@@ -31,12 +31,14 @@ protected:
 
         try {
             for (const auto& entry : std::filesystem::directory_iterator("logs")) {
-                std::ifstream file(entry.path());
-                std::string content((std::istreambuf_iterator<char>(file)),
-                                 std::istreambuf_iterator<char>());
-                
-                if (content.find(text) != std::string::npos) {
-                    return true;
+                if (entry.path().extension() == ".log") {
+                    std::ifstream file(entry.path());
+                    std::string content((std::istreambuf_iterator<char>(file)),
+                                    std::istreambuf_iterator<char>());
+                    
+                    if (content.find(text) != std::string::npos) {
+                        return true;
+                    }
                 }
             }
         } catch (const std::exception& e) {

@@ -830,6 +830,10 @@ CMakeFiles/dfs_crypto.dir/src/crypto/logger.cpp.o: /home/runner/StreamCryptoDFS/
   /nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/bits/exception.h \
   /nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/bits/exception_defines.h \
   /nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/bits/exception_ptr.h \
+  /nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/bits/fs_dir.h \
+  /nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/bits/fs_fwd.h \
+  /nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/bits/fs_ops.h \
+  /nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/bits/fs_path.h \
   /nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/bits/functexcept.h \
   /nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/bits/functional_hash.h \
   /nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/bits/hash_bytes.h \
@@ -918,6 +922,7 @@ CMakeFiles/dfs_crypto.dir/src/crypto/logger.cpp.o: /home/runner/StreamCryptoDFS/
   /nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/climits \
   /nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/clocale \
   /nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/cmath \
+  /nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/codecvt \
   /nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/compare \
   /nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/concepts \
   /nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/cstdarg \
@@ -941,6 +946,7 @@ CMakeFiles/dfs_crypto.dir/src/crypto/logger.cpp.o: /home/runner/StreamCryptoDFS/
   /nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/ext/numeric_traits.h \
   /nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/ext/string_conversions.h \
   /nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/ext/type_traits.h \
+  /nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/filesystem \
   /nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/functional \
   /nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/initializer_list \
   /nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/iomanip \
@@ -3635,8 +3641,6 @@ CMakeFiles/dfs_crypto.dir/src/crypto/logger.cpp.o: /home/runner/StreamCryptoDFS/
 
 /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/move/detail/std_ns_begin.hpp:
 
-/nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/memory_order.hpp:
-
 /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/log/utility/value_ref_fwd.hpp:
 
 /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/log/utility/value_ref.hpp:
@@ -3696,8 +3700,6 @@ CMakeFiles/dfs_crypto.dir/src/crypto/logger.cpp.o: /home/runner/StreamCryptoDFS/
 /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/log/keywords/max_size.hpp:
 
 /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/log/keywords/iteration.hpp:
-
-/nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/log/keywords/incomplete_marker.hpp:
 
 /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/log/keywords/enable_final_rotation.hpp:
 
@@ -4152,6 +4154,22 @@ CMakeFiles/dfs_crypto.dir/src/crypto/logger.cpp.o: /home/runner/StreamCryptoDFS/
 /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/fusion/adapted/struct/detail/adapt_base.hpp:
 
 /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/fusion/adapted/struct/detail/adapt_auto.hpp:
+
+/nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/fusion/adapted/struct/adapt_struct.hpp:
+
+/nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/proto/detail/is_noncopyable.hpp:
+
+/nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/preprocessor/repetition/enum_shifted_params.hpp:
+
+/nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/fusion/adapted/mpl/detail/end_impl.hpp:
+
+/nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/predef/hardware/simd/arm.h:
+
+/nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/fusion/adapted/mpl/detail/begin_impl.hpp:
+
+/nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/proto/detail/extends_funop_const.hpp:
+
+/nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/functional/hash_fwd.hpp:
 
 /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/mpl/count_fwd.hpp:
 
@@ -5165,12 +5183,6 @@ CMakeFiles/dfs_crypto.dir/src/crypto/logger.cpp.o: /home/runner/StreamCryptoDFS/
 
 /nix/store/fwh4fxd747m0py3ib3s5abamia9nrf90-glibc-2.39-52-dev/include/linux/stddef.h:
 
-/nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/proto/detail/is_noncopyable.hpp:
-
-/nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/preprocessor/repetition/enum_shifted_params.hpp:
-
-/nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/fusion/adapted/mpl/detail/end_impl.hpp:
-
 /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/fusion/view/joint_view/detail/value_of_impl.hpp:
 
 /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/fusion/include/next.hpp:
@@ -5294,6 +5306,10 @@ CMakeFiles/dfs_crypto.dir/src/crypto/logger.cpp.o: /home/runner/StreamCryptoDFS/
 /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/log/keywords/format.hpp:
 
 /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/log/sources/threading_models.hpp:
+
+/nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/log/keywords/incomplete_marker.hpp:
+
+/nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/bits/fs_ops.h:
 
 /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/predef/compiler/diab.h:
 
@@ -5876,6 +5892,18 @@ CMakeFiles/dfs_crypto.dir/src/crypto/logger.cpp.o: /home/runner/StreamCryptoDFS/
 /nix/store/fwh4fxd747m0py3ib3s5abamia9nrf90-glibc-2.39-52-dev/include/asm/unistd_64.h:
 
 /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/concept/detail/has_constraints.hpp:
+
+/nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/phoenix/core/detail/cpp03/preprocessed/argument_predefined_10.hpp:
+
+/nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/function_types/property_tags.hpp:
+
+/nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/config.hpp:
+
+/nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/function_types/config/config.hpp:
+
+/nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/mpl/same_as.hpp:
+
+/nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/mpl/bool_fwd.hpp:
 
 /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/preprocessor/cat.hpp:
 
@@ -6509,6 +6537,8 @@ CMakeFiles/dfs_crypto.dir/src/crypto/logger.cpp.o: /home/runner/StreamCryptoDFS/
 
 /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/fusion/container/list/detail/value_at_impl.hpp:
 
+/nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/codecvt:
+
 /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/type_traits/intrinsics.hpp:
 
 /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/date_time/date_generator_parser.hpp:
@@ -6627,6 +6657,10 @@ CMakeFiles/dfs_crypto.dir/src/crypto/logger.cpp.o: /home/runner/StreamCryptoDFS/
 
 /nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/bits/deque.tcc:
 
+/nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/bits/fs_dir.h:
+
+/nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/bits/fs_fwd.h:
+
 /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/mpl/end.hpp:
 
 /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/mpl/distance.hpp:
@@ -6666,6 +6700,10 @@ CMakeFiles/dfs_crypto.dir/src/crypto/logger.cpp.o: /home/runner/StreamCryptoDFS/
 /nix/store/fwh4fxd747m0py3ib3s5abamia9nrf90-glibc-2.39-52-dev/include/bits/floatn.h:
 
 /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/atomic/detail/wait_operations.hpp:
+
+/nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/memory_order.hpp:
+
+/nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/filesystem:
 
 /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/mpl/remove.hpp:
 
@@ -6808,6 +6846,8 @@ CMakeFiles/dfs_crypto.dir/src/crypto/logger.cpp.o: /home/runner/StreamCryptoDFS/
 /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/mpl/map/aux_/iterator.hpp:
 
 /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/atomic/detail/atomic_impl.hpp:
+
+/nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/bits/fs_path.h:
 
 /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/atomic/detail/bitwise_cast.hpp:
 
@@ -6999,10 +7039,6 @@ CMakeFiles/dfs_crypto.dir/src/crypto/logger.cpp.o: /home/runner/StreamCryptoDFS/
 
 /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/date_time/gregorian/gregorian_io.hpp:
 
-/nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/predef/hardware/simd/arm.h:
-
-/nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/fusion/adapted/mpl/detail/begin_impl.hpp:
-
 /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/mpl/tag.hpp:
 
 /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/date_time/gregorian_calendar.ipp:
@@ -7096,21 +7132,3 @@ CMakeFiles/dfs_crypto.dir/src/crypto/logger.cpp.o: /home/runner/StreamCryptoDFS/
 /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/function_types/detail/pp_retag_default_cc/preprocessed.hpp:
 
 /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/function_types/detail/pp_tags/preprocessed.hpp:
-
-/nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/phoenix/core/detail/cpp03/preprocessed/argument_predefined_10.hpp:
-
-/nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/config.hpp:
-
-/nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/function_types/config/config.hpp:
-
-/nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/mpl/same_as.hpp:
-
-/nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/mpl/bool_fwd.hpp:
-
-/nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/function_types/property_tags.hpp:
-
-/nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/proto/detail/extends_funop_const.hpp:
-
-/nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/functional/hash_fwd.hpp:
-
-/nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/fusion/adapted/struct/adapt_struct.hpp:

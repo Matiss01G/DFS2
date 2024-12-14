@@ -11,7 +11,6 @@
 
 namespace dfs::crypto::logging {
 
-// Static variables for initialization control
 static std::mutex init_mutex;
 static bool logging_initialized = false;
 
@@ -19,7 +18,6 @@ void init_logging(const std::string& node_addr) {
     std::lock_guard<std::mutex> lock(init_mutex);
 
     if (!logging_initialized) {
-        // Add common attributes like TimeStamp, LineID, ProcessID
         boost::log::add_common_attributes();
 
         // Setup console output
@@ -33,10 +31,10 @@ void init_logging(const std::string& node_addr) {
                 << boost::log::expressions::smessage
         );
 
-        // Setup file output with same format
+        // Setup file output
         auto file = boost::log::add_file_log(
             boost::log::keywords::file_name = "logs/dfs_%N.log",
-            boost::log::keywords::rotation_size = 10 * 1024 * 1024, // 10MB
+            boost::log::keywords::rotation_size = 10 * 1024 * 1024,
             boost::log::keywords::auto_flush = true
         );
         file->set_formatter(

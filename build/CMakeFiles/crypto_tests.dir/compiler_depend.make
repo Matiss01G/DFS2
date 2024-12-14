@@ -828,6 +828,10 @@ CMakeFiles/crypto_tests.dir/src/tests/logger_test.cpp.o: /home/runner/StreamCryp
   /nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/bits/exception.h \
   /nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/bits/exception_defines.h \
   /nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/bits/exception_ptr.h \
+  /nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/bits/fs_dir.h \
+  /nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/bits/fs_fwd.h \
+  /nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/bits/fs_ops.h \
+  /nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/bits/fs_path.h \
   /nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/bits/fstream.tcc \
   /nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/bits/functexcept.h \
   /nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/bits/functional_hash.h \
@@ -917,6 +921,7 @@ CMakeFiles/crypto_tests.dir/src/tests/logger_test.cpp.o: /home/runner/StreamCryp
   /nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/cerrno \
   /nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/climits \
   /nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/clocale \
+  /nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/codecvt \
   /nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/compare \
   /nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/concepts \
   /nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/condition_variable \
@@ -939,6 +944,7 @@ CMakeFiles/crypto_tests.dir/src/tests/logger_test.cpp.o: /home/runner/StreamCryp
   /nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/ext/numeric_traits.h \
   /nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/ext/string_conversions.h \
   /nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/ext/type_traits.h \
+  /nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/filesystem \
   /nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/fstream \
   /nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/functional \
   /nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/initializer_list \
@@ -1247,7 +1253,6 @@ CMakeFiles/crypto_tests.dir/src/tests/logger_test.cpp.o: /home/runner/StreamCryp
   /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/log/detail/code_conversion.hpp \
   /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/log/detail/config.hpp \
   /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/log/detail/default_attribute_names.hpp \
-  /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/log/detail/embedded_string_type.hpp \
   /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/log/detail/footer.hpp \
   /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/log/detail/header.hpp \
   /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/log/detail/is_character_type.hpp \
@@ -1257,13 +1262,11 @@ CMakeFiles/crypto_tests.dir/src/tests/logger_test.cpp.o: /home/runner/StreamCryp
   /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/log/detail/native_typeof.hpp \
   /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/log/detail/parameter_tools.hpp \
   /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/log/detail/sfinae_tools.hpp \
-  /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/log/detail/singleton.hpp \
   /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/log/expressions/filter.hpp \
   /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/log/expressions/keyword_fwd.hpp \
   /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/log/keywords/severity.hpp \
   /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/log/sources/basic_logger.hpp \
   /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/log/sources/features.hpp \
-  /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/log/sources/global_logger_storage.hpp \
   /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/log/sources/record_ostream.hpp \
   /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/log/sources/severity_feature.hpp \
   /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/log/sources/severity_logger.hpp \
@@ -1271,8 +1274,6 @@ CMakeFiles/crypto_tests.dir/src/tests/logger_test.cpp.o: /home/runner/StreamCryp
   /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/log/trivial.hpp \
   /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/log/utility/formatting_ostream.hpp \
   /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/log/utility/formatting_ostream_fwd.hpp \
-  /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/log/utility/manipulators/add_value.hpp \
-  /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/log/utility/once_block.hpp \
   /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/log/utility/strictest_lock.hpp \
   /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/log/utility/string_literal_fwd.hpp \
   /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/log/utility/type_dispatch/type_dispatcher.hpp \
@@ -1600,7 +1601,6 @@ CMakeFiles/crypto_tests.dir/src/tests/logger_test.cpp.o: /home/runner/StreamCryp
   /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/smart_ptr/detail/sp_counted_base_gcc_atomic.hpp \
   /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/smart_ptr/detail/sp_counted_impl.hpp \
   /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/smart_ptr/detail/sp_disable_deprecated.hpp \
-  /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/smart_ptr/detail/sp_forward.hpp \
   /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/smart_ptr/detail/sp_has_gcc_intrinsics.hpp \
   /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/smart_ptr/detail/sp_has_sync_intrinsics.hpp \
   /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/smart_ptr/detail/sp_noexcept.hpp \
@@ -1614,7 +1614,6 @@ CMakeFiles/crypto_tests.dir/src/tests/logger_test.cpp.o: /home/runner/StreamCryp
   /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/smart_ptr/detail/yield_k.hpp \
   /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/smart_ptr/intrusive_ptr.hpp \
   /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/smart_ptr/intrusive_ref_counter.hpp \
-  /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/smart_ptr/make_shared_object.hpp \
   /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/smart_ptr/shared_ptr.hpp \
   /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/static_assert.hpp \
   /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/thread/detail/config.hpp \
@@ -1625,7 +1624,6 @@ CMakeFiles/crypto_tests.dir/src/tests/logger_test.cpp.o: /home/runner/StreamCryp
   /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/type_index/stl_type_index.hpp \
   /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/type_index/type_index_facade.hpp \
   /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/type_traits/add_rvalue_reference.hpp \
-  /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/type_traits/alignment_of.hpp \
   /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/type_traits/conditional.hpp \
   /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/type_traits/declval.hpp \
   /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/type_traits/detail/config.hpp \
@@ -1652,7 +1650,6 @@ CMakeFiles/crypto_tests.dir/src/tests/logger_test.cpp.o: /home/runner/StreamCryp
   /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/type_traits/is_member_pointer.hpp \
   /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/type_traits/is_nothrow_move_constructible.hpp \
   /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/type_traits/is_nothrow_swappable.hpp \
-  /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/type_traits/is_pod.hpp \
   /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/type_traits/is_pointer.hpp \
   /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/type_traits/is_reference.hpp \
   /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/type_traits/is_rvalue_reference.hpp \
@@ -1664,7 +1661,6 @@ CMakeFiles/crypto_tests.dir/src/tests/logger_test.cpp.o: /home/runner/StreamCryp
   /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/type_traits/remove_cv.hpp \
   /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/type_traits/remove_reference.hpp \
   /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/type_traits/type_identity.hpp \
-  /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/type_traits/type_with_alignment.hpp \
   /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/utility/detail/result_of_variadic.hpp \
   /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/utility/result_of.hpp \
   /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/utility/string_ref_fwd.hpp \
@@ -1679,8 +1675,6 @@ CMakeFiles/crypto_tests.dir/src/tests/logger_test.cpp.o: /home/runner/StreamCryp
 /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/type_traits/is_void.hpp:
 
 /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/type_traits/is_pointer.hpp:
-
-/nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/type_traits/is_pod.hpp:
 
 /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/type_traits/is_nothrow_swappable.hpp:
 
@@ -1710,8 +1704,6 @@ CMakeFiles/crypto_tests.dir/src/tests/logger_test.cpp.o: /home/runner/StreamCryp
 
 /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/type_traits/declval.hpp:
 
-/nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/type_traits/alignment_of.hpp:
-
 /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/throw_exception.hpp:
 
 /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/smart_ptr/intrusive_ref_counter.hpp:
@@ -1735,8 +1727,6 @@ CMakeFiles/crypto_tests.dir/src/tests/logger_test.cpp.o: /home/runner/StreamCryp
 /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/smart_ptr/detail/sp_has_sync_intrinsics.hpp:
 
 /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/smart_ptr/detail/sp_has_gcc_intrinsics.hpp:
-
-/nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/smart_ptr/detail/sp_forward.hpp:
 
 /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/smart_ptr/detail/sp_disable_deprecated.hpp:
 
@@ -1769,8 +1759,6 @@ CMakeFiles/crypto_tests.dir/src/tests/logger_test.cpp.o: /home/runner/StreamCryp
 /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/preprocessor/punctuation/is_begin_parens.hpp:
 
 /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/preprocessor/punctuation/comma_if.hpp:
-
-/nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/type_traits/type_with_alignment.hpp:
 
 /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/preprocessor/punctuation/comma.hpp:
 
@@ -1994,13 +1982,13 @@ CMakeFiles/crypto_tests.dir/src/tests/logger_test.cpp.o: /home/runner/StreamCryp
 
 /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/mpl/bool.hpp:
 
+/nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/preprocessor/list/detail/fold_right.hpp:
+
+/nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/mpl/bind.hpp:
+
 /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/mpl/begin_end.hpp:
 
 /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/mpl/aux_/yes_no.hpp:
-
-/nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/preprocessor/arithmetic/inc.hpp:
-
-/nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/mpl/aux_/value_wknd.hpp:
 
 /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/mpl/aux_/traits_lambda_spec.hpp:
 
@@ -2011,8 +1999,6 @@ CMakeFiles/crypto_tests.dir/src/tests/logger_test.cpp.o: /home/runner/StreamCryp
 /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/mpl/aux_/static_cast.hpp:
 
 /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/mpl/aux_/preprocessor/default_params.hpp:
-
-/nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/smart_ptr/make_shared_object.hpp:
 
 /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/mpl/aux_/preprocessor/def_params_tail.hpp:
 
@@ -2204,6 +2190,8 @@ CMakeFiles/crypto_tests.dir/src/tests/logger_test.cpp.o: /home/runner/StreamCryp
 
 /nix/store/fwh4fxd747m0py3ib3s5abamia9nrf90-glibc-2.39-52-dev/include/asm/posix_types.h:
 
+/nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/bits/fs_dir.h:
+
 /nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/x86_64-unknown-linux-gnu/bits/messages_members.h:
 
 /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/utility/string_ref_fwd.hpp:
@@ -2279,12 +2267,6 @@ CMakeFiles/crypto_tests.dir/src/tests/logger_test.cpp.o: /home/runner/StreamCryp
 /nix/store/fwh4fxd747m0py3ib3s5abamia9nrf90-glibc-2.39-52-dev/include/alloca.h:
 
 /nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/mutex:
-
-/nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/preprocessor/list/detail/fold_right.hpp:
-
-/nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/mpl/bind.hpp:
-
-/nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/log/utility/once_block.hpp:
 
 /nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/lib/gcc/x86_64-unknown-linux-gnu/13.2.0/include/stddef.h:
 
@@ -2379,10 +2361,6 @@ CMakeFiles/crypto_tests.dir/src/tests/logger_test.cpp.o: /home/runner/StreamCryp
 /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/mpl/aux_/config/compiler.hpp:
 
 /nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/ios:
-
-/nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/log/sources/threading_models.hpp:
-
-/nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/bits/localefwd.h:
 
 /nix/store/fwh4fxd747m0py3ib3s5abamia9nrf90-glibc-2.39-52-dev/include/asm-generic/bitsperlong.h:
 
@@ -2527,6 +2505,8 @@ CMakeFiles/crypto_tests.dir/src/tests/logger_test.cpp.o: /home/runner/StreamCryp
 /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/thread/detail/platform.hpp:
 
 /nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/bits/max_size_type.h:
+
+/nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/filesystem:
 
 /nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/iostream:
 
@@ -2749,6 +2729,12 @@ CMakeFiles/crypto_tests.dir/src/tests/logger_test.cpp.o: /home/runner/StreamCryp
 /nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/bits/memoryfwd.h:
 
 /nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/bits/shared_ptr_base.h:
+
+/nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/log/sources/threading_models.hpp:
+
+/nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/bits/localefwd.h:
+
+/nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/bits/fs_ops.h:
 
 /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/predef/os/beos.h:
 
@@ -2986,6 +2972,8 @@ CMakeFiles/crypto_tests.dir/src/tests/logger_test.cpp.o: /home/runner/StreamCryp
 
 /nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/lib/gcc/x86_64-unknown-linux-gnu/13.2.0/include/syslimits.h:
 
+/nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/bits/fs_path.h:
+
 /nix/store/fwh4fxd747m0py3ib3s5abamia9nrf90-glibc-2.39-52-dev/include/bits/types/struct_statx_timestamp.h:
 
 /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/log/attributes/value_visitation_fwd.hpp:
@@ -2995,6 +2983,10 @@ CMakeFiles/crypto_tests.dir/src/tests/logger_test.cpp.o: /home/runner/StreamCryp
 /nix/store/fwh4fxd747m0py3ib3s5abamia9nrf90-glibc-2.39-52-dev/include/sys/types.h:
 
 /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/config/no_tr1/functional.hpp:
+
+/nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/mpl/aux_/config/adl.hpp:
+
+/nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/container_hash/hash_fwd.hpp:
 
 /nix/store/fwh4fxd747m0py3ib3s5abamia9nrf90-glibc-2.39-52-dev/include/bits/types/struct_timeval.h:
 
@@ -3208,15 +3200,7 @@ CMakeFiles/crypto_tests.dir/src/tests/logger_test.cpp.o: /home/runner/StreamCryp
 
 /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/log/attributes/value_extraction_fwd.hpp:
 
-/nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/bits/erase_if.h:
-
-/nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/bits/fstream.tcc:
-
-/nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/fstream:
-
-/nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/predef/os/linux.h:
-
-/nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/source_location:
+/nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/bits/fs_fwd.h:
 
 /nix/store/fwh4fxd747m0py3ib3s5abamia9nrf90-glibc-2.39-52-dev/include/asm/unistd_64.h:
 
@@ -3225,6 +3209,22 @@ CMakeFiles/crypto_tests.dir/src/tests/logger_test.cpp.o: /home/runner/StreamCryp
 /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/mpl/aux_/na_assert.hpp:
 
 /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/log/utility/type_dispatch/type_dispatcher.hpp:
+
+/nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/bits/erase_if.h:
+
+/nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/bits/fstream.tcc:
+
+/nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/preprocessor/arithmetic/inc.hpp:
+
+/nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/mpl/aux_/value_wknd.hpp:
+
+/nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/codecvt:
+
+/nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/fstream:
+
+/nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/predef/os/linux.h:
+
+/nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/source_location:
 
 /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/smart_ptr/detail/sp_counted_impl.hpp:
 
@@ -3314,8 +3314,6 @@ CMakeFiles/crypto_tests.dir/src/tests/logger_test.cpp.o: /home/runner/StreamCryp
 
 /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/log/detail/config.hpp:
 
-/nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/log/detail/embedded_string_type.hpp:
-
 /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/config/detail/select_compiler_config.hpp:
 
 /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/log/detail/sfinae_tools.hpp:
@@ -3324,11 +3322,7 @@ CMakeFiles/crypto_tests.dir/src/tests/logger_test.cpp.o: /home/runner/StreamCryp
 
 /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/log/keywords/severity.hpp:
 
-/nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/log/detail/singleton.hpp:
-
 /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/log/sources/features.hpp:
-
-/nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/log/sources/global_logger_storage.hpp:
 
 /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/mpl/always.hpp:
 
@@ -3343,8 +3337,6 @@ CMakeFiles/crypto_tests.dir/src/tests/logger_test.cpp.o: /home/runner/StreamCryp
 /nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/bits/stl_iterator.h:
 
 /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/mp11/detail/mp_map_find.hpp:
-
-/nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/log/utility/manipulators/add_value.hpp:
 
 /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/parameter/aux_/use_default_tag.hpp:
 
@@ -3433,7 +3425,3 @@ CMakeFiles/crypto_tests.dir/src/tests/logger_test.cpp.o: /home/runner/StreamCryp
 /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/mpl/aux_/arity_spec.hpp:
 
 /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/mpl/aux_/begin_end_impl.hpp:
-
-/nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/container_hash/hash_fwd.hpp:
-
-/nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/mpl/aux_/config/adl.hpp:
