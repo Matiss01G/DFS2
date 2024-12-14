@@ -17,14 +17,35 @@ protected:
         std::remove("test.log");
     }
 
-    bool log_contains(const std::string& text) {
-        std::ifstream file("test.log");
-        std::string line;
-        while (std::getline(file, line)) {
-            if (line.find(text) != std::string::npos) {
-                return true;
+    bool log_contains(const std::string& text, int max_retries = 10) {
+        std::this_thread::sleep_for(std::chrono::milliseconds(100)); // Initial delay
+        
+        for (int i = 0; i < max_retries; ++i) {
+            try {
+                std::ifstream file("test.log");
+                if (!file.is_open()) {
+                    std::cerr << "Could not open log file, retry " << i + 1 << " of " << max_retries << std::endl;
+                    std::this_thread::sleep_for(std::chrono::milliseconds(100));
+                    continue;
+                }
+                
+                std::string content((std::istreambuf_iterator<char>(file)),
+                                  std::istreambuf_iterator<char>());
+                file.close();
+                
+                if (content.find(text) != std::string::npos) {
+                    return true;
+                }
+                
+                std::this_thread::sleep_for(std::chrono::milliseconds(100));
+            }
+            catch (const std::exception& e) {
+                std::cerr << "Error reading log file: " << e.what() << std::endl;
             }
         }
+        
+        // If we get here, we failed to find the text
+        std::cerr << "Failed to find text: '" << text << "' in log file after " << max_retries << " retries" << std::endl;
         return false;
     }
 };
