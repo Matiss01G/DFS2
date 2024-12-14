@@ -1,5 +1,6 @@
 #include "crypto/crypto_stream.hpp"
 #include "crypto/logger.hpp"
+using namespace dfs::logging;
 #include <openssl/evp.h>
 #include <openssl/aes.h>
 #include <openssl/err.h>
