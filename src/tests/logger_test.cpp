@@ -9,7 +9,8 @@ using namespace dfs::crypto;
 class LoggerTest : public ::testing::Test {
 protected:
     void SetUp() override {
-        Logger::init("test.log");
+        // Initialize logger with test configuration
+        init_logging("test.log", severity_level::trace);
     }
 
     void TearDown() override {
@@ -32,6 +33,9 @@ TEST_F(LoggerTest, BasicLogging) {
     LOG_INFO << "Test info message";
     LOG_ERROR << "Test error message";
     
+    // Allow a small delay for log writes
+    std::this_thread::sleep_for(std::chrono::milliseconds(100));
+    
     EXPECT_TRUE(log_contains("Test info message"));
     EXPECT_TRUE(log_contains("Test error message"));
 }
@@ -44,6 +48,9 @@ TEST_F(LoggerTest, ThreadLogging) {
     std::thread t(thread_func);
     t.join();
 
+    // Allow a small delay for log writes
+    std::this_thread::sleep_for(std::chrono::milliseconds(100));
+    
     EXPECT_TRUE(log_contains("Message from thread"));
 }
 
@@ -55,6 +62,9 @@ TEST_F(LoggerTest, SeverityLevels) {
     LOG_ERROR << "Error message";
     LOG_FATAL << "Fatal message";
 
+    // Allow a small delay for log writes
+    std::this_thread::sleep_for(std::chrono::milliseconds(100));
+    
     EXPECT_TRUE(log_contains("Trace message"));
     EXPECT_TRUE(log_contains("Debug message"));
     EXPECT_TRUE(log_contains("Info message"));
