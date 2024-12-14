@@ -1,4 +1,3 @@
-#include "crypto/logger.hpp"
 #include <boost/log/core.hpp>
 #include <boost/log/expressions.hpp>
 #include <boost/log/support/date_time.hpp>
@@ -9,13 +8,14 @@
 #include <mutex>
 #include <string>
 
-namespace dfs::crypto::logging {
+namespace dfs {
+namespace logging {
 
 // Static variables for initialization control
 static std::mutex init_mutex;
 static bool logging_initialized = false;
 
-void init_logging(const std::string& node_addr) {
+inline void init_logging(const std::string &node_addr) {
     std::lock_guard<std::mutex> lock(init_mutex);
 
     if (!logging_initialized) {
@@ -52,18 +52,30 @@ void init_logging(const std::string& node_addr) {
     }
 }
 
-void set_log_level(boost::log::trivial::severity_level level) {
+inline void set_log_level(boost::log::trivial::severity_level level) {
     boost::log::core::get()->set_filter(
         boost::log::trivial::severity >= level
     );
 }
 
-void enable_logging() {
+/**
+ * @brief Enable or disable logging globally
+ */
+inline void enable_logging() {
     boost::log::core::get()->set_logging_enabled(true);
 }
 
-void disable_logging() {
+inline void disable_logging() {
     boost::log::core::get()->set_logging_enabled(false);
 }
 
-} // namespace dfs::crypto::logging
+} // namespace logging
+} // namespace dfs
+
+// Convenience macros for logging
+#define LOG_TRACE BOOST_LOG_TRIVIAL(trace)
+#define LOG_DEBUG BOOST_LOG_TRIVIAL(debug)
+#define LOG_INFO BOOST_LOG_TRIVIAL(info)
+#define LOG_WARN BOOST_LOG_TRIVIAL(warning)
+#define LOG_ERROR BOOST_LOG_TRIVIAL(error)
+#define LOG_FATAL BOOST_LOG_TRIVIAL(fatal)
