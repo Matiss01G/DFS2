@@ -538,6 +538,7 @@ CMakeFiles/dfs_crypto.dir/src/crypto/crypto_stream.cpp.o: /home/runner/StreamCry
   /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/core/enable_if.hpp \
   /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/core/explicit_operator_bool.hpp \
   /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/core/noncopyable.hpp \
+  /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/core/null_deleter.hpp \
   /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/core/ref.hpp \
   /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/core/swap.hpp \
   /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/core/uncaught_exceptions.hpp \
@@ -987,6 +988,7 @@ CMakeFiles/dfs_crypto.dir/src/crypto/crypto_stream.cpp.o: /home/runner/StreamCry
   /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/log/sinks/sink.hpp \
   /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/log/sinks/sync_frontend.hpp \
   /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/log/sinks/text_file_backend.hpp \
+  /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/log/sinks/text_ostream_backend.hpp \
   /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/log/sources/basic_logger.hpp \
   /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/log/sources/features.hpp \
   /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/log/sources/record_ostream.hpp \
@@ -1012,6 +1014,7 @@ CMakeFiles/dfs_crypto.dir/src/crypto/crypto_stream.cpp.o: /home/runner/StreamCry
   /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/log/utility/manipulators/to_log.hpp \
   /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/log/utility/once_block.hpp \
   /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/log/utility/setup/common_attributes.hpp \
+  /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/log/utility/setup/console.hpp \
   /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/log/utility/setup/file.hpp \
   /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/log/utility/setup/filter_parser.hpp \
   /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/log/utility/setup/formatter_parser.hpp \
@@ -3378,6 +3381,20 @@ CMakeFiles/dfs_crypto.dir/src/crypto/crypto_stream.cpp.o: /home/runner/StreamCry
 
 /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/mpl/aux_/config/operators.hpp:
 
+/nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/proto/transform/make.hpp:
+
+/nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/mpl/aux_/config/nttp.hpp:
+
+/nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/type_traits/remove_reference.hpp:
+
+/nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/predef/platform.h:
+
+/nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/mpl/aux_/config/msvc_typename.hpp:
+
+/nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/parameter/template_keyword.hpp:
+
+/nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/mpl/aux_/config/msvc.hpp:
+
 /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/mpl/vector/aux_/front.hpp:
 
 /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/date_time/gregorian_calendar.hpp:
@@ -3385,6 +3402,12 @@ CMakeFiles/dfs_crypto.dir/src/crypto/crypto_stream.cpp.o: /home/runner/StreamCry
 /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/log/expressions/predicates/matches.hpp:
 
 /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/core/ref.hpp:
+
+/nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/core/null_deleter.hpp:
+
+/nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/optional/detail/optional_reference_spec.hpp:
+
+/nix/store/fwh4fxd747m0py3ib3s5abamia9nrf90-glibc-2.39-52-dev/include/bits/unistd-decl.h:
 
 /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/core/addressof.hpp:
 
@@ -3545,10 +3568,6 @@ CMakeFiles/dfs_crypto.dir/src/crypto/crypto_stream.cpp.o: /home/runner/StreamCry
 /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/range/concepts.hpp:
 
 /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/atomic/detail/capabilities.hpp:
-
-/nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/proto/transform/make.hpp:
-
-/nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/mpl/aux_/config/nttp.hpp:
 
 /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/proto/detail/preprocessed/deduce_domain_n.hpp:
 
@@ -4226,10 +4245,6 @@ CMakeFiles/dfs_crypto.dir/src/crypto/crypto_stream.cpp.o: /home/runner/StreamCry
 
 /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/mp11/version.hpp:
 
-/nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/optional/detail/optional_reference_spec.hpp:
-
-/nix/store/fwh4fxd747m0py3ib3s5abamia9nrf90-glibc-2.39-52-dev/include/bits/unistd-decl.h:
-
 /nix/store/fwh4fxd747m0py3ib3s5abamia9nrf90-glibc-2.39-52-dev/include/asm/types.h:
 
 /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/fusion/sequence/intrinsic/at_c.hpp:
@@ -4459,6 +4474,8 @@ CMakeFiles/dfs_crypto.dir/src/crypto/crypto_stream.cpp.o: /home/runner/StreamCry
 /nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/bits/quoted_string.h:
 
 /nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/bits/stl_iterator_base_funcs.h:
+
+/nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/log/utility/setup/console.hpp:
 
 /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/preprocessor/comparison/less.hpp:
 
@@ -4877,6 +4894,8 @@ CMakeFiles/dfs_crypto.dir/src/crypto/crypto_stream.cpp.o: /home/runner/StreamCry
 /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/predef/library.h:
 
 /nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/functional:
+
+/nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/log/sinks/text_ostream_backend.hpp:
 
 /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/predef/compiler/metaware.h:
 
@@ -5344,9 +5363,9 @@ CMakeFiles/dfs_crypto.dir/src/crypto/crypto_stream.cpp.o: /home/runner/StreamCry
 
 /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/mpl/times.hpp:
 
-/nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/bits/functexcept.h:
-
 /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/chrono/system_clocks.hpp:
+
+/nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/bits/functexcept.h:
 
 /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/date_time/time_parsing.hpp:
 
@@ -6002,12 +6021,6 @@ CMakeFiles/dfs_crypto.dir/src/crypto/crypto_stream.cpp.o: /home/runner/StreamCry
 
 /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/log/detail/decomposed_time.hpp:
 
-/nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/type_traits/remove_reference.hpp:
-
-/nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/predef/platform.h:
-
-/nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/mpl/aux_/config/msvc_typename.hpp:
-
 /nix/store/fwh4fxd747m0py3ib3s5abamia9nrf90-glibc-2.39-52-dev/include/bits/types/FILE.h:
 
 /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/log/detail/deduce_char_type.hpp:
@@ -6337,7 +6350,3 @@ CMakeFiles/dfs_crypto.dir/src/crypto/crypto_stream.cpp.o: /home/runner/StreamCry
 /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/mpl/aux_/has_begin.hpp:
 
 /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/mpl/aux_/config/lambda.hpp:
-
-/nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/parameter/template_keyword.hpp:
-
-/nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/mpl/aux_/config/msvc.hpp:

@@ -11,7 +11,7 @@ namespace dfs::crypto {
 
 CryptoStream::CryptoStream() {
     OpenSSL_add_all_algorithms();
-    Logger::get_logger() << boost::log::trivial::info << "CryptoStream instance created";
+    DFS_LOG_INFO << "CryptoStream instance created";
 }
 
 CryptoStream::~CryptoStream() {
@@ -19,26 +19,20 @@ CryptoStream::~CryptoStream() {
 }
 
 void CryptoStream::initialize(const std::vector<uint8_t>& key, const std::vector<uint8_t>& iv) {
-    Logger::get_logger() << boost::log::trivial::debug 
-                        << "Initializing CryptoStream with key size: " << key.size() 
-                        << ", IV size: " << iv.size();
+    DFS_LOG_DEBUG << "Initializing CryptoStream with key size: " << key.size() << ", IV size: " << iv.size();
     
     if (key.size() != KEY_SIZE) {
-        Logger::get_logger() << boost::log::trivial::error 
-                           << "Invalid key size: " << key.size() 
-                           << " (expected " << KEY_SIZE << ")";
+        DFS_LOG_ERROR << "Invalid key size: " << key.size() << " (expected " << KEY_SIZE << ")";
         throw InitializationError("Invalid key size");
     }
     if (iv.size() != IV_SIZE) {
-        Logger::get_logger() << boost::log::trivial::error 
-                           << "Invalid IV size: " << iv.size() 
-                           << " (expected " << IV_SIZE << ")";
+        DFS_LOG_ERROR << "Invalid IV size: " << iv.size() << " (expected " << IV_SIZE << ")";
         throw InitializationError("Invalid IV size");
     }
 
     key_ = key;
     iv_ = iv;
-    Logger::get_logger() << boost::log::trivial::info << "CryptoStream initialized successfully";
+    DFS_LOG_INFO << "CryptoStream initialized successfully";
 }
 
 std::vector<uint8_t> CryptoStream::encryptStream(std::span<const uint8_t> data) {

@@ -10,19 +10,9 @@
 #include <boost/log/sources/severity_logger.hpp>
 #include <boost/log/sources/record_ostream.hpp>
 #include <boost/log/support/date_time.hpp>
-#include <boost/log/attributes/named_scope.hpp>
+#include <boost/log/utility/setup/console.hpp>
 
 namespace dfs::crypto {
-
-// Define severity levels
-enum class severity_level {
-    trace,
-    debug,
-    info,
-    warning,
-    error,
-    fatal
-};
 
 class Logger {
 public:
@@ -33,22 +23,17 @@ public:
 
         // Add common attributes
         logging::add_common_attributes();
-        logging::core::get()->add_global_attribute(
-            "Scope", logging::attributes::named_scope());
 
         // Setup file sink
         logging::add_file_log(
             keywords::file_name = log_file,
+            keywords::auto_flush = true,
             keywords::format = (
                 expr::stream
-                    << expr::format_date_time<boost::posix_time::ptime>("TimeStamp", "%Y-%m-%d %H:%M:%S.%f")
-                    << " [" << expr::attr<logging::trivial::severity_level>("Severity") << "]"
-                    << " [Thread " << expr::attr<logging::attributes::current_thread_id::value_type>("ThreadID") << "]"
-                    << " [" << expr::attr<std::string>("Process") << "]"
-                    << " " << expr::smessage
-            ),
-            keywords::rotation_size = 10 * 1024 * 1024,  // 10 MB
-            keywords::auto_flush = true
+                    << "[" << expr::format_date_time<boost::posix_time::ptime>("TimeStamp", "%Y-%m-%d %H:%M:%S")
+                    << "] [" << logging::trivial::severity
+                    << "] " << expr::smessage
+            )
         );
 
         // Set the minimum severity level
@@ -63,14 +48,14 @@ public:
     }
 };
 
-// Convenience macros for logging
-#define LOG_TRACE BOOST_LOG_SEV(dfs::crypto::Logger::get_logger(), boost::log::trivial::trace)
-#define LOG_DEBUG BOOST_LOG_SEV(dfs::crypto::Logger::get_logger(), boost::log::trivial::debug)
-#define LOG_INFO BOOST_LOG_SEV(dfs::crypto::Logger::get_logger(), boost::log::trivial::info)
-#define LOG_WARN BOOST_LOG_SEV(dfs::crypto::Logger::get_logger(), boost::log::trivial::warning)
-#define LOG_ERROR BOOST_LOG_SEV(dfs::crypto::Logger::get_logger(), boost::log::trivial::error)
-#define LOG_FATAL BOOST_LOG_SEV(dfs::crypto::Logger::get_logger(), boost::log::trivial::fatal)
-
 } // namespace dfs::crypto
+
+// Convenience macros for logging
+#define DFS_LOG_TRACE BOOST_LOG_SEV(dfs::crypto::Logger::get_logger(), boost::log::trivial::trace)
+#define DFS_LOG_DEBUG BOOST_LOG_SEV(dfs::crypto::Logger::get_logger(), boost::log::trivial::debug)
+#define DFS_LOG_INFO BOOST_LOG_SEV(dfs::crypto::Logger::get_logger(), boost::log::trivial::info)
+#define DFS_LOG_WARN BOOST_LOG_SEV(dfs::crypto::Logger::get_logger(), boost::log::trivial::warning)
+#define DFS_LOG_ERROR BOOST_LOG_SEV(dfs::crypto::Logger::get_logger(), boost::log::trivial::error)
+#define DFS_LOG_FATAL BOOST_LOG_SEV(dfs::crypto::Logger::get_logger(), boost::log::trivial::fatal)
 
 #endif // DFS_LOGGER_HPP
