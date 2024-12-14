@@ -76,7 +76,7 @@ void CryptoStream::processStream(std::istream& input, std::ostream& output, bool
     initializeCipher(encrypting);
     
     // Process input stream in blocks with larger buffer for efficiency
-    static constexpr size_t BUFFER_SIZE = 8192; // Larger buffer for better performance
+    static constexpr size_t BUFFER_SIZE = 8192; // 8KB buffer for better performance
     std::array<uint8_t, BUFFER_SIZE> inbuf;
     std::array<uint8_t, BUFFER_SIZE + EVP_MAX_BLOCK_LENGTH> outbuf;
     int outlen;
@@ -86,29 +86,31 @@ void CryptoStream::processStream(std::istream& input, std::ostream& output, bool
         input.read(reinterpret_cast<char*>(inbuf.data()), inbuf.size());
         auto bytes_read = input.gcount();
         
-        if (bytes_read <= 0 && !input.eof()) {
-            throw std::runtime_error("Failed to read from input stream");
-        
-        if (bytes_read > 0) {
-            // Process the block
-            if (encrypting) {
-                if (!EVP_EncryptUpdate(context_->get(), outbuf.data(), &outlen,
-                                     inbuf.data(), static_cast<int>(bytes_read))) {
-                    throw EncryptionError("Failed to encrypt data block");
-                }
-            } else {
-                if (!EVP_DecryptUpdate(context_->get(), outbuf.data(), &outlen,
-                                     inbuf.data(), static_cast<int>(bytes_read))) {
-                    throw DecryptionError("Failed to decrypt data block");
-                }
+        if (bytes_read <= 0) {
+            if (!input.eof()) {
+                throw std::runtime_error("Failed to read from input stream");
             }
+            break;
+        }
 
-            // Write processed block
-            if (outlen > 0) {
-                output.write(reinterpret_cast<char*>(outbuf.data()), outlen);
-                if (!output.good()) {
-                    throw std::runtime_error("Failed to write to output stream");
-                }
+        // Process the block
+        if (encrypting) {
+            if (!EVP_EncryptUpdate(context_->get(), outbuf.data(), &outlen,
+                                 inbuf.data(), static_cast<int>(bytes_read))) {
+                throw EncryptionError("Failed to encrypt data block");
+            }
+        } else {
+            if (!EVP_DecryptUpdate(context_->get(), outbuf.data(), &outlen,
+                                 inbuf.data(), static_cast<int>(bytes_read))) {
+                throw DecryptionError("Failed to decrypt data block");
+            }
+        }
+
+        // Write processed block
+        if (outlen > 0) {
+            output.write(reinterpret_cast<char*>(outbuf.data()), outlen);
+            if (!output.good()) {
+                throw std::runtime_error("Failed to write to output stream");
             }
         }
     }
