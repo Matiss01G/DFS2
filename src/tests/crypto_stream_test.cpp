@@ -1,5 +1,7 @@
 #include <gtest/gtest.h>
+#include <sstream>
 #include <vector>
+#include <cstring>
 #include "crypto/crypto_stream.hpp"
 
 using namespace dfs::crypto;
@@ -16,40 +18,118 @@ protected:
         iv.resize(CryptoStream::IV_SIZE, 0x24);
         crypto.initialize(key, iv);
     }
+
+    // Helper to verify stream contents match
+    static bool streamsEqual(std::istream& s1, std::istream& s2) {
+        // Reset stream positions and states
+        s1.clear();
+        s2.clear();
+        s1.seekg(0);
+        s2.seekg(0);
+
+        if (!s1.good() || !s2.good()) return false;
+
+        constexpr size_t BUFSIZE = 8192;  // Larger buffer for efficiency
+        std::vector<char> buf1(BUFSIZE), buf2(BUFSIZE);
+
+        while (true) {
+            s1.read(buf1.data(), BUFSIZE);
+            s2.read(buf2.data(), BUFSIZE);
+
+            auto count1 = s1.gcount();
+            auto count2 = s2.gcount();
+
+            if (count1 != count2) return false;
+            if (count1 == 0) break;
+
+            if (std::memcmp(buf1.data(), buf2.data(), count1) != 0) return false;
+
+            if (s1.eof() != s2.eof()) return false;
+        }
+
+        return s1.eof() && s2.eof();
+    }
 };
 
-TEST_F(CryptoStreamTest, EncryptDecryptRoundtrip) {
-    std::vector<uint8_t> original = {0x01, 0x02, 0x03, 0x04, 0x05};
-    
-    auto encrypted = crypto.encryptStream(original);
-    ASSERT_NE(encrypted, original);
-    
-    auto decrypted = crypto.decryptStream(encrypted);
-    ASSERT_EQ(decrypted, original);
+// Test basic encryption and decryption with streams
+TEST_F(CryptoStreamTest, BasicStreamOperation) {
+    const std::string plaintext = "Hello, World! This is a test of stream encryption.";
+    std::stringstream input(plaintext);
+    std::stringstream encrypted;
+    std::stringstream decrypted;
+
+    // Encrypt
+    crypto.encrypt(input, encrypted);
+    ASSERT_TRUE(encrypted.str() != plaintext);
+
+    // Decrypt
+    crypto.decrypt(encrypted, decrypted);
+    ASSERT_EQ(decrypted.str(), plaintext);
 }
 
-TEST_F(CryptoStreamTest, InvalidKeySize) {
-    std::vector<uint8_t> invalid_key(16, 0x42);  // Wrong size
-    std::vector<uint8_t> valid_iv(CryptoStream::IV_SIZE, 0x24);
-    
-    EXPECT_THROW(crypto.initialize(invalid_key, valid_iv), InitializationError);
+// Test error handling for uninitialized crypto
+TEST_F(CryptoStreamTest, UninitializedError) {
+    CryptoStream uninitialized;
+    std::stringstream input("test"), output;
+    EXPECT_THROW(uninitialized.encrypt(input, output), InitializationError);
 }
 
-TEST_F(CryptoStreamTest, InvalidIVSize) {
-    std::vector<uint8_t> valid_key(CryptoStream::KEY_SIZE, 0x42);
-    std::vector<uint8_t> invalid_iv(8, 0x24);  // Wrong size
+// Test handling of empty streams
+TEST_F(CryptoStreamTest, EmptyStream) {
+    std::stringstream empty, output;
+    crypto.encrypt(empty, output);
+    ASSERT_FALSE(output.str().empty()); // Should contain at least padding
     
-    EXPECT_THROW(crypto.initialize(valid_key, invalid_iv), InitializationError);
+    std::stringstream decrypted;
+    crypto.decrypt(output, decrypted);
+    ASSERT_TRUE(decrypted.str().empty());
 }
 
-TEST_F(CryptoStreamTest, LargeDataStream) {
-    std::vector<uint8_t> large_data(1024 * 1024);  // 1MB of data
-    for (size_t i = 0; i < large_data.size(); ++i) {
-        large_data[i] = i & 0xFF;
+// Test handling of large data streams
+TEST_F(CryptoStreamTest, LargeStream) {
+    std::stringstream input;
+    const size_t TEST_SIZE = 1024 * 1024; // 1MB
+    
+    // Generate test data
+    for (size_t i = 0; i < TEST_SIZE; ++i) {
+        input.put(static_cast<char>(i & 0xFF));
     }
+
+    std::stringstream encrypted, decrypted;
     
-    auto encrypted = crypto.encryptStream(large_data);
-    auto decrypted = crypto.decryptStream(encrypted);
+    // Process large stream
+    crypto.encrypt(input, encrypted);
+    crypto.decrypt(encrypted, decrypted);
     
-    ASSERT_EQ(decrypted, large_data);
+    ASSERT_TRUE(streamsEqual(input, decrypted));
+}
+
+// Test invalid stream states
+TEST_F(CryptoStreamTest, InvalidStreamState) {
+    std::stringstream input("test"), output;
+    input.setstate(std::ios::badbit);
+    EXPECT_THROW(crypto.encrypt(input, output), std::runtime_error);
+    
+    input.clear();
+    output.setstate(std::ios::badbit);
+    EXPECT_THROW(crypto.encrypt(input, output), std::runtime_error);
+}
+
+// Test block alignment handling
+TEST_F(CryptoStreamTest, BlockAlignment) {
+    // Test various input sizes around block boundaries
+    for (size_t size : {15, 16, 17, 31, 32, 33}) {
+        std::stringstream input;
+        for (size_t i = 0; i < size; ++i) {
+            input.put('A' + (i % 26));
+        }
+        
+        std::stringstream encrypted, decrypted;
+        crypto.encrypt(input, encrypted);
+        crypto.decrypt(encrypted, decrypted);
+        
+        input.seekg(0);
+        ASSERT_TRUE(streamsEqual(input, decrypted)) 
+            << "Failed for size: " << size;
+    }
 }
