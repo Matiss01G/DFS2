@@ -14,6 +14,11 @@ struct CipherContext;
 
 class CryptoStream {
 public:
+    enum class Mode {
+        Encrypt,
+        Decrypt
+    };
+
     static constexpr size_t KEY_SIZE = 32;     // 256 bits for AES-256
     static constexpr size_t IV_SIZE = 16;      // 128 bits for CBC mode
     static constexpr size_t BLOCK_SIZE = 16;   // AES block size
@@ -24,11 +29,15 @@ public:
     // Initialize with encryption key and IV
     void initialize(const std::vector<uint8_t>& key, const std::vector<uint8_t>& iv);
 
-    // Stream operator overloads for encryption
-    CryptoStream& operator>>(std::ostream& output);  // Push encrypted data to output
-    CryptoStream& operator<<(std::istream& input);   // Accept plaintext from input
+    // Set operation mode
+    void setMode(Mode mode) { mode_ = mode; }
+    Mode getMode() const { return mode_; }
 
-    // Encryption stream operations
+    // Stream operator overloads for encryption/decryption
+    CryptoStream& operator>>(std::ostream& output);  // Process data to output
+    CryptoStream& operator<<(std::istream& input);   // Accept input data
+
+    // Encryption/decryption stream operations
     std::ostream& encrypt(std::istream& input, std::ostream& output);
     std::ostream& decrypt(std::istream& input, std::ostream& output);
 
@@ -37,6 +46,7 @@ private:
     std::vector<uint8_t> iv_;
     std::unique_ptr<CipherContext> context_;
     bool is_initialized_ = false;
+    Mode mode_ = Mode::Encrypt;  // Default to encryption mode
     std::istream* pending_input_ = nullptr;  // Store input stream for operator>> to process
     
     // Process data through OpenSSL cipher context

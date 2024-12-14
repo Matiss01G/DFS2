@@ -141,16 +141,24 @@ TEST_F(CryptoStreamTest, StreamOperators) {
     std::stringstream encrypted;
     
     // Test stream operator chaining for encryption
+    crypto.setMode(CryptoStream::Mode::Encrypt);
     crypto << input >> encrypted;
     ASSERT_NE(encrypted.str(), plaintext);
     
-    // Verify the content can be decrypted back
+    // Test stream operator chaining for decryption
     std::stringstream decrypted;
-    crypto.decrypt(encrypted, decrypted);
+    crypto.setMode(CryptoStream::Mode::Decrypt);
+    crypto << encrypted >> decrypted;
     ASSERT_EQ(decrypted.str(), plaintext);
     
     // Test error case - using operator>> without prior operator<<
     std::stringstream output;
     EXPECT_THROW(crypto >> output, std::runtime_error);
+    
+    // Test switching modes
+    crypto.setMode(CryptoStream::Mode::Encrypt);
+    ASSERT_EQ(crypto.getMode(), CryptoStream::Mode::Encrypt);
+    crypto.setMode(CryptoStream::Mode::Decrypt);
+    ASSERT_EQ(crypto.getMode(), CryptoStream::Mode::Decrypt);
 }
 
