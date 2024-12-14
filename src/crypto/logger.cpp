@@ -11,21 +11,33 @@
 #include <boost/make_shared.hpp>
 #include <boost/log/sinks/sync_frontend.hpp>
 #include <boost/log/attributes/named_scope.hpp>
+#include <boost/log/attributes/clock.hpp>
+#include <boost/log/support/date_time.hpp>
 
 namespace dfs::crypto {
+
+// Severity level to string conversion
+const char* to_string(severity_level level) {
+    static const char* const str[] = {
+        "TRACE", "DEBUG", "INFO", "WARNING", "ERROR", "FATAL"
+    };
+    return str[static_cast<int>(level)];
+}
 
 // Define the global logger
 BOOST_LOG_GLOBAL_LOGGER_INIT(global_logger, logger_type) {
     logger_type logger;
     
-    // Add attributes
+    // Add common attributes
+    logger.add_attribute("TimeStamp", boost::log::attributes::local_clock());
     logger.add_attribute("ThreadID", boost::log::attributes::current_thread_id());
+    logger.add_attribute("ProcessID", boost::log::attributes::current_process_id());
     logger.add_attribute("Scope", boost::log::attributes::named_scope());
     
     return logger;
 }
 
-void init_logging(const std::string& log_file) {
+void init_logging(const std::string& log_file, severity_level min_level) {
     // Create a text file sink
     typedef boost::log::sinks::synchronous_sink<boost::log::sinks::text_file_backend> file_sink;
     boost::shared_ptr<file_sink> sink = boost::make_shared<file_sink>(
@@ -35,15 +47,22 @@ void init_logging(const std::string& log_file) {
         boost::log::keywords::format = (
             boost::log::expressions::stream
                 << "[" << boost::log::expressions::format_date_time<boost::posix_time::ptime>("TimeStamp", "%Y-%m-%d %H:%M:%S.%f")
-                << "] [" << boost::log::expressions::attr<boost::log::attributes::current_thread_id::value_type>("ThreadID")
+                << "] [PID:" << boost::log::expressions::attr<boost::log::attributes::current_process_id::value_type>("ProcessID")
+                << "] [TID:" << boost::log::expressions::attr<boost::log::attributes::current_thread_id::value_type>("ThreadID")
                 << "] [" << boost::log::expressions::attr<severity_level>("Severity")
-                << "] " << boost::log::expressions::message
+                << "] [" << boost::log::expressions::attr<boost::log::attributes::named_scope::value_type>("Scope")
+                << "] " << boost::log::expressions::smessage
         )
     );
 
     // Set up the core
     boost::log::core::get()->add_sink(sink);
     boost::log::add_common_attributes();
+    
+    // Set minimum severity level
+    boost::log::core::get()->set_filter(
+        boost::log::expressions::attr<severity_level>("Severity") >= min_level
+    );
     
     // Enable automatic scope tracking
     boost::log::core::get()->add_global_attribute(

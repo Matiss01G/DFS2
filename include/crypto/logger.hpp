@@ -5,10 +5,11 @@
 #include <boost/log/sources/global_logger_storage.hpp>
 #include <boost/log/sources/severity_logger.hpp>
 #include <boost/log/utility/manipulators/add_value.hpp>
+#include <string>
 
 namespace dfs::crypto {
 
-// Define severity levels
+// Define severity levels with string conversion
 enum class severity_level {
     trace,
     debug,
@@ -18,14 +19,18 @@ enum class severity_level {
     fatal
 };
 
+// Convert severity level to string for formatting
+const char* to_string(severity_level level);
+
 // Declare the logger type
 using logger_type = boost::log::sources::severity_logger<severity_level>;
 
 // Declare the global logger storage
 BOOST_LOG_GLOBAL_LOGGER(global_logger, logger_type)
 
-// Initialize logging system
-void init_logging(const std::string& log_file = "crypto.log");
+// Initialize logging system with network-appropriate formatting
+void init_logging(const std::string& log_file = "crypto.log",
+                 severity_level min_level = severity_level::trace);
 
 } // namespace dfs::crypto
 

@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <span>
+#include <cstdint>
 #include "crypto_error.hpp"
 
 namespace dfs::crypto {
