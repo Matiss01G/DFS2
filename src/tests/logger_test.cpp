@@ -10,39 +10,62 @@ using namespace dfs::crypto::logging;
 class LoggerTest : public ::testing::Test {
 protected:
     void SetUp() override {
-        init_logging("test-node");
-        // Create logs directory if it doesn't exist
+        // Clean up any existing logs
+        if (std::filesystem::exists("logs")) {
+            std::filesystem::remove_all("logs");
+        }
         std::filesystem::create_directories("logs");
+        
+        // Initialize logging
+        init_logging("test-node");
+        set_log_level(boost::log::trivial::trace);
+        
+        // Give some time for initialization
+        std::this_thread::sleep_for(std::chrono::milliseconds(100));
     }
 
     void TearDown() override {
-        // Cleanup log files
-        try {
-            for (const auto& entry : std::filesystem::directory_iterator("logs")) {
-                std::filesystem::remove(entry.path());
-            }
-        } catch (const std::exception& e) {
-            std::cerr << "Error cleaning up logs: " << e.what() << std::endl;
+        // Ensure all logs are written
+        boost::log::core::get()->flush();
+        boost::log::core::get()->remove_all_sinks();
+        
+        // Clean up log files
+        if (std::filesystem::exists("logs")) {
+            std::filesystem::remove_all("logs");
         }
     }
 
-    bool log_contains(const std::string& text) {
-        std::this_thread::sleep_for(std::chrono::milliseconds(100)); // Allow time for log writes
-
-        try {
-            for (const auto& entry : std::filesystem::directory_iterator("logs")) {
-                if (entry.path().extension() == ".log") {
-                    std::ifstream file(entry.path());
-                    std::string content((std::istreambuf_iterator<char>(file)),
-                                    std::istreambuf_iterator<char>());
-                    
-                    if (content.find(text) != std::string::npos) {
-                        return true;
+    bool log_contains(const std::string& text, int max_retries = 3) {
+        for (int retry = 0; retry < max_retries; ++retry) {
+            // Force flush and wait with exponential backoff
+            boost::log::core::get()->flush();
+            std::this_thread::sleep_for(std::chrono::milliseconds(100 * (retry + 1)));
+            
+            try {
+                for (const auto& entry : std::filesystem::directory_iterator("logs")) {
+                    if (entry.path().extension() == ".log") {
+                        std::ifstream file(entry.path(), std::ios::in | std::ios::binary);
+                        if (!file.is_open()) {
+                            continue;
+                        }
+                        
+                        std::string content;
+                        file.seekg(0, std::ios::end);
+                        content.resize(file.tellg());
+                        file.seekg(0, std::ios::beg);
+                        file.read(&content[0], content.size());
+                        
+                        if (content.find(text) != std::string::npos) {
+                            return true;
+                        }
                     }
                 }
+            } catch (const std::exception& e) {
+                if (retry == max_retries - 1) {
+                    std::cerr << "Error reading log file (attempt " << retry + 1 << "): " 
+                             << e.what() << std::endl;
+                }
             }
-        } catch (const std::exception& e) {
-            std::cerr << "Error reading log files: " << e.what() << std::endl;
         }
         return false;
     }
@@ -66,25 +89,22 @@ TEST_F(LoggerTest, ThreadLogging) {
 }
 
 TEST_F(LoggerTest, SeverityLevels) {
-    const char* messages[] = {
-        "Trace message",
-        "Debug message",
-        "Info message",
-        "Warning message",
-        "Error message",
-        "Fatal message"
-    };
+    // Set minimum level to trace to capture all messages
+    set_log_level(boost::log::trivial::trace);
     
-    LOG_TRACE << messages[0];
-    LOG_DEBUG << messages[1];
-    LOG_INFO << messages[2];
-    LOG_WARN << messages[3];
-    LOG_ERROR << messages[4];
-    LOG_FATAL << messages[5];
+    LOG_TRACE << "Trace message";
+    LOG_DEBUG << "Debug message";
+    LOG_INFO << "Info message";
+    LOG_WARN << "Warning message";
+    LOG_ERROR << "Error message";
+    LOG_FATAL << "Fatal message";
     
-    for (const auto& msg : messages) {
-        EXPECT_TRUE(log_contains(msg)) << "Failed to find message: " << msg;
-    }
+    EXPECT_TRUE(log_contains("Trace message"));
+    EXPECT_TRUE(log_contains("Debug message"));
+    EXPECT_TRUE(log_contains("Info message"));
+    EXPECT_TRUE(log_contains("Warning message"));
+    EXPECT_TRUE(log_contains("Error message"));
+    EXPECT_TRUE(log_contains("Fatal message"));
 }
 
 TEST_F(LoggerTest, LogLevelFiltering) {
