@@ -1,0 +1,8 @@
+/home/runner/StreamCryptoDFS/build/CMakeFiles/crypto_tests.dir
+/home/runner/StreamCryptoDFS/build/CMakeFiles/test.dir
+/home/runner/StreamCryptoDFS/build/CMakeFiles/edit_cache.dir
+/home/runner/StreamCryptoDFS/build/CMakeFiles/rebuild_cache.dir
+/home/runner/StreamCryptoDFS/build/CMakeFiles/list_install_components.dir
+/home/runner/StreamCryptoDFS/build/CMakeFiles/install.dir
+/home/runner/StreamCryptoDFS/build/CMakeFiles/install/local.dir
+/home/runner/StreamCryptoDFS/build/CMakeFiles/install/strip.dir
