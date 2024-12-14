@@ -133,3 +133,24 @@ TEST_F(CryptoStreamTest, BlockAlignment) {
             << "Failed for size: " << size;
     }
 }
+
+// Test stream operator chaining
+TEST_F(CryptoStreamTest, StreamOperators) {
+    const std::string plaintext = "Testing stream operator chaining functionality";
+    std::stringstream input(plaintext);
+    std::stringstream encrypted;
+    
+    // Test stream operator chaining for encryption
+    crypto << input >> encrypted;
+    ASSERT_NE(encrypted.str(), plaintext);
+    
+    // Verify the content can be decrypted back
+    std::stringstream decrypted;
+    crypto.decrypt(encrypted, decrypted);
+    ASSERT_EQ(decrypted.str(), plaintext);
+    
+    // Test error case - using operator>> without prior operator<<
+    std::stringstream output;
+    EXPECT_THROW(crypto >> output, std::runtime_error);
+}
+

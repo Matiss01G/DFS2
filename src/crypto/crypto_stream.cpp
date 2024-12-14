@@ -146,14 +146,36 @@ std::ostream& CryptoStream::decrypt(std::istream& input, std::ostream& output) {
 }
 
 CryptoStream& CryptoStream::operator>>(std::ostream& output) {
-    // This would complete an encryption operation started by operator<<
-    // Not implemented in this version as we're focusing on direct stream methods
+    if (!pending_input_) {
+        throw std::runtime_error("No pending input stream. Use operator<< first.");
+    }
+    
+    // Process the stored input stream
+    encrypt(*pending_input_, output);
+    
+    // Clear the stored stream after processing
+    pending_input_ = nullptr;
+    
     return *this;
 }
 
 CryptoStream& CryptoStream::operator<<(std::istream& input) {
-    // This would start an encryption operation to be completed by operator>>
-    // Not implemented in this version as we're focusing on direct stream methods
+    // Verify initialization state
+    if (!is_initialized_) {
+        throw InitializationError("CryptoStream not initialized");
+    }
+    
+    // Validate input stream state
+    if (!input.good()) {
+        throw std::runtime_error("Invalid input stream state");
+    }
+
+    // Clear any previous pending input
+    pending_input_ = nullptr;
+    
+    // Store the input stream for later processing
+    pending_input_ = &input;
+    
     return *this;
 }
 

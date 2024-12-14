@@ -37,6 +37,7 @@ private:
     std::vector<uint8_t> iv_;
     std::unique_ptr<CipherContext> context_;
     bool is_initialized_ = false;
+    std::istream* pending_input_ = nullptr;  // Store input stream for operator>> to process
     
     // Process data through OpenSSL cipher context
     void processStream(std::istream& input, std::ostream& output, bool encrypting);
