@@ -10,7 +10,6 @@ set(CMAKE_DEPENDS_LANGUAGES
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "/home/runner/StreamCryptoDFS/src/tests/byte_order_test.cpp" "CMakeFiles/crypto_tests.dir/src/tests/byte_order_test.cpp.o" "gcc" "CMakeFiles/crypto_tests.dir/src/tests/byte_order_test.cpp.o.d"
   "/home/runner/StreamCryptoDFS/src/tests/crypto_stream_test.cpp" "CMakeFiles/crypto_tests.dir/src/tests/crypto_stream_test.cpp.o" "gcc" "CMakeFiles/crypto_tests.dir/src/tests/crypto_stream_test.cpp.o.d"
-  "/home/runner/StreamCryptoDFS/src/tests/logger_test.cpp" "CMakeFiles/crypto_tests.dir/src/tests/logger_test.cpp.o" "gcc" "CMakeFiles/crypto_tests.dir/src/tests/logger_test.cpp.o.d"
   )
 
 # Targets to which this target links which contain Fortran sources.

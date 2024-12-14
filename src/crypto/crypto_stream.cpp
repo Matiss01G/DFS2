@@ -1,16 +1,17 @@
 #include "crypto/crypto_stream.hpp"
-#include "crypto/logger.hpp"
-using namespace dfs::logging;
+#include "logger/logger.hpp"
 #include <openssl/evp.h>
 #include <openssl/aes.h>
 #include <openssl/err.h>
 #include <memory>
 
+using namespace dfs::crypto;
+
 namespace dfs::crypto {
 
 CryptoStream::CryptoStream() {
     OpenSSL_add_all_algorithms();
-    LOG_INFO << "CryptoStream instance created";
+    Logger::get_logger() << boost::log::trivial::info << "CryptoStream instance created";
 }
 
 CryptoStream::~CryptoStream() {
@@ -18,20 +19,26 @@ CryptoStream::~CryptoStream() {
 }
 
 void CryptoStream::initialize(const std::vector<uint8_t>& key, const std::vector<uint8_t>& iv) {
-    LOG_DEBUG << "Initializing CryptoStream with key size: " << key.size() << ", IV size: " << iv.size();
+    Logger::get_logger() << boost::log::trivial::debug 
+                        << "Initializing CryptoStream with key size: " << key.size() 
+                        << ", IV size: " << iv.size();
     
     if (key.size() != KEY_SIZE) {
-        LOG_ERROR << "Invalid key size: " << key.size() << " (expected " << KEY_SIZE << ")";
+        Logger::get_logger() << boost::log::trivial::error 
+                           << "Invalid key size: " << key.size() 
+                           << " (expected " << KEY_SIZE << ")";
         throw InitializationError("Invalid key size");
     }
     if (iv.size() != IV_SIZE) {
-        LOG_ERROR << "Invalid IV size: " << iv.size() << " (expected " << IV_SIZE << ")";
+        Logger::get_logger() << boost::log::trivial::error 
+                           << "Invalid IV size: " << iv.size() 
+                           << " (expected " << IV_SIZE << ")";
         throw InitializationError("Invalid IV size");
     }
 
     key_ = key;
     iv_ = iv;
-    LOG_INFO << "CryptoStream initialized successfully";
+    Logger::get_logger() << boost::log::trivial::info << "CryptoStream initialized successfully";
 }
 
 std::vector<uint8_t> CryptoStream::encryptStream(std::span<const uint8_t> data) {

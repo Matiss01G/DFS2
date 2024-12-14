@@ -13,7 +13,6 @@ find_package(GTest REQUIRED)
 # Create crypto library
 add_library(dfs_crypto
     src/crypto/crypto_stream.cpp
-    src/crypto/logger.cpp
 )
 target_include_directories(dfs_crypto PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
@@ -32,8 +31,7 @@ enable_testing()
 
 add_executable(crypto_tests 
     src/tests/crypto_stream_test.cpp
-    src/tests/byte_order_test.cpp
-    src/tests/logger_test.cpp)
+    src/tests/byte_order_test.cpp)
 
 target_link_libraries(crypto_tests
     PRIVATE

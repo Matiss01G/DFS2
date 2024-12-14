@@ -6,5 +6,5 @@ CXX_DEFINES = -DBOOST_ATOMIC_DYN_LINK -DBOOST_ATOMIC_NO_LIB -DBOOST_CHRONO_DYN_L
 
 CXX_INCLUDES = -I/home/runner/StreamCryptoDFS/include -isystem /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include
 
-CXX_FLAGS = -std=c++20
+CXX_FLAGS = -g -std=c++20
 

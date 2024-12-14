@@ -221,30 +221,6 @@ src/crypto/crypto_stream.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/dfs_crypto.dir/build.make CMakeFiles/dfs_crypto.dir/src/crypto/crypto_stream.cpp.s
 .PHONY : src/crypto/crypto_stream.cpp.s
 
-src/crypto/logger.o: src/crypto/logger.cpp.o
-.PHONY : src/crypto/logger.o
-
-# target to build an object file
-src/crypto/logger.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/dfs_crypto.dir/build.make CMakeFiles/dfs_crypto.dir/src/crypto/logger.cpp.o
-.PHONY : src/crypto/logger.cpp.o
-
-src/crypto/logger.i: src/crypto/logger.cpp.i
-.PHONY : src/crypto/logger.i
-
-# target to preprocess a source file
-src/crypto/logger.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/dfs_crypto.dir/build.make CMakeFiles/dfs_crypto.dir/src/crypto/logger.cpp.i
-.PHONY : src/crypto/logger.cpp.i
-
-src/crypto/logger.s: src/crypto/logger.cpp.s
-.PHONY : src/crypto/logger.s
-
-# target to generate assembly for a file
-src/crypto/logger.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/dfs_crypto.dir/build.make CMakeFiles/dfs_crypto.dir/src/crypto/logger.cpp.s
-.PHONY : src/crypto/logger.cpp.s
-
 src/tests/byte_order_test.o: src/tests/byte_order_test.cpp.o
 .PHONY : src/tests/byte_order_test.o
 
@@ -293,30 +269,6 @@ src/tests/crypto_stream_test.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/crypto_tests.dir/build.make CMakeFiles/crypto_tests.dir/src/tests/crypto_stream_test.cpp.s
 .PHONY : src/tests/crypto_stream_test.cpp.s
 
-src/tests/logger_test.o: src/tests/logger_test.cpp.o
-.PHONY : src/tests/logger_test.o
-
-# target to build an object file
-src/tests/logger_test.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/crypto_tests.dir/build.make CMakeFiles/crypto_tests.dir/src/tests/logger_test.cpp.o
-.PHONY : src/tests/logger_test.cpp.o
-
-src/tests/logger_test.i: src/tests/logger_test.cpp.i
-.PHONY : src/tests/logger_test.i
-
-# target to preprocess a source file
-src/tests/logger_test.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/crypto_tests.dir/build.make CMakeFiles/crypto_tests.dir/src/tests/logger_test.cpp.i
-.PHONY : src/tests/logger_test.cpp.i
-
-src/tests/logger_test.s: src/tests/logger_test.cpp.s
-.PHONY : src/tests/logger_test.s
-
-# target to generate assembly for a file
-src/tests/logger_test.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/crypto_tests.dir/build.make CMakeFiles/crypto_tests.dir/src/tests/logger_test.cpp.s
-.PHONY : src/tests/logger_test.cpp.s
-
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -335,18 +287,12 @@ help:
 	@echo "... src/crypto/crypto_stream.o"
 	@echo "... src/crypto/crypto_stream.i"
 	@echo "... src/crypto/crypto_stream.s"
-	@echo "... src/crypto/logger.o"
-	@echo "... src/crypto/logger.i"
-	@echo "... src/crypto/logger.s"
 	@echo "... src/tests/byte_order_test.o"
 	@echo "... src/tests/byte_order_test.i"
 	@echo "... src/tests/byte_order_test.s"
 	@echo "... src/tests/crypto_stream_test.o"
 	@echo "... src/tests/crypto_stream_test.i"
 	@echo "... src/tests/crypto_stream_test.s"
-	@echo "... src/tests/logger_test.o"
-	@echo "... src/tests/logger_test.i"
-	@echo "... src/tests/logger_test.s"
 .PHONY : help
 
 

@@ -11,6 +11,9 @@ protected:
     std::vector<uint8_t> iv;
 
     void SetUp() override {
+        // Initialize logger for tests
+        Logger::init("logs/crypto_test.log");
+        
         // Initialize with test key and IV
         key.resize(CryptoStream::KEY_SIZE, 0x42);
         iv.resize(CryptoStream::IV_SIZE, 0x24);
