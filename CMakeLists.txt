@@ -5,19 +5,27 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
-# Find OpenSSL
+# Find required packages
 find_package(OpenSSL REQUIRED)
-
-# Find GTest
+find_package(Boost REQUIRED COMPONENTS log log_setup system thread)
 find_package(GTest REQUIRED)
 
-# Create interface library for headers
-add_library(dfs_crypto INTERFACE)
-target_include_directories(dfs_crypto INTERFACE 
+# Create crypto library
+add_library(dfs_crypto
+    src/crypto/crypto_stream.cpp
+    src/crypto/logger.cpp
+)
+target_include_directories(dfs_crypto PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
     $<INSTALL_INTERFACE:include>
 )
-target_link_libraries(dfs_crypto INTERFACE OpenSSL::Crypto)
+target_link_libraries(dfs_crypto PUBLIC
+    OpenSSL::Crypto
+    Boost::log
+    Boost::log_setup
+    Boost::system
+    Boost::thread
+)
 
 # Tests
 enable_testing()
@@ -25,7 +33,7 @@ enable_testing()
 add_executable(crypto_tests 
     src/tests/crypto_stream_test.cpp
     src/tests/byte_order_test.cpp
-)
+    src/tests/logger_test.cpp)
 
 target_link_libraries(crypto_tests
     PRIVATE

@@ -43,6 +43,10 @@ if(NOT DEFINED CMAKE_OBJDUMP)
 endif()
 
 if(CMAKE_INSTALL_COMPONENT STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib" TYPE STATIC_LIBRARY FILES "/home/runner/StreamCryptoDFS/build/libdfs_crypto.a")
+endif()
+
+if(CMAKE_INSTALL_COMPONENT STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
   file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include" TYPE DIRECTORY FILES "/home/runner/StreamCryptoDFS/include/" FILES_MATCHING REGEX "/[^/]*\\.hpp$")
 endif()
 
@@ -64,6 +68,9 @@ if(CMAKE_INSTALL_COMPONENT STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT
     unset(_cmake_export_file_changed)
   endif()
   file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/cmake/dfs_crypto" TYPE FILE FILES "/home/runner/StreamCryptoDFS/build/CMakeFiles/Export/7689b0d9b5b336af3009e27890855d51/dfs_crypto-targets.cmake")
+  if(CMAKE_INSTALL_CONFIG_NAME MATCHES "^()$")
+    file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/cmake/dfs_crypto" TYPE FILE FILES "/home/runner/StreamCryptoDFS/build/CMakeFiles/Export/7689b0d9b5b336af3009e27890855d51/dfs_crypto-targets-noconfig.cmake")
+  endif()
 endif()
 
 if(CMAKE_INSTALL_COMPONENT)

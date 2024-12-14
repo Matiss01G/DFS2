@@ -1,5 +1,5 @@
-CMakeFiles/crypto_tests.dir/src/tests/crypto_stream_test.cpp.o: \
- /home/runner/StreamCryptoDFS/src/tests/crypto_stream_test.cpp \
+CMakeFiles/crypto_tests.dir/src/tests/logger_test.cpp.o: \
+ /home/runner/StreamCryptoDFS/src/tests/logger_test.cpp \
  /nix/store/fwh4fxd747m0py3ib3s5abamia9nrf90-glibc-2.39-52-dev/include/stdc-predef.h \
  /nix/store/ikmzrr3a8gd4jx31lkdhx7bk045j16fi-gtest-1.14.0-dev/include/gtest/gtest.h \
  /nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/cstddef \
@@ -390,43 +390,11 @@ CMakeFiles/crypto_tests.dir/src/tests/crypto_stream_test.cpp.o: \
  /nix/store/ikmzrr3a8gd4jx31lkdhx7bk045j16fi-gtest-1.14.0-dev/include/gtest/gtest-typed-test.h \
  /nix/store/ikmzrr3a8gd4jx31lkdhx7bk045j16fi-gtest-1.14.0-dev/include/gtest/gtest_pred_impl.h \
  /nix/store/ikmzrr3a8gd4jx31lkdhx7bk045j16fi-gtest-1.14.0-dev/include/gtest/gtest_prod.h \
- /home/runner/StreamCryptoDFS/include/crypto/crypto_stream.hpp \
- /nix/store/191vca5vdxdlr32k2hpzd66mic98930f-openssl-3.0.13-dev/include/openssl/evp.h \
- /nix/store/191vca5vdxdlr32k2hpzd66mic98930f-openssl-3.0.13-dev/include/openssl/macros.h \
- /nix/store/191vca5vdxdlr32k2hpzd66mic98930f-openssl-3.0.13-dev/include/openssl/opensslconf.h \
- /nix/store/191vca5vdxdlr32k2hpzd66mic98930f-openssl-3.0.13-dev/include/openssl/configuration.h \
- /nix/store/191vca5vdxdlr32k2hpzd66mic98930f-openssl-3.0.13-dev/include/openssl/opensslv.h \
- /nix/store/191vca5vdxdlr32k2hpzd66mic98930f-openssl-3.0.13-dev/include/openssl/types.h \
- /nix/store/191vca5vdxdlr32k2hpzd66mic98930f-openssl-3.0.13-dev/include/openssl/e_os2.h \
- /nix/store/191vca5vdxdlr32k2hpzd66mic98930f-openssl-3.0.13-dev/include/openssl/safestack.h \
- /nix/store/191vca5vdxdlr32k2hpzd66mic98930f-openssl-3.0.13-dev/include/openssl/stack.h \
- /nix/store/191vca5vdxdlr32k2hpzd66mic98930f-openssl-3.0.13-dev/include/openssl/core.h \
- /nix/store/191vca5vdxdlr32k2hpzd66mic98930f-openssl-3.0.13-dev/include/openssl/core_dispatch.h \
- /nix/store/191vca5vdxdlr32k2hpzd66mic98930f-openssl-3.0.13-dev/include/openssl/symhacks.h \
- /nix/store/191vca5vdxdlr32k2hpzd66mic98930f-openssl-3.0.13-dev/include/openssl/bio.h \
- /nix/store/191vca5vdxdlr32k2hpzd66mic98930f-openssl-3.0.13-dev/include/openssl/crypto.h \
- /nix/store/191vca5vdxdlr32k2hpzd66mic98930f-openssl-3.0.13-dev/include/openssl/cryptoerr.h \
- /nix/store/191vca5vdxdlr32k2hpzd66mic98930f-openssl-3.0.13-dev/include/openssl/cryptoerr_legacy.h \
- /nix/store/191vca5vdxdlr32k2hpzd66mic98930f-openssl-3.0.13-dev/include/openssl/bioerr.h \
- /nix/store/191vca5vdxdlr32k2hpzd66mic98930f-openssl-3.0.13-dev/include/openssl/evperr.h \
- /nix/store/191vca5vdxdlr32k2hpzd66mic98930f-openssl-3.0.13-dev/include/openssl/params.h \
- /nix/store/191vca5vdxdlr32k2hpzd66mic98930f-openssl-3.0.13-dev/include/openssl/bn.h \
- /nix/store/191vca5vdxdlr32k2hpzd66mic98930f-openssl-3.0.13-dev/include/openssl/bnerr.h \
- /nix/store/191vca5vdxdlr32k2hpzd66mic98930f-openssl-3.0.13-dev/include/openssl/objects.h \
- /nix/store/191vca5vdxdlr32k2hpzd66mic98930f-openssl-3.0.13-dev/include/openssl/obj_mac.h \
- /nix/store/191vca5vdxdlr32k2hpzd66mic98930f-openssl-3.0.13-dev/include/openssl/asn1.h \
- /nix/store/191vca5vdxdlr32k2hpzd66mic98930f-openssl-3.0.13-dev/include/openssl/asn1err.h \
- /nix/store/191vca5vdxdlr32k2hpzd66mic98930f-openssl-3.0.13-dev/include/openssl/objectserr.h \
- /nix/store/191vca5vdxdlr32k2hpzd66mic98930f-openssl-3.0.13-dev/include/openssl/aes.h \
- /nix/store/191vca5vdxdlr32k2hpzd66mic98930f-openssl-3.0.13-dev/include/openssl/err.h \
- /nix/store/191vca5vdxdlr32k2hpzd66mic98930f-openssl-3.0.13-dev/include/openssl/lhash.h \
- /nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/span \
- /home/runner/StreamCryptoDFS/include/crypto/crypto_error.hpp \
- /home/runner/StreamCryptoDFS/include/crypto/byte_order.hpp \
- /nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/algorithm \
- /nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/bits/ranges_algo.h \
- /nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/pstl/glue_algorithm_defs.h \
- /nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/cstring \
+ /nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/fstream \
+ /nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/x86_64-unknown-linux-gnu/bits/basic_file.h \
+ /nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/x86_64-unknown-linux-gnu/bits/c++io.h \
+ /nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/bits/fstream.tcc \
+ /nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/thread \
  /home/runner/StreamCryptoDFS/include/crypto/logger.hpp \
  /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/log/core.hpp \
  /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/log/detail/config.hpp \
@@ -495,6 +463,7 @@ CMakeFiles/crypto_tests.dir/src/tests/crypto_stream_test.cpp.o: \
  /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/exception/exception.hpp \
  /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/assert/source_location.hpp \
  /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/current_function.hpp \
+ /nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/cstring \
  /nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/source_location \
  /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/smart_ptr/detail/sp_convertible.hpp \
  /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/smart_ptr/detail/sp_nullptr_t.hpp \
@@ -506,6 +475,9 @@ CMakeFiles/crypto_tests.dir/src/tests/crypto_stream_test.cpp.o: \
  /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/smart_ptr/detail/sp_thread_pause.hpp \
  /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/smart_ptr/detail/sp_thread_sleep.hpp \
  /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/config/pragma_message.hpp \
+ /nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/algorithm \
+ /nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/bits/ranges_algo.h \
+ /nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/pstl/glue_algorithm_defs.h \
  /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/smart_ptr/detail/operator_bool.hpp \
  /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/smart_ptr/detail/local_sp_deleter.hpp \
  /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/smart_ptr/detail/local_counted_base.hpp \

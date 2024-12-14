@@ -14,6 +14,20 @@
 # EXTERNAL cache entries
 ########################
 
+//The directory containing a CMake configuration file for Boost.
+Boost_DIR:PATH=/nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/lib/cmake/Boost-1.81.0
+
+//Path to a file.
+Boost_INCLUDE_DIR:PATH=/nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include
+
+Boost_LOG_LIBRARY_RELEASE:STRING=/nix/store/62sh2bwllmkl8zzpqhglzgpk7lmsmrsa-boost-1.81.0/lib/libboost_log.so.1.81.0
+
+Boost_LOG_SETUP_LIBRARY_RELEASE:STRING=/nix/store/62sh2bwllmkl8zzpqhglzgpk7lmsmrsa-boost-1.81.0/lib/libboost_log_setup.so.1.81.0
+
+Boost_SYSTEM_LIBRARY_RELEASE:STRING=/nix/store/62sh2bwllmkl8zzpqhglzgpk7lmsmrsa-boost-1.81.0/lib/libboost_system.so.1.81.0
+
+Boost_THREAD_LIBRARY_RELEASE:STRING=/nix/store/62sh2bwllmkl8zzpqhglzgpk7lmsmrsa-boost-1.81.0/lib/libboost_thread.so.1.81.0
+
 //Path to a program.
 CMAKE_ADDR2LINE:FILEPATH=/nix/store/9bv7dcvmfcjnmg5mnqwqlq2wxfn8d7yi-gcc-wrapper-13.2.0/bin/addr2line
 
@@ -207,6 +221,33 @@ PKG_CONFIG_ARGN:STRING=
 //pkg-config executable
 PKG_CONFIG_EXECUTABLE:FILEPATH=PKG_CONFIG_EXECUTABLE-NOTFOUND
 
+//The directory containing a CMake configuration file for boost_atomic.
+boost_atomic_DIR:PATH=/nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/lib/cmake/boost_atomic-1.81.0
+
+//The directory containing a CMake configuration file for boost_chrono.
+boost_chrono_DIR:PATH=/nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/lib/cmake/boost_chrono-1.81.0
+
+//The directory containing a CMake configuration file for boost_filesystem.
+boost_filesystem_DIR:PATH=/nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/lib/cmake/boost_filesystem-1.81.0
+
+//The directory containing a CMake configuration file for boost_headers.
+boost_headers_DIR:PATH=/nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/lib/cmake/boost_headers-1.81.0
+
+//The directory containing a CMake configuration file for boost_log.
+boost_log_DIR:PATH=/nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/lib/cmake/boost_log-1.81.0
+
+//The directory containing a CMake configuration file for boost_log_setup.
+boost_log_setup_DIR:PATH=/nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/lib/cmake/boost_log_setup-1.81.0
+
+//The directory containing a CMake configuration file for boost_regex.
+boost_regex_DIR:PATH=/nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/lib/cmake/boost_regex-1.81.0
+
+//The directory containing a CMake configuration file for boost_system.
+boost_system_DIR:PATH=/nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/lib/cmake/boost_system-1.81.0
+
+//The directory containing a CMake configuration file for boost_thread.
+boost_thread_DIR:PATH=/nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/lib/cmake/boost_thread-1.81.0
+
 //Value Computed by CMake
 dfs_crypto_BINARY_DIR:STATIC=/home/runner/StreamCryptoDFS/build
 
@@ -221,6 +262,8 @@ dfs_crypto_SOURCE_DIR:STATIC=/home/runner/StreamCryptoDFS
 # INTERNAL cache entries
 ########################
 
+//ADVANCED property for variable: Boost_DIR
+Boost_DIR-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_ADDR2LINE
 CMAKE_ADDR2LINE-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_AR
@@ -352,6 +395,8 @@ CMAKE_TAPI-ADVANCED:INTERNAL=1
 CMAKE_UNAME:INTERNAL=/nix/store/php4qidg2bxzmm79vpri025bqi0fa889-coreutils-9.5/bin/uname
 //ADVANCED property for variable: CMAKE_VERBOSE_MAKEFILE
 CMAKE_VERBOSE_MAKEFILE-ADVANCED:INTERNAL=1
+//Details about finding Boost
+FIND_PACKAGE_MESSAGE_DETAILS_Boost:INTERNAL=[/nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/lib/cmake/Boost-1.81.0/BoostConfig.cmake][cfound components: log log_setup system thread ][v1.81.0()]
 //Details about finding GTest
 FIND_PACKAGE_MESSAGE_DETAILS_GTest:INTERNAL=[/nix/store/ikmzrr3a8gd4jx31lkdhx7bk045j16fi-gtest-1.14.0-dev/lib/cmake/GTest/GTestConfig.cmake][c ][v1.14.0()]
 //Details about finding OpenSSL
@@ -390,4 +435,22 @@ _OPENSSL_STATIC_LIBS_OTHER:INTERNAL=
 _OPENSSL_STATIC_LIBS_PATHS:INTERNAL=
 _OPENSSL_VERSION:INTERNAL=
 __pkg_config_checked__OPENSSL:INTERNAL=1
+//ADVANCED property for variable: boost_atomic_DIR
+boost_atomic_DIR-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: boost_chrono_DIR
+boost_chrono_DIR-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: boost_filesystem_DIR
+boost_filesystem_DIR-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: boost_headers_DIR
+boost_headers_DIR-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: boost_log_DIR
+boost_log_DIR-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: boost_log_setup_DIR
+boost_log_setup_DIR-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: boost_regex_DIR
+boost_regex_DIR-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: boost_system_DIR
+boost_system_DIR-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: boost_thread_DIR
+boost_thread_DIR-ADVANCED:INTERNAL=1
 

@@ -1,3 +1,4 @@
+/home/runner/StreamCryptoDFS/build/CMakeFiles/dfs_crypto.dir
 /home/runner/StreamCryptoDFS/build/CMakeFiles/crypto_tests.dir
 /home/runner/StreamCryptoDFS/build/CMakeFiles/test.dir
 /home/runner/StreamCryptoDFS/build/CMakeFiles/edit_cache.dir
