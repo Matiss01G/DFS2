@@ -18,10 +18,11 @@ TcpPeer::TcpPeer(boost::asio::io_context& io_context,
     // Generate random peer ID
     std::random_device rd;
     std::mt19937 gen(rd());
-    std::uniform_int_distribution<uint8_t> dist(0, 255);
-    for (auto& byte : peer_id_) {
-        byte = dist(gen);
-    }
+    std::uniform_int_distribution<uint8_t> dist(1, 255); // Avoid all zeros
+    std::generate(peer_id_.begin(), peer_id_.end(), [&]() { return dist(gen); });
+    
+    BOOST_LOG_TRIVIAL(debug) << "Created TCP peer with ID: " 
+                          << std::hex << peer_id_[0] << peer_id_[1];
 }
 
 TcpPeer::~TcpPeer() {
@@ -38,7 +39,23 @@ void TcpPeer::connect() {
                 BOOST_LOG_TRIVIAL(info) << "Connected to peer: " 
                                       << self->endpoint_.address().to_string()
                                       << ":" << self->endpoint_.port();
-                self->start_read_header();
+                
+                // Send peer ID as initial handshake
+                auto id_buffer = std::make_shared<std::vector<uint8_t>>(self->peer_id_.begin(), 
+                                                                      self->peer_id_.end());
+                boost::asio::async_write(self->socket_,
+                    boost::asio::buffer(*id_buffer),
+                    [self, id_buffer](const boost::system::error_code& write_error,
+                                    std::size_t /*bytes_transferred*/) {
+                        if (!write_error) {
+                            if (self->error_handler_) {
+                                self->error_handler_(NetworkError::SUCCESS);
+                            }
+                            self->start_read_header();
+                        } else {
+                            self->handle_error(write_error);
+                        }
+                    });
             } else {
                 self->handle_error(error);
             }
@@ -396,6 +413,11 @@ void TcpPeer::handle_write(const boost::system::error_code& error) {
 void TcpPeer::handle_error(const boost::system::error_code& error) {
     NetworkError net_error;
     
+    if (error == boost::asio::error::operation_aborted) {
+        // Ignore planned disconnections
+        return;
+    }
+    
     if (error == boost::asio::error::eof ||
         error == boost::asio::error::connection_reset ||
         error == boost::asio::error::connection_aborted ||
@@ -416,17 +438,27 @@ void TcpPeer::handle_error(const boost::system::error_code& error) {
         BOOST_LOG_TRIVIAL(error) << "Unknown network error: " << error.message();
     }
     
+    // Ensure we're disconnected before notifying error handler
+    {
+        std::lock_guard<std::mutex> lock(queue_mutex_);
+        writing_ = false;
+        while (!message_queue_.empty()) {
+            message_queue_.pop();
+        }
+        
+        if (connected_) {
+            boost::system::error_code ec;
+            socket_.close(ec);
+            connected_ = false;
+        }
+    }
+    
+    // Notify error handler if set
     if (error_handler_) {
-        error_handler_(net_error);
+        io_context_.post([this, net_error]() {
+            error_handler_(net_error);
+        });
     }
-
-    // Ensure clean disconnect
-    std::lock_guard<std::mutex> lock(queue_mutex_);
-    writing_ = false;
-    while (!message_queue_.empty()) {
-        message_queue_.pop();
-    }
-    disconnect();
 }
 
 void TcpPeer::set_message_handler(message_handler handler) {
@@ -456,9 +488,22 @@ void TcpPeer::accept(boost::asio::ip::tcp::acceptor& acceptor,
             if (!error) {
                 endpoint_ = socket_.remote_endpoint();
                 connected_ = true;
+                
+                // Generate a new peer ID if not already set
+                if (std::all_of(peer_id_.begin(), peer_id_.end(), [](uint8_t b) { return b == 0; })) {
+                    std::random_device rd;
+                    std::mt19937 gen(rd());
+                    std::uniform_int_distribution<uint8_t> dist(1, 255);  // Avoid all zeros
+                    std::generate(peer_id_.begin(), peer_id_.end(), [&]() { return dist(gen); });
+                }
+                
                 BOOST_LOG_TRIVIAL(info) << "Accepted connection from " 
                                       << endpoint_.address().to_string()
                                       << ":" << endpoint_.port();
+                
+                if (error_handler_) {
+                    error_handler_(NetworkError::SUCCESS);
+                }
             }
             handler(error);
         });
