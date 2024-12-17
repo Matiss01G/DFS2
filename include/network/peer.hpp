@@ -42,9 +42,9 @@ public:
     virtual bool start_stream_processing() = 0;
     virtual void stop_stream_processing() = 0;
 
-    // Optional message-based operations
+    // Optional message-based operations for backward compatibility
     virtual bool send_frame(const MessageFrame& frame) { return false; }
-    virtual void set_frame_callback(OnDataReceived callback) {}
+    virtual void set_frame_callback(std::function<void(const MessageFrame&)> callback) {}
 
     // State management
     virtual ConnectionState::State get_connection_state() const = 0;
