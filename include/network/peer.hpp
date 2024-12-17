@@ -2,9 +2,10 @@
 #define DFS_NETWORK_PEER_HPP
 
 #include <string>
-#include <vector>
 #include <functional>
 #include <memory>
+#include <iostream>
+#include <streambuf>
 #include "connection_state.hpp"
 #include "message_frame.hpp"
 
@@ -14,7 +15,8 @@ namespace network {
 // Network streaming interface for DFS peers
 class Peer {
 public:
-    using DataCallback = std::function<void(const std::vector<uint8_t>&)>;
+    // Handler for processing streamed data chunks, manages buffering and async reading
+    using OnDataReceived = std::function<void(std::istream&)>;
     
     virtual ~Peer() = default;
 
@@ -27,13 +29,13 @@ public:
     // Send data frame to peer
     virtual bool send_data(const MessageFrame& frame) = 0;
 
-    // Set callback for received data
-    virtual void set_receive_callback(DataCallback callback) = 0;
+    // Set handler for async data reception
+    virtual void set_receive_callback(OnDataReceived callback) = 0;
 
-    // Begin reading data from peer
+    // Begin background data reading loop
     virtual void start_read_loop() = 0;
 
-    // Stop reading data from peer
+    // Stop background data reading loop
     virtual void stop_read_loop() = 0;
 
     // Get current connection state
