@@ -29,6 +29,9 @@ public:
     const std::array<uint8_t, 32>& get_id() const override;
 
 private:
+    // Constants
+    static constexpr size_t MAX_PAYLOAD_SIZE = 1024 * 1024 * 1024; // 1GB max payload size
+    
     // Internal types for managing async operations
     struct PendingMessage {
         MessageHeader header;
@@ -65,6 +68,9 @@ private:
     void start_read_header();
     void handle_read_header(const boost::system::error_code& error,
                           std::vector<uint8_t>& header_buffer);
+    void read_payload_chunk(const MessageHeader& header,
+                          std::shared_ptr<std::stringstream> stream_buffer,
+                          size_t bytes_read);
     void handle_read_payload(const boost::system::error_code& error,
                            const MessageHeader& header,
                            std::shared_ptr<std::vector<uint8_t>> payload_buffer);

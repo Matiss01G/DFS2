@@ -38,8 +38,12 @@ TEST_F(NetworkTest, ConnectToPeer) {
     // Set up error handler to detect successful connection
     client_->set_error_handler([&](NetworkError error) {
         std::lock_guard<std::mutex> lock(mtx);
-        connected = (error == NetworkError::SUCCESS);
-        cv.notify_one();
+        if (error == NetworkError::SUCCESS) {
+            connected = true;
+            cv.notify_one();
+        } else {
+            BOOST_LOG_TRIVIAL(error) << "Connection error: " << to_string(error);
+        }
     });
     
     // Connect client to server
@@ -48,7 +52,8 @@ TEST_F(NetworkTest, ConnectToPeer) {
     
     // Wait for connection or timeout
     std::unique_lock<std::mutex> lock(mtx);
-    ASSERT_TRUE(cv.wait_for(lock, 5s, [&]{ return connected; }));
+    ASSERT_TRUE(cv.wait_for(lock, 5s, [&]{ return connected; }))
+        << "Failed to establish connection within timeout period";
 }
 
 TEST_F(NetworkTest, StreamFileTransfer) {

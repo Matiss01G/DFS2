@@ -2,6 +2,8 @@
 #include <boost/log/trivial.hpp>
 #include <istream>
 #include <sstream>
+#include <random>
+#include <algorithm>
 
 namespace dfs::network {
 
@@ -73,9 +75,10 @@ void TcpPeer::send_message(MessageType type,
     MessageHeader header;
     header.type = type;
     
-    // Generate random IV for this message
+    // Generate random IV for this message using a lambda that maintains the random device
     std::random_device rd;
-    std::generate(header.iv.begin(), header.iv.end(), rd);
+    std::generate(header.iv.begin(), header.iv.end(), 
+        [&rd]() { return rd(); });
     
     // Copy source ID and file key
     std::copy(peer_id_.begin(), peer_id_.end(), header.source_id.begin());
@@ -124,23 +127,98 @@ void TcpPeer::handle_read_header(const boost::system::error_code& error,
         // Deserialize header
         auto header = MessageHeader::deserialize(header_buffer);
         
-        // Prepare for payload
-        auto payload_buffer = std::make_shared<std::vector<uint8_t>>(header.payload_size);
+        // Validate payload size to prevent memory exhaustion
+        if (header.payload_size > MAX_PAYLOAD_SIZE) {
+            BOOST_LOG_TRIVIAL(error) << "Payload size exceeds maximum allowed: " 
+                                   << header.payload_size << " > " << MAX_PAYLOAD_SIZE;
+            if (error_handler_) {
+                error_handler_(NetworkError::INVALID_MESSAGE);
+            }
+            return;
+        }
         
-        // Start reading payload
-        boost::asio::async_read(socket_,
-            boost::asio::buffer(*payload_buffer),
-            [self = shared_from_this(), header, payload_buffer](
-                const boost::system::error_code& error,
-                std::size_t /*bytes_transferred*/) {
-                self->handle_read_payload(error, header, payload_buffer);
-            });
+        // Use chunked reading for large payloads
+        constexpr size_t CHUNK_SIZE = 8192; // 8KB chunks
+        auto payload_buffer = std::make_shared<std::vector<uint8_t>>();
+        payload_buffer->reserve(std::min(header.payload_size, CHUNK_SIZE));
+        
+        // Start reading payload in chunks
+        auto stream_buffer = std::make_shared<std::stringstream>();
+        read_payload_chunk(header, stream_buffer, 0);
+        
     } catch (const std::exception& e) {
         BOOST_LOG_TRIVIAL(error) << "Error processing message header: " << e.what();
         if (error_handler_) {
             error_handler_(NetworkError::INVALID_MESSAGE);
         }
     }
+}
+
+void TcpPeer::read_payload_chunk(const MessageHeader& header,
+                                std::shared_ptr<std::stringstream> stream_buffer,
+                                size_t bytes_read) {
+    constexpr size_t CHUNK_SIZE = 8192;  // 8KB chunks for efficient streaming
+    size_t remaining_bytes = header.payload_size - bytes_read;
+    size_t chunk_size = std::min(CHUNK_SIZE, remaining_bytes);
+    
+    // Create chunk buffer with appropriate size
+    auto chunk_buffer = std::make_shared<std::vector<uint8_t>>(chunk_size);
+    
+    BOOST_LOG_TRIVIAL(debug) << "Reading chunk: " << chunk_size << " bytes "
+                           << "(total read: " << bytes_read << "/"
+                           << header.payload_size << ")";
+    
+    boost::asio::async_read(socket_,
+        boost::asio::buffer(*chunk_buffer),
+        [self = shared_from_this(), header, stream_buffer, chunk_buffer, bytes_read]
+        (const boost::system::error_code& error, size_t bytes_transferred) {
+            if (error) {
+                if (error == boost::asio::error::eof) {
+                    BOOST_LOG_TRIVIAL(error) << "Stream ended unexpectedly while reading chunk";
+                    if (self->error_handler_) {
+                        self->error_handler_(NetworkError::PEER_DISCONNECTED);
+                    }
+                } else {
+                    self->handle_error(error);
+                }
+                return;
+            }
+            
+            try {
+                // Append chunk to stream buffer
+                stream_buffer->write(reinterpret_cast<char*>(chunk_buffer->data()),
+                                  bytes_transferred);
+                if (!stream_buffer->good()) {
+                    throw std::runtime_error("Failed to write to stream buffer");
+                }
+                
+                size_t total_bytes = bytes_read + bytes_transferred;
+                BOOST_LOG_TRIVIAL(debug) << "Chunk received: " << bytes_transferred 
+                                      << " bytes (total: " << total_bytes << "/"
+                                      << header.payload_size << ")";
+                
+                if (total_bytes < header.payload_size) {
+                    // Continue reading chunks
+                    self->read_payload_chunk(header, stream_buffer, total_bytes);
+                } else {
+                    // All chunks received, process complete payload
+                    stream_buffer->seekg(0);
+                    if (!stream_buffer->good()) {
+                        throw std::runtime_error("Failed to seek stream buffer");
+                    }
+                    
+                    self->handle_read_payload(boost::system::error_code(), header,
+                                          std::make_shared<std::vector<uint8_t>>(
+                                              std::istreambuf_iterator<char>(*stream_buffer),
+                                              std::istreambuf_iterator<char>()));
+                }
+            } catch (const std::exception& e) {
+                BOOST_LOG_TRIVIAL(error) << "Error processing chunk: " << e.what();
+                if (self->error_handler_) {
+                    self->error_handler_(NetworkError::UNKNOWN_ERROR);
+                }
+            }
+        });
 }
 
 void TcpPeer::handle_read_payload(const boost::system::error_code& error,
@@ -165,10 +243,18 @@ void TcpPeer::handle_read_payload(const boost::system::error_code& error,
                                  std::vector<uint8_t>(header.iv.begin(),
                                                     header.iv.end()));
 
-        // Decrypt payload
+        // Stream-based decryption
         auto decrypted_stream = std::make_shared<std::stringstream>();
-        crypto_stream_->decrypt(*encrypted_stream, *decrypted_stream);
-        decrypted_stream->seekg(0);
+        try {
+            *crypto_stream_ << *encrypted_stream >> *decrypted_stream;
+            decrypted_stream->seekg(0);
+        } catch (const crypto::DecryptionError& e) {
+            BOOST_LOG_TRIVIAL(error) << "Decryption error: " << e.what();
+            if (error_handler_) {
+                error_handler_(NetworkError::ENCRYPTION_ERROR);
+            }
+            return;
+        }
 
         // Notify message handler
         if (message_handler_) {
@@ -193,21 +279,46 @@ void TcpPeer::start_write() {
 
     writing_ = true;
     auto& message = message_queue_.front();
+    
+    BOOST_LOG_TRIVIAL(debug) << "Starting write operation for message type: " 
+                           << static_cast<int>(message.header.type);
 
     try {
-        // Prepare encryption
-        crypto_stream_->setMode(crypto::CryptoStream::Mode::Encrypt);
-        crypto_stream_->initialize(std::vector<uint8_t>(message.header.file_key.begin(),
-                                                      message.header.file_key.end()),
-                                 std::vector<uint8_t>(message.header.iv.begin(),
-                                                    message.header.iv.end()));
-
-        // Encrypt payload
+        // Prepare encryption with stream handling
         auto encrypted_stream = std::make_shared<std::stringstream>();
-        crypto_stream_->encrypt(*message.payload, *encrypted_stream);
+        {
+            crypto_stream_->setMode(crypto::CryptoStream::Mode::Encrypt);
+            crypto_stream_->initialize(std::vector<uint8_t>(message.header.file_key.begin(),
+                                                          message.header.file_key.end()),
+                                     std::vector<uint8_t>(message.header.iv.begin(),
+                                                         message.header.iv.end()));
+
+            try {
+                // Stream encryption with progress logging
+                BOOST_LOG_TRIVIAL(debug) << "Starting stream encryption";
+                *crypto_stream_ << *message.payload >> *encrypted_stream;
+                if (!encrypted_stream->good()) {
+                    throw std::runtime_error("Encryption stream write failed");
+                }
+                BOOST_LOG_TRIVIAL(debug) << "Stream encryption completed";
+            } catch (const crypto::EncryptionError& e) {
+                BOOST_LOG_TRIVIAL(error) << "Encryption error: " << e.what();
+                throw;
+            }
+        }
+        
+        // Update payload size after encryption
         encrypted_stream->seekg(0, std::ios::end);
-        message.header.payload_size = encrypted_stream->tellg();
+        auto encrypted_size = encrypted_stream->tellg();
+        if (encrypted_size == -1) {
+            throw std::runtime_error("Failed to determine encrypted payload size");
+        }
+        message.header.payload_size = static_cast<uint64_t>(encrypted_size);
         encrypted_stream->seekg(0);
+
+        if (message.header.payload_size > MAX_PAYLOAD_SIZE) {
+            throw std::runtime_error("Encrypted payload size exceeds maximum allowed size");
+        }
 
         // Serialize header
         auto header_data = message.header.serialize();
@@ -216,23 +327,48 @@ void TcpPeer::start_write() {
         std::vector<boost::asio::const_buffer> buffers;
         buffers.push_back(boost::asio::buffer(header_data));
         
-        // Get encrypted payload data
+        // Get encrypted payload data with validation
         auto payload_data = std::make_shared<std::vector<uint8_t>>(message.header.payload_size);
-        encrypted_stream->read(reinterpret_cast<char*>(payload_data->data()),
-                             message.header.payload_size);
+        if (!encrypted_stream->read(reinterpret_cast<char*>(payload_data->data()),
+                                  message.header.payload_size)) {
+            throw std::runtime_error("Failed to read encrypted payload data");
+        }
         buffers.push_back(boost::asio::buffer(*payload_data));
 
-        // Write message
+        BOOST_LOG_TRIVIAL(debug) << "Sending message: size=" << message.header.payload_size 
+                               << " bytes";
+
+        // Write message with detailed error handling
         boost::asio::async_write(socket_,
             buffers,
             [self = shared_from_this(), payload_data](const boost::system::error_code& error,
-                                                    std::size_t /*bytes_transferred*/) {
+                                                    std::size_t bytes_transferred) {
+                if (!error) {
+                    BOOST_LOG_TRIVIAL(debug) << "Successfully wrote " << bytes_transferred 
+                                          << " bytes";
+                } else if (error == boost::asio::error::broken_pipe ||
+                          error == boost::asio::error::connection_reset) {
+                    BOOST_LOG_TRIVIAL(error) << "Connection lost while writing: " 
+                                          << error.message();
+                    if (self->error_handler_) {
+                        self->error_handler_(NetworkError::PEER_DISCONNECTED);
+                    }
+                } else {
+                    BOOST_LOG_TRIVIAL(error) << "Write error: " << error.message();
+                }
                 self->handle_write(error);
             });
+    } catch (const crypto::EncryptionError& e) {
+        BOOST_LOG_TRIVIAL(error) << "Encryption error while preparing message: " << e.what();
+        if (error_handler_) {
+            error_handler_(NetworkError::ENCRYPTION_ERROR);
+        }
+        writing_ = false;
+        message_queue_.pop();
     } catch (const std::exception& e) {
         BOOST_LOG_TRIVIAL(error) << "Error preparing message for sending: " << e.what();
         if (error_handler_) {
-            error_handler_(NetworkError::ENCRYPTION_ERROR);
+            error_handler_(NetworkError::UNKNOWN_ERROR);
         }
         writing_ = false;
         message_queue_.pop();
@@ -261,20 +397,35 @@ void TcpPeer::handle_error(const boost::system::error_code& error) {
     NetworkError net_error;
     
     if (error == boost::asio::error::eof ||
-        error == boost::asio::error::connection_reset) {
+        error == boost::asio::error::connection_reset ||
+        error == boost::asio::error::connection_aborted ||
+        error == boost::asio::error::broken_pipe) {
         net_error = NetworkError::PEER_DISCONNECTED;
-    } else if (error == boost::asio::error::connection_refused) {
+        BOOST_LOG_TRIVIAL(warning) << "Peer disconnected: " << error.message();
+    } else if (error == boost::asio::error::connection_refused ||
+               error == boost::asio::error::host_unreachable ||
+               error == boost::asio::error::timed_out) {
         net_error = NetworkError::CONNECTION_FAILED;
+        BOOST_LOG_TRIVIAL(error) << "Connection failed: " << error.message();
+    } else if (error == boost::asio::error::no_buffer_space ||
+               error == boost::asio::error::no_memory) {
+        net_error = NetworkError::UNKNOWN_ERROR;
+        BOOST_LOG_TRIVIAL(error) << "Resource error: " << error.message();
     } else {
         net_error = NetworkError::UNKNOWN_ERROR;
+        BOOST_LOG_TRIVIAL(error) << "Unknown network error: " << error.message();
     }
-
-    BOOST_LOG_TRIVIAL(error) << "Network error: " << error.message();
     
     if (error_handler_) {
         error_handler_(net_error);
     }
 
+    // Ensure clean disconnect
+    std::lock_guard<std::mutex> lock(queue_mutex_);
+    writing_ = false;
+    while (!message_queue_.empty()) {
+        message_queue_.pop();
+    }
     disconnect();
 }
 

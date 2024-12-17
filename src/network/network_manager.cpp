@@ -86,20 +86,54 @@ void NetworkManager::send_file(const std::array<uint8_t, 32>& peer_id,
         throw std::runtime_error("Network manager not started");
     }
     
+    BOOST_LOG_TRIVIAL(info) << "Initiating file transfer to peer: " 
+                           << std::hex << peer_id[0] << peer_id[1];
+    
     auto peer = peer_manager_->get_peer(peer_id);
     if (!peer) {
+        BOOST_LOG_TRIVIAL(error) << "Peer not found";
         if (error_handler_) {
             error_handler_(NetworkError::PEER_DISCONNECTED);
         }
         return;
     }
     
+    if (!file_stream || !file_stream->good()) {
+        BOOST_LOG_TRIVIAL(error) << "Invalid file stream";
+        if (error_handler_) {
+            error_handler_(NetworkError::UNKNOWN_ERROR);
+        }
+        return;
+    }
+    
     try {
+        // Get file size for logging
+        auto pos = file_stream->tellg();
+        file_stream->seekg(0, std::ios::end);
+        auto size = file_stream->tellg();
+        file_stream->seekg(pos);
+        
+        BOOST_LOG_TRIVIAL(info) << "Starting file transfer of " << size << " bytes";
+        
+        // Verify file key
+        if (file_key.size() != crypto::CryptoStream::KEY_SIZE) {
+            throw std::runtime_error("Invalid file key size");
+        }
+        
+        // Send the file with stream processing
         peer->send_message(MessageType::FILE_TRANSFER, file_stream, file_key);
+        
+        BOOST_LOG_TRIVIAL(info) << "File transfer initiated successfully";
+        
+    } catch (const crypto::EncryptionError& e) {
+        BOOST_LOG_TRIVIAL(error) << "Encryption error during file transfer: " << e.what();
+        if (error_handler_) {
+            error_handler_(NetworkError::ENCRYPTION_ERROR);
+        }
     } catch (const std::exception& e) {
         BOOST_LOG_TRIVIAL(error) << "Failed to send file: " << e.what();
         if (error_handler_) {
-            error_handler_(NetworkError::ENCRYPTION_ERROR);
+            error_handler_(NetworkError::UNKNOWN_ERROR);
         }
     }
 }

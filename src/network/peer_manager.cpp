@@ -42,25 +42,51 @@ void PeerManager::stop_listening() {
 }
 
 void PeerManager::add_peer(const std::string& address, uint16_t port) {
-    auto peer = create_tcp_peer(io_context_, address, port, crypto_stream_);
+    BOOST_LOG_TRIVIAL(info) << "Adding new peer: " << address << ":" << port;
     
-    // Set up message and error handlers
-    peer->set_message_handler(message_handler_);
-    peer->set_error_handler(
-        [this, peer](NetworkError error) {
-            handle_peer_error(peer->get_id(), error);
-        }
-    );
-
-    // Add to peers map
-    {
-        std::lock_guard<std::mutex> lock(peers_mutex_);
+    try {
+        // Check if peer already exists
         std::string peer_key = address + ":" + std::to_string(port);
-        peers_[peer_key] = peer;
-    }
+        {
+            std::lock_guard<std::mutex> lock(peers_mutex_);
+            if (auto it = peers_.find(peer_key); it != peers_.end()) {
+                if (it->second->is_connected()) {
+                    BOOST_LOG_TRIVIAL(warning) << "Peer already connected: " << peer_key;
+                    return;
+                }
+                // Remove disconnected peer before adding new one
+                peers_.erase(it);
+            }
+        }
+        
+        // Create new peer
+        auto peer = create_tcp_peer(io_context_, address, port, crypto_stream_);
+        
+        // Set up message and error handlers
+        peer->set_message_handler(message_handler_);
+        peer->set_error_handler(
+            [this, peer_key](NetworkError error) {
+                BOOST_LOG_TRIVIAL(info) << "Peer error handler triggered for " << peer_key;
+                handle_peer_error(peer_key, error);
+            }
+        );
 
-    // Connect to peer
-    peer->connect();
+        // Add to peers map
+        {
+            std::lock_guard<std::mutex> lock(peers_mutex_);
+            peers_[peer_key] = peer;
+            BOOST_LOG_TRIVIAL(debug) << "Added peer to map: " << peer_key;
+        }
+
+        // Connect to peer
+        peer->connect();
+        BOOST_LOG_TRIVIAL(info) << "Initiated connection to peer: " << peer_key;
+        
+    } catch (const std::exception& e) {
+        BOOST_LOG_TRIVIAL(error) << "Failed to add peer " << address << ":" << port
+                               << " - " << e.what();
+        throw;
+    }
 }
 
 void PeerManager::remove_peer(const std::array<uint8_t, 32>& peer_id) {
@@ -79,20 +105,53 @@ void PeerManager::remove_peer(const std::array<uint8_t, 32>& peer_id) {
 }
 
 void PeerManager::broadcast_message(MessageType type,
-                                  std::shared_ptr<std::istream> payload,
-                                  const std::vector<uint8_t>& file_key) {
+                                   std::shared_ptr<std::istream> payload,
+                                   const std::vector<uint8_t>& file_key) {
     std::lock_guard<std::mutex> lock(peers_mutex_);
     
-    for (const auto& peer_pair : peers_) {
-        if (peer_pair.second->is_connected()) {
-            // Create a new stream for each peer to avoid sharing stream position
-            auto payload_copy = std::make_shared<std::stringstream>();
-            *payload_copy << payload->rdbuf();
-            payload_copy->seekg(0);
-            
-            peer_pair.second->send_message(type, payload_copy, file_key);
+    BOOST_LOG_TRIVIAL(info) << "Broadcasting message of type " 
+                           << static_cast<int>(type) 
+                           << " to " << peers_.size() << " peers";
+
+    // Store initial position to restore later
+    auto initial_pos = payload->tellg();
+    
+    for (const auto& [peer_key, peer] : peers_) {
+        if (peer->is_connected()) {
+            try {
+                // Create a new stream for each peer to avoid sharing stream position
+                auto payload_copy = std::make_shared<std::stringstream>();
+                
+                // Reset payload position for each copy
+                payload->seekg(0);
+                if (!payload->good()) {
+                    throw std::runtime_error("Failed to seek payload stream");
+                }
+                
+                *payload_copy << payload->rdbuf();
+                if (!payload_copy->good()) {
+                    throw std::runtime_error("Failed to copy payload stream");
+                }
+                
+                payload_copy->seekg(0);
+                if (!payload_copy->good()) {
+                    throw std::runtime_error("Failed to seek payload copy stream");
+                }
+                
+                BOOST_LOG_TRIVIAL(debug) << "Sending broadcast message to peer: " << peer_key;
+                peer->send_message(type, payload_copy, file_key);
+                
+            } catch (const std::exception& e) {
+                BOOST_LOG_TRIVIAL(error) << "Failed to broadcast message to peer " 
+                                       << peer_key << ": " << e.what();
+            }
         }
     }
+    
+    // Restore original position
+    payload->seekg(initial_pos);
+    
+    BOOST_LOG_TRIVIAL(debug) << "Broadcast complete";
 }
 
 std::shared_ptr<IPeer> PeerManager::get_peer(const std::array<uint8_t, 32>& peer_id) {
@@ -118,12 +177,18 @@ std::vector<std::shared_ptr<IPeer>> PeerManager::get_all_peers() {
 }
 
 void PeerManager::set_message_handler(message_handler handler) {
+    BOOST_LOG_TRIVIAL(info) << "Setting new message handler for peer manager";
     message_handler_ = std::move(handler);
     
-    // Update handler for existing peers
+    // Update handler for all existing peers
     std::lock_guard<std::mutex> lock(peers_mutex_);
-    for (const auto& peer_pair : peers_) {
-        peer_pair.second->set_message_handler(message_handler_);
+    for (const auto& [peer_key, peer] : peers_) {
+        try {
+            peer->set_message_handler(message_handler_);
+        } catch (const std::exception& e) {
+            BOOST_LOG_TRIVIAL(error) << "Failed to set message handler for peer "
+                                   << peer_key << ": " << e.what();
+        }
     }
 }
 
@@ -158,7 +223,7 @@ void PeerManager::handle_accept(std::shared_ptr<IPeer> peer,
     peer->set_message_handler(message_handler_);
     peer->set_error_handler(
         [this, peer](NetworkError error) {
-            handle_peer_error(peer->get_id(), error);
+            handle_peer_error(peer->get_address() + ":" + std::to_string(peer->get_port()), error);
         }
     );
 
@@ -179,11 +244,44 @@ void PeerManager::handle_accept(std::shared_ptr<IPeer> peer,
     start_accept();
 }
 
-void PeerManager::handle_peer_error(const std::array<uint8_t, 32>& peer_id,
-                                  NetworkError error) {
-    if (error == NetworkError::PEER_DISCONNECTED ||
-        error == NetworkError::CONNECTION_FAILED) {
-        remove_peer(peer_id);
+void PeerManager::handle_peer_error(const std::string& peer_key, NetworkError error) {
+    BOOST_LOG_TRIVIAL(info) << "Handling peer error for " << peer_key 
+                           << ": " << to_string(error);
+
+    switch (error) {
+        case NetworkError::PEER_DISCONNECTED:
+        case NetworkError::CONNECTION_FAILED:
+            try {
+                std::lock_guard<std::mutex> lock(peers_mutex_);
+                if (auto it = peers_.find(peer_key); it != peers_.end()) {
+                    it->second->disconnect();
+                    peers_.erase(it);
+                    BOOST_LOG_TRIVIAL(info) << "Removed disconnected peer: " << peer_key;
+                }
+            } catch (const std::exception& e) {
+                BOOST_LOG_TRIVIAL(error) << "Error removing peer " << peer_key 
+                                       << ": " << e.what();
+            }
+            break;
+            
+        case NetworkError::ENCRYPTION_ERROR:
+            BOOST_LOG_TRIVIAL(warning) << "Encryption error for peer " << peer_key 
+                                     << ", attempting to re-establish secure connection";
+            try {
+                if (auto it = peers_.find(peer_key); it != peers_.end()) {
+                    it->second->disconnect();
+                    it->second->connect();
+                }
+            } catch (const std::exception& e) {
+                BOOST_LOG_TRIVIAL(error) << "Failed to recover from encryption error: " 
+                                       << e.what();
+                handle_peer_error(peer_key, NetworkError::CONNECTION_FAILED);
+            }
+            break;
+            
+        default:
+            BOOST_LOG_TRIVIAL(warning) << "Unhandled peer error: " << to_string(error);
+            break;
     }
 }
 

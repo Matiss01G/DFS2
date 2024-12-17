@@ -46,7 +46,7 @@ private:
     void start_accept();
     void handle_accept(std::shared_ptr<IPeer> peer,
                       const boost::system::error_code& error);
-    void handle_peer_error(const std::array<uint8_t, 32>& peer_id,
+    void handle_peer_error(const std::string& peer_key,
                           NetworkError error);
 };
 
