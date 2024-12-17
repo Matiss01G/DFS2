@@ -390,4 +390,7 @@ CMakeFiles/network_tests.dir/src/tests/network_test.cpp.o: \
  /nix/store/ikmzrr3a8gd4jx31lkdhx7bk045j16fi-gtest-1.14.0-dev/include/gtest/gtest-typed-test.h \
  /nix/store/ikmzrr3a8gd4jx31lkdhx7bk045j16fi-gtest-1.14.0-dev/include/gtest/gtest_pred_impl.h \
  /nix/store/ikmzrr3a8gd4jx31lkdhx7bk045j16fi-gtest-1.14.0-dev/include/gtest/gtest_prod.h \
- /home/runner/StreamCryptoDFS/include/network/connection_state.hpp
+ /home/runner/StreamCryptoDFS/include/network/connection_state.hpp \
+ /home/runner/StreamCryptoDFS/include/network/peer.hpp \
+ /home/runner/StreamCryptoDFS/include/network/connection_state.hpp \
+ /home/runner/StreamCryptoDFS/include/network/message_frame.hpp

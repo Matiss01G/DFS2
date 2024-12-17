@@ -1,5 +1,5 @@
-add_test([=[NetworkTest.BasicTest]=]  /home/runner/StreamCryptoDFS/build/network_tests [==[--gtest_filter=NetworkTest.BasicTest]==] --gtest_also_run_disabled_tests)
-set_tests_properties([=[NetworkTest.BasicTest]=]  PROPERTIES WORKING_DIRECTORY /home/runner/StreamCryptoDFS/build SKIP_REGULAR_EXPRESSION [==[\[  SKIPPED \]]==])
+add_test([=[NetworkTest.PeerInterface]=]  /home/runner/StreamCryptoDFS/build/network_tests [==[--gtest_filter=NetworkTest.PeerInterface]==] --gtest_also_run_disabled_tests)
+set_tests_properties([=[NetworkTest.PeerInterface]=]  PROPERTIES WORKING_DIRECTORY /home/runner/StreamCryptoDFS/build SKIP_REGULAR_EXPRESSION [==[\[  SKIPPED \]]==])
 add_test([=[ConnectionStateTest.InitialState]=]  /home/runner/StreamCryptoDFS/build/network_tests [==[--gtest_filter=ConnectionStateTest.InitialState]==] --gtest_also_run_disabled_tests)
 set_tests_properties([=[ConnectionStateTest.InitialState]=]  PROPERTIES WORKING_DIRECTORY /home/runner/StreamCryptoDFS/build SKIP_REGULAR_EXPRESSION [==[\[  SKIPPED \]]==])
 add_test([=[ConnectionStateTest.ValidTransitions]=]  /home/runner/StreamCryptoDFS/build/network_tests [==[--gtest_filter=ConnectionStateTest.ValidTransitions]==] --gtest_also_run_disabled_tests)
@@ -12,4 +12,4 @@ add_test([=[ConnectionStateTest.TerminalStates]=]  /home/runner/StreamCryptoDFS/
 set_tests_properties([=[ConnectionStateTest.TerminalStates]=]  PROPERTIES WORKING_DIRECTORY /home/runner/StreamCryptoDFS/build SKIP_REGULAR_EXPRESSION [==[\[  SKIPPED \]]==])
 add_test([=[ConnectionStateTest.StateToString]=]  /home/runner/StreamCryptoDFS/build/network_tests [==[--gtest_filter=ConnectionStateTest.StateToString]==] --gtest_also_run_disabled_tests)
 set_tests_properties([=[ConnectionStateTest.StateToString]=]  PROPERTIES WORKING_DIRECTORY /home/runner/StreamCryptoDFS/build SKIP_REGULAR_EXPRESSION [==[\[  SKIPPED \]]==])
-set(  network_tests_TESTS NetworkTest.BasicTest ConnectionStateTest.InitialState ConnectionStateTest.ValidTransitions ConnectionStateTest.InvalidTransitions ConnectionStateTest.ErrorStateHandling ConnectionStateTest.TerminalStates ConnectionStateTest.StateToString)
+set(  network_tests_TESTS NetworkTest.PeerInterface ConnectionStateTest.InitialState ConnectionStateTest.ValidTransitions ConnectionStateTest.InvalidTransitions ConnectionStateTest.ErrorStateHandling ConnectionStateTest.TerminalStates ConnectionStateTest.StateToString)
