@@ -3,11 +3,11 @@
 if("${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION}" LESS 2.8)
    message(FATAL_ERROR "CMake >= 2.8.0 required")
 endif()
-if(CMAKE_VERSION VERSION_LESS "3.0.0")
-   message(FATAL_ERROR "CMake >= 3.0.0 required")
+if(CMAKE_VERSION VERSION_LESS "2.8.12")
+   message(FATAL_ERROR "CMake >= 2.8.12 required")
 endif()
 cmake_policy(PUSH)
-cmake_policy(VERSION 3.0.0...3.27)
+cmake_policy(VERSION 2.8.12...3.27)
 #----------------------------------------------------------------
 # Generated CMake target import file.
 #----------------------------------------------------------------
@@ -64,11 +64,11 @@ set_target_properties(dfs::dfs_crypto PROPERTIES
 )
 
 # Create imported target dfs::dfs_network
-add_library(dfs::dfs_network INTERFACE IMPORTED)
+add_library(dfs::dfs_network STATIC IMPORTED)
 
 set_target_properties(dfs::dfs_network PROPERTIES
   INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include"
-  INTERFACE_LINK_LIBRARIES "dfs::dfs_crypto;Boost::system;Boost::thread"
+  INTERFACE_LINK_LIBRARIES "dfs::dfs_crypto;Boost::system;Boost::thread;Boost::log"
 )
 
 # Load information for each installed configuration.

@@ -185,6 +185,19 @@ dfs_crypto/fast:
 .PHONY : dfs_crypto/fast
 
 #=============================================================================
+# Target rules for targets named dfs_network
+
+# Build rule for target.
+dfs_network: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 dfs_network
+.PHONY : dfs_network
+
+# fast build rule for target.
+dfs_network/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/dfs_network.dir/build.make CMakeFiles/dfs_network.dir/build
+.PHONY : dfs_network/fast
+
+#=============================================================================
 # Target rules for targets named crypto_tests
 
 # Build rule for target.
@@ -233,6 +246,30 @@ src/crypto/crypto_stream.s: src/crypto/crypto_stream.cpp.s
 src/crypto/crypto_stream.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/dfs_crypto.dir/build.make CMakeFiles/dfs_crypto.dir/src/crypto/crypto_stream.cpp.s
 .PHONY : src/crypto/crypto_stream.cpp.s
+
+src/network/tcp_peer.o: src/network/tcp_peer.cpp.o
+.PHONY : src/network/tcp_peer.o
+
+# target to build an object file
+src/network/tcp_peer.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/dfs_network.dir/build.make CMakeFiles/dfs_network.dir/src/network/tcp_peer.cpp.o
+.PHONY : src/network/tcp_peer.cpp.o
+
+src/network/tcp_peer.i: src/network/tcp_peer.cpp.i
+.PHONY : src/network/tcp_peer.i
+
+# target to preprocess a source file
+src/network/tcp_peer.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/dfs_network.dir/build.make CMakeFiles/dfs_network.dir/src/network/tcp_peer.cpp.i
+.PHONY : src/network/tcp_peer.cpp.i
+
+src/network/tcp_peer.s: src/network/tcp_peer.cpp.s
+.PHONY : src/network/tcp_peer.s
+
+# target to generate assembly for a file
+src/network/tcp_peer.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/dfs_network.dir/build.make CMakeFiles/dfs_network.dir/src/network/tcp_peer.cpp.s
+.PHONY : src/network/tcp_peer.cpp.s
 
 src/tests/connection_state_test.o: src/tests/connection_state_test.cpp.o
 .PHONY : src/tests/connection_state_test.o
@@ -321,10 +358,14 @@ help:
 	@echo "... test"
 	@echo "... crypto_tests"
 	@echo "... dfs_crypto"
+	@echo "... dfs_network"
 	@echo "... network_tests"
 	@echo "... src/crypto/crypto_stream.o"
 	@echo "... src/crypto/crypto_stream.i"
 	@echo "... src/crypto/crypto_stream.s"
+	@echo "... src/network/tcp_peer.o"
+	@echo "... src/network/tcp_peer.i"
+	@echo "... src/network/tcp_peer.s"
 	@echo "... src/tests/connection_state_test.o"
 	@echo "... src/tests/connection_state_test.i"
 	@echo "... src/tests/connection_state_test.s"

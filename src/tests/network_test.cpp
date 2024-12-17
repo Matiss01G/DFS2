@@ -19,58 +19,74 @@ public:
     bool disconnect() override { 
         if (validate_state(ConnectionState::State::CONNECTED)) {
             state = ConnectionState::State::DISCONNECTED;
-            read_active = false;
+            processing = false;
             return true;
         }
         return false;
     }
     
-    bool send_data(const MessageFrame& frame) override { 
-        return validate_state(ConnectionState::State::CONNECTED); 
+    std::ostream* get_output_stream() override {
+        if (!is_connected()) return nullptr;
+        return &output_stream;
     }
     
-    void set_receive_callback(OnDataReceived callback) override {
-        if (callback && validate_state(ConnectionState::State::CONNECTED)) {
-            std::stringstream test_stream;
-            // Simulate buffered data stream
-            for (const auto& chunk : {"test_data\n", "more_test_data\n", "final_chunk"}) {
-                test_stream << chunk;
-                if (test_stream.fail()) {
-                    state = ConnectionState::State::ERROR;
-                    return;
-                }
-            }
-            callback(test_stream);
-        }
+    std::istream* get_input_stream() override {
+        if (!is_connected()) return nullptr;
+        return &input_stream;
     }
     
-    void start_read_loop() override {
+    void set_stream_processor(StreamProcessor processor) override {
         if (validate_state(ConnectionState::State::CONNECTED)) {
-            read_active = true;
+            stream_processor = processor;
         }
     }
     
-    void stop_read_loop() override {
-        read_active = false;
+    bool start_stream_processing() override {
+        if (!is_connected() || processing || !stream_processor) return false;
+        
+        // Simulate stream data
+        input_stream.str("");
+        input_stream.clear();
+        for (const auto& chunk : {"test_data\n", "more_test_data\n", "final_chunk"}) {
+            input_stream << chunk;
+            if (input_stream.fail()) {
+                state = ConnectionState::State::ERROR;
+                return false;
+            }
+        }
+        
+        processing = true;
+        if (stream_processor) {
+            stream_processor(input_stream);
+        }
+        return true;
+    }
+    
+    void stop_stream_processing() override {
+        processing = false;
     }
     
     ConnectionState::State get_connection_state() const override {
         return state;
     }
 
-    bool is_reading() const { return read_active; }
+    bool is_processing() const { return processing; }
 
 private:
     ConnectionState::State state = ConnectionState::State::INITIAL;
-    bool read_active = false;
+    bool processing = false;
+    StreamProcessor stream_processor;
+    std::stringstream input_stream;
+    std::stringstream output_stream;
 };
 
-TEST(NetworkTest, PeerStreamHandling) {
+TEST(NetworkTest, StreamDataProcessing) {
     MockPeer peer;
     std::string received_data;
     
-    // Set up stream receive callback
-    peer.set_receive_callback([&received_data](std::istream& stream) {
+    // Connect and set up stream processor
+    EXPECT_TRUE(peer.connect("localhost", 8080));
+    peer.set_stream_processor([&received_data](std::istream& stream) {
         std::string line;
         while (std::getline(stream, line)) {
             if (!stream.good() && !stream.eof()) {
@@ -80,24 +96,34 @@ TEST(NetworkTest, PeerStreamHandling) {
         }
     });
     
-    // Verify received stream data
+    // Start processing and verify data
+    EXPECT_TRUE(peer.start_stream_processing());
+    EXPECT_TRUE(peer.is_processing());
     EXPECT_EQ(received_data, "test_data,more_test_data,final_chunk,");
+    
+    // Clean up
+    peer.stop_stream_processing();
+    EXPECT_FALSE(peer.is_processing());
 }
 
-TEST(NetworkTest, PeerStateTransitions) {
+TEST(NetworkTest, StreamOperations) {
     MockPeer peer;
     
-    // Initial connection
+    // Test stream access before connection
+    EXPECT_EQ(peer.get_input_stream(), nullptr);
+    EXPECT_EQ(peer.get_output_stream(), nullptr);
+    
+    // Connect and verify streams
     EXPECT_TRUE(peer.connect("localhost", 8080));
-    EXPECT_TRUE(peer.is_connected());
+    EXPECT_NE(peer.get_input_stream(), nullptr);
+    EXPECT_NE(peer.get_output_stream(), nullptr);
     
-    // Start reading loop
-    peer.start_read_loop();
-    EXPECT_TRUE(peer.is_reading());
+    // Write to output stream
+    auto* out = peer.get_output_stream();
+    *out << "test_output" << std::endl;
+    EXPECT_TRUE(out->good());
     
-    // Stop reading and disconnect
-    peer.stop_read_loop();
-    EXPECT_FALSE(peer.is_reading());
+    // Clean up
     EXPECT_TRUE(peer.disconnect());
 }
 

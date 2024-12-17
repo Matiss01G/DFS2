@@ -12,45 +12,50 @@
 namespace dfs {
 namespace network {
 
-// Network streaming interface for DFS peers
+/**
+ * Network peer interface for stream-based communication in DFS.
+ * Implements streaming data transfer with state management and optional
+ * message-based support for backward compatibility.
+ * 
+ * Primary Interface:
+ * - Stream-based data transfer (input/output streams)
+ * - Asynchronous processing with callbacks
+ * - Connection state management
+ */
 class Peer {
 public:
-    // Handler for processing streamed data chunks, manages buffering and async reading
-    using OnDataReceived = std::function<void(std::istream&)>;
+    // Stream callback type for processing received data
+    using StreamProcessor = std::function<void(std::istream&)>;
     
     virtual ~Peer() = default;
 
-    // Connect to remote peer at address:port
+    // Connection management
     virtual bool connect(const std::string& address, uint16_t port) = 0;
-
-    // Close active connection
     virtual bool disconnect() = 0;
 
-    // Send data frame to peer
-    virtual bool send_data(const MessageFrame& frame) = 0;
+    // Stream operations (required)
+    virtual std::ostream* get_output_stream() = 0;
+    virtual std::istream* get_input_stream() = 0;
 
-    // Set handler for async data reception
-    virtual void set_receive_callback(OnDataReceived callback) = 0;
+    // Stream processing
+    virtual void set_stream_processor(StreamProcessor processor) = 0;
+    virtual bool start_stream_processing() = 0;
+    virtual void stop_stream_processing() = 0;
 
-    // Begin background data reading loop
-    virtual void start_read_loop() = 0;
+    // Optional message-based operations
+    virtual bool send_frame(const MessageFrame& frame) { return false; }
+    virtual void set_frame_callback(OnDataReceived callback) {}
 
-    // Stop background data reading loop
-    virtual void stop_read_loop() = 0;
-
-    // Get current connection state
+    // State management
     virtual ConnectionState::State get_connection_state() const = 0;
-
-    // Check if peer is connected
     bool is_connected() const {
         return get_connection_state() == ConnectionState::State::CONNECTED;
     }
 
 protected:
     Peer() = default;
-
-    // Validate operation for current state
-    virtual bool validate_state(ConnectionState::State required_state) const {
+    
+    bool validate_state(ConnectionState::State required_state) const {
         return get_connection_state() == required_state;
     }
 };

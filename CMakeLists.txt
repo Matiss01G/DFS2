@@ -27,15 +27,18 @@ target_link_libraries(dfs_crypto PUBLIC
 )
 
 # Create network library
-add_library(dfs_network INTERFACE)
-target_include_directories(dfs_network INTERFACE
+add_library(dfs_network
+    src/network/tcp_peer.cpp
+)
+target_include_directories(dfs_network PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
     $<INSTALL_INTERFACE:include>
 )
-target_link_libraries(dfs_network INTERFACE
+target_link_libraries(dfs_network PUBLIC
     dfs_crypto
     Boost::system
     Boost::thread
+    Boost::log
 )
 
 # Tests
