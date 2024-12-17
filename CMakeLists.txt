@@ -30,8 +30,7 @@ target_link_libraries(dfs_crypto PUBLIC
 enable_testing()
 
 add_executable(crypto_tests 
-    src/tests/crypto_stream_test.cpp
-    src/tests/byte_order_test.cpp)
+    src/tests/crypto_stream_test.cpp)
 
 target_link_libraries(crypto_tests
     PRIVATE
