@@ -1,6 +1,8 @@
 file(REMOVE_RECURSE
   "CMakeFiles/dfs_network.dir/src/network/network_manager.cpp.o"
   "CMakeFiles/dfs_network.dir/src/network/network_manager.cpp.o.d"
+  "CMakeFiles/dfs_network.dir/src/network/peer.cpp.o"
+  "CMakeFiles/dfs_network.dir/src/network/peer.cpp.o.d"
   "CMakeFiles/dfs_network.dir/src/network/peer_manager.cpp.o"
   "CMakeFiles/dfs_network.dir/src/network/peer_manager.cpp.o.d"
   "CMakeFiles/dfs_network.dir/src/network/tcp_peer.cpp.o"

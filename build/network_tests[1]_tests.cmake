@@ -1,0 +1,7 @@
+add_test([=[NetworkTest.ConnectToPeer]=]  /home/runner/StreamCryptoDFS/build/network_tests [==[--gtest_filter=NetworkTest.ConnectToPeer]==] --gtest_also_run_disabled_tests)
+set_tests_properties([=[NetworkTest.ConnectToPeer]=]  PROPERTIES WORKING_DIRECTORY /home/runner/StreamCryptoDFS/build SKIP_REGULAR_EXPRESSION [==[\[  SKIPPED \]]==])
+add_test([=[NetworkTest.StreamFileTransfer]=]  /home/runner/StreamCryptoDFS/build/network_tests [==[--gtest_filter=NetworkTest.StreamFileTransfer]==] --gtest_also_run_disabled_tests)
+set_tests_properties([=[NetworkTest.StreamFileTransfer]=]  PROPERTIES WORKING_DIRECTORY /home/runner/StreamCryptoDFS/build SKIP_REGULAR_EXPRESSION [==[\[  SKIPPED \]]==])
+add_test([=[NetworkTest.ErrorHandling]=]  /home/runner/StreamCryptoDFS/build/network_tests [==[--gtest_filter=NetworkTest.ErrorHandling]==] --gtest_also_run_disabled_tests)
+set_tests_properties([=[NetworkTest.ErrorHandling]=]  PROPERTIES WORKING_DIRECTORY /home/runner/StreamCryptoDFS/build SKIP_REGULAR_EXPRESSION [==[\[  SKIPPED \]]==])
+set(  network_tests_TESTS NetworkTest.ConnectToPeer NetworkTest.StreamFileTransfer NetworkTest.ErrorHandling)

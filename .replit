@@ -31,3 +31,11 @@ args = "mkdir -p build && cd build && cmake -DCMAKE_BUILD_TYPE=Debug .. && make 
 
 [deployment]
 run = ["sh", "-c", "mkdir -p build && cd build && cmake -DCMAKE_BUILD_TYPE=Debug .. && make && ./crypto_tests && ./network_tests"]
+
+[[ports]]
+localPort = 12345
+externalPort = 80
+
+[[ports]]
+localPort = 12346
+externalPort = 3000

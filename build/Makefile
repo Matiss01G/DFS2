@@ -271,6 +271,30 @@ src/network/network_manager.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/dfs_network.dir/build.make CMakeFiles/dfs_network.dir/src/network/network_manager.cpp.s
 .PHONY : src/network/network_manager.cpp.s
 
+src/network/peer.o: src/network/peer.cpp.o
+.PHONY : src/network/peer.o
+
+# target to build an object file
+src/network/peer.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/dfs_network.dir/build.make CMakeFiles/dfs_network.dir/src/network/peer.cpp.o
+.PHONY : src/network/peer.cpp.o
+
+src/network/peer.i: src/network/peer.cpp.i
+.PHONY : src/network/peer.i
+
+# target to preprocess a source file
+src/network/peer.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/dfs_network.dir/build.make CMakeFiles/dfs_network.dir/src/network/peer.cpp.i
+.PHONY : src/network/peer.cpp.i
+
+src/network/peer.s: src/network/peer.cpp.s
+.PHONY : src/network/peer.s
+
+# target to generate assembly for a file
+src/network/peer.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/dfs_network.dir/build.make CMakeFiles/dfs_network.dir/src/network/peer.cpp.s
+.PHONY : src/network/peer.cpp.s
+
 src/network/peer_manager.o: src/network/peer_manager.cpp.o
 .PHONY : src/network/peer_manager.o
 
@@ -414,6 +438,9 @@ help:
 	@echo "... src/network/network_manager.o"
 	@echo "... src/network/network_manager.i"
 	@echo "... src/network/network_manager.s"
+	@echo "... src/network/peer.o"
+	@echo "... src/network/peer.i"
+	@echo "... src/network/peer.s"
 	@echo "... src/network/peer_manager.o"
 	@echo "... src/network/peer_manager.i"
 	@echo "... src/network/peer_manager.s"
