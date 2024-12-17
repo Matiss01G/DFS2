@@ -5,8 +5,7 @@
 namespace dfs::network {
 
 NetworkManager::NetworkManager()
-    : crypto_stream_(std::make_shared<crypto::CryptoStream>())
-    , peer_manager_(std::make_unique<PeerManager>(io_context_, crypto_stream_)) {
+    : peer_manager_(std::make_unique<PeerManager>(io_context_)) {
 }
 
 NetworkManager::~NetworkManager() {

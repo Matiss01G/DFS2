@@ -9,12 +9,10 @@ namespace dfs::network {
 
 TcpPeer::TcpPeer(boost::asio::io_context& io_context,
                  const std::string& address,
-                 uint16_t port,
-                 std::shared_ptr<crypto::CryptoStream> crypto_stream)
+                 uint16_t port)
     : io_context_(io_context)
     , socket_(io_context)
-    , endpoint_(boost::asio::ip::address::from_string(address), port)
-    , crypto_stream_(crypto_stream) {
+    , endpoint_(boost::asio::ip::address::from_string(address), port) {
     // Generate random peer ID
     std::random_device rd;
     std::mt19937 gen(rd());
@@ -78,9 +76,9 @@ bool TcpPeer::is_connected() const {
     return connected_;
 }
 
-void TcpPeer::send_message(MessageType type,
-                          std::shared_ptr<std::istream> payload,
-                          const std::vector<uint8_t>& file_key) {
+void TcpPeer::send_packet(PacketType type,
+                         std::shared_ptr<std::istream> payload,
+                         uint32_t sequence_number) {
     if (!connected_) {
         if (error_handler_) {
             error_handler_(NetworkError::PEER_DISCONNECTED);
@@ -88,30 +86,23 @@ void TcpPeer::send_message(MessageType type,
         return;
     }
 
-    // Create message header
-    MessageHeader header;
+    // Create packet header
+    PacketHeader header;
     header.type = type;
+    header.sequence_number = sequence_number;
     
-    // Generate random IV for this message using a lambda that maintains the random device
-    std::random_device rd;
-    std::generate(header.iv.begin(), header.iv.end(), 
-        [&rd]() { return rd(); });
-    
-    // Copy source ID and file key
-    std::copy(peer_id_.begin(), peer_id_.end(), header.source_id.begin());
-    if (!file_key.empty()) {
-        std::copy(file_key.begin(), file_key.end(), header.file_key.begin());
-    }
+    // Copy peer ID
+    std::copy(peer_id_.begin(), peer_id_.end(), header.peer_id.begin());
 
     // Get payload size
     payload->seekg(0, std::ios::end);
     header.payload_size = payload->tellg();
     payload->seekg(0);
 
-    // Queue the message
+    // Queue the packet
     {
         std::lock_guard<std::mutex> lock(queue_mutex_);
-        message_queue_.push({header, payload});
+        packet_queue_.push({header, payload});
     }
 
     // Start async write if not already writing
@@ -142,14 +133,14 @@ void TcpPeer::handle_read_header(const boost::system::error_code& error,
 
     try {
         // Deserialize header
-        auto header = MessageHeader::deserialize(header_buffer);
+        auto header = PacketHeader::deserialize(header_buffer);
         
         // Validate payload size to prevent memory exhaustion
         if (header.payload_size > MAX_PAYLOAD_SIZE) {
             BOOST_LOG_TRIVIAL(error) << "Payload size exceeds maximum allowed: " 
                                    << header.payload_size << " > " << MAX_PAYLOAD_SIZE;
             if (error_handler_) {
-                error_handler_(NetworkError::INVALID_MESSAGE);
+                error_handler_(NetworkError::INVALID_PACKET);
             }
             return;
         }
@@ -163,10 +154,13 @@ void TcpPeer::handle_read_header(const boost::system::error_code& error,
         auto stream_buffer = std::make_shared<std::stringstream>();
         read_payload_chunk(header, stream_buffer, 0);
         
+        BOOST_LOG_TRIVIAL(debug) << "Received packet with sequence number: " 
+                               << header.sequence_number;
+        
     } catch (const std::exception& e) {
-        BOOST_LOG_TRIVIAL(error) << "Error processing message header: " << e.what();
+        BOOST_LOG_TRIVIAL(error) << "Error processing packet header: " << e.what();
         if (error_handler_) {
-            error_handler_(NetworkError::INVALID_MESSAGE);
+            error_handler_(NetworkError::INVALID_PACKET);
         }
     }
 }
@@ -239,7 +233,7 @@ void TcpPeer::read_payload_chunk(const MessageHeader& header,
 }
 
 void TcpPeer::handle_read_payload(const boost::system::error_code& error,
-                                 const MessageHeader& header,
+                                 const PacketHeader& header,
                                  std::shared_ptr<std::vector<uint8_t>> payload_buffer) {
     if (error) {
         handle_error(error);
@@ -248,42 +242,25 @@ void TcpPeer::handle_read_payload(const boost::system::error_code& error,
 
     try {
         // Create input stream from payload buffer
-        auto encrypted_stream = std::make_shared<std::stringstream>();
-        encrypted_stream->write(reinterpret_cast<const char*>(payload_buffer->data()),
-                              payload_buffer->size());
-        encrypted_stream->seekg(0);
+        auto payload_stream = std::make_shared<std::stringstream>();
+        payload_stream->write(reinterpret_cast<const char*>(payload_buffer->data()),
+                            payload_buffer->size());
+        payload_stream->seekg(0);
 
-        // Prepare decryption
-        crypto_stream_->setMode(crypto::CryptoStream::Mode::Decrypt);
-        crypto_stream_->initialize(std::vector<uint8_t>(header.file_key.begin(),
-                                                      header.file_key.end()),
-                                 std::vector<uint8_t>(header.iv.begin(),
-                                                    header.iv.end()));
-
-        // Stream-based decryption
-        auto decrypted_stream = std::make_shared<std::stringstream>();
-        try {
-            *crypto_stream_ << *encrypted_stream >> *decrypted_stream;
-            decrypted_stream->seekg(0);
-        } catch (const crypto::DecryptionError& e) {
-            BOOST_LOG_TRIVIAL(error) << "Decryption error: " << e.what();
-            if (error_handler_) {
-                error_handler_(NetworkError::ENCRYPTION_ERROR);
-            }
-            return;
-        }
-
-        // Notify message handler
-        if (message_handler_) {
-            message_handler_(header, decrypted_stream);
+        // Notify packet handler
+        if (packet_handler_) {
+            packet_handler_(header, payload_stream);
         }
 
         // Continue reading
         start_read_header();
+        
+        BOOST_LOG_TRIVIAL(debug) << "Successfully processed packet with sequence number: "
+                               << header.sequence_number;
     } catch (const std::exception& e) {
-        BOOST_LOG_TRIVIAL(error) << "Error processing message payload: " << e.what();
+        BOOST_LOG_TRIVIAL(error) << "Error processing packet payload: " << e.what();
         if (error_handler_) {
-            error_handler_(NetworkError::ENCRYPTION_ERROR);
+            error_handler_(NetworkError::PROTOCOL_ERROR);
         }
     }
 }

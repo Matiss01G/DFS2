@@ -4,10 +4,8 @@
 
 namespace dfs::network {
 
-PeerManager::PeerManager(boost::asio::io_context& io_context,
-                        std::shared_ptr<crypto::CryptoStream> crypto_stream)
-    : io_context_(io_context)
-    , crypto_stream_(crypto_stream) {}
+PeerManager::PeerManager(boost::asio::io_context& io_context)
+    : io_context_(io_context) {}
 
 void PeerManager::start_listening(uint16_t port) {
     try {
@@ -60,10 +58,10 @@ void PeerManager::add_peer(const std::string& address, uint16_t port) {
         }
         
         // Create new peer
-        auto peer = create_tcp_peer(io_context_, address, port, crypto_stream_);
+        auto peer = create_tcp_peer(io_context_, address, port);
         
-        // Set up message and error handlers
-        peer->set_message_handler(message_handler_);
+        // Set up packet and error handlers
+        peer->set_packet_handler(packet_handler_);
         peer->set_error_handler(
             [this, peer_key](NetworkError error) {
                 BOOST_LOG_TRIVIAL(info) << "Peer error handler triggered for " << peer_key;
@@ -104,12 +102,12 @@ void PeerManager::remove_peer(const std::array<uint8_t, 32>& peer_id) {
     }
 }
 
-void PeerManager::broadcast_message(MessageType type,
+void PeerManager::broadcast_packet(PacketType type,
                                    std::shared_ptr<std::istream> payload,
-                                   const std::vector<uint8_t>& file_key) {
+                                   uint32_t sequence_number) {
     std::lock_guard<std::mutex> lock(peers_mutex_);
     
-    BOOST_LOG_TRIVIAL(info) << "Broadcasting message of type " 
+    BOOST_LOG_TRIVIAL(info) << "Broadcasting packet of type " 
                            << static_cast<int>(type) 
                            << " to " << peers_.size() << " peers";
 
@@ -139,7 +137,7 @@ void PeerManager::broadcast_message(MessageType type,
                 }
                 
                 BOOST_LOG_TRIVIAL(debug) << "Sending broadcast message to peer: " << peer_key;
-                peer->send_message(type, payload_copy, file_key);
+                peer->send_packet(type, payload_copy, sequence_number);
                 
             } catch (const std::exception& e) {
                 BOOST_LOG_TRIVIAL(error) << "Failed to broadcast message to peer " 
@@ -264,17 +262,17 @@ void PeerManager::handle_peer_error(const std::string& peer_key, NetworkError er
             }
             break;
             
-        case NetworkError::ENCRYPTION_ERROR:
-            BOOST_LOG_TRIVIAL(warning) << "Encryption error for peer " << peer_key 
-                                     << ", attempting to re-establish secure connection";
+        case NetworkError::PROTOCOL_ERROR:
+            BOOST_LOG_TRIVIAL(warning) << "Protocol error for peer " << peer_key 
+                                      << ", attempting to re-establish connection";
             try {
                 if (auto it = peers_.find(peer_key); it != peers_.end()) {
                     it->second->disconnect();
                     it->second->connect();
                 }
             } catch (const std::exception& e) {
-                BOOST_LOG_TRIVIAL(error) << "Failed to recover from encryption error: " 
-                                       << e.what();
+                BOOST_LOG_TRIVIAL(error) << "Failed to recover from protocol error: " 
+                                        << e.what();
                 handle_peer_error(peer_key, NetworkError::CONNECTION_FAILED);
             }
             break;

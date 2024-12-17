@@ -5,34 +5,32 @@
 #include <vector>
 #include <string>
 #include <array>
-#include "../crypto/crypto_stream.hpp"
 
 namespace dfs::network {
 
-// Message types for network communication
-enum class MessageType : uint8_t {
-    HANDSHAKE = 0x01,
-    FILE_TRANSFER = 0x02,
-    FILE_REQUEST = 0x03,
-    PEER_LIST = 0x04,
-    ERROR = 0xFF
+// Basic packet types for network communication
+enum class PacketType : uint8_t {
+    DATA = 0x01,     // Regular data packet
+    CONTROL = 0x02,  // Control/management packet
+    ACK = 0x03,      // Acknowledgment packet
+    ERROR = 0xFF     // Error notification packet
 };
 
-// Message header structure for framing
-struct MessageHeader {
-    MessageType type;
+// Packet header structure for framing
+struct PacketHeader {
+    PacketType type;
     uint64_t payload_size;
-    std::array<uint8_t, crypto::CryptoStream::IV_SIZE> iv;
-    std::array<uint8_t, 32> source_id;  // Unique identifier for the source peer
-    std::array<uint8_t, crypto::CryptoStream::KEY_SIZE> file_key;  // Optional, used for file transfer
+    uint32_t sequence_number;  // For packet ordering and reliability
+    std::array<uint8_t, 16> peer_id;  // Unique identifier for the source peer
     
     // Serialization methods
     std::vector<uint8_t> serialize() const;
-    static MessageHeader deserialize(const std::vector<uint8_t>& data);
+    static PacketHeader deserialize(const std::vector<uint8_t>& data);
     
-    static constexpr size_t HEADER_SIZE = sizeof(MessageType) + sizeof(uint64_t) + 
-                                        crypto::CryptoStream::IV_SIZE + 32 + 
-                                        crypto::CryptoStream::KEY_SIZE;
+    static constexpr size_t HEADER_SIZE = sizeof(PacketType) + 
+                                        sizeof(uint64_t) + 
+                                        sizeof(uint32_t) + 
+                                        16; // peer_id size
 };
 
 // Network error types
@@ -40,8 +38,8 @@ enum class NetworkError {
     SUCCESS = 0,
     CONNECTION_FAILED,
     PEER_DISCONNECTED,
-    INVALID_MESSAGE,
-    ENCRYPTION_ERROR,
+    INVALID_PACKET,
+    PROTOCOL_ERROR,
     UNKNOWN_ERROR
 };
 

@@ -11,36 +11,35 @@ namespace dfs::network {
 
 class PeerManager {
 public:
-    explicit PeerManager(boost::asio::io_context& io_context,
-                        std::shared_ptr<crypto::CryptoStream> crypto_stream);
+    explicit PeerManager(boost::asio::io_context& io_context);
     
     // Peer management
     void start_listening(uint16_t port);
     void stop_listening();
     
     void add_peer(const std::string& address, uint16_t port);
-    void remove_peer(const std::array<uint8_t, 32>& peer_id);
+    void remove_peer(const std::array<uint8_t, 16>& peer_id);
     
-    // Message broadcasting
-    void broadcast_message(MessageType type, std::shared_ptr<std::istream> payload,
-                         const std::vector<uint8_t>& file_key = {});
+    // Packet broadcasting
+    void broadcast_packet(PacketType type, 
+                        std::shared_ptr<std::istream> payload,
+                        uint32_t sequence_number);
     
     // Peer access
-    std::shared_ptr<IPeer> get_peer(const std::array<uint8_t, 32>& peer_id);
+    std::shared_ptr<IPeer> get_peer(const std::array<uint8_t, 16>& peer_id);
     std::vector<std::shared_ptr<IPeer>> get_all_peers();
     
     // Event handlers
-    using message_handler = IPeer::message_handler;
-    void set_message_handler(message_handler handler);
+    using packet_handler = IPeer::packet_handler;
+    void set_packet_handler(packet_handler handler);
 
 private:
     boost::asio::io_context& io_context_;
-    std::shared_ptr<crypto::CryptoStream> crypto_stream_;
     std::unique_ptr<boost::asio::ip::tcp::acceptor> acceptor_;
     
     std::unordered_map<std::string, std::shared_ptr<IPeer>> peers_;
     std::mutex peers_mutex_;
-    message_handler message_handler_;
+    packet_handler packet_handler_;
     
     // Internal methods
     void start_accept();

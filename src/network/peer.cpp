@@ -7,12 +7,11 @@ namespace dfs::network {
 std::shared_ptr<IPeer> create_tcp_peer(
     boost::asio::io_context& io_context,
     const std::string& address,
-    uint16_t port,
-    std::shared_ptr<crypto::CryptoStream> crypto_stream) {
+    uint16_t port) {
     
     BOOST_LOG_TRIVIAL(debug) << "Creating TCP peer for " << address << ":" << port;
     try {
-        auto peer = std::make_shared<TcpPeer>(io_context, address, port, crypto_stream);
+        auto peer = std::make_shared<TcpPeer>(io_context, address, port);
         BOOST_LOG_TRIVIAL(info) << "Successfully created TCP peer";
         return peer;
     } catch (const std::exception& e) {
