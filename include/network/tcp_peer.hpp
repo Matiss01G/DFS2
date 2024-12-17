@@ -9,6 +9,7 @@
 #include <boost/asio.hpp>
 #include <boost/log/trivial.hpp>
 #include "peer.hpp"
+#include "connection_state.hpp"
 
 namespace dfs {
 namespace network {
@@ -40,8 +41,21 @@ public:
 
 private:
     void process_streams();
-    void handle_error(const std::error_code& error);
-    void close_socket();
+
+    void handle_error(const std::error_code& error) {
+        state_.store(ConnectionState::State::ERROR);
+        close_socket();
+    }
+
+    void close_socket() {
+        if (socket_ && socket_->is_open()) {
+            boost::system::error_code ec;
+            socket_->shutdown(boost::asio::ip::tcp::socket::shutdown_both, ec);
+            socket_->close(ec);
+        }
+    }
+
+    static constexpr size_t BUFFER_SIZE = 8192;
 
     boost::asio::io_context io_context_;
     std::unique_ptr<boost::asio::ip::tcp::socket> socket_;
@@ -54,7 +68,6 @@ private:
     std::atomic<ConnectionState::State> state_;
     std::atomic<bool> processing_;
     std::unique_ptr<std::thread> processing_thread_;
-    static constexpr size_t BUFFER_SIZE = 8192;
 };
 
 } // namespace network
