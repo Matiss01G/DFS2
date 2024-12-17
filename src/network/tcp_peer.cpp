@@ -3,6 +3,7 @@
 #include <boost/asio/read.hpp>
 #include <boost/asio/write.hpp>
 #include <iostream>
+#include <random>
 
 namespace dfs {
 namespace network {
@@ -23,14 +24,37 @@ TcpPeer::~TcpPeer() {
     if (is_connected()) {
         disconnect();
     }
+    
+    // Ensure processing is stopped
+    stop_stream_processing();
+    
+    // Clean up socket and io_context
+    close_socket();
+    io_context_.stop();
+    
+    // Clear buffers
+    if (input_buffer_) {
+        input_buffer_->consume(input_buffer_->size());
+    }
+    if (output_buffer_) {
+        output_buffer_->consume(output_buffer_->size());
+    }
 }
 
 bool TcpPeer::connect(const std::string& address, uint16_t port) {
+    auto current_state = get_connection_state();
     if (!validate_state(ConnectionState::State::INITIAL) && 
         !validate_state(ConnectionState::State::DISCONNECTED)) {
         BOOST_LOG_TRIVIAL(warning) << "Invalid state for connection: " 
-                                  << ConnectionState::state_to_string(get_connection_state());
+                                  << ConnectionState::state_to_string(current_state)
+                                  << ". Must be INITIAL or DISCONNECTED.";
         return false;
+    }
+    
+    // Reset io_context and create new socket if needed
+    io_context_.restart();
+    if (!socket_ || !socket_->is_open()) {
+        socket_ = std::make_unique<boost::asio::ip::tcp::socket>(io_context_);
     }
 
     state_.store(ConnectionState::State::CONNECTING);
@@ -51,21 +75,40 @@ bool TcpPeer::connect(const std::string& address, uint16_t port) {
 
         if (ec || !socket_->is_open()) {
             BOOST_LOG_TRIVIAL(error) << "Connection timeout or error: " 
-                                   << (ec ? ec.message() : "Connection timeout");
+                                    << (ec ? ec.message() : "Connection timeout");
             handle_error(ec);
             return false;
         }
 
         // Configure socket options
-        socket_->set_option(boost::asio::ip::tcp::no_delay(true));
-        socket_->set_option(boost::asio::socket_base::keep_alive(true));
-        socket_->set_option(boost::asio::socket_base::linger(true, 0));
+        boost::system::error_code opt_ec;
+        socket_->set_option(boost::asio::ip::tcp::no_delay(true), opt_ec);
+        if (opt_ec) {
+            BOOST_LOG_TRIVIAL(warning) << "Failed to set TCP_NODELAY: " << opt_ec.message();
+        }
+
+        socket_->set_option(boost::asio::socket_base::keep_alive(true), opt_ec);
+        if (opt_ec) {
+            BOOST_LOG_TRIVIAL(warning) << "Failed to set SO_KEEPALIVE: " << opt_ec.message();
+        }
+
+        socket_->set_option(boost::asio::socket_base::linger(true, 0), opt_ec);
+        if (opt_ec) {
+            BOOST_LOG_TRIVIAL(warning) << "Failed to set SO_LINGER: " << opt_ec.message();
+        }
         
-        // Set socket timeouts
+        // Set socket timeouts with error checking
         socket_->set_option(boost::asio::detail::socket_option::integer<SOL_SOCKET, SO_RCVTIMEO>{
-            static_cast<int>(SOCKET_TIMEOUT.count())});
+            static_cast<int>(SOCKET_TIMEOUT.count())}, opt_ec);
+        if (opt_ec) {
+            BOOST_LOG_TRIVIAL(warning) << "Failed to set SO_RCVTIMEO: " << opt_ec.message();
+        }
+
         socket_->set_option(boost::asio::detail::socket_option::integer<SOL_SOCKET, SO_SNDTIMEO>{
-            static_cast<int>(SOCKET_TIMEOUT.count())});
+            static_cast<int>(SOCKET_TIMEOUT.count())}, opt_ec);
+        if (opt_ec) {
+            BOOST_LOG_TRIVIAL(warning) << "Failed to set SO_SNDTIMEO: " << opt_ec.message();
+        }
         
         peer_address_ = address;
         peer_port_ = port;
@@ -162,29 +205,45 @@ void TcpPeer::process_streams() {
             size_t available = MAX_BUFFER_SIZE - input_buffer_->size();
             size_t to_read = std::min(available, BUFFER_SIZE);
             
+            boost::asio::socket_base::bytes_readable command;
+            socket_->io_control(command);
+            std::size_t bytes_readable = command.get();
+            
+            if (bytes_readable == 0) {
+                std::this_thread::sleep_for(std::chrono::milliseconds(10));
+                continue;
+            }
+            
             size_t bytes = boost::asio::read(*socket_,
-                input_buffer_->prepare(to_read),
+                input_buffer_->prepare(std::min(to_read, bytes_readable)),
                 boost::asio::transfer_at_least(1),
                 ec);
             
             if (ec) {
-                if (ec != boost::asio::error::eof) {
+                if (ec == boost::asio::error::eof) {
+                    BOOST_LOG_TRIVIAL(info) << "Peer disconnected (EOF)";
+                    state_.store(ConnectionState::State::DISCONNECTED);
+                } else if (ec == boost::asio::error::operation_aborted) {
+                    BOOST_LOG_TRIVIAL(info) << "Read operation aborted";
+                } else {
                     BOOST_LOG_TRIVIAL(error) << "Read error: " << ec.message();
                     handle_error(ec);
-                } else {
-                    BOOST_LOG_TRIVIAL(info) << "Peer disconnected (EOF)";
                 }
                 break;
             }
             
             input_buffer_->commit(bytes);
             
-            // Process received data
+            // Process received data with proper error handling
             if (stream_processor_) {
                 try {
                     stream_processor_(*input_stream_);
                 } catch (const std::exception& e) {
                     BOOST_LOG_TRIVIAL(error) << "Stream processor error: " << e.what();
+                    if (is_connected()) {
+                        // Only attempt error recovery if still connected
+                        handle_error(boost::system::error_code(boost::asio::error::fault));
+                    }
                 }
             }
             
@@ -218,31 +277,56 @@ void TcpPeer::handle_error(const std::error_code& error) {
     
     if (current_state != ConnectionState::State::ERROR) {
         BOOST_LOG_TRIVIAL(info) << "Transitioning from " 
-                               << ConnectionState::state_to_string(current_state)
-                               << " to ERROR state";
+                                << ConnectionState::state_to_string(current_state)
+                                << " to ERROR state";
         
         // Close existing socket
         close_socket();
         
-        // Attempt recovery based on error type
-        if (error == boost::asio::error::connection_reset ||
-            error == boost::asio::error::connection_aborted ||
-            error == boost::asio::error::broken_pipe) {
+        // Attempt recovery for connection-related errors
+        if (error.value() == boost::asio::error::connection_reset ||
+            error.value() == boost::asio::error::connection_aborted ||
+            error.value() == boost::asio::error::broken_pipe ||
+            error.value() == boost::asio::error::connection_refused ||
+            error.value() == boost::asio::error::timed_out) {
             
-            BOOST_LOG_TRIVIAL(info) << "Attempting connection recovery...";
+            BOOST_LOG_TRIVIAL(info) << "Attempting connection recovery for peer "
+                                  << peer_address_ << ":" << peer_port_;
+                                  
             for (int retry = 0; retry < MAX_RETRY_ATTEMPTS; ++retry) {
-                std::chrono::milliseconds backoff(100 * (1 << retry));  // Exponential backoff
+                // Exponential backoff with jitter
+                auto base_delay = std::chrono::milliseconds(100 * (1 << retry));
+                auto jitter = std::chrono::milliseconds(rand() % 100);
+                auto backoff = base_delay + jitter;
+                
+                BOOST_LOG_TRIVIAL(info) << "Retry " << retry + 1 << "/" << MAX_RETRY_ATTEMPTS
+                                      << ", waiting " << backoff.count() << "ms";
                 std::this_thread::sleep_for(backoff);
                 
                 if (connect(peer_address_, peer_port_)) {
-                    BOOST_LOG_TRIVIAL(info) << "Successfully recovered connection on attempt " << retry + 1;
+                    BOOST_LOG_TRIVIAL(info) << "Successfully recovered connection to "
+                                          << peer_address_ << ":" << peer_port_
+                                          << " on attempt " << retry + 1;
                     return;
                 }
-                BOOST_LOG_TRIVIAL(warning) << "Recovery attempt " << retry + 1 << " failed";
+                
+                BOOST_LOG_TRIVIAL(warning) << "Recovery attempt " << retry + 1 
+                                         << " failed for peer " << peer_address_ 
+                                         << ":" << peer_port_;
             }
+            
+            BOOST_LOG_TRIVIAL(error) << "Failed to recover connection after "
+                                   << MAX_RETRY_ATTEMPTS << " attempts";
+        } else {
+            BOOST_LOG_TRIVIAL(error) << "Non-recoverable error encountered: "
+                                   << error.message();
         }
         
         state_.store(ConnectionState::State::ERROR);
+        if (ConnectionState::is_valid_transition(ConnectionState::State::ERROR, 
+                                               ConnectionState::State::DISCONNECTED)) {
+            state_.store(ConnectionState::State::DISCONNECTED);
+        }
     }
 }
 
