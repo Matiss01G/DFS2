@@ -19,7 +19,7 @@ public:
     void start(uint16_t listen_port);
     void stop();
     
-    // High-level network operations
+    // High-level network operations     
     void connect_to_peer(const std::string& address, uint16_t port);
     void send_file(const std::array<uint8_t, 32>& peer_id,
                   std::shared_ptr<std::istream> file_stream,
