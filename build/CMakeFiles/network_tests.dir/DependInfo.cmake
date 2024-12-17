@@ -8,6 +8,7 @@ set(CMAKE_DEPENDS_LANGUAGES
 
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
+  "/home/runner/StreamCryptoDFS/src/tests/connection_state_test.cpp" "CMakeFiles/network_tests.dir/src/tests/connection_state_test.cpp.o" "gcc" "CMakeFiles/network_tests.dir/src/tests/connection_state_test.cpp.o.d"
   "/home/runner/StreamCryptoDFS/src/tests/network_test.cpp" "CMakeFiles/network_tests.dir/src/tests/network_test.cpp.o" "gcc" "CMakeFiles/network_tests.dir/src/tests/network_test.cpp.o.d"
   )
 

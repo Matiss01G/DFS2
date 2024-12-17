@@ -185,19 +185,6 @@ dfs_crypto/fast:
 .PHONY : dfs_crypto/fast
 
 #=============================================================================
-# Target rules for targets named dfs_network
-
-# Build rule for target.
-dfs_network: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 dfs_network
-.PHONY : dfs_network
-
-# fast build rule for target.
-dfs_network/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/dfs_network.dir/build.make CMakeFiles/dfs_network.dir/build
-.PHONY : dfs_network/fast
-
-#=============================================================================
 # Target rules for targets named crypto_tests
 
 # Build rule for target.
@@ -247,125 +234,29 @@ src/crypto/crypto_stream.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/dfs_crypto.dir/build.make CMakeFiles/dfs_crypto.dir/src/crypto/crypto_stream.cpp.s
 .PHONY : src/crypto/crypto_stream.cpp.s
 
-src/network/network_manager.o: src/network/network_manager.cpp.o
-.PHONY : src/network/network_manager.o
+src/tests/connection_state_test.o: src/tests/connection_state_test.cpp.o
+.PHONY : src/tests/connection_state_test.o
 
 # target to build an object file
-src/network/network_manager.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/dfs_network.dir/build.make CMakeFiles/dfs_network.dir/src/network/network_manager.cpp.o
-.PHONY : src/network/network_manager.cpp.o
+src/tests/connection_state_test.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/network_tests.dir/build.make CMakeFiles/network_tests.dir/src/tests/connection_state_test.cpp.o
+.PHONY : src/tests/connection_state_test.cpp.o
 
-src/network/network_manager.i: src/network/network_manager.cpp.i
-.PHONY : src/network/network_manager.i
-
-# target to preprocess a source file
-src/network/network_manager.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/dfs_network.dir/build.make CMakeFiles/dfs_network.dir/src/network/network_manager.cpp.i
-.PHONY : src/network/network_manager.cpp.i
-
-src/network/network_manager.s: src/network/network_manager.cpp.s
-.PHONY : src/network/network_manager.s
-
-# target to generate assembly for a file
-src/network/network_manager.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/dfs_network.dir/build.make CMakeFiles/dfs_network.dir/src/network/network_manager.cpp.s
-.PHONY : src/network/network_manager.cpp.s
-
-src/network/peer.o: src/network/peer.cpp.o
-.PHONY : src/network/peer.o
-
-# target to build an object file
-src/network/peer.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/dfs_network.dir/build.make CMakeFiles/dfs_network.dir/src/network/peer.cpp.o
-.PHONY : src/network/peer.cpp.o
-
-src/network/peer.i: src/network/peer.cpp.i
-.PHONY : src/network/peer.i
+src/tests/connection_state_test.i: src/tests/connection_state_test.cpp.i
+.PHONY : src/tests/connection_state_test.i
 
 # target to preprocess a source file
-src/network/peer.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/dfs_network.dir/build.make CMakeFiles/dfs_network.dir/src/network/peer.cpp.i
-.PHONY : src/network/peer.cpp.i
+src/tests/connection_state_test.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/network_tests.dir/build.make CMakeFiles/network_tests.dir/src/tests/connection_state_test.cpp.i
+.PHONY : src/tests/connection_state_test.cpp.i
 
-src/network/peer.s: src/network/peer.cpp.s
-.PHONY : src/network/peer.s
-
-# target to generate assembly for a file
-src/network/peer.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/dfs_network.dir/build.make CMakeFiles/dfs_network.dir/src/network/peer.cpp.s
-.PHONY : src/network/peer.cpp.s
-
-src/network/peer_manager.o: src/network/peer_manager.cpp.o
-.PHONY : src/network/peer_manager.o
-
-# target to build an object file
-src/network/peer_manager.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/dfs_network.dir/build.make CMakeFiles/dfs_network.dir/src/network/peer_manager.cpp.o
-.PHONY : src/network/peer_manager.cpp.o
-
-src/network/peer_manager.i: src/network/peer_manager.cpp.i
-.PHONY : src/network/peer_manager.i
-
-# target to preprocess a source file
-src/network/peer_manager.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/dfs_network.dir/build.make CMakeFiles/dfs_network.dir/src/network/peer_manager.cpp.i
-.PHONY : src/network/peer_manager.cpp.i
-
-src/network/peer_manager.s: src/network/peer_manager.cpp.s
-.PHONY : src/network/peer_manager.s
+src/tests/connection_state_test.s: src/tests/connection_state_test.cpp.s
+.PHONY : src/tests/connection_state_test.s
 
 # target to generate assembly for a file
-src/network/peer_manager.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/dfs_network.dir/build.make CMakeFiles/dfs_network.dir/src/network/peer_manager.cpp.s
-.PHONY : src/network/peer_manager.cpp.s
-
-src/network/tcp_peer.o: src/network/tcp_peer.cpp.o
-.PHONY : src/network/tcp_peer.o
-
-# target to build an object file
-src/network/tcp_peer.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/dfs_network.dir/build.make CMakeFiles/dfs_network.dir/src/network/tcp_peer.cpp.o
-.PHONY : src/network/tcp_peer.cpp.o
-
-src/network/tcp_peer.i: src/network/tcp_peer.cpp.i
-.PHONY : src/network/tcp_peer.i
-
-# target to preprocess a source file
-src/network/tcp_peer.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/dfs_network.dir/build.make CMakeFiles/dfs_network.dir/src/network/tcp_peer.cpp.i
-.PHONY : src/network/tcp_peer.cpp.i
-
-src/network/tcp_peer.s: src/network/tcp_peer.cpp.s
-.PHONY : src/network/tcp_peer.s
-
-# target to generate assembly for a file
-src/network/tcp_peer.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/dfs_network.dir/build.make CMakeFiles/dfs_network.dir/src/network/tcp_peer.cpp.s
-.PHONY : src/network/tcp_peer.cpp.s
-
-src/network/types.o: src/network/types.cpp.o
-.PHONY : src/network/types.o
-
-# target to build an object file
-src/network/types.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/dfs_network.dir/build.make CMakeFiles/dfs_network.dir/src/network/types.cpp.o
-.PHONY : src/network/types.cpp.o
-
-src/network/types.i: src/network/types.cpp.i
-.PHONY : src/network/types.i
-
-# target to preprocess a source file
-src/network/types.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/dfs_network.dir/build.make CMakeFiles/dfs_network.dir/src/network/types.cpp.i
-.PHONY : src/network/types.cpp.i
-
-src/network/types.s: src/network/types.cpp.s
-.PHONY : src/network/types.s
-
-# target to generate assembly for a file
-src/network/types.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/dfs_network.dir/build.make CMakeFiles/dfs_network.dir/src/network/types.cpp.s
-.PHONY : src/network/types.cpp.s
+src/tests/connection_state_test.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/network_tests.dir/build.make CMakeFiles/network_tests.dir/src/tests/connection_state_test.cpp.s
+.PHONY : src/tests/connection_state_test.cpp.s
 
 src/tests/crypto_stream_test.o: src/tests/crypto_stream_test.cpp.o
 .PHONY : src/tests/crypto_stream_test.o
@@ -430,26 +321,13 @@ help:
 	@echo "... test"
 	@echo "... crypto_tests"
 	@echo "... dfs_crypto"
-	@echo "... dfs_network"
 	@echo "... network_tests"
 	@echo "... src/crypto/crypto_stream.o"
 	@echo "... src/crypto/crypto_stream.i"
 	@echo "... src/crypto/crypto_stream.s"
-	@echo "... src/network/network_manager.o"
-	@echo "... src/network/network_manager.i"
-	@echo "... src/network/network_manager.s"
-	@echo "... src/network/peer.o"
-	@echo "... src/network/peer.i"
-	@echo "... src/network/peer.s"
-	@echo "... src/network/peer_manager.o"
-	@echo "... src/network/peer_manager.i"
-	@echo "... src/network/peer_manager.s"
-	@echo "... src/network/tcp_peer.o"
-	@echo "... src/network/tcp_peer.i"
-	@echo "... src/network/tcp_peer.s"
-	@echo "... src/network/types.o"
-	@echo "... src/network/types.i"
-	@echo "... src/network/types.s"
+	@echo "... src/tests/connection_state_test.o"
+	@echo "... src/tests/connection_state_test.i"
+	@echo "... src/tests/connection_state_test.s"
 	@echo "... src/tests/crypto_stream_test.o"
 	@echo "... src/tests/crypto_stream_test.i"
 	@echo "... src/tests/crypto_stream_test.s"

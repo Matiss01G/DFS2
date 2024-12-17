@@ -1,5 +1,5 @@
-CMakeFiles/network_tests.dir/src/tests/network_test.cpp.o: \
- /home/runner/StreamCryptoDFS/src/tests/network_test.cpp \
+CMakeFiles/network_tests.dir/src/tests/connection_state_test.cpp.o: \
+ /home/runner/StreamCryptoDFS/src/tests/connection_state_test.cpp \
  /nix/store/fwh4fxd747m0py3ib3s5abamia9nrf90-glibc-2.39-52-dev/include/stdc-predef.h \
  /nix/store/ikmzrr3a8gd4jx31lkdhx7bk045j16fi-gtest-1.14.0-dev/include/gtest/gtest.h \
  /nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/cstddef \

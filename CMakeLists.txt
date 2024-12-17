@@ -27,18 +27,12 @@ target_link_libraries(dfs_crypto PUBLIC
 )
 
 # Create network library
-add_library(dfs_network
-    src/network/network_manager.cpp
-    src/network/peer_manager.cpp
-    src/network/peer.cpp
-    src/network/tcp_peer.cpp
-    src/network/types.cpp
-)
-target_include_directories(dfs_network PUBLIC
+add_library(dfs_network INTERFACE)
+target_include_directories(dfs_network INTERFACE
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
     $<INSTALL_INTERFACE:include>
 )
-target_link_libraries(dfs_network PUBLIC
+target_link_libraries(dfs_network INTERFACE
     dfs_crypto
     Boost::system
     Boost::thread
@@ -58,7 +52,8 @@ target_link_libraries(crypto_tests
 )
 
 add_executable(network_tests
-    src/tests/network_test.cpp)
+    src/tests/network_test.cpp
+    src/tests/connection_state_test.cpp)
 
 target_link_libraries(network_tests
     PRIVATE
