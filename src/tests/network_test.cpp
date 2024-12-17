@@ -42,7 +42,7 @@ TEST_F(NetworkTest, ConnectToPeer) {
             connected = true;
             cv.notify_one();
         } else {
-            BOOST_LOG_TRIVIAL(error) << "Connection error: " << to_string(error);
+            std::cerr << "Connection error: " << to_string(error) << std::endl;
         }
     });
     
