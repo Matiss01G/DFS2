@@ -247,15 +247,33 @@ void TcpPeer::process_streams() {
                 }
             }
             
-            // Write any pending output
+            // Write any pending output with chunked transfer
             if (output_buffer_->size() > 0) {
-                boost::asio::write(*socket_, *output_buffer_, ec);
-                if (ec) {
-                    BOOST_LOG_TRIVIAL(error) << "Write error: " << ec.message();
-                    handle_error(ec);
-                    break;
+                size_t remaining = output_buffer_->size();
+                const size_t chunk_size = BUFFER_SIZE;
+                
+                while (remaining > 0 && is_connected()) {
+                    size_t to_write = std::min(remaining, chunk_size);
+                    size_t written = boost::asio::write(*socket_,
+                        output_buffer_->data(),
+                        boost::asio::transfer_exactly(to_write),
+                        ec);
+                    
+                    if (ec) {
+                        BOOST_LOG_TRIVIAL(error) << "Write error after " << (output_buffer_->size() - remaining)
+                                               << " bytes: " << ec.message();
+                        handle_error(ec);
+                        break;
+                    }
+                    
+                    output_buffer_->consume(written);
+                    remaining -= written;
+                    
+                    if (remaining > 0) {
+                        BOOST_LOG_TRIVIAL(debug) << "Chunked write: " << written << " bytes, "
+                                               << remaining << " bytes remaining";
+                    }
                 }
-                output_buffer_->consume(output_buffer_->size());
             }
         } catch (const std::exception& e) {
             BOOST_LOG_TRIVIAL(error) << "Stream processing error: " << e.what();
