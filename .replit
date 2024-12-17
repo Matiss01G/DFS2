@@ -27,7 +27,7 @@ task = "packager.installForAll"
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "mkdir -p build && cd build && cmake -DCMAKE_BUILD_TYPE=Debug .. && make && ./crypto_tests"
+args = "mkdir -p build && cd build && cmake -DCMAKE_BUILD_TYPE=Debug .. && make && ./crypto_tests && ./network_tests"
 
 [deployment]
-run = ["sh", "-c", "mkdir -p build && cd build && cmake -DCMAKE_BUILD_TYPE=Debug .. && make && ./crypto_tests"]
+run = ["sh", "-c", "mkdir -p build && cd build && cmake -DCMAKE_BUILD_TYPE=Debug .. && make && ./crypto_tests && ./network_tests"]

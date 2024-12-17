@@ -26,6 +26,23 @@ target_link_libraries(dfs_crypto PUBLIC
     Boost::thread
 )
 
+# Create network library
+add_library(dfs_network
+    src/network/network_manager.cpp
+    src/network/peer_manager.cpp
+    src/network/tcp_peer.cpp
+    src/network/types.cpp
+)
+target_include_directories(dfs_network PUBLIC
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+    $<INSTALL_INTERFACE:include>
+)
+target_link_libraries(dfs_network PUBLIC
+    dfs_crypto
+    Boost::system
+    Boost::thread
+)
+
 # Tests
 enable_testing()
 
@@ -39,12 +56,24 @@ target_link_libraries(crypto_tests
     GTest::Main
 )
 
+add_executable(network_tests
+    src/tests/network_test.cpp)
+
+target_link_libraries(network_tests
+    PRIVATE
+    dfs_network
+    dfs_crypto
+    GTest::GTest
+    GTest::Main
+)
+
 include(GoogleTest)
 gtest_discover_tests(crypto_tests)
+gtest_discover_tests(network_tests)
 
 # Install rules
-install(TARGETS dfs_crypto
-    EXPORT dfs_crypto-targets
+install(TARGETS dfs_crypto dfs_network
+    EXPORT dfs-targets
     ARCHIVE DESTINATION lib
     LIBRARY DESTINATION lib
     RUNTIME DESTINATION bin
@@ -55,8 +84,7 @@ install(DIRECTORY include/
     FILES_MATCHING PATTERN "*.hpp"
 )
 
-install(EXPORT dfs_crypto-targets
-    FILE dfs_crypto-targets.cmake
+install(EXPORT dfs-targets
+    FILE dfs-targets.cmake
     NAMESPACE dfs::
-    DESTINATION lib/cmake/dfs_crypto
-)
+    DESTINATION lib/cmake/dfs)

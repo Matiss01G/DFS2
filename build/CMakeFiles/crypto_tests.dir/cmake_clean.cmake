@@ -1,6 +1,4 @@
 file(REMOVE_RECURSE
-  "CMakeFiles/crypto_tests.dir/src/tests/byte_order_test.cpp.o"
-  "CMakeFiles/crypto_tests.dir/src/tests/byte_order_test.cpp.o.d"
   "CMakeFiles/crypto_tests.dir/src/tests/crypto_stream_test.cpp.o"
   "CMakeFiles/crypto_tests.dir/src/tests/crypto_stream_test.cpp.o.d"
   "crypto_tests"
