@@ -3,8 +3,6 @@
 
 CMakeFiles/network_tests.dir/src/tests/network_test.cpp.o
  /home/runner/StreamCryptoDFS/src/tests/network_test.cpp
- /home/runner/StreamCryptoDFS/include/crypto/crypto_error.hpp
- /home/runner/StreamCryptoDFS/include/crypto/crypto_stream.hpp
  /home/runner/StreamCryptoDFS/include/network/network_manager.hpp
  /home/runner/StreamCryptoDFS/include/network/peer.hpp
  /home/runner/StreamCryptoDFS/include/network/peer_manager.hpp

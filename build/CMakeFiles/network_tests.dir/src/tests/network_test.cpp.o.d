@@ -1414,6 +1414,4 @@ CMakeFiles/network_tests.dir/src/tests/network_test.cpp.o: \
  /home/runner/StreamCryptoDFS/src/tests/../../include/network/network_manager.hpp \
  /home/runner/StreamCryptoDFS/src/tests/../../include/network/peer_manager.hpp \
  /home/runner/StreamCryptoDFS/src/tests/../../include/network/peer.hpp \
- /home/runner/StreamCryptoDFS/src/tests/../../include/network/types.hpp \
- /home/runner/StreamCryptoDFS/src/tests/../../include/network/../crypto/crypto_stream.hpp \
- /home/runner/StreamCryptoDFS/src/tests/../../include/network/../crypto/crypto_error.hpp
+ /home/runner/StreamCryptoDFS/src/tests/../../include/network/types.hpp

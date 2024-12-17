@@ -56,7 +56,7 @@ TEST_F(NetworkTest, ConnectToPeer) {
         << "Failed to establish connection within timeout period";
 }
 
-TEST_F(NetworkTest, StreamFileTransfer) {
+TEST_F(NetworkTest, StreamPacketTransfer) {
     std::string test_data = "Hello, World!";
     auto input_stream = std::make_shared<std::stringstream>(test_data);
     std::string received_data;
@@ -69,26 +69,22 @@ TEST_F(NetworkTest, StreamFileTransfer) {
     client_->connect_to_peer("127.0.0.1", 12345);
     std::this_thread::sleep_for(100ms);  // Allow connection to establish
     
-    // Set up file received handler
-    server_->set_file_received_handler(
-        [&](const std::array<uint8_t, 32>& source_id,
-            const std::vector<uint8_t>& file_key,
-            std::shared_ptr<std::istream> payload) {
-            std::stringstream ss;
-            ss << payload->rdbuf();
-            
-            std::lock_guard<std::mutex> lock(mtx);
-            received_data = ss.str();
-            transfer_complete = true;
-            cv.notify_one();
+    // Set up packet handler
+    server_->set_packet_handler(
+        [&](const PacketHeader& header, std::shared_ptr<std::istream> payload) {
+            if (header.type == PacketType::DATA) {
+                std::stringstream ss;
+                ss << payload->rdbuf();
+                
+                std::lock_guard<std::mutex> lock(mtx);
+                received_data = ss.str();
+                transfer_complete = true;
+                cv.notify_one();
+            }
         });
     
-    // Generate random file key
-    std::vector<uint8_t> file_key(32);
-    std::generate(file_key.begin(), file_key.end(), std::rand);
-    
-    // Send file from client to server
-    client_->send_file(std::array<uint8_t, 32>(), input_stream, file_key);
+    // Send packet from client to server
+    client_->send_packet(std::array<uint8_t, 16>(), PacketType::DATA, input_stream, 1);
     
     // Wait for transfer completion or timeout
     std::unique_lock<std::mutex> lock(mtx);

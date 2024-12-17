@@ -1379,8 +1379,6 @@ CMakeFiles/dfs_network.dir/src/network/network_manager.cpp.o: \
  /home/runner/StreamCryptoDFS/src/network/../../include/network/peer_manager.hpp \
  /home/runner/StreamCryptoDFS/src/network/../../include/network/peer.hpp \
  /home/runner/StreamCryptoDFS/src/network/../../include/network/types.hpp \
- /home/runner/StreamCryptoDFS/src/network/../../include/network/../crypto/crypto_stream.hpp \
- /home/runner/StreamCryptoDFS/src/network/../../include/network/../crypto/crypto_error.hpp \
  /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/log/trivial.hpp \
  /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/log/detail/config.hpp \
  /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/thread/detail/config.hpp \

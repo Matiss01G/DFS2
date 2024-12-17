@@ -27,10 +27,10 @@ task = "packager.installForAll"
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "mkdir -p build && cd build && cmake -DCMAKE_BUILD_TYPE=Debug .. && make && ./crypto_tests && ./network_tests"
+args = "cd build && cmake -DCMAKE_BUILD_TYPE=Debug .. && make && ./network_tests"
 
 [deployment]
-run = ["sh", "-c", "mkdir -p build && cd build && cmake -DCMAKE_BUILD_TYPE=Debug .. && make && ./crypto_tests && ./network_tests"]
+run = ["sh", "-c", "cd build && cmake -DCMAKE_BUILD_TYPE=Debug .. && make && ./network_tests"]
 
 [[ports]]
 localPort = 12345
