@@ -44,6 +44,10 @@ enable_testing()
 add_executable(crypto_tests 
     src/tests/crypto_stream_test.cpp)
 
+add_executable(network_tests
+    src/tests/network_test.cpp
+    src/tests/connection_state_test.cpp)
+
 target_link_libraries(crypto_tests
     PRIVATE
     dfs_crypto
@@ -51,14 +55,9 @@ target_link_libraries(crypto_tests
     GTest::Main
 )
 
-add_executable(network_tests
-    src/tests/network_test.cpp
-    src/tests/connection_state_test.cpp)
-
 target_link_libraries(network_tests
     PRIVATE
     dfs_network
-    dfs_crypto
     GTest::GTest
     GTest::Main
 )
