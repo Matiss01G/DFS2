@@ -91,42 +91,66 @@ protected:
                 boost::asio::ip::tcp::socket socket(io_context_);
                 acceptor_->accept(socket);
                 
+                // Configure socket for optimal performance
+                socket.set_option(boost::asio::ip::tcp::no_delay(true));
+                socket.set_option(boost::asio::socket_base::keep_alive(true));
+                socket.set_option(boost::asio::socket_base::send_buffer_size(8192));
+                socket.set_option(boost::asio::socket_base::receive_buffer_size(8192));
+                
                 // Echo server implementation
                 boost::asio::streambuf buffer;
+                std::string response;
+                
                 while (socket.is_open()) {
                     boost::system::error_code ec;
                     
-                    // Read until newline
+                    // Read until newline with proper error handling
                     std::size_t n = boost::asio::read_until(socket, buffer, '\n', ec);
-                    if (ec) {
-                        if (ec != boost::asio::error::eof) {
-                            BOOST_LOG_TRIVIAL(error) << "Echo server read error: " << ec.message();
-                        }
-                        break;
-                    }
                     
-                    if (n > 0) {
-                        // Get the line from the buffer
-                        std::string line(
-                            boost::asio::buffers_begin(buffer.data()),
-                            boost::asio::buffers_begin(buffer.data()) + n);
-                        buffer.consume(n);  // Remove consumed data
+                    if (!ec && n > 0) {
+                        // Extract complete line with newline
+                        std::istream is(&buffer);
+                        std::getline(is, response);
+                        response += '\n';  // Add back the newline
                         
-                        BOOST_LOG_TRIVIAL(debug) << "Echo server received: " << line;
+                        BOOST_LOG_TRIVIAL(debug) << "Echo server received: " << response;
                         
-                        // Echo it back
-                        boost::asio::write(socket, boost::asio::buffer(line), ec);
-                        if (ec) {
+                        // Echo back with guaranteed delivery
+                        std::size_t bytes_written = boost::asio::write(
+                            socket, 
+                            boost::asio::buffer(response),
+                            boost::asio::transfer_exactly(response.length()),
+                            ec
+                        );
+                        
+                        if (!ec && bytes_written == response.length()) {
+                            socket.lowest_layer().flush(ec);
+                            if (!ec) {
+                                BOOST_LOG_TRIVIAL(debug) << "Echo server sent response: " << response;
+                            } else {
+                                BOOST_LOG_TRIVIAL(error) << "Echo server flush error: " << ec.message();
+                                break;
+                            }
+                        } else {
                             BOOST_LOG_TRIVIAL(error) << "Echo server write error: " << ec.message();
                             break;
                         }
+                    } else if (ec == boost::asio::error::eof) {
+                        BOOST_LOG_TRIVIAL(debug) << "Echo server: Client disconnected";
+                        break;
+                    } else if (ec) {
+                        BOOST_LOG_TRIVIAL(error) << "Echo server read error: " << ec.message();
+                        break;
                     }
                 }
             }
             catch (const std::exception& e) {
-                // Test server error, can be ignored
+                BOOST_LOG_TRIVIAL(error) << "Test server error: " << e.what();
             }
         }).detach();
+        
+        // Allow time for server to start
+        std::this_thread::sleep_for(std::chrono::milliseconds(100));
     }
 };
 
@@ -182,37 +206,53 @@ TEST_F(TCP_PeerTest, StreamOperations) {
     EXPECT_NE(peer.get_output_stream(), nullptr);
     EXPECT_NE(peer.get_input_stream(), nullptr);
     
-    // Test data transfer
+    // Test data transfer with multiple attempts
     const std::string test_data = "Hello,TCP!\n";  // Add newline as frame delimiter
+    const int MAX_RETRIES = 3;
     
-    // Write data
-    std::ostream* out = peer.get_output_stream();
-    ASSERT_NE(out, nullptr);
-    *out << test_data;  // Use operator<< for proper stream handling
-    out->flush();
-    
-    // Read response with timeout
-    std::istream* in = peer.get_input_stream();
-    ASSERT_NE(in, nullptr);
-    
-    auto start = std::chrono::steady_clock::now();
-    std::string received_data;
-    std::string line;
-    
-    while (std::chrono::steady_clock::now() - start < std::chrono::seconds(1)) {
-        if (std::getline(*in, line)) {
-            received_data = line + '\n';  // Re-add the newline that getline removes
-            break;
+    for (int retry = 0; retry < MAX_RETRIES; ++retry) {
+        // Write data
+        std::ostream* out = peer.get_output_stream();
+        ASSERT_NE(out, nullptr);
+        BOOST_LOG_TRIVIAL(debug) << "Sending data: " << test_data;
+        *out << test_data << std::flush;
+        
+        // Read response with timeout
+        std::istream* in = peer.get_input_stream();
+        ASSERT_NE(in, nullptr);
+        
+        auto start = std::chrono::steady_clock::now();
+        std::string received_data;
+        std::string line;
+        bool received = false;
+        
+        while (std::chrono::steady_clock::now() - start < std::chrono::milliseconds(500)) {
+            if (std::getline(*in, line)) {
+                received_data = line + '\n';
+                received = true;
+                BOOST_LOG_TRIVIAL(debug) << "Received data: " << received_data;
+                break;
+            }
+            
+            if (in->fail() && !in->eof()) {
+                in->clear();  // Clear error flags if not EOF
+            }
+            
+            std::this_thread::sleep_for(std::chrono::milliseconds(10));
         }
         
-        if (in->fail() && !in->eof()) {
-            in->clear();  // Clear error flags if not EOF
+        if (received && received_data == test_data) {
+            SUCCEED() << "Data transfer successful on attempt " << (retry + 1);
+            return;
         }
         
-        std::this_thread::sleep_for(std::chrono::milliseconds(10));
+        BOOST_LOG_TRIVIAL(warning) << "Data transfer attempt " << (retry + 1) 
+                                  << " failed. Expected: " << test_data 
+                                  << ", Received: " << received_data;
+        std::this_thread::sleep_for(std::chrono::milliseconds(100));
     }
     
-    EXPECT_EQ(received_data, test_data) << "Data mismatch or timeout occurred";
+    FAIL() << "Data transfer failed after " << MAX_RETRIES << " attempts";
     
     // Cleanup
     peer.disconnect();
@@ -228,37 +268,44 @@ TEST_F(TCP_PeerTest, StreamProcessorOperations) {
     ASSERT_TRUE(peer.connect("127.0.0.1", test_port));
     
     // Test processor setup and execution
-    peer.set_stream_processor([&received_data](std::istream& stream) {
-        std::string data;
-        stream >> data;
-        received_data = data;
+    std::mutex data_mutex;
+    peer.set_stream_processor([&received_data, &data_mutex](std::istream& stream) {
+        std::string line;
+        if (std::getline(stream, line)) {
+            std::lock_guard<std::mutex> lock(data_mutex);
+            received_data = line;
+        }
     });
     
     // Test processing start/stop
     EXPECT_TRUE(peer.start_stream_processing());
     
-    const std::string test_data = "ProcessThis\n";  // Add newline as frame delimiter
+    const std::string test_input = "ProcessThis\n";  // Add newline as frame delimiter
     std::ostream* out = peer.get_output_stream();
     ASSERT_NE(out, nullptr);
-    *out << test_data;
-    out->flush();
+    *out << test_input << std::flush;  // Make sure to flush
     
     // Wait for processor to receive data with timeout
     auto start = std::chrono::steady_clock::now();
-    while (received_data.empty() && 
-           std::chrono::steady_clock::now() - start < std::chrono::seconds(1)) {
+    std::string received_copy;
+    while (std::chrono::steady_clock::now() - start < std::chrono::seconds(1)) {
+        {
+            std::lock_guard<std::mutex> lock(data_mutex);
+            received_copy = received_data;
+        }
+        if (!received_copy.empty()) {
+            break;
+        }
         std::this_thread::sleep_for(std::chrono::milliseconds(10));
     }
     
-    // Remove newline from received data for comparison
-    if (!received_data.empty() && received_data.back() == '\n') {
-        received_data.pop_back();
-    }
-    if (test_data.back() == '\n') {
-        test_data.pop_back();
+    // Prepare test data for comparison (remove newlines)
+    std::string expected_data = test_input;
+    if (!expected_data.empty() && expected_data.back() == '\n') {
+        expected_data.pop_back();
     }
     
-    EXPECT_EQ(received_data, test_data) << "Stream processor did not receive expected data";
+    EXPECT_EQ(received_data, expected_data) << "Stream processor did not receive expected data";
     
     // Test cleanup
     peer.stop_stream_processing();

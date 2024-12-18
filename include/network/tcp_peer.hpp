@@ -56,6 +56,7 @@ private:
     boost::asio::io_context io_context_;
     std::unique_ptr<boost::asio::ip::tcp::socket> socket_;
     std::unique_ptr<boost::asio::ip::tcp::endpoint> endpoint_;
+    std::mutex io_mutex_;  // Mutex for synchronizing I/O operations
     
     // Processing thread
     std::unique_ptr<std::thread> processing_thread_;
