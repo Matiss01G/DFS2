@@ -12,20 +12,27 @@ TCP_Peer::TCP_Peer(const std::string& peer_id)
     output_buffer_(std::make_unique<boost::asio::streambuf>()) {
   BOOST_LOG_TRIVIAL(debug) << "[" << peer_id_ << "] Constructing TCP_Peer";
   initialize_streams();
-  BOOST_LOG_TRIVIAL(debug) << "[" << peer_id_ << "] Input/Output streams initialized";
-  BOOST_LOG_TRIVIAL(info) << "[" << peer_id_ << "] TCP_Peer instance created successfully";
+  BOOST_LOG_TRIVIAL(debug) << "[" << peer_id_ << "] Input buffer size: " << input_buffer_->max_size();
+  BOOST_LOG_TRIVIAL(debug) << "[" << peer_id_ << "] Output buffer size: " << output_buffer_->max_size();
+  BOOST_LOG_TRIVIAL(info) << "[" << peer_id_ << "] TCP_Peer instance created successfully with IO context: " 
+                         << &io_context_;
 }
 
 TCP_Peer::~TCP_Peer() {
+  BOOST_LOG_TRIVIAL(debug) << "[" << peer_id_ << "] Entering destructor";
   if (is_connected()) {
+    BOOST_LOG_TRIVIAL(debug) << "[" << peer_id_ << "] Active connection detected in destructor, initiating disconnect";
     disconnect();
   }
-  BOOST_LOG_TRIVIAL(debug) << "TCP_Peer destroyed: " << peer_id_;
+  BOOST_LOG_TRIVIAL(debug) << "[" << peer_id_ << "] Destructor completed. Final state: " 
+                          << ConnectionState::state_to_string(get_connection_state());
 }
 
 void TCP_Peer::initialize_streams() {
+  BOOST_LOG_TRIVIAL(trace) << "[" << peer_id_ << "] Initializing IO streams";
   input_stream_ = std::make_unique<std::istream>(input_buffer_.get());
   output_stream_ = std::make_unique<std::ostream>(output_buffer_.get());
+  BOOST_LOG_TRIVIAL(debug) << "[" << peer_id_ << "] IO streams initialized successfully";
 }
 
 bool TCP_Peer::connect(const std::string& address, uint16_t port) {
@@ -39,30 +46,58 @@ bool TCP_Peer::connect(const std::string& address, uint16_t port) {
 
   try {
     BOOST_LOG_TRIVIAL(info) << "[" << peer_id_ << "] Initiating connection to " << address << ":" << port;
+    BOOST_LOG_TRIVIAL(debug) << "[" << peer_id_ << "] Connection parameters:"
+                            << "\n  - Peer ID: " << peer_id_
+                            << "\n  - Target address: " << address
+                            << "\n  - Target port: " << port
+                            << "\n  - Initial state: " << ConnectionState::state_to_string(get_connection_state());
+    
     BOOST_LOG_TRIVIAL(debug) << "[" << peer_id_ << "] Transitioning state to CONNECTING";
     connection_state_.transition_to(ConnectionState::State::CONNECTING);
     
+    BOOST_LOG_TRIVIAL(trace) << "[" << peer_id_ << "] Creating resolver with IO context: " << &io_context_;
     boost::asio::ip::tcp::resolver resolver(io_context_);
     boost::system::error_code resolve_ec;
+    
+    auto resolve_start = std::chrono::steady_clock::now();
+    BOOST_LOG_TRIVIAL(debug) << "[" << peer_id_ << "] Starting DNS resolution for " << address;
     auto endpoints = resolver.resolve(address, std::to_string(port), resolve_ec);
+    auto resolve_end = std::chrono::steady_clock::now();
+    auto resolve_duration = std::chrono::duration_cast<std::chrono::milliseconds>(resolve_end - resolve_start);
     
     if (resolve_ec) {
-      BOOST_LOG_TRIVIAL(error) << "[" << peer_id_ << "] DNS resolution failed: " << resolve_ec.message() 
-                              << " (code: " << resolve_ec.value() << ")";
+      BOOST_LOG_TRIVIAL(error) << "[" << peer_id_ << "] DNS resolution failed:"
+                              << "\n  - Error: " << resolve_ec.message()
+                              << "\n  - Error code: " << resolve_ec.value()
+                              << "\n  - Time spent: " << resolve_duration.count() << "ms"
+                              << "\n  - Target: " << address << ":" << port;
       connection_state_.transition_to(ConnectionState::State::ERROR);
       return false;
     }
 
-    BOOST_LOG_TRIVIAL(debug) << "[" << peer_id_ << "] Address resolved successfully";
+    BOOST_LOG_TRIVIAL(debug) << "[" << peer_id_ << "] Address resolved successfully:"
+                            << "\n  - Resolution time: " << resolve_duration.count() << "ms"
+                            << "\n  - Number of endpoints: " << std::distance(endpoints.begin(), endpoints.end());
+    
     endpoint_ = std::make_unique<boost::asio::ip::tcp::endpoint>(*endpoints.begin());
+    BOOST_LOG_TRIVIAL(debug) << "[" << peer_id_ << "] Selected endpoint:"
+                            << "\n  - Address: " << endpoint_->address().to_string()
+                            << "\n  - Port: " << endpoint_->port()
+                            << "\n  - Protocol: " << endpoint_->protocol().name();
     
     BOOST_LOG_TRIVIAL(debug) << "[" << peer_id_ << "] Attempting socket connection";
+    auto connect_start = std::chrono::steady_clock::now();
     boost::system::error_code connect_ec;
     socket_->connect(*endpoint_, connect_ec);
+    auto connect_end = std::chrono::steady_clock::now();
+    auto connect_duration = std::chrono::duration_cast<std::chrono::milliseconds>(connect_end - connect_start);
     
     if (connect_ec) {
-      BOOST_LOG_TRIVIAL(error) << "[" << peer_id_ << "] Connection failed: " << connect_ec.message() 
-                              << " (code: " << connect_ec.value() << ")";
+      BOOST_LOG_TRIVIAL(error) << "[" << peer_id_ << "] Connection failed:"
+                              << "\n  - Error: " << connect_ec.message()
+                              << "\n  - Error code: " << connect_ec.value()
+                              << "\n  - Time spent: " << connect_duration.count() << "ms"
+                              << "\n  - Target endpoint: " << endpoint_->address().to_string() << ":" << endpoint_->port();
       connection_state_.transition_to(ConnectionState::State::ERROR);
       return false;
     }
@@ -228,19 +263,32 @@ void TCP_Peer::process_stream() {
             data += '\n';
           }
           
-          // Write complete message
+          // Trace before write operation
+          BOOST_LOG_TRIVIAL(trace) << "[" << peer_id_ << "] Attempting to write " << data.length() 
+                                  << " bytes to socket";
+          
+          auto start_time = std::chrono::steady_clock::now();
           std::size_t bytes_written = boost::asio::write(
             *socket_,
             boost::asio::buffer(data),
             boost::asio::transfer_exactly(data.length()),
             ec
           );
+          auto end_time = std::chrono::steady_clock::now();
+          auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end_time - start_time);
           
           if (!ec && bytes_written == data.length()) {
             output_buffer_->consume(output_buffer_->size());
-            BOOST_LOG_TRIVIAL(debug) << "Wrote " << bytes_written << " bytes: " << data;
+            BOOST_LOG_TRIVIAL(debug) << "[" << peer_id_ << "] Write operation completed:"
+                                   << "\n  - Bytes written: " << bytes_written
+                                   << "\n  - Duration: " << duration.count() << "µs"
+                                   << "\n  - Data: " << data;
           } else {
-            BOOST_LOG_TRIVIAL(error) << "Write error: " << ec.message();
+            BOOST_LOG_TRIVIAL(error) << "[" << peer_id_ << "] Write operation failed:"
+                                   << "\n  - Error: " << ec.message()
+                                   << "\n  - Error code: " << ec.value()
+                                   << "\n  - Bytes attempted: " << data.length()
+                                   << "\n  - Bytes written: " << bytes_written;
             break;
           }
         } catch (const std::exception& e) {
@@ -261,6 +309,9 @@ void TCP_Peer::process_stream() {
               boost::asio::steady_timer timer(io_context_);
               timer.expires_from_now(std::chrono::milliseconds(100));
 
+              BOOST_LOG_TRIVIAL(trace) << "[" << peer_id_ << "] Starting read operation with timeout";
+              auto read_start_time = std::chrono::steady_clock::now();
+              
               // Read until newline
               std::size_t n = boost::asio::read_until(
                 *socket_,
@@ -268,15 +319,27 @@ void TCP_Peer::process_stream() {
                 '\n',
                 ec
               );
+              
+              auto read_end_time = std::chrono::steady_clock::now();
+              auto read_duration = std::chrono::duration_cast<std::chrono::microseconds>(
+                read_end_time - read_start_time);
 
               if (!ec && n > 0) {
+                BOOST_LOG_TRIVIAL(debug) << "[" << peer_id_ << "] Read operation completed:"
+                                       << "\n  - Bytes read: " << n
+                                       << "\n  - Duration: " << read_duration.count() << "µs"
+                                       << "\n  - Buffer size after read: " << input_buffer_->size();
+                
                 // Process complete message
                 std::string data;
                 std::istream is(input_buffer_.get());
                 std::getline(is, data);
 
                 if (!data.empty()) {
-                  BOOST_LOG_TRIVIAL(debug) << "Received data: " << data;
+                  BOOST_LOG_TRIVIAL(debug) << "[" << peer_id_ << "] Message processing:"
+                                         << "\n  - Message length: " << data.length()
+                                         << "\n  - Content: " << data
+                                         << "\n  - Remaining buffer: " << input_buffer_->size();
                   
                   // Handle the received data
                   if (stream_processor_) {
@@ -334,16 +397,28 @@ void TCP_Peer::process_stream() {
 
 bool TCP_Peer::validate_connection_state(ConnectionState::State required_state) const {
   auto current_state = get_connection_state();
+  BOOST_LOG_TRIVIAL(trace) << "[" << peer_id_ << "] State validation:"
+                          << "\n  - Current state: " << ConnectionState::state_to_string(current_state)
+                          << "\n  - Required state: " << ConnectionState::state_to_string(required_state)
+                          << "\n  - Location: " << __FILE__ << ":" << __LINE__;
+  
   if (current_state != required_state) {
-    BOOST_LOG_TRIVIAL(warning) << "[" << peer_id_ << "] Invalid state transition attempted from " 
-      << ConnectionState::state_to_string(current_state) 
-      << " to " << ConnectionState::state_to_string(required_state)
-      << " at " << __FILE__ << ":" << __LINE__
-      << ". This might indicate a sequencing error in the connection lifecycle.";
+    BOOST_LOG_TRIVIAL(warning) << "[" << peer_id_ << "] Invalid state transition detected:"
+      << "\n  - From: " << ConnectionState::state_to_string(current_state)
+      << "\n  - To: " << ConnectionState::state_to_string(required_state)
+      << "\n  - Location: " << __FILE__ << ":" << __LINE__
+      << "\n  - Error type: Connection lifecycle sequencing error"
+      << "\n  - Socket state: " << (socket_ && socket_->is_open() ? "open" : "closed")
+      << "\n  - Processing active: " << processing_active_
+      << "\n  - Time: " << std::chrono::system_clock::now().time_since_epoch().count();
     return false;
   }
-  BOOST_LOG_TRIVIAL(trace) << "[" << peer_id_ << "] State validation passed: current="
-    << ConnectionState::state_to_string(current_state);
+  
+  BOOST_LOG_TRIVIAL(trace) << "[" << peer_id_ << "] State validation successful:"
+    << "\n  - Verified state: " << ConnectionState::state_to_string(current_state)
+    << "\n  - Processing active: " << processing_active_
+    << "\n  - Input buffer size: " << input_buffer_->size()
+    << "\n  - Output buffer size: " << output_buffer_->size();
   return true;
 }
 
@@ -351,58 +426,91 @@ void TCP_Peer::cleanup_connection() {
   BOOST_LOG_TRIVIAL(debug) << "[" << peer_id_ << "] Starting connection cleanup";
   
   // First, ensure processing is stopped
+  BOOST_LOG_TRIVIAL(trace) << "[" << peer_id_ << "] Stopping stream processing, current state: " 
+                          << (processing_active_ ? "active" : "inactive");
   processing_active_ = false;
   BOOST_LOG_TRIVIAL(debug) << "[" << peer_id_ << "] Set processing_active_ to false";
   
   if (processing_thread_ && processing_thread_->joinable()) {
-    BOOST_LOG_TRIVIAL(debug) << "[" << peer_id_ << "] Joining processing thread";
+    BOOST_LOG_TRIVIAL(debug) << "[" << peer_id_ << "] Joining processing thread"
+                            << "\n  - Thread ID: " << processing_thread_->get_id()
+                            << "\n  - Processing state: " << (processing_active_ ? "active" : "inactive");
     processing_thread_->join();
     processing_thread_.reset();
     BOOST_LOG_TRIVIAL(debug) << "[" << peer_id_ << "] Processing thread joined and reset";
+  } else {
+    BOOST_LOG_TRIVIAL(trace) << "[" << peer_id_ << "] No processing thread to cleanup";
   }
   
   // Then cleanup socket
   if (socket_) {
     boost::system::error_code ec;
+    BOOST_LOG_TRIVIAL(trace) << "[" << peer_id_ << "] Socket cleanup - Initial state:"
+                            << "\n  - Is open: " << (socket_->is_open() ? "yes" : "no")
+                            << "\n  - Has error: " << (socket_->error() ? "yes" : "no")
+                            << "\n  - Available bytes: " << socket_->available(ec);
+    
     if (socket_->is_open()) {
       BOOST_LOG_TRIVIAL(debug) << "[" << peer_id_ << "] Socket is open, initiating shutdown sequence";
       
       // Shutdown the socket first
+      BOOST_LOG_TRIVIAL(trace) << "[" << peer_id_ << "] Attempting socket shutdown";
       socket_->shutdown(boost::asio::ip::tcp::socket::shutdown_both, ec);
       if (ec) {
-        BOOST_LOG_TRIVIAL(error) << "[" << peer_id_ << "] Socket shutdown error: " << ec.message() 
-                                << " (code: " << ec.value() << ")";
+        BOOST_LOG_TRIVIAL(error) << "[" << peer_id_ << "] Socket shutdown error:"
+                                << "\n  - Error message: " << ec.message()
+                                << "\n  - Error code: " << ec.value()
+                                << "\n  - Category: " << ec.category().name();
       } else {
         BOOST_LOG_TRIVIAL(debug) << "[" << peer_id_ << "] Socket shutdown successful";
       }
       
       // Then close it
+      BOOST_LOG_TRIVIAL(trace) << "[" << peer_id_ << "] Attempting socket close";
       socket_->close(ec);
       if (ec) {
-        BOOST_LOG_TRIVIAL(error) << "[" << peer_id_ << "] Socket close error: " << ec.message() 
-                                << " (code: " << ec.value() << ")";
+        BOOST_LOG_TRIVIAL(error) << "[" << peer_id_ << "] Socket close error:"
+                                << "\n  - Error message: " << ec.message()
+                                << "\n  - Error code: " << ec.value()
+                                << "\n  - Category: " << ec.category().name();
       } else {
         BOOST_LOG_TRIVIAL(debug) << "[" << peer_id_ << "] Socket closed successfully";
       }
     } else {
       BOOST_LOG_TRIVIAL(debug) << "[" << peer_id_ << "] Socket was already closed";
     }
+  } else {
+    BOOST_LOG_TRIVIAL(trace) << "[" << peer_id_ << "] No socket to cleanup";
   }
   
   // Clear any remaining data in buffers
+  BOOST_LOG_TRIVIAL(trace) << "[" << peer_id_ << "] Starting buffer cleanup";
   if (input_buffer_) {
     std::size_t input_size = input_buffer_->size();
+    std::size_t max_size = input_buffer_->max_size();
+    BOOST_LOG_TRIVIAL(debug) << "[" << peer_id_ << "] Input buffer status before cleanup:"
+                            << "\n  - Current size: " << input_size << " bytes"
+                            << "\n  - Maximum size: " << max_size << " bytes"
+                            << "\n  - Utilization: " << (input_size * 100.0 / max_size) << "%";
     input_buffer_->consume(input_size);
     BOOST_LOG_TRIVIAL(debug) << "[" << peer_id_ << "] Cleared input buffer (" << input_size << " bytes)";
   }
   if (output_buffer_) {
     std::size_t output_size = output_buffer_->size();
+    std::size_t max_size = output_buffer_->max_size();
+    BOOST_LOG_TRIVIAL(debug) << "[" << peer_id_ << "] Output buffer status before cleanup:"
+                            << "\n  - Current size: " << output_size << " bytes"
+                            << "\n  - Maximum size: " << max_size << " bytes"
+                            << "\n  - Utilization: " << (output_size * 100.0 / max_size) << "%";
     output_buffer_->consume(output_size);
     BOOST_LOG_TRIVIAL(debug) << "[" << peer_id_ << "] Cleared output buffer (" << output_size << " bytes)";
   }
   
   endpoint_.reset();
-  BOOST_LOG_TRIVIAL(debug) << "[" << peer_id_ << "] Connection cleanup completed";
+  BOOST_LOG_TRIVIAL(debug) << "[" << peer_id_ << "] Connection cleanup completed"
+                          << "\n  - Final socket state: " << (socket_ && socket_->is_open() ? "open" : "closed")
+                          << "\n  - Processing thread state: " << (processing_thread_ ? "exists" : "null")
+                          << "\n  - Processing active flag: " << processing_active_;
 }
 
 } // namespace network

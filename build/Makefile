@@ -65,16 +65,6 @@ CMAKE_BINARY_DIR = /home/runner/StreamCryptoDFS/build
 #=============================================================================
 # Targets provided globally by CMake.
 
-# Special rule for the target test
-test:
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --cyan "Running tests..."
-	/nix/store/q1nssraba326p2kp6627hldd2bhg254c-cmake-3.29.2/bin/ctest --force-new-ctest-process $(ARGS)
-.PHONY : test
-
-# Special rule for the target test
-test/fast: test
-.PHONY : test/fast
-
 # Special rule for the target edit_cache
 edit_cache:
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --cyan "No interactive CMake dialog available..."
@@ -197,32 +187,6 @@ dfs_network/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/dfs_network.dir/build.make CMakeFiles/dfs_network.dir/build
 .PHONY : dfs_network/fast
 
-#=============================================================================
-# Target rules for targets named crypto_tests
-
-# Build rule for target.
-crypto_tests: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 crypto_tests
-.PHONY : crypto_tests
-
-# fast build rule for target.
-crypto_tests/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/crypto_tests.dir/build.make CMakeFiles/crypto_tests.dir/build
-.PHONY : crypto_tests/fast
-
-#=============================================================================
-# Target rules for targets named network_tests
-
-# Build rule for target.
-network_tests: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 network_tests
-.PHONY : network_tests
-
-# fast build rule for target.
-network_tests/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/network_tests.dir/build.make CMakeFiles/network_tests.dir/build
-.PHONY : network_tests/fast
-
 src/crypto/crypto_stream.o: src/crypto/crypto_stream.cpp.o
 .PHONY : src/crypto/crypto_stream.o
 
@@ -271,102 +235,6 @@ src/network/tcp_peer.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/dfs_network.dir/build.make CMakeFiles/dfs_network.dir/src/network/tcp_peer.cpp.s
 .PHONY : src/network/tcp_peer.cpp.s
 
-src/tests/connection_state_test.o: src/tests/connection_state_test.cpp.o
-.PHONY : src/tests/connection_state_test.o
-
-# target to build an object file
-src/tests/connection_state_test.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/network_tests.dir/build.make CMakeFiles/network_tests.dir/src/tests/connection_state_test.cpp.o
-.PHONY : src/tests/connection_state_test.cpp.o
-
-src/tests/connection_state_test.i: src/tests/connection_state_test.cpp.i
-.PHONY : src/tests/connection_state_test.i
-
-# target to preprocess a source file
-src/tests/connection_state_test.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/network_tests.dir/build.make CMakeFiles/network_tests.dir/src/tests/connection_state_test.cpp.i
-.PHONY : src/tests/connection_state_test.cpp.i
-
-src/tests/connection_state_test.s: src/tests/connection_state_test.cpp.s
-.PHONY : src/tests/connection_state_test.s
-
-# target to generate assembly for a file
-src/tests/connection_state_test.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/network_tests.dir/build.make CMakeFiles/network_tests.dir/src/tests/connection_state_test.cpp.s
-.PHONY : src/tests/connection_state_test.cpp.s
-
-src/tests/crypto_stream_test.o: src/tests/crypto_stream_test.cpp.o
-.PHONY : src/tests/crypto_stream_test.o
-
-# target to build an object file
-src/tests/crypto_stream_test.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/crypto_tests.dir/build.make CMakeFiles/crypto_tests.dir/src/tests/crypto_stream_test.cpp.o
-.PHONY : src/tests/crypto_stream_test.cpp.o
-
-src/tests/crypto_stream_test.i: src/tests/crypto_stream_test.cpp.i
-.PHONY : src/tests/crypto_stream_test.i
-
-# target to preprocess a source file
-src/tests/crypto_stream_test.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/crypto_tests.dir/build.make CMakeFiles/crypto_tests.dir/src/tests/crypto_stream_test.cpp.i
-.PHONY : src/tests/crypto_stream_test.cpp.i
-
-src/tests/crypto_stream_test.s: src/tests/crypto_stream_test.cpp.s
-.PHONY : src/tests/crypto_stream_test.s
-
-# target to generate assembly for a file
-src/tests/crypto_stream_test.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/crypto_tests.dir/build.make CMakeFiles/crypto_tests.dir/src/tests/crypto_stream_test.cpp.s
-.PHONY : src/tests/crypto_stream_test.cpp.s
-
-src/tests/network_test.o: src/tests/network_test.cpp.o
-.PHONY : src/tests/network_test.o
-
-# target to build an object file
-src/tests/network_test.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/network_tests.dir/build.make CMakeFiles/network_tests.dir/src/tests/network_test.cpp.o
-.PHONY : src/tests/network_test.cpp.o
-
-src/tests/network_test.i: src/tests/network_test.cpp.i
-.PHONY : src/tests/network_test.i
-
-# target to preprocess a source file
-src/tests/network_test.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/network_tests.dir/build.make CMakeFiles/network_tests.dir/src/tests/network_test.cpp.i
-.PHONY : src/tests/network_test.cpp.i
-
-src/tests/network_test.s: src/tests/network_test.cpp.s
-.PHONY : src/tests/network_test.s
-
-# target to generate assembly for a file
-src/tests/network_test.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/network_tests.dir/build.make CMakeFiles/network_tests.dir/src/tests/network_test.cpp.s
-.PHONY : src/tests/network_test.cpp.s
-
-src/tests/tcp_peer_test.o: src/tests/tcp_peer_test.cpp.o
-.PHONY : src/tests/tcp_peer_test.o
-
-# target to build an object file
-src/tests/tcp_peer_test.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/network_tests.dir/build.make CMakeFiles/network_tests.dir/src/tests/tcp_peer_test.cpp.o
-.PHONY : src/tests/tcp_peer_test.cpp.o
-
-src/tests/tcp_peer_test.i: src/tests/tcp_peer_test.cpp.i
-.PHONY : src/tests/tcp_peer_test.i
-
-# target to preprocess a source file
-src/tests/tcp_peer_test.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/network_tests.dir/build.make CMakeFiles/network_tests.dir/src/tests/tcp_peer_test.cpp.i
-.PHONY : src/tests/tcp_peer_test.cpp.i
-
-src/tests/tcp_peer_test.s: src/tests/tcp_peer_test.cpp.s
-.PHONY : src/tests/tcp_peer_test.s
-
-# target to generate assembly for a file
-src/tests/tcp_peer_test.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/network_tests.dir/build.make CMakeFiles/network_tests.dir/src/tests/tcp_peer_test.cpp.s
-.PHONY : src/tests/tcp_peer_test.cpp.s
-
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -379,29 +247,14 @@ help:
 	@echo "... install/strip"
 	@echo "... list_install_components"
 	@echo "... rebuild_cache"
-	@echo "... test"
-	@echo "... crypto_tests"
 	@echo "... dfs_crypto"
 	@echo "... dfs_network"
-	@echo "... network_tests"
 	@echo "... src/crypto/crypto_stream.o"
 	@echo "... src/crypto/crypto_stream.i"
 	@echo "... src/crypto/crypto_stream.s"
 	@echo "... src/network/tcp_peer.o"
 	@echo "... src/network/tcp_peer.i"
 	@echo "... src/network/tcp_peer.s"
-	@echo "... src/tests/connection_state_test.o"
-	@echo "... src/tests/connection_state_test.i"
-	@echo "... src/tests/connection_state_test.s"
-	@echo "... src/tests/crypto_stream_test.o"
-	@echo "... src/tests/crypto_stream_test.i"
-	@echo "... src/tests/crypto_stream_test.s"
-	@echo "... src/tests/network_test.o"
-	@echo "... src/tests/network_test.i"
-	@echo "... src/tests/network_test.s"
-	@echo "... src/tests/tcp_peer_test.o"
-	@echo "... src/tests/tcp_peer_test.i"
-	@echo "... src/tests/tcp_peer_test.s"
 .PHONY : help
 
 

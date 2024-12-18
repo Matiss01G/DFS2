@@ -88,6 +88,4 @@ set(CMAKE_MAKEFILE_PRODUCTS
 set(CMAKE_DEPEND_INFO_FILES
   "CMakeFiles/dfs_crypto.dir/DependInfo.cmake"
   "CMakeFiles/dfs_network.dir/DependInfo.cmake"
-  "CMakeFiles/crypto_tests.dir/DependInfo.cmake"
-  "CMakeFiles/network_tests.dir/DependInfo.cmake"
   )
