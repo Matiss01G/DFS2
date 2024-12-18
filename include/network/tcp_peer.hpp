@@ -44,11 +44,6 @@ public:
     // Stream operations
     std::istream* get_input_stream() override;
     
-    /**
-     * @brief Send a message directly through the socket
-     * @param message The message to send
-     * @return true if the message was sent successfully, false otherwise
-     */
     bool send_message(const std::string& message) override;
 
     // Stream processing
@@ -56,38 +51,10 @@ public:
     bool start_stream_processing() override;
     void stop_stream_processing() override;
 
-    // Accessors
-    /**
-     * @brief Get the unique identifier for this peer
-     * @return The peer's ID as a const string reference
-     */
     const std::string& get_peer_id() const { return peer_id_; }
 
-    /**
-     * @brief Initiates an asynchronous write operation
-     * 
-     * This method is called internally whenever there is data in the output
-     * buffer that needs to be sent. It ensures proper message framing and
-     * handles any write errors that occur during transmission.
-     */
     void async_write();
-    /**
-     * @brief Send data from an input stream through the socket
-     * @param input_stream The input stream to read from
-     * @param buffer_size Size of the buffer for reading chunks (default: 8192)
-     * @return true if the stream was sent successfully, false otherwise
-     */
     bool send_stream(std::istream& input_stream, std::size_t buffer_size = 8192);
-
-
-    /**
-     * @brief Initiates an asynchronous read operation
-     * 
-     * Sets up the next asynchronous read operation, handling message framing
-     * and processing of received data through the stream processor. This method
-     * is called recursively as long as the connection is active and processing
-     * is enabled.
-     */
     void async_read_next();
 
 private:
@@ -107,7 +74,6 @@ private:
 
     // Stream buffers
     std::unique_ptr<boost::asio::streambuf> input_buffer_;
-    // Removed output buffer and stream as we're using direct message sending
     std::unique_ptr<std::istream> input_stream_;
 
     // Internal methods
