@@ -1,0 +1,57 @@
+-- Configuring done (0.0s)
+-- Generating done (0.0s)
+-- Build files have been written to: /home/runner/StreamCryptoDFS/build
+[ 20%] Built target dfs_crypto
+[ 40%] Built target dfs_network
+[ 60%] Built target crypto_tests
+[100%] Built target network_tests
+[==========] Running 13 tests from 2 test suites.
+[----------] Global test environment set-up.
+[----------] 6 tests from ConnectionStateTest
+[ RUN      ] ConnectionStateTest.InitialState
+[       OK ] ConnectionStateTest.InitialState (0 ms)
+[ RUN      ] ConnectionStateTest.ValidTransitions
+[       OK ] ConnectionStateTest.ValidTransitions (0 ms)
+[ RUN      ] ConnectionStateTest.InvalidTransitions
+[       OK ] ConnectionStateTest.InvalidTransitions (0 ms)
+[ RUN      ] ConnectionStateTest.ErrorStateHandling
+[       OK ] ConnectionStateTest.ErrorStateHandling (0 ms)
+[ RUN      ] ConnectionStateTest.TerminalStates
+[       OK ] ConnectionStateTest.TerminalStates (0 ms)
+[ RUN      ] ConnectionStateTest.StateToString
+[       OK ] ConnectionStateTest.StateToString (0 ms)
+[----------] 6 tests from ConnectionStateTest (0 ms total)
+
+[----------] 7 tests from TCP_PeerTest
+[ RUN      ] TCP_PeerTest.BasicConnectivity
+[2024-12-18 06:11:31.766419] [0x00007f91000cbd80] [info]    Mock server listening on port 35989
+[2024-12-18 06:11:31.766495] [0x00007f91000cbd80] [info]    Test setup complete, server ready on port 35989
+[2024-12-18 06:11:31.766520] [0x00007f91000cbd80] [info]    TCP_Peer created with ID: test_peer
+[2024-12-18 06:11:31.766525] [0x00007f91000cbd80] [info]    Attempting to connect to 127.0.0.1:35989
+[2024-12-18 06:11:31.766607] [0x00007f91000cbd80] [info]    Successfully connected to 127.0.0.1:35989
+[2024-12-18 06:11:31.766654] [0x00007f91000cbd80] [info]    Disconnected peer: test_peer
+[2024-12-18 06:11:31.766661] [0x00007f91000cbd80] [debug]   TCP_Peer destroyed: test_peer
+[2024-12-18 06:11:31.766743] [0x00007f91000cbd80] [debug]   Mock server stopped cleanly
+[2024-12-18 06:11:31.766755] [0x00007f91000cbd80] [debug]   Mock server stopped cleanly
+[2024-12-18 06:11:31.776849] [0x00007f91000cbd80] [info]    Test teardown complete
+[       OK ] TCP_PeerTest.BasicConnectivity (11 ms)
+[ RUN      ] TCP_PeerTest.StreamOperations
+[2024-12-18 06:11:31.777268] [0x00007f91000cbd80] [info]    Mock server listening on port 37307
+[2024-12-18 06:11:31.777328] [0x00007f91000cbd80] [info]    Test setup complete, server ready on port 37307
+[2024-12-18 06:11:31.777353] [0x00007f91000cbd80] [info]    TCP_Peer created with ID: stream_test_peer
+[2024-12-18 06:11:31.777358] [0x00007f91000cbd80] [warning] Invalid state transition attempted. Current: INITIAL, Required: CONNECTED
+[2024-12-18 06:11:31.777367] [0x00007f91000cbd80] [warning] Invalid state transition attempted. Current: INITIAL, Required: CONNECTED
+[2024-12-18 06:11:31.777376] [0x00007f91000cbd80] [info]    Attempting to connect to 127.0.0.1:37307
+[2024-12-18 06:11:31.777473] [0x00007f91000cbd80] [info]    Successfully connected to 127.0.0.1:37307
+[2024-12-18 06:11:31.777543] [0x00007f91000cbd80] [info]    Started stream processing for peer: stream_test_peer
+[2024-12-18 06:11:31.777559] [0x00007f91000cbd80] [debug]   Sending test data: 'Hello,TCP!
+'
+[2024-12-18 06:11:31.777571] [0x00007f91000cbd80] [debug]   Waiting for data to be received...
+[2024-12-18 06:11:31.777847] [0x00007f90ff8c46c0] [debug]   Wrote 11 bytes: Hello,TCP!
+
+[2024-12-18 06:11:31.777976] [0x00007f90ff0c36c0] [debug]   Server received: 'Hello,TCP!'
+[2024-12-18 06:11:31.778047] [0x00007f90ff0c36c0] [debug]   Server echoed: 'Hello,TCP!'
+[2024-12-18 06:11:31.778074] [0x00007f90ff8c46c0] [debug]   Received data: Hello,TCP!
+[2024-12-18 06:11:31.778079] [0x00007f90ff8c46c0] [debug]   Stream processor received data: 'Hello,TCP!'
+[2024-12-18 06:11:31.778098] [0x00007f91000cbd80] [info]    Data matched successfully
+^C
