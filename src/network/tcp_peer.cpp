@@ -136,8 +136,8 @@ void TCP_Peer::async_read_next() {
                 if (!data.empty()) {
                     BOOST_LOG_TRIVIAL(debug) << "[" << peer_id_ << "] Received data: " << data;
                     
-                    // Process data through registered handler
                     if (stream_processor_) {
+                        // Process data through registered handler
                         std::string framed_data = data + '\n';
                         std::istringstream iss(framed_data);
                         try {
@@ -145,6 +145,11 @@ void TCP_Peer::async_read_next() {
                         } catch (const std::exception& e) {
                             BOOST_LOG_TRIVIAL(error) << "[" << peer_id_ << "] Stream processor error: " << e.what();
                         }
+                    } else {
+                        // Forward data to input stream when no processor is defined
+                        std::string framed_data = data + '\n';
+                        input_buffer_->sputn(framed_data.c_str(), framed_data.length());
+                        BOOST_LOG_TRIVIAL(debug) << "[" << peer_id_ << "] Data forwarded to input stream";
                     }
                 }
 
