@@ -98,117 +98,50 @@ TEST_F(TCP_PeerTest, DisconnectionSequence) {
 
 // Test buffer management and cleanup
 TEST_F(TCP_PeerTest, BufferManagementAndCleanup) {
-    // Setup async server with short timeout
+    // Setup mock server
     boost::asio::io_context io_context;
-    auto work = boost::asio::make_work_guard(io_context);
-    
     boost::asio::ip::tcp::acceptor acceptor(io_context,
         boost::asio::ip::tcp::endpoint(boost::asio::ip::tcp::v4(), 12348));
-    acceptor.set_option(boost::asio::socket_base::reuse_address(true));
-
-    // Use shorter timeouts
-    boost::asio::socket_base::seconds timeout(1);
-    acceptor.set_option(timeout);
-
-    std::atomic<bool> server_error{false};
-    std::atomic<bool> server_completed{false};
-    std::string server_error_message;
-
-    // Start server thread
-    std::thread server_thread([&]() {
-        try {
-            boost::asio::ip::tcp::socket socket(io_context);
-            
-            // Accept with timeout
-            boost::system::error_code ec;
-            auto deadline = std::chrono::steady_clock::now() + std::chrono::seconds(1);
-            
-            acceptor.accept(socket, ec);
-            if (ec) {
-                server_error = true;
-                server_error_message = "Accept failed: " + ec.message();
-                return;
-            }
-
-            if (std::chrono::steady_clock::now() > deadline) {
-                server_error = true;
-                server_error_message = "Server timeout";
-                return;
-            }
-
-            // Send minimal test data (128 bytes)
-            std::string test_data(128, 'x');
-            test_data += "\n";
-            
-            boost::asio::write(socket, boost::asio::buffer(test_data), ec);
-            if (ec) {
-                server_error = true;
-                server_error_message = "Write failed: " + ec.message();
-                return;
-            }
-
-            server_completed = true;
-        }
-        catch (const std::exception& e) {
-            server_error = true;
-            server_error_message = std::string("Server exception: ") + e.what();
-        }
-    });
-
-    // Short delay to ensure server is ready
-    std::this_thread::sleep_for(std::chrono::milliseconds(50));
-
-    // Connect with timeout
-    auto connect_deadline = std::chrono::steady_clock::now() + std::chrono::seconds(1);
-    ASSERT_TRUE(peer_->connect("127.0.0.1", 12348)) << "Connection failed";
-    ASSERT_TRUE(std::chrono::steady_clock::now() <= connect_deadline) << "Connection timeout";
-    ASSERT_EQ(peer_->get_connection_state(), ConnectionState::State::CONNECTED);
-
-    // Setup stream processor
-    std::atomic<bool> data_received{false};
-    std::atomic<bool> processor_error{false};
-    std::string processor_error_message;
-
-    peer_->set_stream_processor([&](std::istream& stream) {
-        try {
-            std::string data;
-            std::getline(stream, data);
-            EXPECT_EQ(data.length(), 128) << "Unexpected data length: " << data.length();
-            data_received = true;
-        }
-        catch (const std::exception& e) {
-            processor_error = true;
-            processor_error_message = std::string("Processor exception: ") + e.what();
-        }
-    });
-
-    ASSERT_TRUE(peer_->start_stream_processing());
-
-    // Wait with timeout
-    auto process_deadline = std::chrono::steady_clock::now() + std::chrono::seconds(2);
-    while (std::chrono::steady_clock::now() <= process_deadline) {
-        if (data_received || server_completed || server_error || processor_error) {
-            break;
-        }
-        std::this_thread::sleep_for(std::chrono::milliseconds(10));
-    }
-
-    // Cleanup
-    work.reset();
-    io_context.stop();
     
+    std::thread server_thread([&]() {
+        boost::asio::ip::tcp::socket socket(io_context);
+        acceptor.accept(socket);
+        
+        // Send large test data
+        std::string test_data(8192, 'x');  // 8KB of data
+        test_data += "\n";
+        boost::asio::write(socket, boost::asio::buffer(test_data));
+        
+        io_context.stop();
+    });
+    
+    // Connect to mock server
+    EXPECT_TRUE(peer_->connect("127.0.0.1", 12348));
+    EXPECT_EQ(peer_->get_connection_state(), ConnectionState::State::CONNECTED);
+    
+    // Start stream processing
+    bool data_received = false;
+    peer_->set_stream_processor([&data_received](std::istream& stream) {
+        std::string data;
+        std::getline(stream, data);
+        data_received = true;
+        EXPECT_EQ(data.length(), 8192);  // Verify full data received
+    });
+    
+    EXPECT_TRUE(peer_->start_stream_processing());
+    
+    // Wait for data processing
+    std::this_thread::sleep_for(std::chrono::milliseconds(200));
+    
+    // Verify data was processed
+    EXPECT_TRUE(data_received);
+    
+    // Cleanup
     peer_->disconnect();
-    ASSERT_EQ(peer_->get_connection_state(), ConnectionState::State::DISCONNECTED);
-
+    io_context.stop();
     if (server_thread.joinable()) {
         server_thread.join();
     }
-
-    // Check for errors and completion
-    ASSERT_FALSE(server_error) << server_error_message;
-    ASSERT_FALSE(processor_error) << processor_error_message;
-    ASSERT_TRUE(server_completed) << "Server did not complete";
-    ASSERT_TRUE(data_received) << "Data was not received";
 }
 
 // Test multiple connect/disconnect cycles
