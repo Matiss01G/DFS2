@@ -30,7 +30,6 @@ protected:
 TEST_F(TCP_PeerTest, ConstructorInitialization) {
     EXPECT_FALSE(peer_->is_connected());
     EXPECT_EQ(peer_->get_input_stream(), nullptr);  // Should be null when not connected
-    EXPECT_EQ(peer_->get_output_stream(), nullptr); // Should be null when not connected
 }
 
 // Test invalid connection attempts
@@ -50,9 +49,11 @@ TEST_F(TCP_PeerTest, ConnectionValidation) {
     EXPECT_FALSE(peer_->disconnect());
     EXPECT_FALSE(peer_->is_connected());
     
-    // Cannot get streams when not connected
+    // Cannot get input stream when not connected
     EXPECT_EQ(peer_->get_input_stream(), nullptr);
-    EXPECT_EQ(peer_->get_output_stream(), nullptr);
+    
+    // Cannot send messages when not connected
+    EXPECT_FALSE(peer_->send_message("test"));
 }
 
 // Test stream processor
@@ -191,11 +192,8 @@ TEST_F(TCP_PeerTest, StreamOperations) {
     // Start processing
     EXPECT_TRUE(peer_->start_stream_processing());
     
-    // Write test data
-    auto output_stream = peer_->get_output_stream();
-    ASSERT_NE(output_stream, nullptr);
-    *output_stream << "response_message\n";
-    output_stream->flush();
+    // Send test data using direct message sending
+    EXPECT_TRUE(peer_->send_message("response_message"));
     
     // Wait for data processing
     std::this_thread::sleep_for(std::chrono::milliseconds(100));

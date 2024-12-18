@@ -4,7 +4,17 @@
 namespace dfs {
 namespace network {
 
-// Constructor: Initializes a TCP peer with a unique identifier, creates socket, input buffer, and sets up logging
+/**
+ * Constructor: Creates a new TCP peer instance with the specified identifier
+ * 
+ * @param peer_id Unique identifier for this peer
+ * 
+ * Initializes the following components:
+ * - Peer identifier for logging and identification
+ * - Asynchronous I/O context and socket for network operations
+ * - Input buffer for receiving data
+ * - Input stream wrapper for convenient data reading
+ */
 TCP_Peer::TCP_Peer(const std::string& peer_id)
   : peer_id_(peer_id),  // Initialize peer identifier
     socket_(std::make_unique<boost::asio::ip::tcp::socket>(io_context_)),  // Create async I/O socket
@@ -29,6 +39,20 @@ void TCP_Peer::initialize_streams() {
 }
 
 // Establish connection to remote peer with specified address and port, configures socket options for optimal performance
+/**
+ * Establishes a TCP connection to the specified remote endpoint
+ * 
+ * @param address The remote host address to connect to
+ * @param port The remote port number
+ * @return true if connection was established successfully, false otherwise
+ * 
+ * This method performs the following steps:
+ * 1. Validates current socket state
+ * 2. Resolves the remote address
+ * 3. Creates and connects the socket
+ * 4. Configures socket options for optimal performance
+ * 5. Initializes the I/O context for async operations
+ */
 bool TCP_Peer::connect(const std::string& address, uint16_t port) {
   if (socket_->is_open()) {
     BOOST_LOG_TRIVIAL(error) << "[" << peer_id_ << "] Cannot connect - socket already connected";
@@ -210,94 +234,104 @@ bool TCP_Peer::send_message(const std::string& message) {
 
 // Main processing loop for handling incoming data
 void TCP_Peer::process_stream() {
+    BOOST_LOG_TRIVIAL(debug) << "[" << peer_id_ << "] Starting stream processing";
+    
     // Create work object to keep io_context running
     boost::asio::io_context::work work(io_context_);
-    std::thread io_thread([this]() { io_context_.run(); });
+    std::thread io_thread([this]() { 
+        try {
+            io_context_.run();
+        } catch (const std::exception& e) {
+            BOOST_LOG_TRIVIAL(error) << "[" << peer_id_ << "] IO context error: " << e.what();
+        }
+    });
 
+    // Set up deadline timer for read operations
+    boost::asio::steady_timer deadline(io_context_);
+    const auto read_timeout = std::chrono::milliseconds(100);
+    
+    std::function<void()> start_async_read;
+    start_async_read = [this, &deadline, &start_async_read]() {
+        if (!processing_active_ || !socket_->is_open()) return;
+        
+        deadline.expires_after(std::chrono::milliseconds(100));
+        
+        boost::asio::async_read_until(
+            *socket_,
+            *input_buffer_,
+            '\n',
+            [this, &deadline, &start_async_read](
+                const boost::system::error_code& ec,
+                std::size_t bytes_transferred
+            ) {
+                if (!processing_active_) return;
+                
+                if (!ec) {
+                    std::string data;
+                    {
+                        std::lock_guard<std::mutex> lock(io_mutex_);
+                        std::istream is(input_buffer_.get());
+                        std::getline(is, data);
+                    }
+
+                    if (!data.empty()) {
+                        BOOST_LOG_TRIVIAL(debug) << "[" << peer_id_ << "] Received " 
+                            << bytes_transferred << " bytes: " << data;
+
+                        // Process through registered handler
+                        if (stream_processor_) {
+                            std::string framed_data = data + '\n';
+                            std::istringstream iss(framed_data);
+                            stream_processor_(iss);
+                        }
+
+                        // Make available through input stream
+                        std::lock_guard<std::mutex> lock(io_mutex_);
+                        std::string framed_data = data + '\n';
+                        auto bufs = input_buffer_->prepare(framed_data.size());
+                        std::copy(framed_data.begin(), framed_data.end(),
+                                boost::asio::buffers_begin(bufs));
+                        input_buffer_->commit(framed_data.size());
+                    }
+
+                    // Continue reading
+                    start_async_read();
+                }
+                else if (ec != boost::asio::error::operation_aborted) {
+                    if (ec == boost::asio::error::eof) {
+                        BOOST_LOG_TRIVIAL(debug) << "[" << peer_id_ << "] Connection closed by peer";
+                    } else {
+                        BOOST_LOG_TRIVIAL(error) << "[" << peer_id_ << "] Read error: " << ec.message();
+                    }
+                }
+            });
+    };
+
+    // Start the first async read operation
+    start_async_read();
+
+    // Process until stopped or error
     while (processing_active_ && socket_->is_open()) {
         try {
-            boost::system::error_code ec;
-
-            // Handle incoming data with proper synchronization and framing
-      {
-        std::unique_lock<std::mutex> lock(io_mutex_);
-
-        try {
-          // Check if data is available
-          if (socket_->available(ec) > 0 || !ec) {
-            try {
-              // Read complete message frame with timeout
-              boost::asio::steady_timer timer(io_context_);
-              timer.expires_from_now(std::chrono::milliseconds(100));
-
-              // Read until newline
-              std::size_t n = boost::asio::read_until(
-                *socket_,
-                *input_buffer_,
-                '\n',
-                ec
-              );
-
-              if (!ec && n > 0) {
-                // Process complete message
-                std::string data;
-                std::istream is(input_buffer_.get());
-                std::getline(is, data);
-
-                if (!data.empty()) {
-                  BOOST_LOG_TRIVIAL(debug) << "[" << peer_id_ << "] Received data: " << data;
-
-                  // Handle the received data
-                  if (stream_processor_) {
-                    // Pass to stream processor first
-                    std::string framed_data = data + '\n';
-                    std::istringstream iss(framed_data);
-                    stream_processor_(iss);
-                  }
-
-                  // Write to input buffer for normal reads
-                  {
-                    std::lock_guard<std::mutex> lock(io_mutex_);
-                    std::string framed_data = data + '\n';
-                    std::size_t write_size = framed_data.size();
-                    auto bufs = input_buffer_->prepare(write_size);
-                    std::copy(framed_data.begin(), framed_data.end(), 
-                        boost::asio::buffers_begin(bufs));
-                    input_buffer_->commit(write_size);
-                  }
-                }
-              } else if (ec && 
-                    ec != boost::asio::error::would_block && 
-                    ec != boost::asio::error::try_again &&
-                    ec != boost::asio::error::eof) {
-                BOOST_LOG_TRIVIAL(error) << "[" << peer_id_ << "] Read error: " << ec.message();
-                break;
-              }
-            } catch (const std::exception& e) {
-              BOOST_LOG_TRIVIAL(error) << "[" << peer_id_ << "] Stream processing error: " << e.what();
-              break;
-            }
-          }
-        } catch (const std::exception& e) {
-          BOOST_LOG_TRIVIAL(error) << "[" << peer_id_ << "] Read processing error: " << e.what();
-          break;
+            // Process one async operation
+            io_context_.run_one();
         }
-      }
-
-      // Small delay to prevent busy-waiting
-      std::this_thread::sleep_for(std::chrono::milliseconds(1));
+        catch (const std::exception& e) {
+            BOOST_LOG_TRIVIAL(error) << "[" << peer_id_ << "] Stream processing error: " << e.what();
+            break;
+        }
     }
-    catch (const std::exception& e) {
-      BOOST_LOG_TRIVIAL(error) << "[" << peer_id_ << "] Stream processing error: " << e.what();
-      break;
-    }
-  }
 
-  // Cleanup
-  io_context_.stop();
-  if (io_thread.joinable()) {
-    io_thread.join();
-  }
+    // Cleanup
+    processing_active_ = false;
+    deadline.cancel();
+    io_context_.stop();
+    
+    if (io_thread.joinable()) {
+        io_thread.join();
+    }
+    
+    BOOST_LOG_TRIVIAL(info) << "[" << peer_id_ << "] Stream processing stopped";
 }
 
 // Cleanup connection and associated resources

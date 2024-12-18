@@ -32,8 +32,10 @@ public:
     virtual bool is_connected() const = 0;
 
     // Stream operations (required)
-    virtual std::ostream* get_output_stream() = 0;
     virtual std::istream* get_input_stream() = 0;
+    
+    // Message operations
+    virtual bool send_message(const std::string& message) = 0;
 
     // Stream processing
     virtual void set_stream_processor(StreamProcessor processor) = 0;
