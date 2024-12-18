@@ -1,0 +1,140 @@
+- Configuring done (0.1s)
+-- Generating done (0.1s)
+-- Build files have been written to: /home/runner/StreamCryptoDFS/build
+[ 20%] Built target dfs_crypto
+[ 40%] Built target dfs_network
+[ 60%] Built target crypto_tests
+[ 70%] Building CXX object CMakeFiles/network_tests.dir/src/tests/tcp_peer_test.cpp.o
+[ 80%] Linking CXX executable network_tests
+[100%] Built target network_tests
+[==========] Running 15 tests from 2 test suites.
+[----------] Global test environment set-up.
+[----------] 6 tests from ConnectionStateTest
+[ RUN      ] ConnectionStateTest.InitialState
+[       OK ] ConnectionStateTest.InitialState (0 ms)
+[ RUN      ] ConnectionStateTest.ValidTransitions
+[       OK ] ConnectionStateTest.ValidTransitions (0 ms)
+[ RUN      ] ConnectionStateTest.InvalidTransitions
+[       OK ] ConnectionStateTest.InvalidTransitions (0 ms)
+[ RUN      ] ConnectionStateTest.ErrorStateHandling
+[       OK ] ConnectionStateTest.ErrorStateHandling (0 ms)
+[ RUN      ] ConnectionStateTest.TerminalStates
+[       OK ] ConnectionStateTest.TerminalStates (0 ms)
+[ RUN      ] ConnectionStateTest.StateToString
+[       OK ] ConnectionStateTest.StateToString (0 ms)
+[----------] 6 tests from ConnectionStateTest (0 ms total)
+
+[----------] 9 tests from TCP_PeerTest
+[ RUN      ] TCP_PeerTest.ConstructorInitialization
+[2024-12-18 17:31:59.554943] [0x00007fadcfbadd80] [debug]   [test_peer] Constructing TCP_Peer
+[2024-12-18 17:31:59.554954] [0x00007fadcfbadd80] [debug]   [test_peer] Input/Output streams initialized
+[2024-12-18 17:31:59.554958] [0x00007fadcfbadd80] [info]    [test_peer] TCP_Peer instance created successfully
+[2024-12-18 17:31:59.554967] [0x00007fadcfbadd80] [warning] [test_peer] Invalid state transition attempted from INITIAL to CONNECTED at /home/runner/StreamCryptoDFS/src/network/tcp_peer.cpp:341. This might indicate a sequencing error in the connection lifecycle.
+[2024-12-18 17:31:59.554975] [0x00007fadcfbadd80] [warning] [test_peer] Invalid state transition attempted from INITIAL to CONNECTED at /home/runner/StreamCryptoDFS/src/network/tcp_peer.cpp:341. This might indicate a sequencing error in the connection lifecycle.
+[2024-12-18 17:31:59.554983] [0x00007fadcfbadd80] [debug]   TCP_Peer destroyed: test_peer
+[       OK ] TCP_PeerTest.ConstructorInitialization (0 ms)
+[ RUN      ] TCP_PeerTest.InvalidConnectionAttempts
+[2024-12-18 17:31:59.555015] [0x00007fadcfbadd80] [debug]   [test_peer] Constructing TCP_Peer
+[2024-12-18 17:31:59.555021] [0x00007fadcfbadd80] [debug]   [test_peer] Input/Output streams initialized
+[2024-12-18 17:31:59.555025] [0x00007fadcfbadd80] [info]    [test_peer] TCP_Peer instance created successfully
+[2024-12-18 17:31:59.555032] [0x00007fadcfbadd80] [debug]   [test_peer] Entering connect() method
+[2024-12-18 17:31:59.555038] [0x00007fadcfbadd80] [trace]   [test_peer] State validation passed: current=INITIAL
+[2024-12-18 17:31:59.555044] [0x00007fadcfbadd80] [info]    [test_peer] Initiating connection to invalid_address:12345
+[2024-12-18 17:31:59.555048] [0x00007fadcfbadd80] [debug]   [test_peer] Transitioning state to CONNECTING
+[2024-12-18 17:31:59.556458] [0x00007fadcfbadd80] [error]   [test_peer] DNS resolution failed: Host not found (authoritative) (code: 1)
+[2024-12-18 17:31:59.556469] [0x00007fadcfbadd80] [debug]   [test_peer] Entering connect() method
+[2024-12-18 17:31:59.556474] [0x00007fadcfbadd80] [warning] [test_peer] Invalid state transition attempted from ERROR to INITIAL at /home/runner/StreamCryptoDFS/src/network/tcp_peer.cpp:341. This might indicate a sequencing error in the connection lifecycle.
+[2024-12-18 17:31:59.556483] [0x00007fadcfbadd80] [error]   [test_peer] Connection attempt failed - Invalid state: ERROR
+[2024-12-18 17:31:59.556490] [0x00007fadcfbadd80] [debug]   TCP_Peer destroyed: test_peer
+[       OK ] TCP_PeerTest.InvalidConnectionAttempts (1 ms)
+[ RUN      ] TCP_PeerTest.StateValidation
+[2024-12-18 17:31:59.556529] [0x00007fadcfbadd80] [debug]   [test_peer] Constructing TCP_Peer
+[2024-12-18 17:31:59.556536] [0x00007fadcfbadd80] [debug]   [test_peer] Input/Output streams initialized
+[2024-12-18 17:31:59.556540] [0x00007fadcfbadd80] [info]    [test_peer] TCP_Peer instance created successfully
+[2024-12-18 17:31:59.556546] [0x00007fadcfbadd80] [debug]   [test_peer] Initiating disconnect sequence
+[2024-12-18 17:31:59.556553] [0x00007fadcfbadd80] [warning] [test_peer] Invalid state transition attempted from INITIAL to CONNECTED at /home/runner/StreamCryptoDFS/src/network/tcp_peer.cpp:341. This might indicate a sequencing error in the connection lifecycle.
+[2024-12-18 17:31:59.556558] [0x00007fadcfbadd80] [error]   [test_peer] Cannot disconnect - Invalid state: INITIAL
+[2024-12-18 17:31:59.556561] [0x00007fadcfbadd80] [warning] [test_peer] Invalid state transition attempted from INITIAL to CONNECTED at /home/runner/StreamCryptoDFS/src/network/tcp_peer.cpp:341. This might indicate a sequencing error in the connection lifecycle.
+[2024-12-18 17:31:59.556565] [0x00007fadcfbadd80] [warning] [test_peer] Invalid state transition attempted from INITIAL to CONNECTED at /home/runner/StreamCryptoDFS/src/network/tcp_peer.cpp:341. This might indicate a sequencing error in the connection lifecycle.
+[2024-12-18 17:31:59.556568] [0x00007fadcfbadd80] [debug]   TCP_Peer destroyed: test_peer
+[       OK ] TCP_PeerTest.StateValidation (0 ms)
+[ RUN      ] TCP_PeerTest.StreamProcessorHandling
+[2024-12-18 17:31:59.556587] [0x00007fadcfbadd80] [debug]   [test_peer] Constructing TCP_Peer
+[2024-12-18 17:31:59.556592] [0x00007fadcfbadd80] [debug]   [test_peer] Input/Output streams initialized
+[2024-12-18 17:31:59.556593] [0x00007fadcfbadd80] [info]    [test_peer] TCP_Peer instance created successfully
+[2024-12-18 17:31:59.556596] [0x00007fadcfbadd80] [debug]   [test_peer] Setting stream processor
+[2024-12-18 17:31:59.556600] [0x00007fadcfbadd80] [debug]   [test_peer] Stream processor configured
+[2024-12-18 17:31:59.556602] [0x00007fadcfbadd80] [debug]   [test_peer] Attempting to start stream processing
+[2024-12-18 17:31:59.556609] [0x00007fadcfbadd80] [warning] [test_peer] Invalid state transition attempted from INITIAL to CONNECTED at /home/runner/StreamCryptoDFS/src/network/tcp_peer.cpp:341. This might indicate a sequencing error in the connection lifecycle.
+[2024-12-18 17:31:59.556618] [0x00007fadcfbadd80] [error]   [test_peer] Cannot start processing - Invalid connection state: INITIAL
+[2024-12-18 17:31:59.556625] [0x00007fadcfbadd80] [debug]   TCP_Peer destroyed: test_peer
+[       OK ] TCP_PeerTest.StreamProcessorHandling (0 ms)
+[ RUN      ] TCP_PeerTest.DisconnectionSequence
+[2024-12-18 17:31:59.556654] [0x00007fadcfbadd80] [debug]   [test_peer] Constructing TCP_Peer
+[2024-12-18 17:31:59.556661] [0x00007fadcfbadd80] [debug]   [test_peer] Input/Output streams initialized
+[2024-12-18 17:31:59.556667] [0x00007fadcfbadd80] [info]    [test_peer] TCP_Peer instance created successfully
+[2024-12-18 17:31:59.557283] [0x00007fadcfbadd80] [debug]   [test_peer] Entering connect() method
+[2024-12-18 17:31:59.557292] [0x00007fadcfbadd80] [trace]   [test_peer] State validation passed: current=INITIAL
+[2024-12-18 17:31:59.557295] [0x00007fadcfbadd80] [info]    [test_peer] Initiating connection to 127.0.0.1:12345
+[2024-12-18 17:31:59.557301] [0x00007fadcfbadd80] [debug]   [test_peer] Transitioning state to CONNECTING
+[2024-12-18 17:31:59.557308] [0x00007fadcfbadd80] [debug]   [test_peer] Address resolved successfully
+[2024-12-18 17:31:59.557313] [0x00007fadcfbadd80] [debug]   [test_peer] Attempting socket connection
+[2024-12-18 17:31:59.557368] [0x00007fadcfbadd80] [debug]   [test_peer] Configuring socket options
+[2024-12-18 17:31:59.557377] [0x00007fadcfbadd80] [debug]   [test_peer] TCP_NODELAY set: success
+[2024-12-18 17:31:59.557381] [0x00007fadcfbadd80] [debug]   [test_peer] SO_KEEPALIVE set: success
+[2024-12-18 17:31:59.557388] [0x00007fadcfbadd80] [debug]   [test_peer] SO_SNDBUF set to 8192: success
+[2024-12-18 17:31:59.557390] [0x00007fadcfbadd80] [debug]   [test_peer] SO_RCVBUF set to 8192: success
+[2024-12-18 17:31:59.557393] [0x00007fadcfbadd80] [debug]   [test_peer] SO_REUSEADDR set: success
+[2024-12-18 17:31:59.557395] [0x00007fadcfbadd80] [debug]   [test_peer] SO_LINGER set: success
+[2024-12-18 17:31:59.557401] [0x00007fadcfbadd80] [info]    Successfully connected to 127.0.0.1:12345
+[2024-12-18 17:31:59.557408] [0x00007fadcfbadd80] [debug]   [test_peer] Initiating disconnect sequence
+[2024-12-18 17:31:59.557415] [0x00007fadcfbadd80] [trace]   [test_peer] State validation passed: current=CONNECTED
+[2024-12-18 17:31:59.557418] [0x00007fadcfbadd80] [debug]   [test_peer] Transitioning to DISCONNECTING state
+[2024-12-18 17:31:59.557422] [0x00007fadcfbadd80] [debug]   [test_peer] Stopping stream processing
+[2024-12-18 17:31:59.557430] [0x00007fadcfbadd80] [debug]   [test_peer] Initiating connection cleanup
+[2024-12-18 17:31:59.557437] [0x00007fadcfbadd80] [debug]   [test_peer] Starting connection cleanup
+[2024-12-18 17:31:59.557443] [0x00007fadcfbadd80] [debug]   [test_peer] Set processing_active_ to false
+[2024-12-18 17:31:59.557449] [0x00007fadcfbadd80] [debug]   [test_peer] Socket is open, initiating shutdown sequence
+[2024-12-18 17:31:59.557465] [0x00007fadcfbadd80] [debug]   [test_peer] Socket shutdown successful
+[2024-12-18 17:31:59.557489] [0x00007fadcfbadd80] [debug]   [test_peer] Socket closed successfully
+[2024-12-18 17:31:59.557498] [0x00007fadcfbadd80] [debug]   [test_peer] Cleared input buffer (0 bytes)
+[2024-12-18 17:31:59.557502] [0x00007fadcfbadd80] [debug]   [test_peer] Cleared output buffer (0 bytes)
+[2024-12-18 17:31:59.557509] [0x00007fadcfbadd80] [debug]   [test_peer] Connection cleanup completed
+[2024-12-18 17:31:59.557513] [0x00007fadcfbadd80] [debug]   [test_peer] Transitioning to DISCONNECTED state
+[2024-12-18 17:31:59.557517] [0x00007fadcfbadd80] [info]    [test_peer] Peer successfully disconnected
+[2024-12-18 17:31:59.557537] [0x00007fadcfbadd80] [debug]   TCP_Peer destroyed: test_peer
+[       OK ] TCP_PeerTest.DisconnectionSequence (0 ms)
+[ RUN      ] TCP_PeerTest.BufferManagementAndCleanup
+[2024-12-18 17:31:59.557573] [0x00007fadcfbadd80] [debug]   [test_peer] Constructing TCP_Peer
+[2024-12-18 17:31:59.557580] [0x00007fadcfbadd80] [debug]   [test_peer] Input/Output streams initialized
+[2024-12-18 17:31:59.557584] [0x00007fadcfbadd80] [info]    [test_peer] TCP_Peer instance created successfully
+[2024-12-18 17:31:59.558302] [0x00007fadcfbadd80] [debug]   [test_peer] Entering connect() method
+[2024-12-18 17:31:59.558314] [0x00007fadcfbadd80] [trace]   [test_peer] State validation passed: current=INITIAL
+[2024-12-18 17:31:59.558319] [0x00007fadcfbadd80] [info]    [test_peer] Initiating connection to 127.0.0.1:12348
+[2024-12-18 17:31:59.558323] [0x00007fadcfbadd80] [debug]   [test_peer] Transitioning state to CONNECTING
+[2024-12-18 17:31:59.558330] [0x00007fadcfbadd80] [debug]   [test_peer] Address resolved successfully
+[2024-12-18 17:31:59.558335] [0x00007fadcfbadd80] [debug]   [test_peer] Attempting socket connection
+[2024-12-18 17:31:59.558485] [0x00007fadcfbadd80] [debug]   [test_peer] Configuring socket options
+[2024-12-18 17:31:59.558498] [0x00007fadcfbadd80] [debug]   [test_peer] TCP_NODELAY set: success
+[2024-12-18 17:31:59.558504] [0x00007fadcfbadd80] [debug]   [test_peer] SO_KEEPALIVE set: success
+[2024-12-18 17:31:59.558508] [0x00007fadcfbadd80] [debug]   [test_peer] SO_SNDBUF set to 8192: success
+[2024-12-18 17:31:59.558512] [0x00007fadcfbadd80] [debug]   [test_peer] SO_RCVBUF set to 8192: success
+[2024-12-18 17:31:59.558518] [0x00007fadcfbadd80] [debug]   [test_peer] SO_REUSEADDR set: success
+[2024-12-18 17:31:59.558523] [0x00007fadcfbadd80] [debug]   [test_peer] SO_LINGER set: success
+[2024-12-18 17:31:59.558527] [0x00007fadcfbadd80] [info]    Successfully connected to 127.0.0.1:12348
+[2024-12-18 17:31:59.558531] [0x00007fadcfbadd80] [debug]   [test_peer] Setting stream processor
+[2024-12-18 17:31:59.558535] [0x00007fadcfbadd80] [debug]   [test_peer] Stream processor configured
+[2024-12-18 17:31:59.558538] [0x00007fadcfbadd80] [debug]   [test_peer] Attempting to start stream processing
+[2024-12-18 17:31:59.558541] [0x00007fadcfbadd80] [trace]   [test_peer] State validation passed: current=CONNECTED
+[2024-12-18 17:31:59.558545] [0x00007fadcfbadd80] [debug]   [test_peer] Initializing stream processing thread
+[2024-12-18 17:31:59.558635] [0x00007fadcfbadd80] [info]    [test_peer] Stream processing started successfully
+[2024-12-18 17:31:59.558657] [0x00007fadcf3a66c0] [debug]   [test_peer] Starting stream processing thread
+[2024-12-18 17:31:59.558690] [0x00007fadcf3a66c0] [debug]   [test_peer] Launching IO context thread
+[2024-12-18 17:31:59.558761] [0x00007fadcf3a66c0] [trace]   [test_peer] Stream processing iteration started
+[2024-12-18 17:31:59.558953] [0x00007fadcf3a66c0] [debug]   Received data: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+[2024-12-18 17:31:59.559106] [0x00007fadceba56c0] [debug]   [test_peer] IO context thread started
+[2024-12-18 17:31:59.758732] [0x00007fadcfbadd80] [debug]   [test_peer] Initiating disconnect sequence
+[2024-12-18 17:31:59.758752] [0x00007fadcfbadd80] [trace]   [test_peer] State validation passed: current=CONNECTED
+[2024-12-18 17:31:59.758757] [0x00007fadcfbadd80] [debug]   [test_peer] Transitioning to DISCONNECTING state
+[2024-12-18 17:31:59.758762] [0x00007fadcfbadd80] [debug]   [test_peer] Stopping stream processing
+^C

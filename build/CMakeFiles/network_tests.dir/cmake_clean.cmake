@@ -3,6 +3,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/network_tests.dir/src/tests/connection_state_test.cpp.o.d"
   "CMakeFiles/network_tests.dir/src/tests/network_test.cpp.o"
   "CMakeFiles/network_tests.dir/src/tests/network_test.cpp.o.d"
+  "CMakeFiles/network_tests.dir/src/tests/tcp_peer_test.cpp.o"
+  "CMakeFiles/network_tests.dir/src/tests/tcp_peer_test.cpp.o.d"
   "network_tests"
   "network_tests.pdb"
   "network_tests[1]_tests.cmake"
