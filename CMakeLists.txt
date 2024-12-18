@@ -41,7 +41,35 @@ target_link_libraries(dfs_network PUBLIC
     Boost::log
 )
 
-# Library builds complete
+# Tests
+enable_testing()
+
+add_executable(crypto_tests 
+    src/tests/crypto_stream_test.cpp)
+
+target_link_libraries(crypto_tests
+    PRIVATE
+    dfs_crypto
+    GTest::GTest
+    GTest::Main
+)
+
+add_executable(network_tests
+    src/tests/network_test.cpp
+    src/tests/connection_state_test.cpp
+    src/tests/tcp_peer_test.cpp)
+
+target_link_libraries(network_tests
+    PRIVATE
+    dfs_network
+    dfs_crypto
+    GTest::GTest
+    GTest::Main
+)
+
+include(GoogleTest)
+gtest_discover_tests(crypto_tests)
+gtest_discover_tests(network_tests)
 
 # Install rules
 install(TARGETS dfs_crypto dfs_network
