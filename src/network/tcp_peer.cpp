@@ -4,14 +4,14 @@
 namespace dfs {
 namespace network {
 
+// Constructor: Initializes a TCP peer with a unique identifier, creates socket, input buffer, and sets up logging
 TCP_Peer::TCP_Peer(const std::string& peer_id)
-  : peer_id_(peer_id),
-    socket_(std::make_unique<boost::asio::ip::tcp::socket>(io_context_)),
-    input_buffer_(std::make_unique<boost::asio::streambuf>()),
-    output_buffer_(std::make_unique<boost::asio::streambuf>()) {
+  : peer_id_(peer_id),  // Initialize peer identifier
+    socket_(std::make_unique<boost::asio::ip::tcp::socket>(io_context_)),  // Create async I/O socket
+    input_buffer_(std::make_unique<boost::asio::streambuf>()) {  // Initialize input buffer only
   initialize_streams();
   BOOST_LOG_TRIVIAL(debug) << "[" << peer_id_ << "] Constructing TCP_Peer";
-  BOOST_LOG_TRIVIAL(debug) << "[" << peer_id_ << "] Input/Output streams initialized";
+  BOOST_LOG_TRIVIAL(debug) << "[" << peer_id_ << "] Input stream initialized";
   BOOST_LOG_TRIVIAL(info) << "[" << peer_id_ << "] TCP_Peer instance created successfully";
 }
 
@@ -22,11 +22,13 @@ TCP_Peer::~TCP_Peer() {
   BOOST_LOG_TRIVIAL(debug) << "TCP_Peer destroyed: " << peer_id_;
 }
 
+// Initialize input stream for reading incoming data
 void TCP_Peer::initialize_streams() {
+  // Create input stream wrapper around the buffer for convenient reading
   input_stream_ = std::make_unique<std::istream>(input_buffer_.get());
-  output_stream_ = std::make_unique<std::ostream>(output_buffer_.get());
 }
 
+// Establish connection to remote peer with specified address and port, configures socket options for optimal performance
 bool TCP_Peer::connect(const std::string& address, uint16_t port) {
   if (socket_->is_open()) {
     BOOST_LOG_TRIVIAL(error) << "[" << peer_id_ << "] Cannot connect - socket already connected";
@@ -120,12 +122,6 @@ bool TCP_Peer::disconnect() {
   }
 }
 
-std::ostream* TCP_Peer::get_output_stream() {
-  if (!socket_->is_open()) {
-    return nullptr;
-  }
-  return output_stream_.get();
-}
 
 std::istream* TCP_Peer::get_input_stream() {
   if (!socket_->is_open()) {
@@ -173,50 +169,56 @@ void TCP_Peer::stop_stream_processing() {
   }
 }
 
-void TCP_Peer::process_stream() {
-  boost::asio::io_context::work work(io_context_);
-  std::thread io_thread([this]() { io_context_.run(); });
+// Direct message sending method for synchronous transmission of data
+// Returns true if message was sent successfully, false otherwise
+bool TCP_Peer::send_message(const std::string& message) {
+    if (!socket_ || !socket_->is_open()) {
+        BOOST_LOG_TRIVIAL(error) << "[" << peer_id_ << "] Cannot send message - socket not connected";
+        return false;
+    }
 
-  while (processing_active_ && socket_->is_open()) {
     try {
-      boost::system::error_code ec;
-
-      // Handle outgoing data with proper synchronization and framing
-      if (output_buffer_->size() > 0) {
         std::unique_lock<std::mutex> lock(io_mutex_);
-
-        try {
-          // Ensure message ends with newline for proper framing
-          std::string data(
-            boost::asio::buffers_begin(output_buffer_->data()),
-            boost::asio::buffers_end(output_buffer_->data())
-          );
-          if (data.back() != '\n') {
-            data += '\n';
-          }
-
-          // Write complete message
-          std::size_t bytes_written = boost::asio::write(
-            *socket_,
-            boost::asio::buffer(data),
-            boost::asio::transfer_exactly(data.length()),
-            ec
-          );
-
-          if (!ec && bytes_written == data.length()) {
-            output_buffer_->consume(output_buffer_->size());
-            BOOST_LOG_TRIVIAL(debug) << "[" << peer_id_ << "] Wrote " << bytes_written << " bytes: " << data;
-          } else {
-            BOOST_LOG_TRIVIAL(error) << "[" << peer_id_ << "] Write error: " << ec.message();
-            break;
-          }
-        } catch (const std::exception& e) {
-          BOOST_LOG_TRIVIAL(error) << "[" << peer_id_ << "] Write processing error: " << e.what();
-          break;
+        
+        // Ensure message ends with newline for proper framing
+        std::string framed_message = message;
+        if (framed_message.empty() || framed_message.back() != '\n') {
+            framed_message += '\n';
         }
-      }
 
-      // Handle incoming data with proper synchronization and framing
+        // Write complete message with synchronous operation
+        boost::system::error_code ec;
+        std::size_t bytes_written = boost::asio::write(
+            *socket_,
+            boost::asio::buffer(framed_message),
+            boost::asio::transfer_exactly(framed_message.length()),
+            ec
+        );
+
+        if (!ec && bytes_written == framed_message.length()) {
+            BOOST_LOG_TRIVIAL(debug) << "[" << peer_id_ << "] Sent " << bytes_written << " bytes: " << message;
+            return true;
+        } else {
+            BOOST_LOG_TRIVIAL(error) << "[" << peer_id_ << "] Send error: " << ec.message();
+            return false;
+        }
+    } catch (const std::exception& e) {
+        BOOST_LOG_TRIVIAL(error) << "[" << peer_id_ << "] Send error: " << e.what();
+        return false;
+    }
+}
+
+// Main processing loop for handling incoming data
+void TCP_Peer::process_stream() {
+    // Create work object to keep io_context running
+    boost::asio::io_context::work work(io_context_);
+    std::thread io_thread([this]() { io_context_.run(); });
+
+    while (processing_active_ && socket_->is_open()) {
+        try {
+            boost::system::error_code ec;
+
+            // Handle incoming data with proper synchronization and framing
       {
         std::unique_lock<std::mutex> lock(io_mutex_);
 
@@ -298,46 +300,46 @@ void TCP_Peer::process_stream() {
   }
 }
 
+// Cleanup connection and associated resources
 void TCP_Peer::cleanup_connection() {
-  // First, ensure processing is stopped
-  processing_active_ = false;
+    // First ensure processing is stopped
+    processing_active_ = false;
 
-  if (processing_thread_ && processing_thread_->joinable()) {
-    processing_thread_->join();
-    processing_thread_.reset();
-  }
-
-  // Then cleanup socket
-  if (socket_) {
-    boost::system::error_code ec;
-    if (socket_->is_open()) {
-      // Shutdown the socket first
-      socket_->shutdown(boost::asio::ip::tcp::socket::shutdown_both, ec);
-      if (ec) {
-        BOOST_LOG_TRIVIAL(error) << "[" << peer_id_ << "] Socket shutdown error: " << ec.message();
-      }
-
-      // Then close it
-      socket_->close(ec);
-      if (ec) {
-        BOOST_LOG_TRIVIAL(error) << "[" << peer_id_ << "] Socket close error: " << ec.message();
-      }
+    // Join processing thread if it exists
+    if (processing_thread_ && processing_thread_->joinable()) {
+        processing_thread_->join();
+        processing_thread_.reset();
     }
-  }
 
-  // Clear any remaining data in buffers
-  if (input_buffer_) {
-    input_buffer_->consume(input_buffer_->size());
-  }
-  if (output_buffer_) {
-    output_buffer_->consume(output_buffer_->size());
-  }
+    // Cleanup socket with proper shutdown sequence
+    if (socket_ && socket_->is_open()) {
+        boost::system::error_code ec;
+        
+        // Gracefully shutdown the socket
+        socket_->shutdown(boost::asio::ip::tcp::socket::shutdown_both, ec);
+        if (ec) {
+            BOOST_LOG_TRIVIAL(error) << "[" << peer_id_ << "] Socket shutdown error: " << ec.message();
+        }
 
-  endpoint_.reset();
+        // Close the socket
+        socket_->close(ec);
+        if (ec) {
+            BOOST_LOG_TRIVIAL(error) << "[" << peer_id_ << "] Socket close error: " << ec.message();
+        }
+    }
+
+    // Clear any remaining data in input buffer
+    if (input_buffer_) {
+        input_buffer_->consume(input_buffer_->size());
+    }
+
+    endpoint_.reset();
 }
 
+// Check if the peer is currently connected
+// Returns true if socket exists and is open
 bool TCP_Peer::is_connected() const {
-  return socket_ && socket_->is_open();
+    return socket_ && socket_->is_open();
 }
 
 } // namespace network

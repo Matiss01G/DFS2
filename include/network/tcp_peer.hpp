@@ -42,8 +42,14 @@ public:
     bool is_connected() const override;
 
     // Stream operations
-    std::ostream* get_output_stream() override;
     std::istream* get_input_stream() override;
+    
+    /**
+     * @brief Send a message directly through the socket
+     * @param message The message to send
+     * @return true if the message was sent successfully, false otherwise
+     */
+    bool send_message(const std::string& message) override;
 
     // Stream processing
     void set_stream_processor(StreamProcessor processor) override;
@@ -93,9 +99,8 @@ private:
 
     // Stream buffers
     std::unique_ptr<boost::asio::streambuf> input_buffer_;
-    std::unique_ptr<boost::asio::streambuf> output_buffer_;
+    // Removed output buffer and stream as we're using direct message sending
     std::unique_ptr<std::istream> input_stream_;
-    std::unique_ptr<std::ostream> output_stream_;
 
     // Internal methods
     void initialize_streams();
