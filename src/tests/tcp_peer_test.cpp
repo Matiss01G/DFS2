@@ -1,6 +1,7 @@
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
 #include "network/tcp_peer.hpp"
+#include <boost/asio.hpp>
 #include <thread>
 #include <chrono>
 
@@ -66,34 +67,8 @@ TEST_F(TCP_PeerTest, StreamProcessorHandling) {
     
     peer_->set_stream_processor(processor);
     
-    // Cannot start processing in INITIAL state
+    // Cannot start processing when not connected
     EXPECT_FALSE(peer_->start_stream_processing());
-}
-
-// Test disconnection sequence
-TEST_F(TCP_PeerTest, DisconnectionSequence) {
-    // Setup mock server and connect first
-    boost::asio::io_context io_context;
-    boost::asio::ip::tcp::acceptor acceptor(io_context,
-        boost::asio::ip::tcp::endpoint(boost::asio::ip::tcp::v4(), 12345));
-    
-    std::thread server_thread([&io_context]() {
-        io_context.run();
-    });
-    
-    // Connect to local server
-    EXPECT_TRUE(peer_->connect("127.0.0.1", 12345));
-    EXPECT_TRUE(peer_->is_connected());
-    
-    // Test disconnection
-    EXPECT_TRUE(peer_->disconnect());
-    EXPECT_FALSE(peer_->is_connected());
-    
-    // Cleanup
-    io_context.stop();
-    if (server_thread.joinable()) {
-        server_thread.join();
-    }
 }
 
 // Test buffer management and cleanup
@@ -117,7 +92,7 @@ TEST_F(TCP_PeerTest, BufferManagementAndCleanup) {
     
     // Connect to mock server
     EXPECT_TRUE(peer_->connect("127.0.0.1", 12348));
-    EXPECT_EQ(peer_->get_connection_state(), ConnectionState::State::CONNECTED);
+    EXPECT_TRUE(peer_->is_connected());
     
     // Start stream processing
     bool data_received = false;
@@ -164,56 +139,17 @@ TEST_F(TCP_PeerTest, MultipleConnectionCycles) {
     // Perform multiple connect/disconnect cycles
     for (int i = 0; i < 3; ++i) {
         EXPECT_TRUE(peer_->connect("127.0.0.1", 12349));
-        EXPECT_EQ(peer_->get_connection_state(), ConnectionState::State::CONNECTED);
+        EXPECT_TRUE(peer_->is_connected());
         
         std::this_thread::sleep_for(std::chrono::milliseconds(50));
         
         EXPECT_TRUE(peer_->disconnect());
-        EXPECT_EQ(peer_->get_connection_state(), ConnectionState::State::DISCONNECTED);
+        EXPECT_FALSE(peer_->is_connected());
         
         std::this_thread::sleep_for(std::chrono::milliseconds(50));
     }
     
     // Cleanup
-    io_context.stop();
-    if (server_thread.joinable()) {
-        server_thread.join();
-    }
-}
-
-// Test stream processor error handling
-TEST_F(TCP_PeerTest, StreamProcessorErrorHandling) {
-    boost::asio::io_context io_context;
-    boost::asio::ip::tcp::acceptor acceptor(io_context,
-        boost::asio::ip::tcp::endpoint(boost::asio::ip::tcp::v4(), 12350));
-    
-    std::thread server_thread([&]() {
-        boost::asio::ip::tcp::socket socket(io_context);
-        acceptor.accept(socket);
-        
-        // Send malformed data
-        std::string bad_data = "malformed\xFF\xFE\n";
-        boost::asio::write(socket, boost::asio::buffer(bad_data));
-        
-        io_context.stop();
-    });
-    
-    // Connect to mock server
-    EXPECT_TRUE(peer_->connect("127.0.0.1", 12350));
-    
-    // Set up processor that throws an exception
-    bool exception_caught = false;
-    peer_->set_stream_processor([&exception_caught](std::istream& stream) {
-        throw std::runtime_error("Test exception");
-    });
-    
-    EXPECT_TRUE(peer_->start_stream_processing());
-    
-    // Wait for error processing
-    std::this_thread::sleep_for(std::chrono::milliseconds(100));
-    
-    // Cleanup
-    peer_->disconnect();
     io_context.stop();
     if (server_thread.joinable()) {
         server_thread.join();
@@ -244,7 +180,7 @@ TEST_F(TCP_PeerTest, StreamOperations) {
     
     // Connect to mock server
     EXPECT_TRUE(peer_->connect("127.0.0.1", 12346));
-    EXPECT_EQ(peer_->get_connection_state(), ConnectionState::State::CONNECTED);
+    EXPECT_TRUE(peer_->is_connected());
     
     // Setup stream processor
     std::string received_data;

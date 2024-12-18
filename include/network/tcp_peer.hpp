@@ -67,7 +67,6 @@ private:
     void initialize_streams();
     void cleanup_connection();
     void process_stream();
-    bool validate_connection_state(ConnectionState::State required_state) const;
 };
 
 } // namespace network

@@ -6,7 +6,6 @@
 #include <memory>
 #include <iostream>
 #include <streambuf>
-#include "connection_state.hpp"
 #include "message_frame.hpp"
 
 namespace dfs {
@@ -14,13 +13,11 @@ namespace network {
 
 /**
  * Network peer interface for stream-based communication in DFS.
- * Implements streaming data transfer with state management and optional
- * message-based support for backward compatibility.
+ * Implements streaming data transfer and message-based support.
  * 
  * Primary Interface:
  * - Stream-based data transfer (input/output streams)
  * - Asynchronous processing with callbacks
- * - Connection state management
  */
 class Peer {
 public:
@@ -32,6 +29,7 @@ public:
     // Connection management
     virtual bool connect(const std::string& address, uint16_t port) = 0;
     virtual bool disconnect() = 0;
+    virtual bool is_connected() const = 0;
 
     // Stream operations (required)
     virtual std::ostream* get_output_stream() = 0;
@@ -42,18 +40,8 @@ public:
     virtual bool start_stream_processing() = 0;
     virtual void stop_stream_processing() = 0;
 
-    // State management
-    virtual ConnectionState::State get_connection_state() const = 0;
-    bool is_connected() const {
-        return get_connection_state() == ConnectionState::State::CONNECTED;
-    }
-
 protected:
     Peer() = default;
-    
-    bool validate_state(ConnectionState::State required_state) const {
-        return get_connection_state() == required_state;
-    }
 };
 
 } // namespace network
