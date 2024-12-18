@@ -1,0 +1,79 @@
+void TCP_Peer::process_stream() {
+  // Create work object to keep io_context running and keep peer connection running
+  boost::asio::io_context::work work(io_context_);
+  std::thread io_thread([this]() { 
+    try {
+      io_context_.run();
+    } catch (const std::exception& e) {
+      BOOST_LOG_TRIVIAL(error) << "[" << peer_id_ << "] IO context error: " << e.what();
+    }
+  });
+
+  // Set up deadline timer for read operations
+  boost::asio::steady_timer deadline(io_context_);
+  const auto max_idle_time = std::chrono::seconds(5);
+
+  while (processing_active_ && socket_->is_open()) {
+    try {
+      boost::system::error_code ec;
+      deadline.expires_after(max_idle_time);
+
+      // Handle incoming data with proper synchronization
+      {
+        std::unique_lock<std::mutex> lock(io_mutex_);
+        // Check if data is available with timeout
+        socket_->async_wait(boost::asio::ip::tcp::socket::wait_read,
+          [this](const boost::system::error_code& ec) {
+            if (ec) {
+              BOOST_LOG_TRIVIAL(error) << "[" << peer_id_ << "] Socket wait error: " << ec.message();
+            }
+          });
+
+        if (socket_->available(ec) > 0 || !ec) {
+          // Read until newline with timeout protection
+          boost::asio::async_read_until(
+            *socket_,
+            *input_buffer_,
+            '\n',
+            [this](const boost::system::error_code& ec, std::size_t n) {
+              if (!ec && n > 0) {
+                std::string data;
+                std::istream is(input_buffer_.get());
+                std::getline(is, data);
+                if (!data.empty()) {
+                  BOOST_LOG_TRIVIAL(debug) << "[" << peer_id_ << "] Received data: " << data;
+                  // Process data through registered handler
+                  if (stream_processor_) {
+                    std::string framed_data = data + '\n';
+                    std::istringstream iss(framed_data);
+                    stream_processor_(iss);
+                  }
+                }
+              } else if (ec != boost::asio::error::would_block && 
+                        ec != boost::asio::error::try_again) {
+                BOOST_LOG_TRIVIAL(error) << "[" << peer_id_ << "] Read error: " << ec.message();
+              }
+            });
+        }
+      }
+
+      // Wait for either data or timeout
+      io_context_.run_one();
+      if (deadline.expires_at() <= boost::asio::steady_timer::clock_type::now()) {
+        BOOST_LOG_TRIVIAL(debug) << "[" << peer_id_ << "] Stream processing cycle completed";
+        break;
+      }
+    }
+    catch (const std::exception& e) {
+      BOOST_LOG_TRIVIAL(error) << "[" << peer_id_ << "] Stream processing error: " << e.what();
+      break;
+    }
+  }
+
+  // Cleanup io_context and processing thread
+  io_context_.stop();
+  if (io_thread.joinable()) {
+    io_thread.join();
+  }
+  BOOST_LOG_TRIVIAL(info) << "[" << peer_id_ << "] Stream processing stopped";
+}
