@@ -62,7 +62,20 @@ bool TcpPeer::connect(const std::string& address, uint16_t port) {
         socket_ = std::make_unique<boost::asio::ip::tcp::socket>(io_context_);
     }
 
-    state_.store(ConnectionState::State::CONNECTING);
+    // Ensure clean state transition
+    {
+        auto expected_state = ConnectionState::State::INITIAL;
+        if (!state_.compare_exchange_strong(expected_state, 
+                                          ConnectionState::State::CONNECTING)) {
+            expected_state = ConnectionState::State::DISCONNECTED;
+            if (!state_.compare_exchange_strong(expected_state, 
+                                              ConnectionState::State::CONNECTING)) {
+                BOOST_LOG_TRIVIAL(error) << "Invalid state transition from " 
+                    << ConnectionState::state_to_string(expected_state);
+                return false;
+            }
+        }
+    }
     
     try {
         boost::asio::ip::tcp::resolver resolver(io_context_);
@@ -77,10 +90,24 @@ bool TcpPeer::connect(const std::string& address, uint16_t port) {
             });
 
         // Run with timeout
-        if (!io_context_.run_for(CONNECTION_TIMEOUT)) {
-            BOOST_LOG_TRIVIAL(error) << "Connection timeout";
-            handle_error(boost::asio::error::timed_out);
-            return false;
+        // Run io_context with timeout and properly handle async operations
+        std::chrono::steady_clock::time_point timeout_time = 
+            std::chrono::steady_clock::now() + CONNECTION_TIMEOUT;
+            
+        while (io_context_.run_one_for(std::chrono::milliseconds(100))) {
+            if (std::chrono::steady_clock::now() > timeout_time) {
+                BOOST_LOG_TRIVIAL(error) << "Connection timeout";
+                handle_error(boost::system::error_code(boost::asio::error::timed_out));
+                return false;
+            }
+            
+            if (ec) {
+                break;  // Connection completed with error
+            }
+            
+            if (socket_->is_open()) {
+                break;  // Connection successful
+            }
         }
 
         if (ec) {
@@ -91,7 +118,7 @@ bool TcpPeer::connect(const std::string& address, uint16_t port) {
 
         if (!socket_->is_open()) {
             BOOST_LOG_TRIVIAL(error) << "Socket closed unexpectedly during connection";
-            handle_error(boost::asio::error::connection_aborted);
+            handle_error(boost::system::error_code(boost::asio::error::connection_aborted));
             return false;
         }
 
@@ -233,7 +260,10 @@ void TcpPeer::process_streams() {
                     if (ec) {
                         if (ec == boost::asio::error::eof) {
                             BOOST_LOG_TRIVIAL(info) << "Peer disconnected (EOF)";
-                            state_.store(ConnectionState::State::DISCONNECTED);
+                            if (get_connection_state() == ConnectionState::State::CONNECTED) {
+                                state_.store(ConnectionState::State::DISCONNECTING);
+                                state_.store(ConnectionState::State::DISCONNECTED);
+                            }
                             break;
                         } else if (ec == boost::asio::error::operation_aborted) {
                             BOOST_LOG_TRIVIAL(info) << "Read operation aborted";
@@ -255,7 +285,7 @@ void TcpPeer::process_streams() {
                         } catch (const std::exception& e) {
                             BOOST_LOG_TRIVIAL(error) << "Stream processor error: " << e.what();
                             if (get_connection_state() == ConnectionState::State::CONNECTED) {
-                                handle_error(boost::asio::error::fault);
+                                handle_error(boost::system::error_code(boost::asio::error::fault));
                                 break;
                             }
                         }
@@ -297,13 +327,20 @@ void TcpPeer::process_streams() {
             }
             
             // Small delay to prevent busy-waiting
-            if (!bytes_readable && output_buffer_->size() == 0) {
+            size_t current_readable_bytes = 0;
+            {
+                boost::asio::socket_base::bytes_readable command;
+                socket_->io_control(command);
+                current_readable_bytes = command.get();
+            }
+            
+            if (!current_readable_bytes && output_buffer_->size() == 0) {
                 std::this_thread::sleep_for(std::chrono::milliseconds(1));
             }
             
         } catch (const std::exception& e) {
             BOOST_LOG_TRIVIAL(error) << "Stream processing error: " << e.what();
-            handle_error(boost::asio::error::fault);
+            handle_error(boost::system::error_code(boost::asio::error::fault));
             break;
         }
     }
@@ -320,7 +357,8 @@ void TcpPeer::handle_error(const std::error_code& error) {
                 << "): " << error.message();
     
     if (current_state != ConnectionState::State::ERROR && 
-        current_state != ConnectionState::State::DISCONNECTED) {
+        current_state != ConnectionState::State::DISCONNECTED &&
+        current_state != ConnectionState::State::DISCONNECTING) {
         BOOST_LOG_TRIVIAL(info) << "Transitioning from " 
                     << ConnectionState::state_to_string(current_state)
                     << " to ERROR state";
@@ -330,15 +368,15 @@ void TcpPeer::handle_error(const std::error_code& error) {
         close_socket();
         
         // Attempt recovery for connection-related errors
-        if (error == boost::asio::error::connection_reset ||
-            error == boost::asio::error::connection_aborted ||
-            error == boost::asio::error::broken_pipe ||
-            error == boost::asio::error::connection_refused ||
-            error == boost::asio::error::timed_out ||
-            error == boost::asio::error::network_down ||
-            error == boost::asio::error::network_reset ||
-            error == boost::asio::error::network_unreachable ||
-            error == boost::asio::error::host_unreachable) {
+        if (error.value() == boost::asio::error::connection_reset ||
+            error.value() == boost::asio::error::connection_aborted ||
+            error.value() == boost::asio::error::broken_pipe ||
+            error.value() == boost::asio::error::connection_refused ||
+            error.value() == boost::asio::error::timed_out ||
+            error.value() == boost::asio::error::network_down ||
+            error.value() == boost::asio::error::network_reset ||
+            error.value() == boost::asio::error::network_unreachable ||
+            error.value() == boost::asio::error::host_unreachable) {
             
             BOOST_LOG_TRIVIAL(info) << "Attempting connection recovery for peer "
                         << peer_address_ << ":" << peer_port_;

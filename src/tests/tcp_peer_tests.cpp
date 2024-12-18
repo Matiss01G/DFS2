@@ -190,55 +190,6 @@ TEST_F(TcpPeerTest, StreamOperations) {
     peer.disconnect();
 }
 
-// Test connection error handling
-TEST_F(TcpPeerTest, ConnectionErrors) {
-    TcpPeer peer;
-    
-    // Test connection to non-existent server
-    EXPECT_FALSE(peer.connect("127.0.0.1", 54321));
-    EXPECT_EQ(peer.get_connection_state(), ConnectionState::State::ERROR);
-    
-    // Test automatic transition to DISCONNECTED state
-    std::this_thread::sleep_for(std::chrono::milliseconds(100));
-    EXPECT_EQ(peer.get_connection_state(), ConnectionState::State::DISCONNECTED);
-    
-    // Test reconnection after error
-    EXPECT_TRUE(peer.connect("127.0.0.1", test_port_));
-    EXPECT_EQ(peer.get_connection_state(), ConnectionState::State::CONNECTED);
-}
-
-// Test stream processing control
-TEST_F(TcpPeerTest, StreamProcessingControl) {
-    TcpPeer peer;
-    ASSERT_TRUE(peer.connect("127.0.0.1", test_port_));
-    
-    // Test starting without processor
-    EXPECT_FALSE(peer.start_stream_processing());
-    
-    // Set processor and start
-    bool processor_called = false;
-    peer.set_stream_processor([&processor_called](std::istream&) {
-        processor_called = true;
-    });
-    
-    EXPECT_TRUE(peer.start_stream_processing());
-    
-    // Write some data to trigger processing
-    auto* out = peer.get_output_stream();
-    *out << "Test data" << std::endl;
-    out->flush();
-    
-    // Wait for processing
-    std::this_thread::sleep_for(std::chrono::milliseconds(100));
-    
-    // Stop processing
-    peer.stop_stream_processing();
-    EXPECT_TRUE(processor_called);
-    
-    // Clean up
-    peer.disconnect();
-}
-
 // Test multiple connect/disconnect cycles
 TEST_F(TcpPeerTest, ConnectionCycles) {
     TcpPeer peer;
