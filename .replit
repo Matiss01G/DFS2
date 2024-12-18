@@ -35,6 +35,7 @@ run = ["sh", "-c", "cd build && cmake -DCMAKE_BUILD_TYPE=Debug .. && make"]
 [[ports]]
 localPort = 12345
 externalPort = 80
+exposeLocalhost = true
 
 [[ports]]
 localPort = 12346

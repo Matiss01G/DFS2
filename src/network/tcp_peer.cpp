@@ -242,6 +242,12 @@ bool TCP_Peer::disconnect() {
 }
 
 // Send data from an input stream through the socket
+// Implementation of send_message using send_stream
+bool TCP_Peer::send_message(const std::string& message) {
+    std::istringstream iss(message);
+    return send_stream(iss);
+}
+
 bool TCP_Peer::send_stream(std::istream& input_stream, std::size_t buffer_size) {
     if (!socket_ || !socket_->is_open()) {
         BOOST_LOG_TRIVIAL(error) << "[" << peer_id_ << "] Cannot send stream - socket not connected";
