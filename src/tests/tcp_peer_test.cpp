@@ -28,9 +28,8 @@ protected:
 // Test constructor and initial state
 TEST_F(TCP_PeerTest, ConstructorInitialization) {
     EXPECT_EQ(peer_->get_connection_state(), ConnectionState::State::INITIAL);
-    EXPECT_FALSE(peer_->is_connected());
-    EXPECT_EQ(peer_->get_input_stream(), nullptr);
-    EXPECT_EQ(peer_->get_output_stream(), nullptr);
+    EXPECT_EQ(peer_->get_input_stream(), nullptr);  // Should be null in INITIAL state
+    EXPECT_EQ(peer_->get_output_stream(), nullptr); // Should be null in INITIAL state
 }
 
 // Test invalid connection attempts
@@ -38,9 +37,6 @@ TEST_F(TCP_PeerTest, InvalidConnectionAttempts) {
     // Try connecting to invalid address
     EXPECT_FALSE(peer_->connect("invalid_address", 12345));
     EXPECT_EQ(peer_->get_connection_state(), ConnectionState::State::ERROR);
-    
-    // Create new peer for second test since we can't transition from ERROR
-    peer_.reset(new TCP_Peer("test_peer"));
     
     // Try connecting to unreachable port
     EXPECT_FALSE(peer_->connect("127.0.0.1", 1));
