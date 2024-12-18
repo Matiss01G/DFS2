@@ -1,6 +1,10 @@
 #include <gtest/gtest.h>
+#include <gmock/gmock.h>
 #include "network/connection_state.hpp"
-#include "network/peer.hpp"
+#include "network/tcp_peer.hpp"
+#include <boost/asio.hpp>
+#include <thread>
+#include <chrono>
 
 // Main function for running all tests
 int main(int argc, char** argv) {
