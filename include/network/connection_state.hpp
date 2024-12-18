@@ -115,6 +115,12 @@ private:
     State current_state_;
 };
 
+// Stream operator for ConnectionState::State to support test assertions and logging
+inline std::ostream& operator<<(std::ostream& os, const ConnectionState::State& state) {
+    os << ConnectionState::state_to_string(state);
+    return os;
+}
+
 } // namespace network
 } // namespace dfs
 
