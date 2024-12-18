@@ -6,7 +6,6 @@ namespace network {
 
 TCP_Peer::TCP_Peer(const std::string& peer_id)
   : peer_id_(peer_id),
-    connection_state_(),
     socket_(std::make_unique<boost::asio::ip::tcp::socket>(io_context_)),
     input_buffer_(std::make_unique<boost::asio::streambuf>()),
     output_buffer_(std::make_unique<boost::asio::streambuf>()) {
@@ -27,15 +26,13 @@ void TCP_Peer::initialize_streams() {
 }
 
 bool TCP_Peer::connect(const std::string& address, uint16_t port) {
-  if (!validate_connection_state(ConnectionState::State::INITIAL)) {
-    BOOST_LOG_TRIVIAL(error) << "Invalid state for connection: " << 
-      ConnectionState::state_to_string(get_connection_state());
+  if (socket_->is_open()) {
+    BOOST_LOG_TRIVIAL(error) << "Socket already connected";
     return false;
   }
 
   try {
     BOOST_LOG_TRIVIAL(info) << "Attempting to connect to " << address << ":" << port;
-    connection_state_.transition_to(ConnectionState::State::CONNECTING);
 
     boost::asio::ip::tcp::resolver resolver(io_context_);
     boost::system::error_code resolve_ec;
@@ -43,7 +40,6 @@ bool TCP_Peer::connect(const std::string& address, uint16_t port) {
 
     if (resolve_ec) {
       BOOST_LOG_TRIVIAL(error) << "Failed to resolve address: " << resolve_ec.message();
-      connection_state_.transition_to(ConnectionState::State::ERROR);
       return false;
     }
 
@@ -54,7 +50,6 @@ bool TCP_Peer::connect(const std::string& address, uint16_t port) {
 
     if (connect_ec) {
       BOOST_LOG_TRIVIAL(error) << "Connection failed: " << connect_ec.message();
-      connection_state_.transition_to(ConnectionState::State::ERROR);
       return false;
     }
 
@@ -71,52 +66,46 @@ bool TCP_Peer::connect(const std::string& address, uint16_t port) {
       io_context_.reset();
     }
 
-    connection_state_.transition_to(ConnectionState::State::CONNECTED);
     BOOST_LOG_TRIVIAL(info) << "Successfully connected to " << address << ":" << port;
     return true;
   }
   catch (const std::exception& e) {
     BOOST_LOG_TRIVIAL(error) << "Connection error: " << e.what();
-    connection_state_.transition_to(ConnectionState::State::ERROR);
     cleanup_connection();
     return false;
   }
 }
 
 bool TCP_Peer::disconnect() {
-  if (!validate_connection_state(ConnectionState::State::CONNECTED)) {
+  if (!socket_->is_open()) {
     return false;
   }
 
   try {
-    connection_state_.transition_to(ConnectionState::State::DISCONNECTING);
-
     // First stop any ongoing stream processing
     stop_stream_processing();
 
     // Then cleanup the connection
     cleanup_connection();
 
-    connection_state_.transition_to(ConnectionState::State::DISCONNECTED);
     BOOST_LOG_TRIVIAL(info) << "Disconnected peer: " << peer_id_;
     return true;
   }
   catch (const std::exception& e) {
     BOOST_LOG_TRIVIAL(error) << "Disconnect error: " << e.what();
-    connection_state_.transition_to(ConnectionState::State::ERROR);
     return false;
   }
 }
 
 std::ostream* TCP_Peer::get_output_stream() {
-  if (!validate_connection_state(ConnectionState::State::CONNECTED)) {
+  if (!socket_->is_open()) {
     return nullptr;
   }
   return output_stream_.get();
 }
 
 std::istream* TCP_Peer::get_input_stream() {
-  if (!validate_connection_state(ConnectionState::State::CONNECTED)) {
+  if (!socket_->is_open()) {
     return nullptr;
   }
   return input_stream_.get();
@@ -127,8 +116,7 @@ void TCP_Peer::set_stream_processor(StreamProcessor processor) {
 }
 
 bool TCP_Peer::start_stream_processing() {
-  if (!validate_connection_state(ConnectionState::State::CONNECTED) || 
-    !stream_processor_) {
+  if (!socket_->is_open() || !stream_processor_) {
     return false;
   }
 
@@ -152,9 +140,6 @@ void TCP_Peer::stop_stream_processing() {
   }
 }
 
-ConnectionState::State TCP_Peer::get_connection_state() const {
-  return connection_state_.get_state();
-}
 
 void TCP_Peer::process_stream() {
   boost::asio::io_context::work work(io_context_);
@@ -281,17 +266,6 @@ void TCP_Peer::process_stream() {
   }
 }
 
-bool TCP_Peer::validate_connection_state(ConnectionState::State required_state) const {
-  auto current_state = get_connection_state();
-  if (current_state != required_state) {
-    BOOST_LOG_TRIVIAL(warning) << "Invalid state transition attempted. Current: " 
-      << ConnectionState::state_to_string(current_state) 
-      << ", Required: " << ConnectionState::state_to_string(required_state);
-    return false;
-  }
-  return true;
-}
-
 void TCP_Peer::cleanup_connection() {
   // First, ensure processing is stopped
   processing_active_ = false;
@@ -328,6 +302,10 @@ void TCP_Peer::cleanup_connection() {
   }
 
   endpoint_.reset();
+}
+
+bool TCP_Peer::is_connected() const {
+  return socket_ && socket_->is_open();
 }
 
 } // namespace network

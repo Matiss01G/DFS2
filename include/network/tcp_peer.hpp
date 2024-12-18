@@ -8,7 +8,6 @@
 #include <boost/asio.hpp>
 #include <boost/log/trivial.hpp>
 #include "peer.hpp"
-#include "connection_state.hpp"
 
 namespace dfs {
 namespace network {
@@ -29,7 +28,7 @@ public:
     // Connection management
     bool connect(const std::string& address, uint16_t port) override;
     bool disconnect() override;
-    bool is_connected() const { return get_connection_state() == ConnectionState::State::CONNECTED; }
+    bool is_connected() const override;
 
     // Stream operations
     std::ostream* get_output_stream() override;
@@ -40,16 +39,12 @@ public:
     bool start_stream_processing() override;
     void stop_stream_processing() override;
 
-    // State management
-    ConnectionState::State get_connection_state() const override;
-
     // Accessors
     const std::string& get_peer_id() const { return peer_id_; }
 
 private:
     // Core attributes
     std::string peer_id_;
-    ConnectionState connection_state_;
     StreamProcessor stream_processor_;
 
     // Network components
