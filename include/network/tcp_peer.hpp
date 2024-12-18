@@ -13,10 +13,21 @@ namespace dfs {
 namespace network {
 
 /**
- * TCP implementation of the Peer interface.
- * Provides TCP/IP-based network communication with stream support.
+ * @brief TCP implementation of the Peer interface
+ * 
+ * This class provides TCP/IP-based network communication with stream support.
+ * It implements an asynchronous event-driven approach for handling network I/O,
+ * utilizing boost::asio for efficient, non-blocking operations.
+ * 
+ * Key features:
+ * - Asynchronous I/O operations for improved performance
+ * - Automatic message framing with newline delimiters
+ * - Thread-safe stream processing
+ * - Comprehensive error handling and logging
+ * - Support for custom stream processors
  */
-class TCP_Peer : public Peer {
+class TCP_Peer : public Peer,
+                 public std::enable_shared_from_this<TCP_Peer> {
 public:
     explicit TCP_Peer(const std::string& peer_id);
     ~TCP_Peer() override;
@@ -40,7 +51,30 @@ public:
     void stop_stream_processing() override;
 
     // Accessors
+    /**
+     * @brief Get the unique identifier for this peer
+     * @return The peer's ID as a const string reference
+     */
     const std::string& get_peer_id() const { return peer_id_; }
+
+    /**
+     * @brief Initiates an asynchronous write operation
+     * 
+     * This method is called internally whenever there is data in the output
+     * buffer that needs to be sent. It ensures proper message framing and
+     * handles any write errors that occur during transmission.
+     */
+    void async_write();
+
+    /**
+     * @brief Initiates an asynchronous read operation
+     * 
+     * Sets up the next asynchronous read operation, handling message framing
+     * and processing of received data through the stream processor. This method
+     * is called recursively as long as the connection is active and processing
+     * is enabled.
+     */
+    void async_read_next();
 
 private:
     // Core attributes
