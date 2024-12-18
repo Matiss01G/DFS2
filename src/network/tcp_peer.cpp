@@ -164,65 +164,104 @@ void TCP_Peer::process_stream() {
         try {
             boost::system::error_code ec;
             
-            // Handle outgoing data synchronously with proper flushing
+            // Handle outgoing data with proper synchronization and framing
             if (output_buffer_->size() > 0) {
                 std::unique_lock<std::mutex> lock(io_mutex_);
-                std::size_t bytes_to_write = output_buffer_->size();
                 
-                boost::asio::write(
-                    *socket_, 
-                    output_buffer_->data(),
-                    boost::asio::transfer_exactly(bytes_to_write),
-                    ec
-                );
-                
-                if (!ec) {
-                    output_buffer_->consume(bytes_to_write);
-                    BOOST_LOG_TRIVIAL(debug) << "Wrote " << bytes_to_write << " bytes";
+                try {
+                    // Ensure message ends with newline for proper framing
+                    std::string data(
+                        boost::asio::buffers_begin(output_buffer_->data()),
+                        boost::asio::buffers_end(output_buffer_->data())
+                    );
+                    if (data.back() != '\n') {
+                        data += '\n';
+                    }
                     
-                    // Ensure data is sent by flushing the socket
-                    socket_->lowest_layer().flush(ec);
-                } else {
-                    BOOST_LOG_TRIVIAL(error) << "Write error: " << ec.message();
+                    // Write complete message
+                    std::size_t bytes_written = boost::asio::write(
+                        *socket_,
+                        boost::asio::buffer(data),
+                        boost::asio::transfer_exactly(data.length()),
+                        ec
+                    );
+                    
+                    if (!ec && bytes_written == data.length()) {
+                        output_buffer_->consume(output_buffer_->size());
+                        BOOST_LOG_TRIVIAL(debug) << "Wrote " << bytes_written << " bytes: " << data;
+                    } else {
+                        BOOST_LOG_TRIVIAL(error) << "Write error: " << ec.message();
+                        break;
+                    }
+                } catch (const std::exception& e) {
+                    BOOST_LOG_TRIVIAL(error) << "Write processing error: " << e.what();
                     break;
                 }
             }
             
-            // Check for incoming data with proper synchronization
+            // Handle incoming data with proper synchronization and framing
             {
                 std::unique_lock<std::mutex> lock(io_mutex_);
                 
-                if (socket_->available(ec) > 0 || !ec) {
-                    // Read until newline delimiter
-                    boost::asio::read_until(
-                        *socket_,
-                        *input_buffer_,
-                        '\n',
-                        ec
-                    );
-                    
-                    if (!ec) {
-                        // Get the complete message
-                        std::string data;
-                        std::istream is(input_buffer_.get());
-                        std::getline(is, data);
-                        
-                        if (!data.empty()) {
-                            BOOST_LOG_TRIVIAL(debug) << "Received data: " << data;
-                            
-                            if (stream_processor_) {
-                                // Add back the newline for consistent processing
-                                data += '\n';
-                                std::istringstream iss(data);
-                                stream_processor_(iss);
+                try {
+                    // Check if data is available
+                    if (socket_->available(ec) > 0 || !ec) {
+                        try {
+                            // Read complete message frame with timeout
+                            boost::asio::steady_timer timer(io_context_);
+                            timer.expires_from_now(std::chrono::milliseconds(100));
+
+                            // Read until newline
+                            std::size_t n = boost::asio::read_until(
+                                *socket_,
+                                *input_buffer_,
+                                '\n',
+                                ec
+                            );
+
+                            if (!ec && n > 0) {
+                                // Process complete message
+                                std::string data;
+                                std::istream is(input_buffer_.get());
+                                std::getline(is, data);
+
+                                if (!data.empty()) {
+                                    BOOST_LOG_TRIVIAL(debug) << "Received data: " << data;
+                                    
+                                    // Handle the received data
+                                    if (stream_processor_) {
+                                        // Pass to stream processor first
+                                        std::string framed_data = data + '\n';
+                                        std::istringstream iss(framed_data);
+                                        stream_processor_(iss);
+                                    }
+
+                                    // Write to input buffer for normal reads, ensuring no duplicates
+                                    {
+                                        std::lock_guard<std::mutex> lock(io_mutex_);
+                                        std::string framed_data = data + '\n';
+                                        std::size_t write_size = framed_data.size();
+                                        auto bufs = input_buffer_->prepare(write_size);
+                                        std::copy(framed_data.begin(), framed_data.end(), 
+                                                boost::asio::buffers_begin(bufs));
+                                        input_buffer_->commit(write_size);
+                                    }
+                                }
+                            } else if (ec && 
+                                      ec != boost::asio::error::would_block && 
+                                      ec != boost::asio::error::try_again &&
+                                      ec != boost::asio::error::eof) {
+                                BOOST_LOG_TRIVIAL(error) << "Read error: " << ec.message();
+                                break;
                             }
+                        } catch (const std::exception& e) {
+                            BOOST_LOG_TRIVIAL(error) << "Stream processing error: " << e.what();
+                            break;
                         }
-                    } else if (ec != boost::asio::error::would_block && 
-                             ec != boost::asio::error::try_again &&
-                             ec != boost::asio::error::eof) {
-                        BOOST_LOG_TRIVIAL(error) << "Read error: " << ec.message();
-                        break;
                     }
+                } catch (const std::exception& e) {
+                    BOOST_LOG_TRIVIAL(error) << "Read processing error: " << e.what();
+                    break;
                 }
             }
             
