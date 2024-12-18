@@ -2,6 +2,8 @@
 #include <sstream>
 #include "network/connection_state.hpp"
 #include "network/peer.hpp"
+#include "network/network_manager.hpp"
+#include "network/network_error.hpp"
 
 using namespace dfs::network;
 
@@ -9,9 +11,9 @@ class NetworkTest : public ::testing::Test {
 protected:
     std::condition_variable cv;
     std::mutex mtx;
-    bool connected = false;
-    bool transfer_complete = false;
-    NetworkError last_error = NetworkError::SUCCESS;
+    bool connected{false};
+    bool transfer_complete{false};
+    NetworkError last_error{NetworkError::SUCCESS};
     
     void SetUp() override {
         // Reset test state
@@ -25,7 +27,7 @@ protected:
         transfer_complete = false;
     }
 
-    static void connection_callback(const std::string& peer_id, bool success) {
+    void connection_callback(const std::string& peer_id, bool success) {
         if (success) {
             std::unique_lock<std::mutex> lock(mtx);
             connected = true;
@@ -33,7 +35,7 @@ protected:
         }
     }
 
-    static void transfer_callback(const std::string& peer_id, bool success) {
+    void transfer_callback(const std::string& peer_id, bool success) {
         if (success) {
             std::unique_lock<std::mutex> lock(mtx);
             transfer_complete = true;
@@ -41,7 +43,7 @@ protected:
         }
     }
 
-    static void error_callback(const std::string& peer_id, NetworkError error) {
+    void error_callback(const std::string& peer_id, NetworkError error) {
         std::unique_lock<std::mutex> lock(mtx);
         last_error = error;
         cv.notify_one();

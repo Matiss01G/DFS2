@@ -1,16 +1,30 @@
 #include "network/tcp_peer.hpp"
+#include <boost/asio/ip/tcp.hpp>
 #include <boost/asio/connect.hpp>
 #include <boost/asio/read.hpp>
 #include <boost/asio/write.hpp>
+#include <boost/asio/streambuf.hpp>
 #include <boost/bind/bind.hpp>
-#include <iostream>
+#include <boost/log/trivial.hpp>
 #include <random>
+#include <chrono>
 
 namespace dfs {
 namespace network {
 
+using boost::asio::ip::tcp;
+using boost::system::error_code;
+
+boost::asio::ip::tcp::socket* TcpPeer::get_socket() {
+    return socket_.get();
+}
+
+const boost::asio::ip::tcp::socket* TcpPeer::get_socket() const {
+    return socket_.get();
+}
+
 TcpPeer::TcpPeer()
-    : socket_(std::make_unique<boost::asio::ip::tcp::socket>(io_context_))
+    : socket_(std::make_unique<tcp::socket>(io_context_))
     , input_buffer_(std::make_unique<boost::asio::streambuf>())
     , output_buffer_(std::make_unique<boost::asio::streambuf>())
     , input_stream_(std::make_unique<std::istream>(input_buffer_.get()))
@@ -18,7 +32,7 @@ TcpPeer::TcpPeer()
     , processing_(false)
     , state_(ConnectionState::State::INITIAL)
     , peer_port_(0) {
-    BOOST_LOG_TRIVIAL(info) << "TcpPeer created";
+    BOOST_LOG_TRIVIAL(debug) << "TcpPeer created";
 }
 
 TcpPeer::~TcpPeer() {
@@ -46,10 +60,13 @@ TcpPeer::~TcpPeer() {
     }
 }
 
+bool TcpPeer::is_connected() const {
+    return get_connection_state() == ConnectionState::State::CONNECTED;
+}
 bool TcpPeer::connect(const std::string& address, uint16_t port) {
     auto current_state = get_connection_state();
-    if (!validate_state(ConnectionState::State::INITIAL) && 
-        !validate_state(ConnectionState::State::DISCONNECTED)) {
+    if (current_state != ConnectionState::State::INITIAL && 
+        current_state != ConnectionState::State::DISCONNECTED) {
         BOOST_LOG_TRIVIAL(warning) << "Invalid state for connection: " 
                       << ConnectionState::state_to_string(current_state)
                       << ". Must be INITIAL or DISCONNECTED.";
@@ -173,9 +190,10 @@ bool TcpPeer::connect(const std::string& address, uint16_t port) {
 }
 
 bool TcpPeer::disconnect() {
-  if (!validate_state(ConnectionState::State::CONNECTED)) {
+  auto current_state = get_connection_state();
+  if (current_state != ConnectionState::State::CONNECTED) {
     BOOST_LOG_TRIVIAL(warning) << "Invalid state for disconnection: " 
-                  << ConnectionState::state_to_string(get_connection_state());
+                  << ConnectionState::state_to_string(current_state);
     return false;
   }
 
@@ -236,12 +254,23 @@ ConnectionState::State TcpPeer::get_connection_state() const {
 }
 
 void TcpPeer::process_streams() {
-    BOOST_LOG_TRIVIAL(info) << "Starting stream processing for peer: " 
-                << peer_address_ << ":" << peer_port_;
-    
-    while (processing_ && get_connection_state() == ConnectionState::State::CONNECTED) {
-        try {
-            boost::system::error_code ec;
+        if (!socket_ || !socket_->is_open()) {
+            BOOST_LOG_TRIVIAL(error) << "Cannot process streams: socket not open";
+            handle_error(boost::system::error_code(boost::asio::error::not_connected));
+            return;
+        }
+
+        BOOST_LOG_TRIVIAL(info) << "Starting stream processing for peer: " 
+                    << peer_address_ << ":" << peer_port_;
+        
+        while (processing_ && get_connection_state() == ConnectionState::State::CONNECTED) {
+            try {
+                boost::system::error_code ec;
+                if (!socket_->is_open()) {
+                    BOOST_LOG_TRIVIAL(error) << "Socket closed during stream processing";
+                    handle_error(boost::system::error_code(boost::asio::error::connection_aborted));
+                    break;
+                }
             
             // Handle input processing
             if (input_buffer_->size() < MAX_BUFFER_SIZE) {

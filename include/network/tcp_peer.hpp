@@ -51,6 +51,11 @@ public:
     // State management - from Peer interface
     ConnectionState::State get_connection_state() const override;
 
+    // Socket access methods
+    boost::asio::ip::tcp::socket* get_socket();
+    const boost::asio::ip::tcp::socket* get_socket() const;
+    bool is_connected() const;
+
 private:
     // Internal processing
     void process_streams();
