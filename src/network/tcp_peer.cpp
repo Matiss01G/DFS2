@@ -158,7 +158,7 @@ bool TCP_Peer::disconnect() {
   }
 }
 
-bool TCP_Peer::send_stream(std::istream& input_stream, std::size_t buffer_size = 8192) {
+bool TCP_Peer::send_stream(std::istream& input_stream, std::size_t buffer_size) {
   if (!socket_ || !socket_->is_open()) {
     BOOST_LOG_TRIVIAL(error) << "[" << peer_id_ << "] Cannot send stream - socket not connected";
     return false;
@@ -202,82 +202,75 @@ bool TCP_Peer::send_stream(std::istream& input_stream, std::size_t buffer_size =
 }
 
 void TCP_Peer::process_stream() {
-  // Create work object to keep io_context running and keep peer connection running
+  // Create work object to keep io_context running indefinitely
   boost::asio::io_context::work work(io_context_);
+  
+  // Start IO service in separate thread
   std::thread io_thread([this]() { 
     try {
-      io_context_.run();
+      while (processing_active_ && socket_->is_open()) {
+        io_context_.run();
+      }
     } catch (const std::exception& e) {
       BOOST_LOG_TRIVIAL(error) << "[" << peer_id_ << "] IO context error: " << e.what();
     }
   });
 
-  // Set up deadline timer for read operations
-  boost::asio::steady_timer deadline(io_context_);
-  const auto max_idle_time = std::chrono::seconds(5);
+  // Define the read handler function type
+  using ReadHandler = std::function<void()>;
+  ReadHandler start_read;
 
-  while (processing_active_ && socket_->is_open()) {
-    try {
-      boost::system::error_code ec;
-      deadline.expires_after(max_idle_time);
+  // Initialize the read handler with self-referential lambda
+  start_read = [this, &start_read]() {
+    boost::asio::async_read_until(
+      *socket_,
+      *input_buffer_,
+      '\n',
+      [this, &start_read](const boost::system::error_code& ec, std::size_t bytes_transferred) {
+        if (!ec && bytes_transferred > 0) {
+          // Process received data
+          std::string data;
+          std::istream is(input_buffer_.get());
+          std::getline(is, data);
 
-      // Handle incoming data with proper synchronization
-      {
-        std::unique_lock<std::mutex> lock(io_mutex_);
-        // Check if data is available with timeout
-        socket_->async_wait(boost::asio::ip::tcp::socket::wait_read,
-          [this](const boost::system::error_code& ec) {
-            if (ec) {
-              BOOST_LOG_TRIVIAL(error) << "[" << peer_id_ << "] Socket wait error: " << ec.message();
-            }
-          });
-
-        if (socket_->available(ec) > 0 || !ec) {
-          // Read until newline with timeout protection
-          boost::asio::async_read_until(
-            *socket_,
-            *input_buffer_,
-            '\n',
-            [this](const boost::system::error_code& ec, std::size_t n) {
-              if (!ec && n > 0) {
-                std::string data;
-                std::istream is(input_buffer_.get());
-                std::getline(is, data);
-                if (!data.empty()) {
-                  BOOST_LOG_TRIVIAL(debug) << "[" << peer_id_ << "] Received data: " << data;
-                  // Process data through registered handler
-                  if (stream_processor_) {
-                    std::string framed_data = data + '\n';
-                    std::istringstream iss(framed_data);
-                    stream_processor_(iss);
-                  }
-                }
-              } else if (ec != boost::asio::error::would_block && 
-                        ec != boost::asio::error::try_again) {
-                BOOST_LOG_TRIVIAL(error) << "[" << peer_id_ << "] Read error: " << ec.message();
+          if (!data.empty()) {
+            BOOST_LOG_TRIVIAL(debug) << "[" << peer_id_ << "] Received data: " << data;
+            
+            // Process data through registered handler
+            if (stream_processor_) {
+              std::string framed_data = data + '\n';
+              std::istringstream iss(framed_data);
+              try {
+                stream_processor_(iss);
+              } catch (const std::exception& e) {
+                BOOST_LOG_TRIVIAL(error) << "[" << peer_id_ << "] Stream processor error: " << e.what();
               }
-            });
-        }
-      }
+            }
+          }
 
-      // Wait for either data or timeout
-      io_context_.run_one();
-      if (deadline.expires_at() <= boost::asio::steady_timer::clock_type::now()) {
-        BOOST_LOG_TRIVIAL(debug) << "[" << peer_id_ << "] Stream processing cycle completed";
-        break;
-      }
-    }
-    catch (const std::exception& e) {
-      BOOST_LOG_TRIVIAL(error) << "[" << peer_id_ << "] Stream processing error: " << e.what();
-      break;
-    }
+          // Reset read position and continue listening for next data
+          if (processing_active_ && socket_->is_open()) {
+            start_read();
+          }
+        } else if (ec != boost::asio::error::operation_aborted) {
+          BOOST_LOG_TRIVIAL(error) << "[" << peer_id_ << "] Read error: " << ec.message();
+          if (processing_active_ && socket_->is_open()) {
+            start_read();  // Try to recover by starting a new read operation
+          }
+        }
+      });
+  };
+
+  // Initial start of the read chain
+  if (processing_active_ && socket_->is_open()) {
+    start_read();
   }
 
-  // Cleanup io_context and processing thread
-  io_context_.stop();
+  // Keep the processing thread running until explicitly stopped
   if (io_thread.joinable()) {
     io_thread.join();
   }
+
   BOOST_LOG_TRIVIAL(info) << "[" << peer_id_ << "] Stream processing stopped";
 }
 

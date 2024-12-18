@@ -71,6 +71,14 @@ public:
      * handles any write errors that occur during transmission.
      */
     void async_write();
+    /**
+     * @brief Send data from an input stream through the socket
+     * @param input_stream The input stream to read from
+     * @param buffer_size Size of the buffer for reading chunks (default: 8192)
+     * @return true if the stream was sent successfully, false otherwise
+     */
+    bool send_stream(std::istream& input_stream, std::size_t buffer_size = 8192);
+
 
     /**
      * @brief Initiates an asynchronous read operation
