@@ -97,32 +97,32 @@ CMakeFiles/network_tests.dir/src/tests/connection_state_test.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/network_tests.dir/src/tests/connection_state_test.cpp.s"
 	/nix/store/9bv7dcvmfcjnmg5mnqwqlq2wxfn8d7yi-gcc-wrapper-13.2.0/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/runner/StreamCryptoDFS/src/tests/connection_state_test.cpp -o CMakeFiles/network_tests.dir/src/tests/connection_state_test.cpp.s
 
-CMakeFiles/network_tests.dir/src/tests/tcp_peer_tests.cpp.o: CMakeFiles/network_tests.dir/flags.make
-CMakeFiles/network_tests.dir/src/tests/tcp_peer_tests.cpp.o: /home/runner/StreamCryptoDFS/src/tests/tcp_peer_tests.cpp
-CMakeFiles/network_tests.dir/src/tests/tcp_peer_tests.cpp.o: CMakeFiles/network_tests.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/StreamCryptoDFS/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/network_tests.dir/src/tests/tcp_peer_tests.cpp.o"
-	/nix/store/9bv7dcvmfcjnmg5mnqwqlq2wxfn8d7yi-gcc-wrapper-13.2.0/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/network_tests.dir/src/tests/tcp_peer_tests.cpp.o -MF CMakeFiles/network_tests.dir/src/tests/tcp_peer_tests.cpp.o.d -o CMakeFiles/network_tests.dir/src/tests/tcp_peer_tests.cpp.o -c /home/runner/StreamCryptoDFS/src/tests/tcp_peer_tests.cpp
+CMakeFiles/network_tests.dir/src/tests/tcp_peer_test.cpp.o: CMakeFiles/network_tests.dir/flags.make
+CMakeFiles/network_tests.dir/src/tests/tcp_peer_test.cpp.o: /home/runner/StreamCryptoDFS/src/tests/tcp_peer_test.cpp
+CMakeFiles/network_tests.dir/src/tests/tcp_peer_test.cpp.o: CMakeFiles/network_tests.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/StreamCryptoDFS/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/network_tests.dir/src/tests/tcp_peer_test.cpp.o"
+	/nix/store/9bv7dcvmfcjnmg5mnqwqlq2wxfn8d7yi-gcc-wrapper-13.2.0/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/network_tests.dir/src/tests/tcp_peer_test.cpp.o -MF CMakeFiles/network_tests.dir/src/tests/tcp_peer_test.cpp.o.d -o CMakeFiles/network_tests.dir/src/tests/tcp_peer_test.cpp.o -c /home/runner/StreamCryptoDFS/src/tests/tcp_peer_test.cpp
 
-CMakeFiles/network_tests.dir/src/tests/tcp_peer_tests.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/network_tests.dir/src/tests/tcp_peer_tests.cpp.i"
-	/nix/store/9bv7dcvmfcjnmg5mnqwqlq2wxfn8d7yi-gcc-wrapper-13.2.0/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/runner/StreamCryptoDFS/src/tests/tcp_peer_tests.cpp > CMakeFiles/network_tests.dir/src/tests/tcp_peer_tests.cpp.i
+CMakeFiles/network_tests.dir/src/tests/tcp_peer_test.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/network_tests.dir/src/tests/tcp_peer_test.cpp.i"
+	/nix/store/9bv7dcvmfcjnmg5mnqwqlq2wxfn8d7yi-gcc-wrapper-13.2.0/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/runner/StreamCryptoDFS/src/tests/tcp_peer_test.cpp > CMakeFiles/network_tests.dir/src/tests/tcp_peer_test.cpp.i
 
-CMakeFiles/network_tests.dir/src/tests/tcp_peer_tests.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/network_tests.dir/src/tests/tcp_peer_tests.cpp.s"
-	/nix/store/9bv7dcvmfcjnmg5mnqwqlq2wxfn8d7yi-gcc-wrapper-13.2.0/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/runner/StreamCryptoDFS/src/tests/tcp_peer_tests.cpp -o CMakeFiles/network_tests.dir/src/tests/tcp_peer_tests.cpp.s
+CMakeFiles/network_tests.dir/src/tests/tcp_peer_test.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/network_tests.dir/src/tests/tcp_peer_test.cpp.s"
+	/nix/store/9bv7dcvmfcjnmg5mnqwqlq2wxfn8d7yi-gcc-wrapper-13.2.0/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/runner/StreamCryptoDFS/src/tests/tcp_peer_test.cpp -o CMakeFiles/network_tests.dir/src/tests/tcp_peer_test.cpp.s
 
 # Object files for target network_tests
 network_tests_OBJECTS = \
 "CMakeFiles/network_tests.dir/src/tests/network_test.cpp.o" \
 "CMakeFiles/network_tests.dir/src/tests/connection_state_test.cpp.o" \
-"CMakeFiles/network_tests.dir/src/tests/tcp_peer_tests.cpp.o"
+"CMakeFiles/network_tests.dir/src/tests/tcp_peer_test.cpp.o"
 
 # External object files for target network_tests
 network_tests_EXTERNAL_OBJECTS =
 
 network_tests: CMakeFiles/network_tests.dir/src/tests/network_test.cpp.o
 network_tests: CMakeFiles/network_tests.dir/src/tests/connection_state_test.cpp.o
-network_tests: CMakeFiles/network_tests.dir/src/tests/tcp_peer_tests.cpp.o
+network_tests: CMakeFiles/network_tests.dir/src/tests/tcp_peer_test.cpp.o
 network_tests: CMakeFiles/network_tests.dir/build.make
 network_tests: libdfs_network.a
 network_tests: libdfs_crypto.a
