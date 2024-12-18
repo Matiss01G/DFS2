@@ -10,23 +10,78 @@ class TCP_PeerTest : public ::testing::Test {
 protected:
     boost::asio::io_context io_context_;
     std::unique_ptr<boost::asio::ip::tcp::acceptor> acceptor_;
-    const uint16_t test_port = 12345;
+    uint16_t test_port = 12345;
     
+    static const int MAX_RETRIES = 5;
+    static const int RETRY_DELAY_MS = 100;
+
     void SetUp() override {
-        // Set up a test server
-        acceptor_ = std::make_unique<boost::asio::ip::tcp::acceptor>(
-            io_context_,
-            boost::asio::ip::tcp::endpoint(
-                boost::asio::ip::tcp::v4(),
-                test_port
-            )
-        );
+        // Set up a test server with retries
+        boost::system::error_code ec;
+        acceptor_ = std::make_unique<boost::asio::ip::tcp::acceptor>(io_context_);
+        
+        int retries = 0;
+        bool success = false;
+        
+        while (!success && retries < MAX_RETRIES) {
+            ec.clear();
+            acceptor_->open(boost::asio::ip::tcp::v4(), ec);
+            
+            if (!ec) {
+                // Enable address reuse and other socket options
+                acceptor_->set_option(boost::asio::ip::tcp::acceptor::reuse_address(true), ec);
+                acceptor_->set_option(boost::asio::socket_base::linger(true, 0), ec);
+                
+                if (!ec) {
+                    acceptor_->bind(boost::asio::ip::tcp::endpoint(
+                        boost::asio::ip::tcp::v4(), test_port + retries), ec);
+                    
+                    if (!ec) {
+                        acceptor_->listen(boost::asio::socket_base::max_listen_connections, ec);
+                        if (!ec) {
+                            test_port = test_port + retries;  // Update the port if we bound to a different one
+                            success = true;
+                            break;
+                        }
+                    }
+                }
+            }
+            
+            if (!success) {
+                acceptor_->close(ec);
+                std::this_thread::sleep_for(std::chrono::milliseconds(RETRY_DELAY_MS));
+                retries++;
+            }
+        }
+        
+        if (!success) {
+            FAIL() << "Failed to set up test server after " << MAX_RETRIES 
+                  << " retries. Last error: " << ec.message();
+        }
     }
 
     void TearDown() override {
-        if (acceptor_ && acceptor_->is_open()) {
-            acceptor_->close();
+        if (acceptor_) {
+            boost::system::error_code ec;
+            
+            // Cancel any pending operations
+            acceptor_->cancel(ec);
+            
+            // Ensure the acceptor is closed properly
+            if (acceptor_->is_open()) {
+                acceptor_->close(ec);
+            }
+            
+            // Reset the acceptor
+            acceptor_.reset();
         }
+        
+        // Stop and reset io_context
+        io_context_.stop();
+        io_context_.reset();
+        
+        // Allow some time for socket cleanup
+        std::this_thread::sleep_for(std::chrono::milliseconds(RETRY_DELAY_MS));
     }
 
     // Helper to run test server in background
@@ -37,16 +92,35 @@ protected:
                 acceptor_->accept(socket);
                 
                 // Echo server implementation
+                boost::asio::streambuf buffer;
                 while (socket.is_open()) {
-                    boost::asio::streambuf buf;
                     boost::system::error_code ec;
-                    size_t n = boost::asio::read(socket, buf, 
-                        boost::asio::transfer_at_least(1), ec);
                     
-                    if (ec) break;
+                    // Read until newline
+                    std::size_t n = boost::asio::read_until(socket, buffer, '\n', ec);
+                    if (ec) {
+                        if (ec != boost::asio::error::eof) {
+                            BOOST_LOG_TRIVIAL(error) << "Echo server read error: " << ec.message();
+                        }
+                        break;
+                    }
                     
-                    boost::asio::write(socket, buf.data(), ec);
-                    if (ec) break;
+                    if (n > 0) {
+                        // Get the line from the buffer
+                        std::string line(
+                            boost::asio::buffers_begin(buffer.data()),
+                            boost::asio::buffers_begin(buffer.data()) + n);
+                        buffer.consume(n);  // Remove consumed data
+                        
+                        BOOST_LOG_TRIVIAL(debug) << "Echo server received: " << line;
+                        
+                        // Echo it back
+                        boost::asio::write(socket, boost::asio::buffer(line), ec);
+                        if (ec) {
+                            BOOST_LOG_TRIVIAL(error) << "Echo server write error: " << ec.message();
+                            break;
+                        }
+                    }
                 }
             }
             catch (const std::exception& e) {
@@ -109,14 +183,38 @@ TEST_F(TCP_PeerTest, StreamOperations) {
     EXPECT_NE(peer.get_input_stream(), nullptr);
     
     // Test data transfer
-    std::string test_data = "Hello, TCP!";
-    *peer.get_output_stream() << test_data << std::flush;
+    const std::string test_data = "Hello,TCP!\n";  // Add newline as frame delimiter
     
+    // Write data
+    std::ostream* out = peer.get_output_stream();
+    ASSERT_NE(out, nullptr);
+    *out << test_data;  // Use operator<< for proper stream handling
+    out->flush();
+    
+    // Read response with timeout
+    std::istream* in = peer.get_input_stream();
+    ASSERT_NE(in, nullptr);
+    
+    auto start = std::chrono::steady_clock::now();
     std::string received_data;
-    *peer.get_input_stream() >> received_data;
+    std::string line;
     
-    EXPECT_EQ(received_data, test_data);
+    while (std::chrono::steady_clock::now() - start < std::chrono::seconds(1)) {
+        if (std::getline(*in, line)) {
+            received_data = line + '\n';  // Re-add the newline that getline removes
+            break;
+        }
+        
+        if (in->fail() && !in->eof()) {
+            in->clear();  // Clear error flags if not EOF
+        }
+        
+        std::this_thread::sleep_for(std::chrono::milliseconds(10));
+    }
     
+    EXPECT_EQ(received_data, test_data) << "Data mismatch or timeout occurred";
+    
+    // Cleanup
     peer.disconnect();
 }
 
@@ -138,12 +236,29 @@ TEST_F(TCP_PeerTest, StreamProcessorOperations) {
     
     // Test processing start/stop
     EXPECT_TRUE(peer.start_stream_processing());
-    std::string test_data = "ProcessThis";
-    *peer.get_output_stream() << test_data << std::flush;
     
-    // Allow time for processing
-    std::this_thread::sleep_for(std::chrono::milliseconds(100));
-    EXPECT_EQ(received_data, test_data);
+    const std::string test_data = "ProcessThis\n";  // Add newline as frame delimiter
+    std::ostream* out = peer.get_output_stream();
+    ASSERT_NE(out, nullptr);
+    *out << test_data;
+    out->flush();
+    
+    // Wait for processor to receive data with timeout
+    auto start = std::chrono::steady_clock::now();
+    while (received_data.empty() && 
+           std::chrono::steady_clock::now() - start < std::chrono::seconds(1)) {
+        std::this_thread::sleep_for(std::chrono::milliseconds(10));
+    }
+    
+    // Remove newline from received data for comparison
+    if (!received_data.empty() && received_data.back() == '\n') {
+        received_data.pop_back();
+    }
+    if (test_data.back() == '\n') {
+        test_data.pop_back();
+    }
+    
+    EXPECT_EQ(received_data, test_data) << "Stream processor did not receive expected data";
     
     // Test cleanup
     peer.stop_stream_processing();
@@ -183,7 +298,4 @@ TEST_F(TCP_PeerTest, ConcurrentOperations) {
     peer.disconnect();
 }
 
-int main(int argc, char **argv) {
-    testing::InitGoogleTest(&argc, argv);
-    return RUN_ALL_TESTS();
-}
+// Main function is defined in network_test.cpp

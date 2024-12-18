@@ -82,13 +82,11 @@ bool TCP_Peer::disconnect() {
     try {
         connection_state_.transition_to(ConnectionState::State::DISCONNECTING);
         
+        // First stop any ongoing stream processing
         stop_stream_processing();
         
-        if (socket_->is_open()) {
-            boost::system::error_code ec;
-            socket_->shutdown(boost::asio::ip::tcp::socket::shutdown_both, ec);
-            socket_->close(ec);
-        }
+        // Then cleanup the connection
+        cleanup_connection();
 
         connection_state_.transition_to(ConnectionState::State::DISCONNECTED);
         BOOST_LOG_TRIVIAL(info) << "Disconnected peer: " << peer_id_;
@@ -153,18 +151,36 @@ void TCP_Peer::process_stream() {
     while (processing_active_ && socket_->is_open()) {
         try {
             boost::system::error_code ec;
-            size_t bytes = boost::asio::read(*socket_, *input_buffer_,
-                boost::asio::transfer_at_least(1), ec);
-
+            
+            // Read data into the input buffer until we get a complete line
+            size_t n = boost::asio::read_until(*socket_, *input_buffer_, '\n', ec);
             if (ec) {
                 if (ec != boost::asio::error::eof) {
                     BOOST_LOG_TRIVIAL(error) << "Read error: " << ec.message();
                 }
                 break;
             }
-
-            if (bytes > 0 && stream_processor_) {
-                stream_processor_(*input_stream_);
+            
+            if (n > 0) {
+                if (stream_processor_) {
+                    // Use stream processor if available
+                    stream_processor_(*input_stream_);
+                    input_buffer_->consume(n);  // Remove processed data
+                } else {
+                    // Without processor, just keep data in buffer for normal stream operations
+                    BOOST_LOG_TRIVIAL(debug) << "Received " << n << " bytes of data";
+                }
+                
+                // Handle any output data
+                if (output_buffer_->size() > 0) {
+                    boost::asio::write(*socket_, *output_buffer_, ec);
+                    if (!ec) {
+                        output_buffer_->consume(output_buffer_->size());
+                    } else {
+                        BOOST_LOG_TRIVIAL(error) << "Write error: " << ec.message();
+                        break;
+                    }
+                }
             }
         }
         catch (const std::exception& e) {
@@ -186,24 +202,41 @@ bool TCP_Peer::validate_connection_state(ConnectionState::State required_state) 
 }
 
 void TCP_Peer::cleanup_connection() {
-    if (socket_ && socket_->is_open()) {
-        try {
-            boost::system::error_code ec;
-            socket_->shutdown(boost::asio::ip::tcp::socket::shutdown_both, ec);
-            socket_->close(ec);
-        }
-        catch (const std::exception& e) {
-            BOOST_LOG_TRIVIAL(error) << "Error during connection cleanup: " << e.what();
-        }
-    }
-    
-    endpoint_.reset();
+    // First, ensure processing is stopped
     processing_active_ = false;
     
     if (processing_thread_ && processing_thread_->joinable()) {
         processing_thread_->join();
+        processing_thread_.reset();
     }
-    processing_thread_.reset();
+    
+    // Then cleanup socket
+    if (socket_) {
+        boost::system::error_code ec;
+        if (socket_->is_open()) {
+            // Shutdown the socket first
+            socket_->shutdown(boost::asio::ip::tcp::socket::shutdown_both, ec);
+            if (ec) {
+                BOOST_LOG_TRIVIAL(error) << "Socket shutdown error: " << ec.message();
+            }
+            
+            // Then close it
+            socket_->close(ec);
+            if (ec) {
+                BOOST_LOG_TRIVIAL(error) << "Socket close error: " << ec.message();
+            }
+        }
+    }
+    
+    // Clear any remaining data in buffers
+    if (input_buffer_) {
+        input_buffer_->consume(input_buffer_->size());
+    }
+    if (output_buffer_) {
+        output_buffer_->consume(output_buffer_->size());
+    }
+    
+    endpoint_.reset();
 }
 
 } // namespace network

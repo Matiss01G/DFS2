@@ -29,6 +29,7 @@ public:
     // Connection management
     bool connect(const std::string& address, uint16_t port) override;
     bool disconnect() override;
+    bool is_connected() const { return get_connection_state() == ConnectionState::State::CONNECTED; }
 
     // Stream operations
     std::ostream* get_output_stream() override;
