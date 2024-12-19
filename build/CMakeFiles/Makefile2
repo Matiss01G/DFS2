@@ -168,12 +168,12 @@ CMakeFiles/network_tests.dir/all: CMakeFiles/dfs_crypto.dir/all
 CMakeFiles/network_tests.dir/all: CMakeFiles/dfs_network.dir/all
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/network_tests.dir/build.make CMakeFiles/network_tests.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/network_tests.dir/build.make CMakeFiles/network_tests.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/runner/StreamCryptoDFS/build/CMakeFiles --progress-num=7,8,9,10 "Built target network_tests"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/runner/StreamCryptoDFS/build/CMakeFiles --progress-num=7,8,9 "Built target network_tests"
 .PHONY : CMakeFiles/network_tests.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/network_tests.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/StreamCryptoDFS/build/CMakeFiles 8
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/StreamCryptoDFS/build/CMakeFiles 7
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/network_tests.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/StreamCryptoDFS/build/CMakeFiles 0
 .PHONY : CMakeFiles/network_tests.dir/rule
@@ -200,7 +200,7 @@ CMakeFiles/run_tests.dir/all: CMakeFiles/network_tests.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/run_tests.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/StreamCryptoDFS/build/CMakeFiles 10
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/StreamCryptoDFS/build/CMakeFiles 9
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/run_tests.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/StreamCryptoDFS/build/CMakeFiles 0
 .PHONY : CMakeFiles/run_tests.dir/rule
