@@ -1,46 +1,47 @@
-#include "../../include/store/store.hpp"
+#include "store/store.hpp"
 #include <iomanip>
 #include <boost/log/trivial.hpp>
 
 namespace dfs {
+namespace store {
 
-// Initialize store with base directory path
+// Initialize store with base directory path and ensure it exists
 Store::Store(const std::string& base_path) : base_path_(base_path) {
     BOOST_LOG_TRIVIAL(info) << "Initializing Store with base path: " << base_path;
-    ensure_directory_exists(base_path_);
+    ensure_directory_exists(base_path_); // Create base directory if it doesn't exist
     BOOST_LOG_TRIVIAL(debug) << "Store directory created/verified at: " << base_path;
 }
 
 void Store::store(const std::string& key, std::istream& data) {
     BOOST_LOG_TRIVIAL(info) << "Storing data with key: " << key;
     
-    // Validate input stream before processing
+    // Check stream state before attempting any operations
     if (!data.good()) {
         BOOST_LOG_TRIVIAL(error) << "Invalid input stream provided for key: " << key;
         throw StoreError("Invalid input stream");
     }
 
-    // Generate file path from key hash
-    std::string hash = hash_key(key);
-    std::filesystem::path file_path = get_path_for_hash(hash);
-    ensure_directory_exists(file_path.parent_path());
+    // Create hierarchical directory structure based on key hash
+    std::string hash = hash_key(key);  // Generate SHA-256 hash from key
+    std::filesystem::path file_path = get_path_for_hash(hash);  // Convert hash to path
+    ensure_directory_exists(file_path.parent_path());  // Create directories if needed
 
     BOOST_LOG_TRIVIAL(debug) << "Calculated file path: " << file_path.string();
     
-    // Open output file in binary mode
+    // Create output file in binary mode for cross-platform compatibility
     std::ofstream file(file_path, std::ios::binary);
     if (!file) {
         throw StoreError("Failed to create file: " + file_path.string());
     }
 
-    // Copy data from input stream to file using buffer for efficiency
+    // Stream data in chunks for memory efficiency
     size_t bytes_written = 0;
-    char buffer[4096];  // 4KB buffer size for optimal I/O performance
-    while (data.read(buffer, sizeof(buffer))) {
+    char buffer[4096];  // 4KB chunks balance memory usage and I/O performance
+    while (data.read(buffer, sizeof(buffer))) {  // Read full chunks
         file.write(buffer, data.gcount());
         bytes_written += data.gcount();
     }
-    // Write remaining bytes from last partial buffer
+    // Handle final partial chunk if any
     file.write(buffer, data.gcount());
     bytes_written += data.gcount();
 
@@ -110,40 +111,42 @@ void Store::clear() {
 std::string Store::hash_key(const std::string& key) const {
     BOOST_LOG_TRIVIAL(debug) << "Generating hash for key: " << key;
     
-    // Initialize OpenSSL EVP context for SHA-256 hashing
+    // Allocate buffer for hash output - EVP_MAX_MD_SIZE ensures enough space for any hash
     unsigned char hash[EVP_MAX_MD_SIZE];
     unsigned int hash_len;
     
-    // Create new EVP message digest context
+    // Create OpenSSL EVP message digest context for secure hashing
     EVP_MD_CTX* ctx = EVP_MD_CTX_new();
     if (!ctx) {
         throw StoreError("Failed to create hash context");
     }
     
-    // Initialize context with SHA-256 algorithm
+    // Set up SHA-256 algorithm - modern, secure, and suitable for file addressing
     if (!EVP_DigestInit_ex(ctx, EVP_sha256(), nullptr)) {
         EVP_MD_CTX_free(ctx);
         throw StoreError("Failed to initialize hash context");
     }
     
-    // Update hash with input key data
+    // Process the input key - converts string to secure hash
     if (!EVP_DigestUpdate(ctx, key.c_str(), key.length())) {
         EVP_MD_CTX_free(ctx);
         throw StoreError("Failed to update hash");
     }
     
-    // Finalize hash calculation
+    // Get the final hash value and cleanup
     if (!EVP_DigestFinal_ex(ctx, hash, &hash_len)) {
         EVP_MD_CTX_free(ctx);
         throw StoreError("Failed to finalize hash");
     }
     
-    EVP_MD_CTX_free(ctx);
+    EVP_MD_CTX_free(ctx);  // Always free context to prevent memory leaks
     
-    // Convert binary hash to hexadecimal string
+    // Convert raw hash bytes to human-readable hex string
+    // Each byte becomes two hex characters, with leading zeros preserved
     std::stringstream ss;
     for (unsigned int i = 0; i < hash_len; i++) {
-        ss << std::hex << std::setw(2) << std::setfill('0') << static_cast<int>(hash[i]);
+        ss << std::hex << std::setw(2) << std::setfill('0') 
+           << static_cast<int>(hash[i]);  // Zero-padded hex format
     }
     
     std::string result = ss.str();
@@ -152,13 +155,15 @@ std::string Store::hash_key(const std::string& key) const {
 }
 
 std::filesystem::path Store::get_path_for_hash(const std::string& hash) const {
-    // Create hierarchical path structure:
-    // base_path/aa/bb/cc/remaininghash
-    // where aa, bb, cc are first three 2-character segments of hash
+    
     std::filesystem::path path = base_path_;
+    
+    // Create three directory levels with 2 chars each (16-bit spread per level)
     for (size_t i = 0; i < 6; i += 2) {
-        path /= hash.substr(i, 2);
+        path /= hash.substr(i, 2);  // Extract 2-char segments for each level
     }
+    
+    // Use remaining hash characters as filename
     path /= hash.substr(6);
     
     BOOST_LOG_TRIVIAL(debug) << "Calculated hierarchical path: " << path.string();
@@ -172,4 +177,5 @@ void Store::ensure_directory_exists(const std::filesystem::path& path) const {
     }
 }
 
+} // namespace store
 } // namespace dfs
