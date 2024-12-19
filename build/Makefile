@@ -356,6 +356,30 @@ src/tests/network_test.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/network_tests.dir/build.make CMakeFiles/network_tests.dir/src/tests/network_test.cpp.s
 .PHONY : src/tests/network_test.cpp.s
 
+src/tests/peer_manager_test.o: src/tests/peer_manager_test.cpp.o
+.PHONY : src/tests/peer_manager_test.o
+
+# target to build an object file
+src/tests/peer_manager_test.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/network_tests.dir/build.make CMakeFiles/network_tests.dir/src/tests/peer_manager_test.cpp.o
+.PHONY : src/tests/peer_manager_test.cpp.o
+
+src/tests/peer_manager_test.i: src/tests/peer_manager_test.cpp.i
+.PHONY : src/tests/peer_manager_test.i
+
+# target to preprocess a source file
+src/tests/peer_manager_test.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/network_tests.dir/build.make CMakeFiles/network_tests.dir/src/tests/peer_manager_test.cpp.i
+.PHONY : src/tests/peer_manager_test.cpp.i
+
+src/tests/peer_manager_test.s: src/tests/peer_manager_test.cpp.s
+.PHONY : src/tests/peer_manager_test.s
+
+# target to generate assembly for a file
+src/tests/peer_manager_test.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/network_tests.dir/build.make CMakeFiles/network_tests.dir/src/tests/peer_manager_test.cpp.s
+.PHONY : src/tests/peer_manager_test.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -389,6 +413,9 @@ help:
 	@echo "... src/tests/network_test.o"
 	@echo "... src/tests/network_test.i"
 	@echo "... src/tests/network_test.s"
+	@echo "... src/tests/peer_manager_test.o"
+	@echo "... src/tests/peer_manager_test.i"
+	@echo "... src/tests/peer_manager_test.s"
 .PHONY : help
 
 
