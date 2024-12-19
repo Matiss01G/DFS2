@@ -14,7 +14,7 @@ Store::Store(const std::string& base_path) : base_path_(base_path) {
 
 void Store::store(const std::string& key, std::istream& data) {
     BOOST_LOG_TRIVIAL(info) << "Storing data with key: " << key;
-    
+
     // Check stream state before attempting any operations
     if (!data.good()) {
         BOOST_LOG_TRIVIAL(error) << "Invalid input stream provided for key: " << key;
@@ -27,7 +27,7 @@ void Store::store(const std::string& key, std::istream& data) {
     ensure_directory_exists(file_path.parent_path());  // Create directories if needed
 
     BOOST_LOG_TRIVIAL(debug) << "Calculated file path: " << file_path.string();
-    
+
     // Create output file in binary mode for cross-platform compatibility
     std::ofstream file(file_path, std::ios::binary);
     if (!file) {
@@ -37,40 +37,67 @@ void Store::store(const std::string& key, std::istream& data) {
     // Stream data in chunks for memory efficiency
     size_t bytes_written = 0;
     char buffer[4096];  // 4KB chunks balance memory usage and I/O performance
+
+    // Handle empty stream case
+    data.peek();
+    if (data.eof()) {
+        BOOST_LOG_TRIVIAL(debug) << "Storing empty content for key: " << key;
+        file.close();
+        BOOST_LOG_TRIVIAL(info) << "Successfully stored 0 bytes with key: " << key;
+        return;
+    }
+
     while (data.read(buffer, sizeof(buffer))) {  // Read full chunks
         file.write(buffer, data.gcount());
         bytes_written += data.gcount();
     }
-    // Handle final partial chunk if any exists
+    // Handle final partial chunk if any
     if (data.gcount() > 0) {
         file.write(buffer, data.gcount());
         bytes_written += data.gcount();
     }
 
+    file.close();
     BOOST_LOG_TRIVIAL(info) << "Successfully stored " << bytes_written << " bytes with key: " << key;
 }
 
 std::unique_ptr<std::stringstream> Store::get(const std::string& key) {
     BOOST_LOG_TRIVIAL(info) << "Retrieving data for key: " << key;
-    
+
     // Generate file path and verify existence
     std::string hash = hash_key(key);
     std::filesystem::path file_path = get_path_for_hash(hash);
-    
+
     if (!std::filesystem::exists(file_path)) {
         BOOST_LOG_TRIVIAL(error) << "File not found: " << file_path.string();
         throw StoreError("File not found");
     }
-    
+
+    // Create a new stringstream for the result
+    auto result = std::make_unique<std::stringstream>(std::ios::in | std::ios::out | std::ios::binary);
+
+    // Handle empty file case
+    if (std::filesystem::file_size(file_path) == 0) {
+        BOOST_LOG_TRIVIAL(debug) << "Retrieved empty content for key: " << key;
+        return result;
+    }
+
     // Open file in binary mode and stream content
     std::ifstream file(file_path, std::ios::binary);
     if (!file) {
         throw StoreError("Failed to open file: " + file_path.string());
     }
-    
-    // Create and return memory stream containing file data
-    auto result = std::make_unique<std::stringstream>();
+
+    // Copy file contents to stringstream
     *result << file.rdbuf();
+
+    // Verify stream state and reset position
+    if (!result->good()) {
+        throw StoreError("Failed to read file contents");
+    }
+
+    result->seekg(0);  // Reset read position to beginning
+    BOOST_LOG_TRIVIAL(debug) << "Successfully retrieved data for key: " << key;
     return result;
 }
 
@@ -88,11 +115,11 @@ bool Store::has(const std::string& key) const {
 
 void Store::remove(const std::string& key) {
     BOOST_LOG_TRIVIAL(info) << "Removing file with key: " << key;
-    
+
     // Calculate path and attempt deletion
     std::string hash = hash_key(key);
     std::filesystem::path file_path = get_path_for_hash(hash);
-    
+
     if (std::filesystem::remove(file_path)) {
         BOOST_LOG_TRIVIAL(info) << "Successfully removed file with key: " << key;
     } else {
@@ -112,37 +139,37 @@ void Store::clear() {
 
 std::string Store::hash_key(const std::string& key) const {
     BOOST_LOG_TRIVIAL(debug) << "Generating hash for key: " << key;
-    
+
     // Allocate buffer for hash output - EVP_MAX_MD_SIZE ensures enough space for any hash
     unsigned char hash[EVP_MAX_MD_SIZE];
     unsigned int hash_len;
-    
+
     // Create OpenSSL EVP message digest context for secure hashing
     EVP_MD_CTX* ctx = EVP_MD_CTX_new();
     if (!ctx) {
         throw StoreError("Failed to create hash context");
     }
-    
+
     // Set up SHA-256 algorithm - modern, secure, and suitable for file addressing
     if (!EVP_DigestInit_ex(ctx, EVP_sha256(), nullptr)) {
         EVP_MD_CTX_free(ctx);
         throw StoreError("Failed to initialize hash context");
     }
-    
+
     // Process the input key - converts string to secure hash
     if (!EVP_DigestUpdate(ctx, key.c_str(), key.length())) {
         EVP_MD_CTX_free(ctx);
         throw StoreError("Failed to update hash");
     }
-    
+
     // Get the final hash value and cleanup
     if (!EVP_DigestFinal_ex(ctx, hash, &hash_len)) {
         EVP_MD_CTX_free(ctx);
         throw StoreError("Failed to finalize hash");
     }
-    
+
     EVP_MD_CTX_free(ctx);  // Always free context to prevent memory leaks
-    
+
     // Convert raw hash bytes to human-readable hex string
     // Each byte becomes two hex characters, with leading zeros preserved
     std::stringstream ss;
@@ -150,24 +177,24 @@ std::string Store::hash_key(const std::string& key) const {
         ss << std::hex << std::setw(2) << std::setfill('0') 
            << static_cast<int>(hash[i]);  // Zero-padded hex format
     }
-    
+
     std::string result = ss.str();
     BOOST_LOG_TRIVIAL(debug) << "Generated hash: " << result;
     return result;
 }
 
 std::filesystem::path Store::get_path_for_hash(const std::string& hash) const {
-    
+
     std::filesystem::path path = base_path_;
-    
+
     // Create three directory levels with 2 chars each (16-bit spread per level)
     for (size_t i = 0; i < 6; i += 2) {
         path /= hash.substr(i, 2);  // Extract 2-char segments for each level
     }
-    
+
     // Use remaining hash characters as filename
     path /= hash.substr(6);
-    
+
     BOOST_LOG_TRIVIAL(debug) << "Calculated hierarchical path: " << path.string();
     return path;
 }
