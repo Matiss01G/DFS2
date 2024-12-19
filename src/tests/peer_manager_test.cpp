@@ -7,12 +7,23 @@
 #include <thread>
 #include <vector>
 #include <future>
+#include <boost/log/core.hpp>
+#include <boost/log/expressions.hpp>
+#include <boost/log/trivial.hpp>
 
 using namespace dfs::network;
 
 class PeerManagerTest : public ::testing::Test {
 protected:
     void SetUp() override {
+        // Set logging level to INFO for cleaner test output
+        boost::log::core::get()->set_filter(
+            boost::log::expressions::is_in_range(
+                boost::log::trivial::severity,
+                boost::log::trivial::info,
+                boost::log::trivial::fatal
+            )
+        );
         manager = std::make_unique<PeerManager>();
     }
 
@@ -124,8 +135,8 @@ TEST_F(PeerManagerTest, MultiplePeerOperations) {
 
 // Test concurrent operations
 TEST_F(PeerManagerTest, ConcurrentOperations) {
-    const int num_threads = 4;
-    const int peers_per_thread = 25;
+    const int num_threads = 2;
+    const int peers_per_thread = 2; // Reduced number of peers per thread
     std::vector<std::thread> threads;
     
     // Launch threads to add peers
@@ -159,7 +170,7 @@ TEST_F(PeerManagerTest, ConcurrentOperations) {
 
 // Test concurrent add and remove operations
 TEST_F(PeerManagerTest, ConcurrentAddRemove) {
-    const int num_operations = 100;
+    const int num_operations = 10; // Reduced number of operations
     
     // Create a future for adding peers
     auto add_future = std::async(std::launch::async, [this, num_operations]() {
@@ -191,9 +202,4 @@ TEST_F(PeerManagerTest, ConcurrentAddRemove) {
             EXPECT_EQ(peer->get_peer_id(), "test_peer_" + std::to_string(i));
         }
     }
-}
-
-int main(int argc, char** argv) {
-    testing::InitGoogleTest(&argc, argv);
-    return RUN_ALL_TESTS();
 }

@@ -29,6 +29,7 @@ target_link_libraries(dfs_crypto PUBLIC
 # Create network library
 add_library(dfs_network
     src/network/tcp_peer.cpp
+    src/network/peer_manager.cpp
 )
 target_include_directories(dfs_network PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>

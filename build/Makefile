@@ -260,6 +260,30 @@ src/crypto/crypto_stream.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/dfs_crypto.dir/build.make CMakeFiles/dfs_crypto.dir/src/crypto/crypto_stream.cpp.s
 .PHONY : src/crypto/crypto_stream.cpp.s
 
+src/network/peer_manager.o: src/network/peer_manager.cpp.o
+.PHONY : src/network/peer_manager.o
+
+# target to build an object file
+src/network/peer_manager.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/dfs_network.dir/build.make CMakeFiles/dfs_network.dir/src/network/peer_manager.cpp.o
+.PHONY : src/network/peer_manager.cpp.o
+
+src/network/peer_manager.i: src/network/peer_manager.cpp.i
+.PHONY : src/network/peer_manager.i
+
+# target to preprocess a source file
+src/network/peer_manager.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/dfs_network.dir/build.make CMakeFiles/dfs_network.dir/src/network/peer_manager.cpp.i
+.PHONY : src/network/peer_manager.cpp.i
+
+src/network/peer_manager.s: src/network/peer_manager.cpp.s
+.PHONY : src/network/peer_manager.s
+
+# target to generate assembly for a file
+src/network/peer_manager.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/dfs_network.dir/build.make CMakeFiles/dfs_network.dir/src/network/peer_manager.cpp.s
+.PHONY : src/network/peer_manager.cpp.s
+
 src/network/tcp_peer.o: src/network/tcp_peer.cpp.o
 .PHONY : src/network/tcp_peer.o
 
@@ -401,6 +425,9 @@ help:
 	@echo "... src/crypto/crypto_stream.o"
 	@echo "... src/crypto/crypto_stream.i"
 	@echo "... src/crypto/crypto_stream.s"
+	@echo "... src/network/peer_manager.o"
+	@echo "... src/network/peer_manager.i"
+	@echo "... src/network/peer_manager.s"
 	@echo "... src/network/tcp_peer.o"
 	@echo "... src/network/tcp_peer.i"
 	@echo "... src/network/tcp_peer.s"

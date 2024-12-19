@@ -19,7 +19,7 @@ void PeerManager::add_peer(std::shared_ptr<TCP_Peer> peer) {
     }
 
     std::lock_guard<std::mutex> lock(mutex_);
-    const std::string& peer_id = peer->get_id();
+    const std::string& peer_id = peer->get_peer_id();
     
     auto it = peers_.find(peer_id);
     if (it != peers_.end()) {
