@@ -13,6 +13,7 @@ find_package(GTest REQUIRED)
 # Create crypto library
 add_library(dfs_crypto
     src/crypto/crypto_stream.cpp
+    src/store/store.cpp
 )
 target_include_directories(dfs_crypto PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>

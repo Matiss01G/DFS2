@@ -321,6 +321,30 @@ src/network/tcp_peer.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/dfs_network.dir/build.make CMakeFiles/dfs_network.dir/src/network/tcp_peer.cpp.s
 .PHONY : src/network/tcp_peer.cpp.s
 
+src/store/store.o: src/store/store.cpp.o
+.PHONY : src/store/store.o
+
+# target to build an object file
+src/store/store.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/dfs_crypto.dir/build.make CMakeFiles/dfs_crypto.dir/src/store/store.cpp.o
+.PHONY : src/store/store.cpp.o
+
+src/store/store.i: src/store/store.cpp.i
+.PHONY : src/store/store.i
+
+# target to preprocess a source file
+src/store/store.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/dfs_crypto.dir/build.make CMakeFiles/dfs_crypto.dir/src/store/store.cpp.i
+.PHONY : src/store/store.cpp.i
+
+src/store/store.s: src/store/store.cpp.s
+.PHONY : src/store/store.s
+
+# target to generate assembly for a file
+src/store/store.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/dfs_crypto.dir/build.make CMakeFiles/dfs_crypto.dir/src/store/store.cpp.s
+.PHONY : src/store/store.cpp.s
+
 src/tests/connection_state_test.o: src/tests/connection_state_test.cpp.o
 .PHONY : src/tests/connection_state_test.o
 
@@ -469,6 +493,9 @@ help:
 	@echo "... src/network/tcp_peer.o"
 	@echo "... src/network/tcp_peer.i"
 	@echo "... src/network/tcp_peer.s"
+	@echo "... src/store/store.o"
+	@echo "... src/store/store.i"
+	@echo "... src/store/store.s"
 	@echo "... src/tests/connection_state_test.o"
 	@echo "... src/tests/connection_state_test.i"
 	@echo "... src/tests/connection_state_test.s"

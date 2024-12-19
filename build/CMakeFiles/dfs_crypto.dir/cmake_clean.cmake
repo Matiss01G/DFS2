@@ -1,6 +1,8 @@
 file(REMOVE_RECURSE
   "CMakeFiles/dfs_crypto.dir/src/crypto/crypto_stream.cpp.o"
   "CMakeFiles/dfs_crypto.dir/src/crypto/crypto_stream.cpp.o.d"
+  "CMakeFiles/dfs_crypto.dir/src/store/store.cpp.o"
+  "CMakeFiles/dfs_crypto.dir/src/store/store.cpp.o.d"
   "libdfs_crypto.a"
   "libdfs_crypto.pdb"
 )

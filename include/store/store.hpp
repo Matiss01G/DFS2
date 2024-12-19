@@ -31,13 +31,16 @@ public:
     // Clear all files from store
     void clear();
 
+protected:
+    // Friend declaration to allow tests to access protected members
+    friend class StoreTest;
+
+    // Get filesystem path for file key - protected for testing
+    std::filesystem::path get_file_path(const std::string& file_key) const;
+
 private:
     // Hash file key for content-addressable storage
-    // Static method as it doesn't depend on instance state
-    static std::string hash_key(const std::string& file_key);
-    
-    // Get filesystem path for file key
-    std::filesystem::path get_file_path(const std::string& file_key) const;
+    std::string hash_key(const std::string& file_key) const;
     
     std::filesystem::path base_path_;
 };
