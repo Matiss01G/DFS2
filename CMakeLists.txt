@@ -60,6 +60,7 @@ target_link_libraries(dfs_network PUBLIC
 # Tests
 enable_testing()
 
+# Crypto tests
 add_executable(crypto_tests 
     src/tests/crypto_stream_test.cpp)
 
@@ -70,6 +71,7 @@ target_link_libraries(crypto_tests
     GTest::Main
 )
 
+# Store tests
 add_executable(store_tests
     src/tests/store_test.cpp)
 
@@ -80,6 +82,7 @@ target_link_libraries(store_tests
     GTest::Main
 )
 
+# Network tests
 add_executable(network_tests
     src/tests/network_test.cpp
     src/tests/connection_state_test.cpp

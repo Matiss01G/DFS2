@@ -47,8 +47,10 @@ protected:
     // Helper to create test data stream with proper initialization
     static std::unique_ptr<std::stringstream> create_test_stream(const std::string& content) {
         auto ss = std::make_unique<std::stringstream>();
-        ss->write(content.c_str(), content.length());
-        ss->seekg(0);  // Reset read position to beginning
+        if (!content.empty()) {
+            ss->write(content.c_str(), content.length());
+            ss->seekg(0);  // Reset read position to beginning
+        }
         EXPECT_TRUE(ss->good()) << "Failed to create test stream";
         return ss;
     }
@@ -56,10 +58,24 @@ protected:
     // Helper to verify stream contents with proper error handling
     static void verify_stream_content(std::istream& stream, const std::string& expected) {
         ASSERT_TRUE(stream.good()) << "Input stream is not in good state";
-        std::stringstream buffer;
-        buffer << stream.rdbuf();
-        EXPECT_TRUE(buffer.good()) << "Failed to read stream contents";
-        ASSERT_EQ(buffer.str(), expected) << "Stream content doesn't match expected value";
+        std::string content;
+        if (!expected.empty()) {
+            std::stringstream buffer;
+            buffer << stream.rdbuf();
+            EXPECT_TRUE(buffer.good()) << "Failed to read stream contents";
+            content = buffer.str();
+        } else {
+            char ch;
+            if (stream.get(ch)) {
+                content.push_back(ch);
+                while (stream.get(ch)) {
+                    content.push_back(ch);
+                }
+            }
+            // For empty content, we expect EOF immediately
+            EXPECT_TRUE(stream.eof()) << "Stream should be at EOF for empty content";
+        }
+        ASSERT_EQ(content, expected) << "Stream content doesn't match expected value";
     }
 };
 
