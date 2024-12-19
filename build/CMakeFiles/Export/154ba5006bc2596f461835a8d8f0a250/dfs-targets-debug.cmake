@@ -15,6 +15,16 @@ set_target_properties(dfs::dfs_crypto PROPERTIES
 list(APPEND _cmake_import_check_targets dfs::dfs_crypto )
 list(APPEND _cmake_import_check_files_for_dfs::dfs_crypto "${_IMPORT_PREFIX}/lib/libdfs_crypto.a" )
 
+# Import target "dfs::dfs_store" for configuration "Debug"
+set_property(TARGET dfs::dfs_store APPEND PROPERTY IMPORTED_CONFIGURATIONS DEBUG)
+set_target_properties(dfs::dfs_store PROPERTIES
+  IMPORTED_LINK_INTERFACE_LANGUAGES_DEBUG "CXX"
+  IMPORTED_LOCATION_DEBUG "${_IMPORT_PREFIX}/lib/libdfs_store.a"
+  )
+
+list(APPEND _cmake_import_check_targets dfs::dfs_store )
+list(APPEND _cmake_import_check_files_for_dfs::dfs_store "${_IMPORT_PREFIX}/lib/libdfs_store.a" )
+
 # Import target "dfs::dfs_network" for configuration "Debug"
 set_property(TARGET dfs::dfs_network APPEND PROPERTY IMPORTED_CONFIGURATIONS DEBUG)
 set_target_properties(dfs::dfs_network PROPERTIES

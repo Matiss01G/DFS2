@@ -13,7 +13,6 @@ find_package(GTest REQUIRED)
 # Create crypto library
 add_library(dfs_crypto
     src/crypto/crypto_stream.cpp
-    src/store/store.cpp
 )
 target_include_directories(dfs_crypto PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
@@ -25,6 +24,21 @@ target_link_libraries(dfs_crypto PUBLIC
     Boost::log_setup
     Boost::system
     Boost::thread
+)
+
+# Create store library
+add_library(dfs_store
+    src/store/store.cpp
+)
+target_include_directories(dfs_store PUBLIC
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+    $<INSTALL_INTERFACE:include>
+)
+target_link_libraries(dfs_store PUBLIC
+    OpenSSL::Crypto
+    Boost::log
+    Boost::log_setup
+    Boost::system
 )
 
 # Create network library
@@ -56,6 +70,16 @@ target_link_libraries(crypto_tests
     GTest::Main
 )
 
+add_executable(store_tests
+    src/tests/store_test.cpp)
+
+target_link_libraries(store_tests
+    PRIVATE
+    dfs_store
+    GTest::GTest
+    GTest::Main
+)
+
 add_executable(network_tests
     src/tests/network_test.cpp
     src/tests/connection_state_test.cpp
@@ -69,22 +93,22 @@ target_link_libraries(network_tests
     GTest::Main
 )
 
-
-
 include(GoogleTest)
 gtest_discover_tests(crypto_tests)
+gtest_discover_tests(store_tests)
 gtest_discover_tests(network_tests)
 
 # Add custom target to run tests
 add_custom_target(run_tests ALL
     COMMAND crypto_tests
+    COMMAND store_tests
     COMMAND network_tests
-    DEPENDS crypto_tests network_tests
+    DEPENDS crypto_tests store_tests network_tests
     WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
 )
 
 # Install rules
-install(TARGETS dfs_crypto dfs_network
+install(TARGETS dfs_crypto dfs_store dfs_network
     EXPORT dfs-targets
     ARCHIVE DESTINATION lib
     LIBRARY DESTINATION lib

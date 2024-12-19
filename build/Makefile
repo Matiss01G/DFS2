@@ -185,6 +185,19 @@ dfs_crypto/fast:
 .PHONY : dfs_crypto/fast
 
 #=============================================================================
+# Target rules for targets named dfs_store
+
+# Build rule for target.
+dfs_store: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 dfs_store
+.PHONY : dfs_store
+
+# fast build rule for target.
+dfs_store/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/dfs_store.dir/build.make CMakeFiles/dfs_store.dir/build
+.PHONY : dfs_store/fast
+
+#=============================================================================
 # Target rules for targets named dfs_network
 
 # Build rule for target.
@@ -209,6 +222,19 @@ crypto_tests: cmake_check_build_system
 crypto_tests/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/crypto_tests.dir/build.make CMakeFiles/crypto_tests.dir/build
 .PHONY : crypto_tests/fast
+
+#=============================================================================
+# Target rules for targets named store_tests
+
+# Build rule for target.
+store_tests: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 store_tests
+.PHONY : store_tests
+
+# fast build rule for target.
+store_tests/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/store_tests.dir/build.make CMakeFiles/store_tests.dir/build
+.PHONY : store_tests/fast
 
 #=============================================================================
 # Target rules for targets named network_tests
@@ -313,7 +339,7 @@ src/store/store.o: src/store/store.cpp.o
 
 # target to build an object file
 src/store/store.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/dfs_crypto.dir/build.make CMakeFiles/dfs_crypto.dir/src/store/store.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/dfs_store.dir/build.make CMakeFiles/dfs_store.dir/src/store/store.cpp.o
 .PHONY : src/store/store.cpp.o
 
 src/store/store.i: src/store/store.cpp.i
@@ -321,7 +347,7 @@ src/store/store.i: src/store/store.cpp.i
 
 # target to preprocess a source file
 src/store/store.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/dfs_crypto.dir/build.make CMakeFiles/dfs_crypto.dir/src/store/store.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/dfs_store.dir/build.make CMakeFiles/dfs_store.dir/src/store/store.cpp.i
 .PHONY : src/store/store.cpp.i
 
 src/store/store.s: src/store/store.cpp.s
@@ -329,7 +355,7 @@ src/store/store.s: src/store/store.cpp.s
 
 # target to generate assembly for a file
 src/store/store.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/dfs_crypto.dir/build.make CMakeFiles/dfs_crypto.dir/src/store/store.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/dfs_store.dir/build.make CMakeFiles/dfs_store.dir/src/store/store.cpp.s
 .PHONY : src/store/store.cpp.s
 
 src/tests/connection_state_test.o: src/tests/connection_state_test.cpp.o
@@ -428,6 +454,30 @@ src/tests/peer_manager_test.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/network_tests.dir/build.make CMakeFiles/network_tests.dir/src/tests/peer_manager_test.cpp.s
 .PHONY : src/tests/peer_manager_test.cpp.s
 
+src/tests/store_test.o: src/tests/store_test.cpp.o
+.PHONY : src/tests/store_test.o
+
+# target to build an object file
+src/tests/store_test.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/store_tests.dir/build.make CMakeFiles/store_tests.dir/src/tests/store_test.cpp.o
+.PHONY : src/tests/store_test.cpp.o
+
+src/tests/store_test.i: src/tests/store_test.cpp.i
+.PHONY : src/tests/store_test.i
+
+# target to preprocess a source file
+src/tests/store_test.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/store_tests.dir/build.make CMakeFiles/store_tests.dir/src/tests/store_test.cpp.i
+.PHONY : src/tests/store_test.cpp.i
+
+src/tests/store_test.s: src/tests/store_test.cpp.s
+.PHONY : src/tests/store_test.s
+
+# target to generate assembly for a file
+src/tests/store_test.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/store_tests.dir/build.make CMakeFiles/store_tests.dir/src/tests/store_test.cpp.s
+.PHONY : src/tests/store_test.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -445,7 +495,9 @@ help:
 	@echo "... crypto_tests"
 	@echo "... dfs_crypto"
 	@echo "... dfs_network"
+	@echo "... dfs_store"
 	@echo "... network_tests"
+	@echo "... store_tests"
 	@echo "... src/crypto/crypto_stream.o"
 	@echo "... src/crypto/crypto_stream.i"
 	@echo "... src/crypto/crypto_stream.s"
@@ -470,6 +522,9 @@ help:
 	@echo "... src/tests/peer_manager_test.o"
 	@echo "... src/tests/peer_manager_test.i"
 	@echo "... src/tests/peer_manager_test.s"
+	@echo "... src/tests/store_test.o"
+	@echo "... src/tests/store_test.i"
+	@echo "... src/tests/store_test.s"
 .PHONY : help
 
 
