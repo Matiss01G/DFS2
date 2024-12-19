@@ -41,9 +41,11 @@ void Store::store(const std::string& key, std::istream& data) {
         file.write(buffer, data.gcount());
         bytes_written += data.gcount();
     }
-    // Handle final partial chunk if any
-    file.write(buffer, data.gcount());
-    bytes_written += data.gcount();
+    // Handle final partial chunk if any exists
+    if (data.gcount() > 0) {
+        file.write(buffer, data.gcount());
+        bytes_written += data.gcount();
+    }
 
     BOOST_LOG_TRIVIAL(info) << "Successfully stored " << bytes_written << " bytes with key: " << key;
 }
