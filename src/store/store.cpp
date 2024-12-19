@@ -22,10 +22,18 @@ void Store::store(const std::string& file_key, std::istream& input_stream) {
     }
 
     auto file_path = get_file_path(file_key);
-    BOOST_LOG_TRIVIAL(debug) << "Calculated storage path: " << file_path.string();
+    BOOST_LOG_TRIVIAL(debug) << "Calculated hierarchical storage path: " << file_path.string();
     
-    std::filesystem::create_directories(file_path.parent_path());
-    BOOST_LOG_TRIVIAL(debug) << "Created/verified parent directories";
+    // Create all parent directories in the hierarchical structure
+    auto parent_path = file_path.parent_path();
+    std::error_code ec;
+    if (!std::filesystem::create_directories(parent_path, ec)) {
+        if (ec) {
+            BOOST_LOG_TRIVIAL(error) << "Failed to create directory structure: " << parent_path.string() << " - " << ec.message();
+            throw crypto::CryptoError("Failed to create directory structure: " + ec.message());
+        }
+    }
+    BOOST_LOG_TRIVIAL(debug) << "Created/verified hierarchical directory structure";
     
     std::ofstream file(file_path, std::ios::binary);
     if (!file) {
@@ -149,7 +157,26 @@ std::string Store::hash_key(const std::string& file_key) const {
 }
 
 std::filesystem::path Store::get_file_path(const std::string& file_key) const {
-    return base_path_ / hash_key(file_key);
+    auto hash = hash_key(file_key);
+    
+    // Create hierarchical path with 3 levels of subdirectories
+    // Each level uses 2 characters from the hash
+    // Remaining characters become the filename
+    std::filesystem::path path = base_path_;
+    
+    // Ensure hash is long enough (SHA-256 produces 64 hex chars, so this is always true)
+    if (hash.length() >= 8) {
+        path /= hash.substr(0, 2);     // First level directory
+        path /= hash.substr(2, 2);     // Second level directory
+        path /= hash.substr(4, 2);     // Third level directory
+        path /= hash.substr(6);        // Remaining hash as filename
+    } else {
+        // Fallback in case of unexpected hash length
+        path /= hash;
+    }
+    
+    BOOST_LOG_TRIVIAL(debug) << "Calculated hierarchical path: " << path.string();
+    return path;
 }
 
 } // namespace store
