@@ -137,7 +137,7 @@ void Store::clear() {
     BOOST_LOG_TRIVIAL(info) << "Successfully removed " << removed_count << " entries from store";
 }
 
-std::string Store::hash_key(const std::string& file_key) const {
+std::string Store::hash_key(const std::string& file_key) {
     BOOST_LOG_TRIVIAL(debug) << "Generating hash for key: " << file_key;
     
     unsigned char hash[SHA256_DIGEST_LENGTH];

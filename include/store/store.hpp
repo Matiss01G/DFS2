@@ -33,7 +33,8 @@ public:
 
 private:
     // Hash file key for content-addressable storage
-    std::string hash_key(const std::string& file_key) const;
+    // Static method as it doesn't depend on instance state
+    static std::string hash_key(const std::string& file_key);
     
     // Get filesystem path for file key
     std::filesystem::path get_file_path(const std::string& file_key) const;

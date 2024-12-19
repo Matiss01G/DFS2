@@ -1,11 +1,13 @@
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
 #include "store/store.hpp"
+#include "crypto/crypto_error.hpp"
 #include <sstream>
 #include <filesystem>
 #include <fstream>
 
 using namespace dfs::store;
+using namespace dfs::crypto;
 
 class StoreTest : public ::testing::Test {
 protected:
@@ -23,16 +25,20 @@ protected:
 
     // Helper function to verify directory structure
     bool verify_directory_structure(const std::string& file_key) {
-        auto file_path = store_->get_file_path(file_key);
-        return std::filesystem::exists(file_path) &&
-               std::filesystem::exists(file_path.parent_path()) &&
-               std::filesystem::exists(file_path.parent_path().parent_path()) &&
-               std::filesystem::exists(file_path.parent_path().parent_path().parent_path());
-    }
-
-    // Helper function to verify directory structure
-    bool verify_directory_structure(const std::string& file_key) {
-        auto file_path = store_->get_file_path(file_key);
+        // We'll verify by checking if the file exists after storage
+        // and if the parent directories are created properly
+        std::filesystem::path file_path = test_dir_;
+        auto hash = store_->hash_key(file_key);
+        
+        if (hash.length() >= 8) {
+            file_path /= hash.substr(0, 2);
+            file_path /= hash.substr(2, 2);
+            file_path /= hash.substr(4, 2);
+            file_path /= hash.substr(6);
+        } else {
+            file_path /= hash;
+        }
+        
         return std::filesystem::exists(file_path) &&
                std::filesystem::exists(file_path.parent_path()) &&
                std::filesystem::exists(file_path.parent_path().parent_path()) &&
@@ -116,7 +122,7 @@ TEST_F(StoreTest, FileRemoval) {
     
     store_->remove(test_key);
     EXPECT_FALSE(store_->has(test_key));
-    EXPECT_THROW(store_->get(test_key), crypto::CryptoError);
+    EXPECT_THROW(store_->get(test_key), CryptoError);
 }
 
 // Test store with empty input
@@ -141,7 +147,7 @@ TEST_F(StoreTest, InvalidInputStream) {
     std::istringstream input("Test data");
     input.setstate(std::ios::badbit);
 
-    EXPECT_THROW(store_->store(test_key, input), crypto::CryptoError);
+    EXPECT_THROW(store_->store(test_key, input), CryptoError);
 }
 
 // Test clearing all files
