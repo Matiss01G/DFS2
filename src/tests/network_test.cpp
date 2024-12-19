@@ -122,42 +122,123 @@ TEST_F(TCPPeerTest, ReceiveStreamTest) {
         server_thread.join();
     }
     
-    // Send test data from server
-    std::string test_data = "Server response!\n";
-    boost::system::error_code ec;
-    boost::asio::write(*server_socket, 
-        boost::asio::buffer(test_data),
-        boost::asio::transfer_exactly(test_data.size()),
-        ec
-    );
-    ASSERT_FALSE(ec);
-    
     // Setup synchronization primitives
     std::mutex mtx;
     std::condition_variable cv;
     std::string received_data;
     bool data_received = false;
-
+    
     // Setup stream processor with synchronization
     test_peer->set_stream_processor([&](std::istream& stream) {
-        std::string line;
-        std::getline(stream, line);
-        {
-            std::lock_guard<std::mutex> lock(mtx);
-            received_data = line + '\n';  // Add back the newline that getline removes
-            data_received = true;
+        try {
+            std::string line;
+            std::getline(stream, line);
+            {
+                std::lock_guard<std::mutex> lock(mtx);
+                received_data = line + '\n';  // Add back the newline that getline removes
+                data_received = true;
+            }
+            cv.notify_one();
+        } catch (const std::exception& e) {
+            BOOST_LOG_TRIVIAL(error) << "Stream processor error: " << e.what();
         }
-        cv.notify_one();
     });
     
-    // Start stream processing
+    // Start stream processing before sending data
     ASSERT_TRUE(test_peer->start_stream_processing());
     
-    // Wait for data with timeout
+    // Send test data from server after stream processing is started
+    std::string test_data = "Server response!\n";
+    {
+        boost::system::error_code ec;
+        boost::asio::write(*server_socket, 
+            boost::asio::buffer(test_data),
+            boost::asio::transfer_exactly(test_data.size()),
+            ec
+        );
+        ASSERT_FALSE(ec) << "Failed to write test data: " << ec.message();
+    }
+    
+    // Wait for data with a shorter timeout
     {
         std::unique_lock<std::mutex> lock(mtx);
-        ASSERT_TRUE(cv.wait_for(lock, std::chrono::seconds(2), [&]{ return data_received; }));
+        ASSERT_TRUE(cv.wait_for(lock, std::chrono::milliseconds(500), [&]{ return data_received; }))
+            << "Timeout waiting for data reception";
         EXPECT_EQ(received_data, test_data);
+    }
+    
+    // Stop processing and cleanup
+    test_peer->stop_stream_processing();
+}
+// Test receiving multiple messages through same connection
+TEST_F(TCPPeerTest, MultipleMessagesTest) {
+    start_server_thread();
+    
+    ASSERT_TRUE(test_peer->connect("127.0.0.1", 12345));
+    
+    // Wait for server to accept connection
+    if (server_thread.joinable()) {
+        server_thread.join();
+    }
+    
+    // Setup synchronization primitives
+    std::mutex mtx;
+    std::condition_variable cv;
+    std::vector<std::string> received_messages;
+    std::atomic<int> messages_received{0};
+    const int expected_messages = 3;
+    
+    // Setup stream processor with synchronization
+    test_peer->set_stream_processor([&](std::istream& stream) {
+        try {
+            std::string line;
+            std::getline(stream, line);
+            {
+                std::lock_guard<std::mutex> lock(mtx);
+                received_messages.push_back(line + '\n');  // Add back the newline that getline removes
+                messages_received++;
+            }
+            cv.notify_one();
+        } catch (const std::exception& e) {
+            BOOST_LOG_TRIVIAL(error) << "Stream processor error: " << e.what();
+        }
+    });
+    
+    // Start stream processing before sending data
+    ASSERT_TRUE(test_peer->start_stream_processing());
+    
+    // Test messages to send
+    std::vector<std::string> test_messages = {
+        "First message!\n",
+        "Second message!\n",
+        "Third message!\n"
+    };
+    
+    // Send messages with small delays between them
+    for (const auto& msg : test_messages) {
+        boost::system::error_code ec;
+        boost::asio::write(*server_socket, 
+            boost::asio::buffer(msg),
+            boost::asio::transfer_exactly(msg.size()),
+            ec
+        );
+        ASSERT_FALSE(ec) << "Failed to write message: " << ec.message();
+        std::this_thread::sleep_for(std::chrono::milliseconds(10));  // Small delay between messages
+    }
+    
+    // Wait for all messages with timeout
+    {
+        std::unique_lock<std::mutex> lock(mtx);
+        ASSERT_TRUE(cv.wait_for(lock, std::chrono::milliseconds(500), 
+            [&]{ return messages_received == expected_messages; }))
+            << "Timeout waiting for messages, received " << messages_received << " of " << expected_messages;
+        
+        // Verify messages were received in order
+        ASSERT_EQ(received_messages.size(), test_messages.size());
+        for (size_t i = 0; i < test_messages.size(); ++i) {
+            EXPECT_EQ(received_messages[i], test_messages[i]) 
+                << "Message " << i << " does not match";
+        }
     }
     
     // Stop processing and cleanup

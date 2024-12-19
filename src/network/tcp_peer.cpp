@@ -71,14 +71,32 @@ bool TCP_Peer::start_stream_processing() {
 void TCP_Peer::stop_stream_processing() {
     if (processing_active_) {
         BOOST_LOG_TRIVIAL(debug) << "[" << peer_id_ << "] Stopping stream processing";
+        
+        // Signal processing to stop
         processing_active_ = false;
-
+        
+        // Cancel any pending asynchronous operations
+        if (socket_ && socket_->is_open()) {
+            boost::system::error_code ec;
+            socket_->cancel(ec);
+            if (ec) {
+                BOOST_LOG_TRIVIAL(error) << "[" << peer_id_ << "] Error canceling socket operations: " << ec.message();
+            }
+        }
+        
+        // Stop io_context
+        io_context_.stop();
+        
         // Wait for processing thread to complete
         if (processing_thread_ && processing_thread_->joinable()) {
             processing_thread_->join();
+            processing_thread_.reset();
             BOOST_LOG_TRIVIAL(debug) << "[" << peer_id_ << "] Processing thread joined";
         }
-
+        
+        // Reset io_context for potential reuse
+        io_context_.restart();
+        
         BOOST_LOG_TRIVIAL(info) << "[" << peer_id_ << "] Stream processing stopped";
     }
 }
@@ -87,28 +105,28 @@ void TCP_Peer::stop_stream_processing() {
 void TCP_Peer::process_stream() {
     BOOST_LOG_TRIVIAL(debug) << "[" << peer_id_ << "] Setting up stream processing";
     
-    // Create work object to keep io_context running indefinitely
-    boost::asio::io_context::work work(io_context_);
-    
-    // Start IO service in separate thread
-    std::thread io_thread([this]() { 
-        try {
-            while (processing_active_ && socket_->is_open()) {
-                io_context_.run();
-            }
-        } catch (const std::exception& e) {
-            BOOST_LOG_TRIVIAL(error) << "[" << peer_id_ << "] IO context error: " << e.what();
+    try {
+        // Create work guard to keep io_context running
+        auto work_guard = boost::asio::make_work_guard(io_context_);
+        
+        // Start the initial async read operation
+        if (processing_active_ && socket_->is_open()) {
+            async_read_next();
         }
-    });
-
-    // Start the initial async read operation
-    if (processing_active_ && socket_->is_open()) {
-        async_read_next();
-    }
-
-    // Keep the processing thread running until explicitly stopped
-    if (io_thread.joinable()) {
-        io_thread.join();
+        
+        // Run IO context in this thread
+        while (processing_active_ && socket_->is_open()) {
+            io_context_.run_one();
+        }
+        
+        // Release work guard to allow io_context to stop
+        work_guard.reset();
+        
+        // Run any remaining handlers
+        while (io_context_.poll_one()) {}
+        
+    } catch (const std::exception& e) {
+        BOOST_LOG_TRIVIAL(error) << "[" << peer_id_ << "] Stream processing error: " << e.what();
     }
 
     BOOST_LOG_TRIVIAL(info) << "[" << peer_id_ << "] Stream processing stopped";
