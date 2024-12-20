@@ -1,6 +1,7 @@
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
 #include "network/tcp_peer.hpp"
+#include "test_utils.hpp"
 #include <boost/asio.hpp>
 #include <boost/log/core.hpp>
 #include <boost/log/trivial.hpp>
@@ -13,13 +14,6 @@
 using namespace dfs::network;
 using ::testing::Return;
 using ::testing::_;
-
-// Set logging severity level
-void init_logging() {
-    boost::log::core::get()->set_filter(
-        boost::log::trivial::severity >= boost::log::trivial::error // Only show errors
-    );
-}
 
 class TCPPeerTest : public ::testing::Test {
 protected:
@@ -275,10 +269,4 @@ TEST_F(TCPPeerTest, EdgeCasesTest) {
 
     // Test getting input stream when not connected
     EXPECT_EQ(test_peer->get_input_stream(), nullptr);
-}
-
-int main(int argc, char** argv) {
-    init_logging(); // Initialize logging with reduced verbosity
-    testing::InitGoogleTest(&argc, argv);
-    return RUN_ALL_TESTS();
 }

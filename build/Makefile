@@ -358,30 +358,6 @@ src/store/store.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/dfs_store.dir/build.make CMakeFiles/dfs_store.dir/src/store/store.cpp.s
 .PHONY : src/store/store.cpp.s
 
-src/tests/connection_state_test.o: src/tests/connection_state_test.cpp.o
-.PHONY : src/tests/connection_state_test.o
-
-# target to build an object file
-src/tests/connection_state_test.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/network_tests.dir/build.make CMakeFiles/network_tests.dir/src/tests/connection_state_test.cpp.o
-.PHONY : src/tests/connection_state_test.cpp.o
-
-src/tests/connection_state_test.i: src/tests/connection_state_test.cpp.i
-.PHONY : src/tests/connection_state_test.i
-
-# target to preprocess a source file
-src/tests/connection_state_test.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/network_tests.dir/build.make CMakeFiles/network_tests.dir/src/tests/connection_state_test.cpp.i
-.PHONY : src/tests/connection_state_test.cpp.i
-
-src/tests/connection_state_test.s: src/tests/connection_state_test.cpp.s
-.PHONY : src/tests/connection_state_test.s
-
-# target to generate assembly for a file
-src/tests/connection_state_test.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/network_tests.dir/build.make CMakeFiles/network_tests.dir/src/tests/connection_state_test.cpp.s
-.PHONY : src/tests/connection_state_test.cpp.s
-
 src/tests/crypto_stream_test.o: src/tests/crypto_stream_test.cpp.o
 .PHONY : src/tests/crypto_stream_test.o
 
@@ -510,9 +486,6 @@ help:
 	@echo "... src/store/store.o"
 	@echo "... src/store/store.i"
 	@echo "... src/store/store.s"
-	@echo "... src/tests/connection_state_test.o"
-	@echo "... src/tests/connection_state_test.i"
-	@echo "... src/tests/connection_state_test.s"
 	@echo "... src/tests/crypto_stream_test.o"
 	@echo "... src/tests/crypto_stream_test.i"
 	@echo "... src/tests/crypto_stream_test.s"

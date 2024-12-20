@@ -2,6 +2,7 @@
 #include <gmock/gmock.h>
 #include "network/tcp_peer.hpp"
 #include "network/peer_manager.hpp"
+#include "test_utils.hpp"
 #include <boost/log/core.hpp>
 #include <boost/log/trivial.hpp>
 #include <boost/log/expressions.hpp>
@@ -13,17 +14,10 @@ using namespace dfs::network;
 using ::testing::Return;
 using ::testing::_;
 
-// Set logging severity level
-void init_logging() {
-    boost::log::core::get()->set_filter(
-        boost::log::trivial::severity >= boost::log::trivial::error // Only show errors
-    );
-}
-
 class PeerManagerTest : public ::testing::Test {
 protected:
     void SetUp() override {
-        init_logging(); // Initialize logging with reduced verbosity
+        init_logging(); 
         manager = std::make_unique<PeerManager>();
     }
 
@@ -65,11 +59,11 @@ TEST_F(PeerManagerTest, AddDuplicatePeerTest) {
     auto peer2 = std::make_shared<TCP_Peer>("duplicate_id");
 
     manager->add_peer(peer1);
-    manager->add_peer(peer2); // Should not override or crash
+    manager->add_peer(peer2); 
 
     auto retrieved_peer = manager->get_peer("duplicate_id");
     ASSERT_NE(retrieved_peer, nullptr);
-    EXPECT_EQ(retrieved_peer, peer1); // Should still be the first peer
+    EXPECT_EQ(retrieved_peer, peer1); 
 }
 
 // Test removing existing peer
@@ -84,7 +78,7 @@ TEST_F(PeerManagerTest, RemoveExistingPeerTest) {
 
 // Test removing non-existent peer
 TEST_F(PeerManagerTest, RemoveNonExistentPeerTest) {
-    manager->remove_peer("non_existent"); // Should not crash
+    manager->remove_peer("non_existent"); 
     EXPECT_EQ(manager->get_peer("non_existent"), nullptr);
 }
 
@@ -95,8 +89,8 @@ TEST_F(PeerManagerTest, GetNonExistentPeerTest) {
 
 // Test thread safety with multiple threads adding and removing peers
 TEST_F(PeerManagerTest, ThreadSafetyTest) {
-    const int num_threads = 3;  // Reduced from 10
-    const int operations_per_thread = 5;  // Further reduced from 10 to 5
+    const int num_threads = 3;  
+    const int operations_per_thread = 5;  
     std::vector<std::thread> threads;
 
     // Create threads that add and remove peers
@@ -135,7 +129,7 @@ TEST_F(PeerManagerTest, ThreadSafetyTest) {
 // Test shutdown functionality
 TEST_F(PeerManagerTest, ShutdownTest) {
     // Add several peers
-    std::vector<std::string> peer_ids = {"peer1", "peer2"};  // Reduced from 3 peers
+    std::vector<std::string> peer_ids = {"peer1", "peer2"};  
     for (const auto& id : peer_ids) {
         manager->add_peer(std::make_shared<TCP_Peer>(id));
     }
@@ -154,8 +148,4 @@ TEST_F(PeerManagerTest, ShutdownTest) {
     }
 }
 
-int main(int argc, char** argv) {
-    init_logging(); // Initialize logging with reduced verbosity
-    testing::InitGoogleTest(&argc, argv);
-    return RUN_ALL_TESTS();
-}
+// Additional test cases can be added here

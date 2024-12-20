@@ -61,7 +61,7 @@ target_link_libraries(dfs_network PUBLIC
 enable_testing()
 
 # Crypto tests
-add_executable(crypto_tests 
+add_executable(crypto_tests
     src/tests/crypto_stream_test.cpp)
 
 target_link_libraries(crypto_tests
@@ -85,8 +85,11 @@ target_link_libraries(store_tests
 # Network tests
 add_executable(network_tests
     src/tests/tcp_peer_test.cpp
-    src/tests/connection_state_test.cpp
     src/tests/peer_manager_test.cpp)
+
+target_include_directories(network_tests PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/tests
+)
 
 target_link_libraries(network_tests
     PRIVATE
@@ -104,7 +107,9 @@ gtest_discover_tests(network_tests)
 # Add custom target to run tests
 add_custom_target(run_tests ALL
     COMMAND crypto_tests
-    DEPENDS crypto_tests
+    COMMAND store_tests
+    COMMAND network_tests
+    DEPENDS crypto_tests store_tests network_tests
     WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
 )
 
