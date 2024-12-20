@@ -84,7 +84,7 @@ target_link_libraries(store_tests
 
 # Network tests
 add_executable(network_tests
-    src/tests/network_test.cpp
+    src/tests/tcp_peer_test.cpp
     src/tests/connection_state_test.cpp
     src/tests/peer_manager_test.cpp)
 

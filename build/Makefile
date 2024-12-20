@@ -406,29 +406,29 @@ src/tests/crypto_stream_test.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/crypto_tests.dir/build.make CMakeFiles/crypto_tests.dir/src/tests/crypto_stream_test.cpp.s
 .PHONY : src/tests/crypto_stream_test.cpp.s
 
-src/tests/network_test.o: src/tests/network_test.cpp.o
-.PHONY : src/tests/network_test.o
+src/tests/peer_manager_test.o: src/tests/peer_manager_test.cpp.o
+.PHONY : src/tests/peer_manager_test.o
 
 # target to build an object file
-src/tests/network_test.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/network_tests.dir/build.make CMakeFiles/network_tests.dir/src/tests/network_test.cpp.o
-.PHONY : src/tests/network_test.cpp.o
+src/tests/peer_manager_test.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/network_tests.dir/build.make CMakeFiles/network_tests.dir/src/tests/peer_manager_test.cpp.o
+.PHONY : src/tests/peer_manager_test.cpp.o
 
-src/tests/network_test.i: src/tests/network_test.cpp.i
-.PHONY : src/tests/network_test.i
+src/tests/peer_manager_test.i: src/tests/peer_manager_test.cpp.i
+.PHONY : src/tests/peer_manager_test.i
 
 # target to preprocess a source file
-src/tests/network_test.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/network_tests.dir/build.make CMakeFiles/network_tests.dir/src/tests/network_test.cpp.i
-.PHONY : src/tests/network_test.cpp.i
+src/tests/peer_manager_test.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/network_tests.dir/build.make CMakeFiles/network_tests.dir/src/tests/peer_manager_test.cpp.i
+.PHONY : src/tests/peer_manager_test.cpp.i
 
-src/tests/network_test.s: src/tests/network_test.cpp.s
-.PHONY : src/tests/network_test.s
+src/tests/peer_manager_test.s: src/tests/peer_manager_test.cpp.s
+.PHONY : src/tests/peer_manager_test.s
 
 # target to generate assembly for a file
-src/tests/network_test.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/network_tests.dir/build.make CMakeFiles/network_tests.dir/src/tests/network_test.cpp.s
-.PHONY : src/tests/network_test.cpp.s
+src/tests/peer_manager_test.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/network_tests.dir/build.make CMakeFiles/network_tests.dir/src/tests/peer_manager_test.cpp.s
+.PHONY : src/tests/peer_manager_test.cpp.s
 
 src/tests/store_test.o: src/tests/store_test.cpp.o
 .PHONY : src/tests/store_test.o
@@ -453,6 +453,30 @@ src/tests/store_test.s: src/tests/store_test.cpp.s
 src/tests/store_test.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/store_tests.dir/build.make CMakeFiles/store_tests.dir/src/tests/store_test.cpp.s
 .PHONY : src/tests/store_test.cpp.s
+
+src/tests/tcp_peer_test.o: src/tests/tcp_peer_test.cpp.o
+.PHONY : src/tests/tcp_peer_test.o
+
+# target to build an object file
+src/tests/tcp_peer_test.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/network_tests.dir/build.make CMakeFiles/network_tests.dir/src/tests/tcp_peer_test.cpp.o
+.PHONY : src/tests/tcp_peer_test.cpp.o
+
+src/tests/tcp_peer_test.i: src/tests/tcp_peer_test.cpp.i
+.PHONY : src/tests/tcp_peer_test.i
+
+# target to preprocess a source file
+src/tests/tcp_peer_test.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/network_tests.dir/build.make CMakeFiles/network_tests.dir/src/tests/tcp_peer_test.cpp.i
+.PHONY : src/tests/tcp_peer_test.cpp.i
+
+src/tests/tcp_peer_test.s: src/tests/tcp_peer_test.cpp.s
+.PHONY : src/tests/tcp_peer_test.s
+
+# target to generate assembly for a file
+src/tests/tcp_peer_test.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/network_tests.dir/build.make CMakeFiles/network_tests.dir/src/tests/tcp_peer_test.cpp.s
+.PHONY : src/tests/tcp_peer_test.cpp.s
 
 # Help Target
 help:
@@ -492,12 +516,15 @@ help:
 	@echo "... src/tests/crypto_stream_test.o"
 	@echo "... src/tests/crypto_stream_test.i"
 	@echo "... src/tests/crypto_stream_test.s"
-	@echo "... src/tests/network_test.o"
-	@echo "... src/tests/network_test.i"
-	@echo "... src/tests/network_test.s"
+	@echo "... src/tests/peer_manager_test.o"
+	@echo "... src/tests/peer_manager_test.i"
+	@echo "... src/tests/peer_manager_test.s"
 	@echo "... src/tests/store_test.o"
 	@echo "... src/tests/store_test.i"
 	@echo "... src/tests/store_test.s"
+	@echo "... src/tests/tcp_peer_test.o"
+	@echo "... src/tests/tcp_peer_test.i"
+	@echo "... src/tests/tcp_peer_test.s"
 .PHONY : help
 
 
