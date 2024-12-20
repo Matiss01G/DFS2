@@ -5,6 +5,8 @@
 #include <array>
 #include <stdexcept>
 #include <boost/log/trivial.hpp>
+#include <algorithm> //Added for std::min and std::max
+
 
 namespace dfs::crypto {
 
@@ -93,7 +95,7 @@ void CryptoStream::initializeCipher(bool encrypting) {
 // Process input stream through the cipher (encryption or decryption)
 void CryptoStream::processStream(std::istream& input, std::ostream& output, bool encrypting) {
     BOOST_LOG_TRIVIAL(info) << "Starting stream " << (encrypting ? "encryption" : "decryption");
-    
+
     // Verify stream states before processing
     if (!input.good() || !output.good()) {
         BOOST_LOG_TRIVIAL(error) << "Invalid stream state detected";
@@ -102,64 +104,80 @@ void CryptoStream::processStream(std::istream& input, std::ostream& output, bool
 
     // Initialize cipher context for either encryption or decryption
     initializeCipher(encrypting);
-    
-    // Process input stream in blocks with larger buffer for efficiency
-    static constexpr size_t BUFFER_SIZE = 8192; // 8KB buffer for better performance
-    std::array<uint8_t, BUFFER_SIZE> inbuf;
-    std::array<uint8_t, BUFFER_SIZE + EVP_MAX_BLOCK_LENGTH> outbuf;
+
+    // Calculate optimal chunk size based on system memory constraints
+    // Default to 1KB for embedded systems, can be increased for systems with more resources
+    static constexpr size_t MIN_CHUNK_SIZE = 1024;    // 1KB minimum
+    static constexpr size_t MAX_CHUNK_SIZE = 4096;    // 4KB maximum
+    const size_t CHUNK_SIZE = std::min(MAX_CHUNK_SIZE, 
+                                     std::max(MIN_CHUNK_SIZE, 
+                                            static_cast<size_t>(EVP_MAX_BLOCK_LENGTH * 4)));
+
+    BOOST_LOG_TRIVIAL(debug) << "Using chunk size: " << CHUNK_SIZE << " bytes";
+
+    std::vector<uint8_t> inbuf(CHUNK_SIZE);
+    std::vector<uint8_t> outbuf(CHUNK_SIZE + EVP_MAX_BLOCK_LENGTH);
     int outlen;
 
-    while (!input.eof()) {
-        // Read a block of data
-        input.read(reinterpret_cast<char*>(inbuf.data()), inbuf.size());
-        auto bytes_read = input.gcount();
-        
-        if (bytes_read <= 0) {
-            if (!input.eof()) {
-                throw std::runtime_error("Failed to read from input stream");
+    try {
+        while (input.good() && !input.eof()) {
+            // Read data in chunks
+            input.read(reinterpret_cast<char*>(inbuf.data()), CHUNK_SIZE);
+            const size_t bytes_read = input.gcount();
+
+            if (bytes_read == 0) break;
+
+            // Process the chunk
+            if (encrypting) {
+                if (!EVP_EncryptUpdate(context_->get(), outbuf.data(), &outlen,
+                                    inbuf.data(), static_cast<int>(bytes_read))) {
+                    BOOST_LOG_TRIVIAL(error) << "Encryption update failed";
+                    throw EncryptionError("Failed to encrypt data chunk");
+                }
+            } else {
+                if (!EVP_DecryptUpdate(context_->get(), outbuf.data(), &outlen,
+                                    inbuf.data(), static_cast<int>(bytes_read))) {
+                    BOOST_LOG_TRIVIAL(error) << "Decryption update failed";
+                    throw DecryptionError("Failed to decrypt data chunk");
+                }
             }
-            break;
+
+            // Write processed chunk immediately
+            if (outlen > 0) {
+                output.write(reinterpret_cast<char*>(outbuf.data()), outlen);
+                if (!output.good()) {
+                    BOOST_LOG_TRIVIAL(error) << "Failed to write to output stream";
+                    throw std::runtime_error("Failed to write to output stream");
+                }
+                output.flush(); // Ensure data is written immediately
+            }
         }
 
-        // Process the block
+        // Finalize the operation
         if (encrypting) {
-            if (!EVP_EncryptUpdate(context_->get(), outbuf.data(), &outlen,
-                                 inbuf.data(), static_cast<int>(bytes_read))) {
-                throw EncryptionError("Failed to encrypt data block");
+            if (!EVP_EncryptFinal_ex(context_->get(), outbuf.data(), &outlen)) {
+                BOOST_LOG_TRIVIAL(error) << "Failed to finalize encryption";
+                throw EncryptionError("Failed to finalize encryption");
             }
         } else {
-            if (!EVP_DecryptUpdate(context_->get(), outbuf.data(), &outlen,
-                                 inbuf.data(), static_cast<int>(bytes_read))) {
-                throw DecryptionError("Failed to decrypt data block");
+            if (!EVP_DecryptFinal_ex(context_->get(), outbuf.data(), &outlen)) {
+                BOOST_LOG_TRIVIAL(error) << "Failed to finalize decryption";
+                throw DecryptionError("Failed to finalize decryption");
             }
         }
 
-        // Write processed block
+        // Write final block if any
         if (outlen > 0) {
             output.write(reinterpret_cast<char*>(outbuf.data()), outlen);
             if (!output.good()) {
-                throw std::runtime_error("Failed to write to output stream");
+                BOOST_LOG_TRIVIAL(error) << "Failed to write final block";
+                throw std::runtime_error("Failed to write final block");
             }
+            output.flush();
         }
-    }
-
-    // Finalize the operation
-    if (encrypting) {
-        if (!EVP_EncryptFinal_ex(context_->get(), outbuf.data(), &outlen)) {
-            throw EncryptionError("Failed to finalize encryption");
-        }
-    } else {
-        if (!EVP_DecryptFinal_ex(context_->get(), outbuf.data(), &outlen)) {
-            throw DecryptionError("Failed to finalize decryption");
-        }
-    }
-
-    // Write final block if any
-    if (outlen > 0) {
-        output.write(reinterpret_cast<char*>(outbuf.data()), outlen);
-        if (!output.good()) {
-            throw std::runtime_error("Failed to write final block");
-        }
+    } catch (const std::exception& e) {
+        BOOST_LOG_TRIVIAL(error) << "Stream processing error: " << e.what();
+        throw;
     }
 }
 
