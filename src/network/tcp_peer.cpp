@@ -104,27 +104,41 @@ void TCP_Peer::stop_stream_processing() {
 // Main processing function that sets up async reading
 void TCP_Peer::process_stream() {
     BOOST_LOG_TRIVIAL(debug) << "[" << peer_id_ << "] Setting up stream processing";
-    
+
     try {
-        // Create work guard to keep io_context running
-        auto work_guard = boost::asio::make_work_guard(io_context_);
-        
-        // Start the initial async read operation
-        if (processing_active_ && socket_->is_open()) {
-            async_read_next();
+        // Create work guard with limited scope
+        {
+            auto work_guard = boost::asio::make_work_guard(io_context_);
+
+            // Start the initial async read operation
+            if (processing_active_ && socket_->is_open()) {
+                async_read_next();
+            }
+
+            // Run IO context while processing is active
+            while (processing_active_ && socket_->is_open()) {
+                io_context_.run_one();
+            }
+
+            // Work guard will be destroyed here, allowing io_context to stop
         }
-        
-        // Run IO context in this thread
-        while (processing_active_ && socket_->is_open()) {
-            io_context_.run_one();
+
+        // Cancel any pending operations
+        if (socket_->is_open()) {
+            boost::system::error_code ec;
+            socket_->cancel(ec);
+            if (ec) {
+                BOOST_LOG_TRIVIAL(error) << "[" << peer_id_ << "] Error canceling socket operations: " << ec.message();
+            }
         }
-        
-        // Release work guard to allow io_context to stop
-        work_guard.reset();
-        
+
         // Run any remaining handlers
-        while (io_context_.poll_one()) {}
-        
+        while (io_context_.poll()) {}
+
+        // Stop and reset io_context
+        io_context_.stop();
+        io_context_.reset();
+
     } catch (const std::exception& e) {
         BOOST_LOG_TRIVIAL(error) << "[" << peer_id_ << "] Stream processing error: " << e.what();
     }
@@ -323,19 +337,31 @@ void TCP_Peer::cleanup_connection() {
     // First ensure processing is stopped
     processing_active_ = false;
 
+    // Cancel any pending async operations
+    if (socket_ && socket_->is_open()) {
+        boost::system::error_code ec;
+        socket_->cancel(ec);
+        if (ec) {
+            BOOST_LOG_TRIVIAL(error) << "[" << peer_id_ << "] Socket cancel error: " << ec.message();
+        }
+    }
+
+    // Stop io_context to prevent new operations
+    io_context_.stop();
+
     // Join processing thread if it exists
     if (processing_thread_ && processing_thread_->joinable()) {
         processing_thread_->join();
         processing_thread_.reset();
     }
 
-    // Cleanup socket with proper shutdown sequence
+    // Now safe to cleanup socket
     if (socket_ && socket_->is_open()) {
         boost::system::error_code ec;
 
         // Gracefully shutdown the socket
         socket_->shutdown(boost::asio::ip::tcp::socket::shutdown_both, ec);
-        if (ec) {
+        if (ec && ec != boost::asio::error::not_connected) {
             BOOST_LOG_TRIVIAL(error) << "[" << peer_id_ << "] Socket shutdown error: " << ec.message();
         }
 
@@ -345,6 +371,9 @@ void TCP_Peer::cleanup_connection() {
             BOOST_LOG_TRIVIAL(error) << "[" << peer_id_ << "] Socket close error: " << ec.message();
         }
     }
+
+    // Reset io_context for potential reuse
+    io_context_.reset();
 
     // Clear any remaining data in input buffer
     if (input_buffer_) {
