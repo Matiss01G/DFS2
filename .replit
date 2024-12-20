@@ -4,7 +4,7 @@ modules = ["cpp"]
 channel = "stable-24_05"
 
 [workflows]
-runButton = "Project"
+runButton = "Build and Test"
 
 [[workflows.workflow]]
 name = "Project"
@@ -18,10 +18,6 @@ args = "Build and Test"
 [[workflows.workflow.tasks]]
 task = "workflow.run"
 args = "Build"
-
-[[workflows.workflow.tasks]]
-task = "workflow.run"
-args = "Channel Tests"
 
 [[workflows.workflow]]
 name = "Build and Test"
@@ -50,20 +46,6 @@ task = "packager.installForAll"
 [[workflows.workflow.tasks]]
 task = "shell.exec"
 args = "cd build && cmake .. && make"
-
-[[workflows.workflow]]
-name = "Channel Tests"
-author = "agent"
-
-[workflows.workflow.metadata]
-agentRequireRestartOnSave = false
-
-[[workflows.workflow.tasks]]
-task = "packager.installForAll"
-
-[[workflows.workflow.tasks]]
-task = "shell.exec"
-args = "cd build && cmake -DCMAKE_BUILD_TYPE=Debug .. && make && ./network_tests"
 
 [deployment]
 run = ["sh", "-c", "cd build && cmake -DCMAKE_BUILD_TYPE=Debug .. && make && ./network_tests"]
