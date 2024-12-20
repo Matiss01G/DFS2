@@ -12,6 +12,10 @@ bool MessageHandler::serialize(std::istream& input, std::ostream& output) {
         // Create message frame
         MessageFrame frame;
 
+        // Convert source_id and payload_size to network byte order
+        frame.source_id = ByteOrder::toNetworkOrder(frame.source_id);
+        frame.payload_size = ByteOrder::toNetworkOrder(frame.payload_size);
+
         // Read input data into buffer
         std::vector<char> data;
         char buffer[4096];
@@ -47,9 +51,14 @@ bool MessageHandler::deserialize(std::istream& input, std::ostream& output) {
             BOOST_LOG_TRIVIAL(error) << "Failed to read message frame";
             return false;
         }
+
+        // Convert source_id and payload_size back to host byte order
+        frame.source_id = ByteOrder::fromNetworkOrder(frame.source_id);
+        frame.payload_size = ByteOrder::fromNetworkOrder(frame.payload_size);
+
         // Process payload in chunks
         std::vector<char> buffer(4096);
-        uint32_t remaining = payload_size;
+        uint32_t remaining = frame.payload_size;  // Use converted payload_size
 
         while (remaining > 0 && input.good()) {
             size_t to_read = std::min(remaining, static_cast<uint32_t>(buffer.size()));
