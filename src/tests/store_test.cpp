@@ -456,3 +456,40 @@ TEST_F(StoreTest, ConcurrentAccess) {
     EXPECT_EQ(successful_ops, num_threads * ops_per_thread)
         << "All operations should complete successfully";
 }
+
+/**
+ * Test: FileSizeRetrieval
+ * Purpose: Tests the get_file_size() method functionality.
+ * 
+ * Methodology:
+ * 1. Tests size retrieval for normal files
+ * 2. Tests size retrieval for empty files
+ * 3. Tests error handling for non-existent files
+ * 
+ * Expected Results:
+ * - Should return correct file size for existing files
+ * - Should return 0 for empty files
+ * - Should throw StoreError for non-existent files
+ */
+TEST_F(StoreTest, FileSizeRetrieval) {
+    const std::string test_key = "size_test";
+    const std::string test_data = "Hello, Store!";
+    const std::string empty_key = "empty_test";
+    const std::string nonexistent_key = "nonexistent_key";
+
+    // Test normal file size
+    auto input = create_test_stream(test_data);
+    store->store(test_key, *input);
+    ASSERT_EQ(store->get_file_size(test_key), test_data.length()) 
+        << "File size should match input data length";
+
+    // Test empty file size
+    auto empty_input = create_test_stream("");
+    store->store(empty_key, *empty_input);
+    ASSERT_EQ(store->get_file_size(empty_key), 0) 
+        << "Empty file should have size 0";
+
+    // Test non-existent file
+    EXPECT_THROW(store->get_file_size(nonexistent_key), StoreError)
+        << "Getting size of non-existent file should throw";
+}

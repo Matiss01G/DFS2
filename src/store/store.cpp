@@ -113,6 +113,22 @@ bool Store::has(const std::string& key) const {
     return exists;
 }
 
+std::uintmax_t Store::get_file_size(const std::string& key) const {
+    BOOST_LOG_TRIVIAL(debug) << "Getting file size for key: " << key;
+
+    std::string hash = hash_key(key);
+    std::filesystem::path file_path = get_path_for_hash(hash);
+
+    if (!std::filesystem::exists(file_path)) {
+        BOOST_LOG_TRIVIAL(error) << "File not found: " << file_path.string();
+        throw StoreError("File not found");
+    }
+
+    std::uintmax_t size = std::filesystem::file_size(file_path);
+    BOOST_LOG_TRIVIAL(debug) << "File size for key " << key << ": " << size << " bytes";
+    return size;
+}
+
 void Store::remove(const std::string& key) {
     BOOST_LOG_TRIVIAL(info) << "Removing file with key: " << key;
 

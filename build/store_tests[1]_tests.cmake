@@ -18,4 +18,6 @@ add_test([=[StoreTest.StreamStatePreservation]=]  /home/runner/StreamCryptoDFS/b
 set_tests_properties([=[StoreTest.StreamStatePreservation]=]  PROPERTIES WORKING_DIRECTORY /home/runner/StreamCryptoDFS/build SKIP_REGULAR_EXPRESSION [==[\[  SKIPPED \]]==])
 add_test([=[StoreTest.ConcurrentAccess]=]  /home/runner/StreamCryptoDFS/build/store_tests [==[--gtest_filter=StoreTest.ConcurrentAccess]==] --gtest_also_run_disabled_tests)
 set_tests_properties([=[StoreTest.ConcurrentAccess]=]  PROPERTIES WORKING_DIRECTORY /home/runner/StreamCryptoDFS/build SKIP_REGULAR_EXPRESSION [==[\[  SKIPPED \]]==])
-set(  store_tests_TESTS StoreTest.BasicStoreAndRetrieve StoreTest.EmptyInput StoreTest.MultipleFiles StoreTest.ErrorHandling StoreTest.Clear StoreTest.LargeFileHandling StoreTest.InvalidKeyNames StoreTest.OverwriteBehavior StoreTest.StreamStatePreservation StoreTest.ConcurrentAccess)
+add_test([=[StoreTest.FileSizeRetrieval]=]  /home/runner/StreamCryptoDFS/build/store_tests [==[--gtest_filter=StoreTest.FileSizeRetrieval]==] --gtest_also_run_disabled_tests)
+set_tests_properties([=[StoreTest.FileSizeRetrieval]=]  PROPERTIES WORKING_DIRECTORY /home/runner/StreamCryptoDFS/build SKIP_REGULAR_EXPRESSION [==[\[  SKIPPED \]]==])
+set(  store_tests_TESTS StoreTest.BasicStoreAndRetrieve StoreTest.EmptyInput StoreTest.MultipleFiles StoreTest.ErrorHandling StoreTest.Clear StoreTest.LargeFileHandling StoreTest.InvalidKeyNames StoreTest.OverwriteBehavior StoreTest.StreamStatePreservation StoreTest.ConcurrentAccess StoreTest.FileSizeRetrieval)
