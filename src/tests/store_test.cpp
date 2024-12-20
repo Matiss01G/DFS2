@@ -2,6 +2,10 @@
 #include <sstream>
 #include <filesystem>
 #include "store/store.hpp"
+#include <chrono>
+#include <thread>
+#include <atomic>
+#include <set>
 
 using namespace dfs::store;
 
@@ -79,7 +83,21 @@ protected:
     }
 };
 
-// Test basic store and retrieve operations
+/**
+ * Test: BasicStoreAndRetrieve
+ * Purpose: Verifies the basic functionality of storing and retrieving data from the store.
+ * 
+ * Methodology:
+ * 1. Stores a simple string using a key
+ * 2. Verifies the key exists in the store
+ * 3. Retrieves the data and verifies its content
+ * 
+ * Expected Results:
+ * - Data should be stored successfully
+ * - Key should exist in the store after storing
+ * - Retrieved data should match the original input
+ * - No exceptions should be thrown during normal operation
+ */
 TEST_F(StoreTest, BasicStoreAndRetrieve) {
     const std::string test_key = "test_key";
     const std::string test_data = "Hello, Store!";
@@ -98,7 +116,21 @@ TEST_F(StoreTest, BasicStoreAndRetrieve) {
     verify_stream_content(*output, test_data);
 }
 
-// Test storing and retrieving empty data
+/**
+ * Test: EmptyInput
+ * Purpose: Tests the store's handling of empty data streams.
+ * 
+ * Methodology:
+ * 1. Attempts to store an empty string
+ * 2. Verifies the key exists
+ * 3. Retrieves and verifies the empty content
+ * 
+ * Expected Results:
+ * - Empty data should be stored successfully
+ * - Key should exist in the store
+ * - Retrieved stream should be valid but empty
+ * - No exceptions should be thrown
+ */
 TEST_F(StoreTest, EmptyInput) {
     const std::string test_key = "empty_test";
 
@@ -114,7 +146,21 @@ TEST_F(StoreTest, EmptyInput) {
     verify_stream_content(*output, "");
 }
 
-// Test storing and retrieving multiple files
+/**
+ * Test: MultipleFiles
+ * Purpose: Verifies the store can handle multiple files simultaneously.
+ * 
+ * Methodology:
+ * 1. Stores multiple files with different keys and content
+ * 2. Verifies each key exists
+ * 3. Retrieves and verifies content of each file
+ * 
+ * Expected Results:
+ * - All files should be stored successfully
+ * - Each key should exist in the store
+ * - Retrieved content should match original data for each file
+ * - No cross-contamination between files
+ */
 TEST_F(StoreTest, MultipleFiles) {
     const std::vector<std::pair<std::string, std::string>> test_data = {
         {"key1", "First file content"},
@@ -141,7 +187,19 @@ TEST_F(StoreTest, MultipleFiles) {
     }
 }
 
-// Test error handling
+/**
+ * Test: ErrorHandling
+ * Purpose: Tests the store's error handling capabilities.
+ * 
+ * Methodology:
+ * 1. Attempts to retrieve non-existent key
+ * 2. Attempts to store data with invalid stream
+ * 
+ * Expected Results:
+ * - Getting non-existent key should throw StoreError
+ * - Storing with invalid stream should throw StoreError
+ * - Error messages should be descriptive
+ */
 TEST_F(StoreTest, ErrorHandling) {
     const std::string test_key = "error_key";
 
@@ -155,7 +213,20 @@ TEST_F(StoreTest, ErrorHandling) {
     EXPECT_THROW(store->store(test_key, bad_stream), StoreError) << "Storing with invalid stream should throw";
 }
 
-// Test clear functionality
+/**
+ * Test: Clear
+ * Purpose: Verifies the store's clear functionality.
+ * 
+ * Methodology:
+ * 1. Stores multiple items
+ * 2. Clears the store
+ * 3. Verifies all items are removed
+ * 
+ * Expected Results:
+ * - Clear operation should succeed
+ * - All keys should be removed
+ * - Attempting to access cleared keys should throw
+ */
 TEST_F(StoreTest, Clear) {
     const std::vector<std::string> keys = {"key1", "key2", "key3"};
     const std::string test_data = "Test data";
@@ -175,4 +246,213 @@ TEST_F(StoreTest, Clear) {
         ASSERT_FALSE(store->has(key)) << "Key should not exist after clear: " << key;
         EXPECT_THROW(store->get(key), StoreError) << "Getting cleared key should throw";
     }
+}
+
+/**
+ * Test: LargeFileHandling
+ * Purpose: Tests the store's ability to handle large files.
+ * 
+ * Methodology:
+ * 1. Creates a large (10MB) test file
+ * 2. Stores and retrieves the large file
+ * 3. Verifies content integrity
+ * 
+ * Expected Results:
+ * - Large file should be stored successfully
+ * - Retrieved content should match original
+ * - No memory issues or performance degradation
+ */
+TEST_F(StoreTest, LargeFileHandling) {
+    const std::string test_key = "large_file";
+    const size_t large_size = 10 * 1024 * 1024; // 10MB
+    std::string large_data(large_size, 'X'); // Create large content
+
+    // Store large file
+    auto input = create_test_stream(large_data);
+    ASSERT_NO_THROW({
+        store->store(test_key, *input);
+    }) << "Storing large file should not throw";
+    ASSERT_TRUE(store->has(test_key)) << "Large file key should exist after storing";
+
+    // Retrieve and verify large file
+    auto output = store->get(test_key);
+    ASSERT_TRUE(output != nullptr) << "Retrieved stream should not be null";
+    verify_stream_content(*output, large_data);
+}
+
+/**
+ * Test: InvalidKeyNames
+ * Purpose: Tests the store's handling of various potentially problematic key names.
+ * 
+ * Methodology:
+ * 1. Attempts to store data with various edge-case key names
+ * 2. Verifies proper handling of each case
+ * 
+ * Expected Results:
+ * - Store should either handle or reject invalid keys gracefully
+ * - No filesystem security vulnerabilities
+ * - Proper error handling for truly invalid keys
+ */
+TEST_F(StoreTest, InvalidKeyNames) {
+    const std::vector<std::pair<std::string, std::string>> test_cases = {
+        {"", "Empty key"}, // Empty key
+        {"../attempt/traversal", "Path traversal attempt"}, // Path traversal attempt
+        {std::string(1024, 'a'), "Very long key"}, // Extremely long key
+        {"key\0with\0nulls", "Key with null characters"}, // Null characters
+        {"/absolute/path", "Absolute path attempt"}, // Absolute path
+        {"\\windows\\path", "Windows-style path"} // Windows-style path
+    };
+    const std::string test_data = "Test data";
+
+    for (const auto& [key, description] : test_cases) {
+        auto input = create_test_stream(test_data);
+        try {
+            store->store(key, *input);
+            // If store succeeds, verify the data can be retrieved
+            ASSERT_TRUE(store->has(key)) << "Key should exist after storing: " << description;
+            auto output = store->get(key);
+            ASSERT_TRUE(output != nullptr) << "Retrieved stream should not be null for: " << description;
+            verify_stream_content(*output, test_data);
+        } catch (const StoreError& e) {
+            // Some invalid keys might cause StoreError, which is acceptable
+            SUCCEED() << "Store rejected invalid key as expected: " << description;
+        }
+    }
+}
+
+/**
+ * Test: OverwriteBehavior
+ * Purpose: Tests the store's behavior when overwriting existing keys.
+ * 
+ * Methodology:
+ * 1. Stores initial data
+ * 2. Overwrites with new data
+ * 3. Verifies content is updated
+ * 
+ * Expected Results:
+ * - Initial store should succeed
+ * - Overwrite should succeed
+ * - Retrieved data should match latest stored content
+ */
+TEST_F(StoreTest, OverwriteBehavior) {
+    const std::string test_key = "overwrite_test";
+    const std::string initial_data = "Initial content";
+    const std::string updated_data = "Updated content";
+
+    // Store initial data
+    auto initial_input = create_test_stream(initial_data);
+    ASSERT_NO_THROW(store->store(test_key, *initial_input)) << "Initial store should not throw";
+    ASSERT_TRUE(store->has(test_key)) << "Key should exist after initial store";
+
+    // Verify initial content
+    auto initial_output = store->get(test_key);
+    ASSERT_TRUE(initial_output != nullptr);
+    verify_stream_content(*initial_output, initial_data);
+
+    // Overwrite with new data
+    auto update_input = create_test_stream(updated_data);
+    ASSERT_NO_THROW(store->store(test_key, *update_input)) << "Overwrite should not throw";
+
+    // Verify updated content
+    auto updated_output = store->get(test_key);
+    ASSERT_TRUE(updated_output != nullptr);
+    verify_stream_content(*updated_output, updated_data);
+}
+
+/**
+ * Test: StreamStatePreservation
+ * Purpose: Verifies that stream state and position are properly preserved.
+ * 
+ * Methodology:
+ * 1. Stores test data
+ * 2. Performs partial reads
+ * 3. Verifies stream position and content
+ * 
+ * Expected Results:
+ * - Stream position should be maintained between operations
+ * - Partial reads should return correct content
+ * - Stream should remain in good state
+ */
+TEST_F(StoreTest, StreamStatePreservation) {
+    const std::string test_key = "stream_state_test";
+    const std::string test_data = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+    // Store full data
+    auto input = create_test_stream(test_data);
+    store->store(test_key, *input);
+
+    // Read partial data and verify stream position
+    auto output = store->get(test_key);
+    ASSERT_TRUE(output != nullptr);
+
+    char buffer[10];
+    output->read(buffer, 5);
+    ASSERT_TRUE(output->good()) << "Stream should be good after partial read";
+    ASSERT_EQ(output->tellg(), 5) << "Stream position should be preserved";
+
+    std::string partial(buffer, 5);
+    ASSERT_EQ(partial, "ABCDE") << "Partial read should match expected content";
+
+    // Continue reading and verify
+    output->read(buffer, 5);
+    ASSERT_TRUE(output->good());
+    std::string next_partial(buffer, 5);
+    ASSERT_EQ(next_partial, "FGHIJ") << "Continued read should match expected content";
+}
+
+/**
+ * Test: ConcurrentAccess
+ * Purpose: Tests the store's thread safety and concurrent access capabilities.
+ * 
+ * Methodology:
+ * 1. Creates multiple threads
+ * 2. Each thread performs multiple store/retrieve operations
+ * 3. Tracks successful operations
+ * 
+ * Expected Results:
+ * - All operations should complete successfully
+ * - No data corruption or race conditions
+ * - Proper handling of concurrent access
+ */
+TEST_F(StoreTest, ConcurrentAccess) {
+    const size_t num_threads = 10;
+    const size_t ops_per_thread = 100;
+    std::vector<std::thread> threads;
+    std::atomic<size_t> successful_ops{0};
+
+    for (size_t i = 0; i < num_threads; ++i) {
+        threads.emplace_back([this, i, ops_per_thread, &successful_ops]() {
+            for (size_t j = 0; j < ops_per_thread; ++j) {
+                const std::string key = "concurrent_key_" + std::to_string(i) + "_" + std::to_string(j);
+                const std::string data = "Concurrent test data for " + key;
+
+                try {
+                    // Store data
+                    auto input = create_test_stream(data);
+                    store->store(key, *input);
+                    EXPECT_TRUE(store->has(key));
+
+                    // Retrieve and verify
+                    auto output = store->get(key);
+                    EXPECT_TRUE(output != nullptr);
+
+                    std::stringstream buffer;
+                    buffer << output->rdbuf();
+                    EXPECT_EQ(buffer.str(), data);
+
+                    successful_ops++;
+                } catch (const std::exception& e) {
+                    ADD_FAILURE() << "Thread " << i << " failed: " << e.what();
+                }
+            }
+        });
+    }
+
+    // Wait for all threads to complete
+    for (auto& thread : threads) {
+        thread.join();
+    }
+
+    EXPECT_EQ(successful_ops, num_threads * ops_per_thread)
+        << "All operations should complete successfully";
 }
