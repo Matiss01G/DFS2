@@ -17,7 +17,6 @@ struct MessageFrame {
     MessageType message_type;
     uint32_t source_id;
     uint64_t payload_size;
-    uint8_t* payload_data;
 };
 
 } // namespace network
