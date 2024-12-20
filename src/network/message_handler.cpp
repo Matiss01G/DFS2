@@ -9,31 +9,33 @@ namespace network {
 
 bool MessageHandler::serialize(std::istream& input, std::ostream& output) {
     try {
-        // Use 4KB chunks for efficient memory usage
-        std::vector<char> buffer(4096);
+        // Create message frame
+        MessageFrame frame;
 
-        while (input.good() && !input.eof()) {
-            // Read chunk from input
-            input.read(buffer.data(), buffer.size());
-            std::streamsize bytes_read = input.gcount();
-
-            if (bytes_read > 0) {
-                // Convert each 4-byte segment to network byte order
-                for (std::streamsize i = 0; i + sizeof(uint32_t) <= bytes_read; i += sizeof(uint32_t)) {
-                    uint32_t* value = reinterpret_cast<uint32_t*>(&buffer[i]);
-                    *value = ByteOrder::toNetworkOrder(*value);
-                }
-
-                // Write converted chunk to output
-                output.write(buffer.data(), bytes_read);
-                if (!output.good()) {
-                    BOOST_LOG_TRIVIAL(error) << "Failed to write converted data to output stream";
-                    return false;
-                }
-            }
+        // Read input data into buffer
+        std::vector<char> data;
+        char buffer[4096];
+        while (input.read(buffer, sizeof(buffer))) {
+            data.insert(data.end(), buffer, buffer + input.gcount());
+        }
+        if (input.gcount() > 0) {
+            data.insert(data.end(), buffer, buffer + input.gcount());
         }
 
-        return true;
+        // Set frame fields
+        frame.type = ByteOrder::toNetworkOrder(frame.type);
+        frame.source_id = ByteOrder::toNetworkOrder(frame.source_id);
+        frame.payload_size = ByteOrder::toNetworkOrder(static_cast<uint32_t>(data.size()));
+
+        // Write frame header
+        output.write(reinterpret_cast<const char*>(&frame), sizeof(frame));
+
+        // Write data payload
+        if (!data.empty()) {
+            output.write(data.data(), data.size());
+        }
+
+        return output.good();
     } catch (const std::exception& e) {
         BOOST_LOG_TRIVIAL(error) << "Serialization error: " << e.what();
         return false;
@@ -42,31 +44,35 @@ bool MessageHandler::serialize(std::istream& input, std::ostream& output) {
 
 bool MessageHandler::deserialize(std::istream& input, std::ostream& output) {
     try {
-        // Use 4KB chunks for efficient memory usage
+        MessageFrame frame;
+
+        // Read frame header
+        input.read(reinterpret_cast<char*>(&frame), sizeof(frame));
+        if (!input.good()) {
+            BOOST_LOG_TRIVIAL(error) << "Failed to read message frame";
+            return false;
+        }
+
+        // Convert frame fields to host byte order
+        frame.type = ByteOrder::fromNetworkOrder(frame.type);
+        frame.source_id = ByteOrder::fromNetworkOrder(frame.source_id);
+        uint32_t payload_size = ByteOrder::fromNetworkOrder(frame.payload_size);
+
+        // Process payload in chunks
         std::vector<char> buffer(4096);
+        uint32_t remaining = payload_size;
 
-        while (input.good() && !input.eof()) {
-            // Read chunk from input
-            input.read(buffer.data(), buffer.size());
-            std::streamsize bytes_read = input.gcount();
+        while (remaining > 0 && input.good()) {
+            size_t to_read = std::min(remaining, static_cast<uint32_t>(buffer.size()));
+            input.read(buffer.data(), to_read);
 
-            if (bytes_read > 0) {
-                // Convert each 4-byte segment from network to host byte order
-                for (std::streamsize i = 0; i + sizeof(uint32_t) <= bytes_read; i += sizeof(uint32_t)) {
-                    uint32_t* value = reinterpret_cast<uint32_t*>(&buffer[i]);
-                    *value = ByteOrder::fromNetworkOrder(*value);
-                }
-
-                // Write converted chunk to output
-                output.write(buffer.data(), bytes_read);
-                if (!output.good()) {
-                    BOOST_LOG_TRIVIAL(error) << "Failed to write converted data to output stream";
-                    return false;
-                }
+            if (input.gcount() > 0) {
+                output.write(buffer.data(), input.gcount());
+                remaining -= input.gcount();
             }
         }
 
-        return true;
+        return input.good() && output.good() && remaining == 0;
     } catch (const std::exception& e) {
         BOOST_LOG_TRIVIAL(error) << "Deserialization error: " << e.what();
         return false;
@@ -80,13 +86,17 @@ bool MessageHandler::process_incoming_data(std::istream& input, const std::array
             return false;
         }
 
-        // Skip initialization vector as specified
+        // Store IV for potential later use
+        std::vector<uint8_t> initialization_vector(iv.begin(), iv.end());
+
+        // Skip IV in input stream as it's provided separately
         input.ignore(IV_SIZE);
         if (!input.good()) {
             BOOST_LOG_TRIVIAL(error) << "Failed to skip initialization vector";
             return false;
         }
 
+        // Read message headers
         MessageHeader headers;
         if (!read_headers(input, headers)) {
             BOOST_LOG_TRIVIAL(error) << "Failed to read message headers";
@@ -106,6 +116,7 @@ bool MessageHandler::process_incoming_data(std::istream& input, const std::array
                     return false;
                 }
 
+                // Create stream for file data
                 auto stream = std::make_unique<std::stringstream>();
                 if (!deserialize(input, *stream)) {
                     BOOST_LOG_TRIVIAL(error) << "Failed to deserialize file data for " 
@@ -113,15 +124,24 @@ bool MessageHandler::process_incoming_data(std::istream& input, const std::array
                     return false;
                 }
 
-                // TODO: Call appropriate FileServer method
-                // fileserver.store_file(headers.file_name, headers.file_size, std::move(stream));
+                // TODO: FileServer Integration
+                // Call fileserver.store_file with:
+                // - headers.file_name: name of file to store
+                // - headers.file_size: expected size of file
+                // - std::move(stream): data stream containing file contents
+                // - initialization_vector: IV for encryption
+
                 BOOST_LOG_TRIVIAL(info) << "Successfully processed STORE_FILE request for " 
                                       << headers.file_name;
                 break;
             }
             case MessageType::GET_FILE: {
-                // TODO: Call appropriate FileServer method
-                // fileserver.get_file(headers.file_name, headers.file_size);
+                // TODO: FileServer Integration
+                // Call fileserver.get_file with:
+                // - headers.file_name: name of file to retrieve
+                // - headers.file_size: expected size of file
+                // - initialization_vector: IV for decryption
+
                 BOOST_LOG_TRIVIAL(info) << "Successfully processed GET_FILE request for " 
                                       << headers.file_name;
                 break;
@@ -165,7 +185,7 @@ std::unique_ptr<std::stringstream> MessageHandler::process_outgoing_data(
                                 << static_cast<uint32_t>(headers.type)
                                 << ", Size: " << headers.file_size;
 
-        // Write frame to output
+        // Write headers to output
         if (!write_headers(*output, headers)) {
             BOOST_LOG_TRIVIAL(error) << "Failed to write headers for " << headers.file_name;
             return nullptr;
@@ -187,18 +207,18 @@ std::unique_ptr<std::stringstream> MessageHandler::process_outgoing_data(
 
 bool MessageHandler::read_headers(std::istream& input, MessageHeader& headers) {
     try {
-        // Read message type
+        // Read message type (in network byte order)
         uint32_t type;
         input.read(reinterpret_cast<char*>(&type), sizeof(type));
         type = ByteOrder::fromNetworkOrder(type);
         headers.type = static_cast<MessageType>(type);
 
-        // Read file size
+        // Read file size (in network byte order)
         uint64_t size;
         input.read(reinterpret_cast<char*>(&size), sizeof(size));
         headers.file_size = ByteOrder::fromNetworkOrder(size);
 
-        // Read file name length (network byte order)
+        // Read file name length (in network byte order)
         uint32_t name_length;
         input.read(reinterpret_cast<char*>(&name_length), sizeof(name_length));
         name_length = ByteOrder::fromNetworkOrder(name_length);
@@ -208,7 +228,7 @@ bool MessageHandler::read_headers(std::istream& input, MessageHeader& headers) {
             return false;
         }
 
-        // Read file name
+        // Read file name (raw bytes, no conversion needed)
         std::vector<char> name_buffer(name_length);
         input.read(name_buffer.data(), name_length);
         headers.file_name.assign(name_buffer.data(), name_length);
@@ -236,7 +256,7 @@ bool MessageHandler::write_headers(std::ostream& output, const MessageHeader& he
         );
         output.write(reinterpret_cast<const char*>(&name_length), sizeof(name_length));
 
-        // Write file name
+        // Write file name (raw bytes, no conversion needed)
         output.write(headers.file_name.c_str(), headers.file_name.length());
 
         return output.good();
