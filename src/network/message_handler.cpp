@@ -22,12 +22,21 @@ bool MessageHandler::serialize(std::istream& input, std::ostream& output) {
             data.insert(data.end(), buffer, buffer + input.gcount());
         }
 
-        // Set frame fields
+        // Set frame fields with network byte order
         frame.type = ByteOrder::toNetworkOrder(frame.type);
         frame.source_id = ByteOrder::toNetworkOrder(frame.source_id);
         frame.payload_size = ByteOrder::toNetworkOrder(static_cast<uint32_t>(data.size()));
 
-        // Write frame header
+        // Write IV header in network byte order
+        std::vector<uint32_t> iv_network_order(frame.iv.size() / sizeof(uint32_t));
+        for (size_t i = 0; i < iv_network_order.size(); ++i) {
+            uint32_t value;
+            std::memcpy(&value, frame.iv.data() + i * sizeof(uint32_t), sizeof(uint32_t));
+            iv_network_order[i] = ByteOrder::toNetworkOrder(value);
+        }
+        output.write(reinterpret_cast<const char*>(iv_network_order.data()), frame.iv.size());
+
+        // Write frame header after IV
         output.write(reinterpret_cast<const char*>(&frame), sizeof(frame));
 
         // Write data payload
@@ -44,16 +53,29 @@ bool MessageHandler::serialize(std::istream& input, std::ostream& output) {
 
 bool MessageHandler::deserialize(std::istream& input, std::ostream& output) {
     try {
-        MessageFrame frame;
+        // Read IV header first
+        std::vector<uint8_t> iv_data(IV_SIZE);
+        input.read(reinterpret_cast<char*>(iv_data.data()), IV_SIZE);
+        if (!input.good()) {
+            BOOST_LOG_TRIVIAL(error) << "Failed to read IV header";
+            return false;
+        }
 
-        // Read frame header
+        // Convert IV from network byte order to host byte order
+        for (size_t i = 0; i < IV_SIZE / sizeof(uint32_t); ++i) {
+            uint32_t* value = reinterpret_cast<uint32_t*>(iv_data.data() + i * sizeof(uint32_t));
+            *value = ByteOrder::fromNetworkOrder(*value);
+        }
+
+        MessageFrame frame;
+        // Read frame header after IV
         input.read(reinterpret_cast<char*>(&frame), sizeof(frame));
         if (!input.good()) {
             BOOST_LOG_TRIVIAL(error) << "Failed to read message frame";
             return false;
         }
 
-        // Convert frame fields to host byte order
+        // Convert frame fields from network to host byte order
         frame.type = ByteOrder::fromNetworkOrder(frame.type);
         frame.source_id = ByteOrder::fromNetworkOrder(frame.source_id);
         uint32_t payload_size = ByteOrder::fromNetworkOrder(frame.payload_size);
