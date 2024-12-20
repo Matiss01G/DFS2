@@ -23,6 +23,7 @@ bool MessageHandler::serialize(std::istream& input, std::ostream& output) {
         }
 
         // Set frame fields with network byte order
+        frame.initialization_vector = ByteOrder::toNetworkOrder(frame.type);
         frame.type = ByteOrder::toNetworkOrder(frame.type);
         frame.source_id = ByteOrder::toNetworkOrder(frame.source_id);
         frame.payload_size = ByteOrder::toNetworkOrder(static_cast<uint32_t>(data.size()));
