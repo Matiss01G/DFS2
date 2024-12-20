@@ -85,7 +85,8 @@ target_link_libraries(store_tests
 # Network tests
 add_executable(network_tests
     src/tests/network_test.cpp
-    src/tests/connection_state_test.cpp)
+    src/tests/connection_state_test.cpp
+    src/tests/peer_manager_test.cpp)
 
 target_link_libraries(network_tests
     PRIVATE
@@ -103,9 +104,7 @@ gtest_discover_tests(network_tests)
 # Add custom target to run tests
 add_custom_target(run_tests ALL
     COMMAND crypto_tests
-    COMMAND store_tests
-    COMMAND network_tests
-    DEPENDS crypto_tests store_tests network_tests
+    DEPENDS crypto_tests
     WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
 )
 
