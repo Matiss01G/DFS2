@@ -85,10 +85,13 @@ target_link_libraries(store_tests
 # Network tests
 add_executable(network_tests
     src/tests/tcp_peer_test.cpp
-    src/tests/peer_manager_test.cpp)
+    src/tests/peer_manager_test.cpp
+    tests/codec_test.cpp)
 
 target_include_directories(network_tests PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/src/tests
+    ${CMAKE_CURRENT_SOURCE_DIR}/include
+    ${CMAKE_CURRENT_SOURCE_DIR}/src
 )
 
 target_link_libraries(network_tests

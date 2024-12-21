@@ -454,6 +454,30 @@ src/tests/tcp_peer_test.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/network_tests.dir/build.make CMakeFiles/network_tests.dir/src/tests/tcp_peer_test.cpp.s
 .PHONY : src/tests/tcp_peer_test.cpp.s
 
+tests/codec_test.o: tests/codec_test.cpp.o
+.PHONY : tests/codec_test.o
+
+# target to build an object file
+tests/codec_test.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/network_tests.dir/build.make CMakeFiles/network_tests.dir/tests/codec_test.cpp.o
+.PHONY : tests/codec_test.cpp.o
+
+tests/codec_test.i: tests/codec_test.cpp.i
+.PHONY : tests/codec_test.i
+
+# target to preprocess a source file
+tests/codec_test.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/network_tests.dir/build.make CMakeFiles/network_tests.dir/tests/codec_test.cpp.i
+.PHONY : tests/codec_test.cpp.i
+
+tests/codec_test.s: tests/codec_test.cpp.s
+.PHONY : tests/codec_test.s
+
+# target to generate assembly for a file
+tests/codec_test.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/network_tests.dir/build.make CMakeFiles/network_tests.dir/tests/codec_test.cpp.s
+.PHONY : tests/codec_test.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -498,6 +522,9 @@ help:
 	@echo "... src/tests/tcp_peer_test.o"
 	@echo "... src/tests/tcp_peer_test.i"
 	@echo "... src/tests/tcp_peer_test.s"
+	@echo "... tests/codec_test.o"
+	@echo "... tests/codec_test.i"
+	@echo "... tests/codec_test.s"
 .PHONY : help
 
 
