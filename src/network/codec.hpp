@@ -11,11 +11,24 @@ namespace network {
 
 class Codec {
 public:
-    
-    // Serializes a MessageFrame to an output stream in network byte order
+    /**
+     * Serializes a MessageFrame to an output stream in network byte order
+     * 
+     * @param frame The MessageFrame to serialize
+     * @param output The output stream to write to
+     * @return Number of bytes written
+     * @throws std::runtime_error if serialization fails
+     */
     std::size_t serialize(const MessageFrame& frame, std::ostream& output);
 
-    // Deserializes a MessageFrame from an input stream in network byte order
+    /**
+     * Deserializes a MessageFrame from an input stream in network byte order
+     * 
+     * @param input The input stream to read from
+     * @param channel The channel to push the deserialized frame to
+     * @return The deserialized MessageFrame
+     * @throws std::runtime_error if deserialization fails
+     */
     MessageFrame deserialize(std::istream& input, Channel& channel);
 
 private:
