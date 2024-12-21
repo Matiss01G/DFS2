@@ -2,9 +2,26 @@
 #include <boost/log/trivial.hpp>
 #include <sstream>
 #include <stdexcept>
+#include <boost/endian/conversion.hpp>
 
 namespace dfs {
 namespace network {
+
+uint32_t Codec::to_network_order(uint32_t host_value) {
+    return boost::endian::native_to_big(host_value);
+}
+
+uint64_t Codec::to_network_order(uint64_t host_value) {
+    return boost::endian::native_to_big(host_value);
+}
+
+uint32_t Codec::from_network_order(uint32_t network_value) {
+    return boost::endian::big_to_native(network_value);
+}
+
+uint64_t Codec::from_network_order(uint64_t network_value) {
+    return boost::endian::big_to_native(network_value);
+}
 
 std::size_t Codec::serialize(const MessageFrame& frame, std::ostream& output) {
     if (!output.good()) {
@@ -14,11 +31,11 @@ std::size_t Codec::serialize(const MessageFrame& frame, std::ostream& output) {
     std::size_t total_bytes = 0;
 
     try {
-        // Write initialization vector (fixed size array)
+        // Write initialization vector
         write_bytes(output, frame.initialization_vector.data(), frame.initialization_vector.size());
         total_bytes += frame.initialization_vector.size();
 
-        // Write message type (underlying uint8_t)
+        // Write message type
         write_bytes(output, &frame.message_type, sizeof(MessageType));
         total_bytes += sizeof(MessageType);
 
@@ -37,28 +54,12 @@ std::size_t Codec::serialize(const MessageFrame& frame, std::ostream& output) {
         write_bytes(output, &network_payload_size, sizeof(uint64_t));
         total_bytes += sizeof(uint64_t);
 
-        // Stream payload data if present
+        // Write payload data if present
         if (frame.payload_size > 0 && frame.payload_stream) {
-            char buffer[4096];  // 4KB chunks for efficient streaming
-            std::size_t remaining = frame.payload_size;
-
-            while (remaining > 0 && frame.payload_stream->good()) {
-                std::size_t chunk_size = std::min(remaining, sizeof(buffer));
-                frame.payload_stream->read(buffer, chunk_size);
-                std::size_t bytes_read = frame.payload_stream->gcount();
-
-                if (bytes_read == 0) {
-                    throw std::runtime_error("Unexpected end of payload stream");
-                }
-
-                write_bytes(output, buffer, bytes_read);
-                total_bytes += bytes_read;
-                remaining -= bytes_read;
-            }
-
-            if (remaining > 0) {
-                throw std::runtime_error("Failed to write complete payload");
-            }
+            // Create a copy of the stringstream to preserve its state
+            std::string payload_data = frame.payload_stream->str();
+            write_bytes(output, payload_data.c_str(), payload_data.size());
+            total_bytes += payload_data.size();
         }
 
         return total_bytes;
@@ -97,30 +98,19 @@ MessageFrame Codec::deserialize(std::istream& input, Channel& channel) {
         read_bytes(input, &network_payload_size, sizeof(uint64_t));
         frame.payload_size = from_network_order(network_payload_size);
 
+        // If payload exists, create stream and read data
+        if (frame.payload_size > 0) {
+            auto payload_stream = std::make_shared<std::stringstream>();
+            std::vector<char> buffer(frame.payload_size);
+            read_bytes(input, buffer.data(), frame.payload_size);
+            payload_stream->write(buffer.data(), frame.payload_size);
+            frame.payload_stream = payload_stream;
+        }
+
         // Thread-safe channel push
         {
             std::lock_guard<std::mutex> lock(mutex_);
             channel.produce(frame);
-        }
-  
-        // If payload exists, create stream and read data
-        if (frame.payload_size > 0) {
-            auto payload_stream = std::make_shared<std::stringstream>();
-            char buffer[4096];  // 4KB chunks for efficient streaming
-            std::size_t remaining = frame.payload_size;
-
-            while (remaining > 0 && input.good()) {
-                std::size_t chunk_size = std::min(remaining, sizeof(buffer));
-                read_bytes(input, buffer, chunk_size);
-                payload_stream->write(buffer, chunk_size);
-                remaining -= chunk_size;
-            }
-
-            if (remaining > 0) {
-                throw std::runtime_error("Failed to read complete payload");
-            }
-
-            frame.payload_stream = payload_stream;
         }
 
         return frame;

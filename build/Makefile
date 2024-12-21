@@ -262,6 +262,30 @@ run_tests/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/run_tests.dir/build.make CMakeFiles/run_tests.dir/build
 .PHONY : run_tests/fast
 
+src/channel/channel.o: src/channel/channel.cpp.o
+.PHONY : src/channel/channel.o
+
+# target to build an object file
+src/channel/channel.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/dfs_network.dir/build.make CMakeFiles/dfs_network.dir/src/channel/channel.cpp.o
+.PHONY : src/channel/channel.cpp.o
+
+src/channel/channel.i: src/channel/channel.cpp.i
+.PHONY : src/channel/channel.i
+
+# target to preprocess a source file
+src/channel/channel.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/dfs_network.dir/build.make CMakeFiles/dfs_network.dir/src/channel/channel.cpp.i
+.PHONY : src/channel/channel.cpp.i
+
+src/channel/channel.s: src/channel/channel.cpp.s
+.PHONY : src/channel/channel.s
+
+# target to generate assembly for a file
+src/channel/channel.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/dfs_network.dir/build.make CMakeFiles/dfs_network.dir/src/channel/channel.cpp.s
+.PHONY : src/channel/channel.cpp.s
+
 src/crypto/crypto_stream.o: src/crypto/crypto_stream.cpp.o
 .PHONY : src/crypto/crypto_stream.o
 
@@ -285,6 +309,30 @@ src/crypto/crypto_stream.s: src/crypto/crypto_stream.cpp.s
 src/crypto/crypto_stream.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/dfs_crypto.dir/build.make CMakeFiles/dfs_crypto.dir/src/crypto/crypto_stream.cpp.s
 .PHONY : src/crypto/crypto_stream.cpp.s
+
+src/network/codec.o: src/network/codec.cpp.o
+.PHONY : src/network/codec.o
+
+# target to build an object file
+src/network/codec.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/dfs_network.dir/build.make CMakeFiles/dfs_network.dir/src/network/codec.cpp.o
+.PHONY : src/network/codec.cpp.o
+
+src/network/codec.i: src/network/codec.cpp.i
+.PHONY : src/network/codec.i
+
+# target to preprocess a source file
+src/network/codec.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/dfs_network.dir/build.make CMakeFiles/dfs_network.dir/src/network/codec.cpp.i
+.PHONY : src/network/codec.cpp.i
+
+src/network/codec.s: src/network/codec.cpp.s
+.PHONY : src/network/codec.s
+
+# target to generate assembly for a file
+src/network/codec.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/dfs_network.dir/build.make CMakeFiles/dfs_network.dir/src/network/codec.cpp.s
+.PHONY : src/network/codec.cpp.s
 
 src/network/peer_manager.o: src/network/peer_manager.cpp.o
 .PHONY : src/network/peer_manager.o
@@ -498,9 +546,15 @@ help:
 	@echo "... dfs_store"
 	@echo "... network_tests"
 	@echo "... store_tests"
+	@echo "... src/channel/channel.o"
+	@echo "... src/channel/channel.i"
+	@echo "... src/channel/channel.s"
 	@echo "... src/crypto/crypto_stream.o"
 	@echo "... src/crypto/crypto_stream.i"
 	@echo "... src/crypto/crypto_stream.s"
+	@echo "... src/network/codec.o"
+	@echo "... src/network/codec.i"
+	@echo "... src/network/codec.s"
 	@echo "... src/network/peer_manager.o"
 	@echo "... src/network/peer_manager.i"
 	@echo "... src/network/peer_manager.s"

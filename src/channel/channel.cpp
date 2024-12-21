@@ -1,4 +1,4 @@
-#include "network/channel/channel.hpp"
+#include "channel/channel.hpp"
 #include <boost/log/trivial.hpp>
 
 namespace dfs {
@@ -15,7 +15,7 @@ bool Channel::consume(MessageFrame& frame) {
     if (queue_.empty()) {
         return false;
     }
-    
+
     frame = queue_.front();
     queue_.pop();
     BOOST_LOG_TRIVIAL(debug) << "Retrieved message frame from channel. Channel size: " << queue_.size();
