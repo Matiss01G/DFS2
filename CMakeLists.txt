@@ -45,8 +45,6 @@ target_link_libraries(dfs_store PUBLIC
 add_library(dfs_network
     src/network/tcp_peer.cpp
     src/network/peer_manager.cpp
-    src/network/codec.cpp
-    src/channel/channel.cpp
 )
 target_include_directories(dfs_network PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
@@ -87,13 +85,10 @@ target_link_libraries(store_tests
 # Network tests
 add_executable(network_tests
     src/tests/tcp_peer_test.cpp
-    src/tests/peer_manager_test.cpp
-    tests/codec_test.cpp)
+    src/tests/peer_manager_test.cpp)
 
 target_include_directories(network_tests PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/src/tests
-    ${CMAKE_CURRENT_SOURCE_DIR}/include
-    ${CMAKE_CURRENT_SOURCE_DIR}/src
 )
 
 target_link_libraries(network_tests
