@@ -97,6 +97,12 @@ MessageFrame Codec::deserialize(std::istream& input, Channel& channel) {
         read_bytes(input, &network_payload_size, sizeof(uint64_t));
         frame.payload_size = from_network_order(network_payload_size);
 
+        // Thread-safe channel push
+        {
+            std::lock_guard<std::mutex> lock(mutex_);
+            channel.produce(frame);
+        }
+  
         // If payload exists, create stream and read data
         if (frame.payload_size > 0) {
             auto payload_stream = std::make_shared<std::stringstream>();
@@ -115,12 +121,6 @@ MessageFrame Codec::deserialize(std::istream& input, Channel& channel) {
             }
 
             frame.payload_stream = payload_stream;
-        }
-
-        // Thread-safe channel push
-        {
-            std::lock_guard<std::mutex> lock(mutex_);
-            channel.produce(frame);
         }
 
         return frame;
