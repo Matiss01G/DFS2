@@ -10,7 +10,6 @@ set(CMAKE_DEPENDS_LANGUAGES
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "/home/runner/StreamCryptoDFS/src/tests/peer_manager_test.cpp" "CMakeFiles/network_tests.dir/src/tests/peer_manager_test.cpp.o" "gcc" "CMakeFiles/network_tests.dir/src/tests/peer_manager_test.cpp.o.d"
   "/home/runner/StreamCryptoDFS/src/tests/tcp_peer_test.cpp" "CMakeFiles/network_tests.dir/src/tests/tcp_peer_test.cpp.o" "gcc" "CMakeFiles/network_tests.dir/src/tests/tcp_peer_test.cpp.o.d"
-  "/home/runner/StreamCryptoDFS/tests/channel_test.cpp" "CMakeFiles/network_tests.dir/tests/channel_test.cpp.o" "gcc" "CMakeFiles/network_tests.dir/tests/channel_test.cpp.o.d"
   )
 
 # Targets to which this target links which contain Fortran sources.

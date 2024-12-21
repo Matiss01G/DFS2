@@ -22,13 +22,10 @@ TEST_F(ChannelTest, InitialState) {
 
 TEST_F(ChannelTest, SingleProduceConsume) {
     MessageFrame input_frame;
-    input_frame.message_type = MessageType::STORE_FILE;
+    input_frame.type = 1;
     input_frame.source_id = 123;
     input_frame.payload_size = 5;
-
-    // Set initialization vector
-    std::array<uint8_t, 16> iv = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16};
-    input_frame.initialization_vector = iv;
+    input_frame.payload_data = {'H', 'e', 'l', 'l', 'o'};
 
     channel.produce(input_frame);
 
@@ -38,10 +35,10 @@ TEST_F(ChannelTest, SingleProduceConsume) {
     MessageFrame output_frame;
     EXPECT_TRUE(channel.consume(output_frame));
 
-    EXPECT_EQ(output_frame.message_type, input_frame.message_type);
+    EXPECT_EQ(output_frame.type, input_frame.type);
     EXPECT_EQ(output_frame.source_id, input_frame.source_id);
     EXPECT_EQ(output_frame.payload_size, input_frame.payload_size);
-    EXPECT_EQ(output_frame.initialization_vector, input_frame.initialization_vector);
+    EXPECT_EQ(output_frame.payload_data, input_frame.payload_data);
 
     EXPECT_TRUE(channel.empty());
     EXPECT_EQ(channel.size(), 0);
@@ -54,16 +51,10 @@ TEST_F(ChannelTest, MultipleMessages) {
     // Produce multiple frames
     for (int i = 0; i < frame_count; ++i) {
         MessageFrame frame;
-        frame.message_type = i % 2 == 0 ? MessageType::STORE_FILE : MessageType::GET_FILE;
+        frame.type = i;
         frame.source_id = i * 100;
-        frame.payload_size = sizeof(int);
-
-        std::array<uint8_t, 16> iv;
-        for (size_t j = 0; j < 16; ++j) {
-            iv[j] = static_cast<uint8_t>(i + j);
-        }
-        frame.initialization_vector = iv;
-
+        frame.payload_size = 1;
+        frame.payload_data = {static_cast<char>('A' + i)};
         frames.push_back(frame);
         channel.produce(frame);
     }
@@ -74,10 +65,9 @@ TEST_F(ChannelTest, MultipleMessages) {
     for (int i = 0; i < frame_count; ++i) {
         MessageFrame output_frame;
         EXPECT_TRUE(channel.consume(output_frame));
-        EXPECT_EQ(output_frame.message_type, frames[i].message_type);
+        EXPECT_EQ(output_frame.type, frames[i].type);
         EXPECT_EQ(output_frame.source_id, frames[i].source_id);
-        EXPECT_EQ(output_frame.payload_size, frames[i].payload_size);
-        EXPECT_EQ(output_frame.initialization_vector, frames[i].initialization_vector);
+        EXPECT_EQ(output_frame.payload_data, frames[i].payload_data);
     }
 
     EXPECT_TRUE(channel.empty());
@@ -106,16 +96,10 @@ TEST_F(ChannelTest, ConcurrentProducersConsumers) {
 
             for (int j = 0; j < messages_per_producer; ++j) {
                 MessageFrame frame;
-                frame.message_type = j % 2 == 0 ? MessageType::STORE_FILE : MessageType::GET_FILE;
+                frame.type = i;
                 frame.source_id = j;
                 frame.payload_size = sizeof(int);
-
-                std::array<uint8_t, 16> iv;
-                for (size_t k = 0; k < 16; ++k) {
-                    iv[k] = static_cast<uint8_t>((j + k) & 0xFF);
-                }
-                frame.initialization_vector = iv;
-
+                frame.payload_data = {static_cast<char>(j & 0xFF)};
                 channel.produce(frame);
 
                 // Random delay to increase chance of thread interleaving
@@ -160,6 +144,87 @@ TEST_F(ChannelTest, ConcurrentProducersConsumers) {
 }
 
 // Edge cases and stress testing
+TEST_F(ChannelTest, AlternatingProduceConsume) {
+    const int iterations = 1000;
+    std::atomic<bool> producer_done{false};
+    std::atomic<int> consumed_count{0};
+
+    // Producer thread
+    std::thread producer([this, iterations, &producer_done]() {
+        for (int i = 0; i < iterations; ++i) {
+            MessageFrame frame;
+            frame.type = 1;
+            frame.source_id = i;
+            frame.payload_size = sizeof(int);
+            frame.payload_data = {static_cast<char>(i & 0xFF)};
+            channel.produce(frame);
+            std::this_thread::yield(); // Allow consumer to interleave
+        }
+        producer_done = true;
+    });
+
+    // Consumer thread
+    std::thread consumer([this, &producer_done, &consumed_count]() {
+        MessageFrame frame;
+        while (!producer_done || !channel.empty()) {
+            if (channel.consume(frame)) {
+                consumed_count++;
+            }
+            std::this_thread::yield();
+        }
+    });
+
+    producer.join();
+    consumer.join();
+
+    EXPECT_EQ(consumed_count, iterations);
+    EXPECT_TRUE(channel.empty());
+}
+
+TEST_F(ChannelTest, BurstyTraffic) {
+    const int burst_size = 100;
+    const int num_bursts = 10;
+    std::atomic<int> consumed_count{0};
+
+    std::thread producer([this, burst_size, num_bursts]() {
+        std::random_device rd;
+        std::mt19937 gen(rd());
+        std::uniform_int_distribution<> delay(1, 50);
+
+        for (int burst = 0; burst < num_bursts; ++burst) {
+            // Produce burst of messages
+            for (int i = 0; i < burst_size; ++i) {
+                MessageFrame frame;
+                frame.type = burst;
+                frame.source_id = i;
+                channel.produce(frame);
+            }
+
+            // Random delay between bursts
+            std::this_thread::sleep_for(std::chrono::milliseconds(delay(gen)));
+        }
+    });
+
+    std::thread consumer([this, burst_size, num_bursts, &consumed_count]() {
+        MessageFrame frame;
+        const int total_messages = burst_size * num_bursts;
+
+        while (consumed_count < total_messages) {
+            if (channel.consume(frame)) {
+                consumed_count++;
+            }
+            std::this_thread::yield();
+        }
+    });
+
+    producer.join();
+    consumer.join();
+
+    EXPECT_EQ(consumed_count, burst_size * num_bursts);
+    EXPECT_TRUE(channel.empty());
+}
+
+// Stress test with rapid produce/consume operations
 TEST_F(ChannelTest, StressTest) {
     const int operations = 10000;
     std::atomic<bool> stop{false};
@@ -170,16 +235,8 @@ TEST_F(ChannelTest, StressTest) {
     std::thread producer([this, &stop, &produced]() {
         while (produced < operations && !stop) {
             MessageFrame frame;
-            frame.message_type = MessageType::STORE_FILE;
+            frame.type = 1;
             frame.source_id = produced;
-            frame.payload_size = sizeof(int);
-
-            std::array<uint8_t, 16> iv;
-            for (size_t i = 0; i < 16; ++i) {
-                iv[i] = static_cast<uint8_t>((produced + i) & 0xFF);
-            }
-            frame.initialization_vector = iv;
-
             channel.produce(frame);
             produced++;
         }

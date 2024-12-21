@@ -30,9 +30,9 @@ public:
     // Returns number of bytes written
     static std::size_t serialize(const MessageFrame& frame, std::istream& data, std::ostream& output);
 
-    // Deserializes a message frame from an input stream and positions the stream at payload start
-    // Returns the parsed message frame and a pointer to the input stream positioned at payload start
-    static std::pair<MessageFrame, std::istream*> deserialize(std::istream& input);
+    // Deserializes a message frame from an input stream and positions the stream at the start of payload
+    // Returns the parsed message frame and a reference to the input stream positioned at payload start
+    static std::pair<MessageFrame, std::istream&> deserialize(std::istream& input);
 
 private:
     static constexpr std::size_t FRAME_SIZE = 

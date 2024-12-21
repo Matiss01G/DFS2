@@ -262,30 +262,6 @@ run_tests/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/run_tests.dir/build.make CMakeFiles/run_tests.dir/build
 .PHONY : run_tests/fast
 
-src/channel/channel.o: src/channel/channel.cpp.o
-.PHONY : src/channel/channel.o
-
-# target to build an object file
-src/channel/channel.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/dfs_network.dir/build.make CMakeFiles/dfs_network.dir/src/channel/channel.cpp.o
-.PHONY : src/channel/channel.cpp.o
-
-src/channel/channel.i: src/channel/channel.cpp.i
-.PHONY : src/channel/channel.i
-
-# target to preprocess a source file
-src/channel/channel.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/dfs_network.dir/build.make CMakeFiles/dfs_network.dir/src/channel/channel.cpp.i
-.PHONY : src/channel/channel.cpp.i
-
-src/channel/channel.s: src/channel/channel.cpp.s
-.PHONY : src/channel/channel.s
-
-# target to generate assembly for a file
-src/channel/channel.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/dfs_network.dir/build.make CMakeFiles/dfs_network.dir/src/channel/channel.cpp.s
-.PHONY : src/channel/channel.cpp.s
-
 src/crypto/crypto_stream.o: src/crypto/crypto_stream.cpp.o
 .PHONY : src/crypto/crypto_stream.o
 
@@ -309,30 +285,6 @@ src/crypto/crypto_stream.s: src/crypto/crypto_stream.cpp.s
 src/crypto/crypto_stream.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/dfs_crypto.dir/build.make CMakeFiles/dfs_crypto.dir/src/crypto/crypto_stream.cpp.s
 .PHONY : src/crypto/crypto_stream.cpp.s
-
-src/network/message_handler.o: src/network/message_handler.cpp.o
-.PHONY : src/network/message_handler.o
-
-# target to build an object file
-src/network/message_handler.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/dfs_network.dir/build.make CMakeFiles/dfs_network.dir/src/network/message_handler.cpp.o
-.PHONY : src/network/message_handler.cpp.o
-
-src/network/message_handler.i: src/network/message_handler.cpp.i
-.PHONY : src/network/message_handler.i
-
-# target to preprocess a source file
-src/network/message_handler.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/dfs_network.dir/build.make CMakeFiles/dfs_network.dir/src/network/message_handler.cpp.i
-.PHONY : src/network/message_handler.cpp.i
-
-src/network/message_handler.s: src/network/message_handler.cpp.s
-.PHONY : src/network/message_handler.s
-
-# target to generate assembly for a file
-src/network/message_handler.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/dfs_network.dir/build.make CMakeFiles/dfs_network.dir/src/network/message_handler.cpp.s
-.PHONY : src/network/message_handler.cpp.s
 
 src/network/peer_manager.o: src/network/peer_manager.cpp.o
 .PHONY : src/network/peer_manager.o
@@ -502,30 +454,6 @@ src/tests/tcp_peer_test.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/network_tests.dir/build.make CMakeFiles/network_tests.dir/src/tests/tcp_peer_test.cpp.s
 .PHONY : src/tests/tcp_peer_test.cpp.s
 
-tests/channel_test.o: tests/channel_test.cpp.o
-.PHONY : tests/channel_test.o
-
-# target to build an object file
-tests/channel_test.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/network_tests.dir/build.make CMakeFiles/network_tests.dir/tests/channel_test.cpp.o
-.PHONY : tests/channel_test.cpp.o
-
-tests/channel_test.i: tests/channel_test.cpp.i
-.PHONY : tests/channel_test.i
-
-# target to preprocess a source file
-tests/channel_test.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/network_tests.dir/build.make CMakeFiles/network_tests.dir/tests/channel_test.cpp.i
-.PHONY : tests/channel_test.cpp.i
-
-tests/channel_test.s: tests/channel_test.cpp.s
-.PHONY : tests/channel_test.s
-
-# target to generate assembly for a file
-tests/channel_test.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/network_tests.dir/build.make CMakeFiles/network_tests.dir/tests/channel_test.cpp.s
-.PHONY : tests/channel_test.cpp.s
-
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -546,15 +474,9 @@ help:
 	@echo "... dfs_store"
 	@echo "... network_tests"
 	@echo "... store_tests"
-	@echo "... src/channel/channel.o"
-	@echo "... src/channel/channel.i"
-	@echo "... src/channel/channel.s"
 	@echo "... src/crypto/crypto_stream.o"
 	@echo "... src/crypto/crypto_stream.i"
 	@echo "... src/crypto/crypto_stream.s"
-	@echo "... src/network/message_handler.o"
-	@echo "... src/network/message_handler.i"
-	@echo "... src/network/message_handler.s"
 	@echo "... src/network/peer_manager.o"
 	@echo "... src/network/peer_manager.i"
 	@echo "... src/network/peer_manager.s"
@@ -576,9 +498,6 @@ help:
 	@echo "... src/tests/tcp_peer_test.o"
 	@echo "... src/tests/tcp_peer_test.i"
 	@echo "... src/tests/tcp_peer_test.s"
-	@echo "... tests/channel_test.o"
-	@echo "... tests/channel_test.i"
-	@echo "... tests/channel_test.s"
 .PHONY : help
 
 

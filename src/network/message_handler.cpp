@@ -62,7 +62,7 @@ std::size_t MessageHandler::serialize(const MessageFrame& frame, std::istream& d
     }
 }
 
-std::pair<MessageFrame, std::istream*> 
+std::pair<MessageFrame, std::istream&> 
 MessageHandler::deserialize(std::istream& input) {
     if (!input.good()) {
         throw MessageError("Invalid input stream");
@@ -86,8 +86,8 @@ MessageHandler::deserialize(std::istream& input) {
         read_bytes(input, &network_payload_size, sizeof(uint64_t));
         frame.payload_size = from_network_order(network_payload_size);
 
-        // Return the frame and a pointer to the input stream positioned at payload start
-        return std::make_pair(frame, &input);
+        // Return the frame and input stream positioned at payload start
+        return std::make_pair(frame, input);
     }
     catch (const std::exception& e) {
         throw MessageError(std::string("Deserialization error: ") + e.what());
