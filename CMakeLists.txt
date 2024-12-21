@@ -100,9 +100,16 @@ target_link_libraries(network_tests
 )
 
 include(GoogleTest)
-gtest_discover_tests(crypto_tests)
-gtest_discover_tests(store_tests)
-gtest_discover_tests(network_tests)
+gtest_discover_tests(crypto_tests DISCOVERY_TIMEOUT 60)
+gtest_discover_tests(store_tests DISCOVERY_TIMEOUT 60)
+gtest_discover_tests(network_tests DISCOVERY_TIMEOUT 60)
+
+add_custom_target(run_tests
+    COMMAND crypto_tests
+    COMMAND store_tests  
+    COMMAND network_tests
+    DEPENDS crypto_tests store_tests network_tests
+)
 
 
 # Install rules
