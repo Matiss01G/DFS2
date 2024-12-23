@@ -1,4 +1,4 @@
-#include "network/channel/channel.hpp"
+#include "network/channel.hpp"
 #include <boost/log/trivial.hpp>
 
 namespace dfs {
