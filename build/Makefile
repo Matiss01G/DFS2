@@ -263,19 +263,6 @@ channel_tests/fast:
 .PHONY : channel_tests/fast
 
 #=============================================================================
-# Target rules for targets named codec_tests
-
-# Build rule for target.
-codec_tests: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 codec_tests
-.PHONY : codec_tests
-
-# fast build rule for target.
-codec_tests/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/codec_tests.dir/build.make CMakeFiles/codec_tests.dir/build
-.PHONY : codec_tests/fast
-
-#=============================================================================
 # Target rules for targets named run_tests
 
 # Build rule for target.
@@ -317,7 +304,6 @@ src/network/channel.o: src/network/channel.cpp.o
 
 # target to build an object file
 src/network/channel.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/dfs_network.dir/build.make CMakeFiles/dfs_network.dir/src/network/channel.cpp.o
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/channel_tests.dir/build.make CMakeFiles/channel_tests.dir/src/network/channel.cpp.o
 .PHONY : src/network/channel.cpp.o
 
@@ -326,7 +312,6 @@ src/network/channel.i: src/network/channel.cpp.i
 
 # target to preprocess a source file
 src/network/channel.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/dfs_network.dir/build.make CMakeFiles/dfs_network.dir/src/network/channel.cpp.i
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/channel_tests.dir/build.make CMakeFiles/channel_tests.dir/src/network/channel.cpp.i
 .PHONY : src/network/channel.cpp.i
 
@@ -335,33 +320,8 @@ src/network/channel.s: src/network/channel.cpp.s
 
 # target to generate assembly for a file
 src/network/channel.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/dfs_network.dir/build.make CMakeFiles/dfs_network.dir/src/network/channel.cpp.s
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/channel_tests.dir/build.make CMakeFiles/channel_tests.dir/src/network/channel.cpp.s
 .PHONY : src/network/channel.cpp.s
-
-src/network/codec.o: src/network/codec.cpp.o
-.PHONY : src/network/codec.o
-
-# target to build an object file
-src/network/codec.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/dfs_network.dir/build.make CMakeFiles/dfs_network.dir/src/network/codec.cpp.o
-.PHONY : src/network/codec.cpp.o
-
-src/network/codec.i: src/network/codec.cpp.i
-.PHONY : src/network/codec.i
-
-# target to preprocess a source file
-src/network/codec.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/dfs_network.dir/build.make CMakeFiles/dfs_network.dir/src/network/codec.cpp.i
-.PHONY : src/network/codec.cpp.i
-
-src/network/codec.s: src/network/codec.cpp.s
-.PHONY : src/network/codec.s
-
-# target to generate assembly for a file
-src/network/codec.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/dfs_network.dir/build.make CMakeFiles/dfs_network.dir/src/network/codec.cpp.s
-.PHONY : src/network/codec.cpp.s
 
 src/network/peer_manager.o: src/network/peer_manager.cpp.o
 .PHONY : src/network/peer_manager.o
@@ -458,30 +418,6 @@ src/tests/channel_test.s: src/tests/channel_test.cpp.s
 src/tests/channel_test.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/channel_tests.dir/build.make CMakeFiles/channel_tests.dir/src/tests/channel_test.cpp.s
 .PHONY : src/tests/channel_test.cpp.s
-
-src/tests/codec_test.o: src/tests/codec_test.cpp.o
-.PHONY : src/tests/codec_test.o
-
-# target to build an object file
-src/tests/codec_test.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/codec_tests.dir/build.make CMakeFiles/codec_tests.dir/src/tests/codec_test.cpp.o
-.PHONY : src/tests/codec_test.cpp.o
-
-src/tests/codec_test.i: src/tests/codec_test.cpp.i
-.PHONY : src/tests/codec_test.i
-
-# target to preprocess a source file
-src/tests/codec_test.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/codec_tests.dir/build.make CMakeFiles/codec_tests.dir/src/tests/codec_test.cpp.i
-.PHONY : src/tests/codec_test.cpp.i
-
-src/tests/codec_test.s: src/tests/codec_test.cpp.s
-.PHONY : src/tests/codec_test.s
-
-# target to generate assembly for a file
-src/tests/codec_test.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/codec_tests.dir/build.make CMakeFiles/codec_tests.dir/src/tests/codec_test.cpp.s
-.PHONY : src/tests/codec_test.cpp.s
 
 src/tests/crypto_stream_test.o: src/tests/crypto_stream_test.cpp.o
 .PHONY : src/tests/crypto_stream_test.o
@@ -594,7 +530,6 @@ help:
 	@echo "... test"
 	@echo "... run_tests"
 	@echo "... channel_tests"
-	@echo "... codec_tests"
 	@echo "... crypto_tests"
 	@echo "... dfs_crypto"
 	@echo "... dfs_network"
@@ -607,9 +542,6 @@ help:
 	@echo "... src/network/channel.o"
 	@echo "... src/network/channel.i"
 	@echo "... src/network/channel.s"
-	@echo "... src/network/codec.o"
-	@echo "... src/network/codec.i"
-	@echo "... src/network/codec.s"
 	@echo "... src/network/peer_manager.o"
 	@echo "... src/network/peer_manager.i"
 	@echo "... src/network/peer_manager.s"
@@ -622,9 +554,6 @@ help:
 	@echo "... src/tests/channel_test.o"
 	@echo "... src/tests/channel_test.i"
 	@echo "... src/tests/channel_test.s"
-	@echo "... src/tests/codec_test.o"
-	@echo "... src/tests/codec_test.i"
-	@echo "... src/tests/codec_test.s"
 	@echo "... src/tests/crypto_stream_test.o"
 	@echo "... src/tests/crypto_stream_test.i"
 	@echo "... src/tests/crypto_stream_test.s"

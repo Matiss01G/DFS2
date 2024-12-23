@@ -97,51 +97,19 @@ CMakeFiles/dfs_network.dir/src/network/peer_manager.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/dfs_network.dir/src/network/peer_manager.cpp.s"
 	/nix/store/9bv7dcvmfcjnmg5mnqwqlq2wxfn8d7yi-gcc-wrapper-13.2.0/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/runner/StreamCryptoDFS/src/network/peer_manager.cpp -o CMakeFiles/dfs_network.dir/src/network/peer_manager.cpp.s
 
-CMakeFiles/dfs_network.dir/src/network/codec.cpp.o: CMakeFiles/dfs_network.dir/flags.make
-CMakeFiles/dfs_network.dir/src/network/codec.cpp.o: /home/runner/StreamCryptoDFS/src/network/codec.cpp
-CMakeFiles/dfs_network.dir/src/network/codec.cpp.o: CMakeFiles/dfs_network.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/StreamCryptoDFS/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/dfs_network.dir/src/network/codec.cpp.o"
-	/nix/store/9bv7dcvmfcjnmg5mnqwqlq2wxfn8d7yi-gcc-wrapper-13.2.0/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/dfs_network.dir/src/network/codec.cpp.o -MF CMakeFiles/dfs_network.dir/src/network/codec.cpp.o.d -o CMakeFiles/dfs_network.dir/src/network/codec.cpp.o -c /home/runner/StreamCryptoDFS/src/network/codec.cpp
-
-CMakeFiles/dfs_network.dir/src/network/codec.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/dfs_network.dir/src/network/codec.cpp.i"
-	/nix/store/9bv7dcvmfcjnmg5mnqwqlq2wxfn8d7yi-gcc-wrapper-13.2.0/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/runner/StreamCryptoDFS/src/network/codec.cpp > CMakeFiles/dfs_network.dir/src/network/codec.cpp.i
-
-CMakeFiles/dfs_network.dir/src/network/codec.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/dfs_network.dir/src/network/codec.cpp.s"
-	/nix/store/9bv7dcvmfcjnmg5mnqwqlq2wxfn8d7yi-gcc-wrapper-13.2.0/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/runner/StreamCryptoDFS/src/network/codec.cpp -o CMakeFiles/dfs_network.dir/src/network/codec.cpp.s
-
-CMakeFiles/dfs_network.dir/src/network/channel.cpp.o: CMakeFiles/dfs_network.dir/flags.make
-CMakeFiles/dfs_network.dir/src/network/channel.cpp.o: /home/runner/StreamCryptoDFS/src/network/channel.cpp
-CMakeFiles/dfs_network.dir/src/network/channel.cpp.o: CMakeFiles/dfs_network.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/StreamCryptoDFS/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/dfs_network.dir/src/network/channel.cpp.o"
-	/nix/store/9bv7dcvmfcjnmg5mnqwqlq2wxfn8d7yi-gcc-wrapper-13.2.0/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/dfs_network.dir/src/network/channel.cpp.o -MF CMakeFiles/dfs_network.dir/src/network/channel.cpp.o.d -o CMakeFiles/dfs_network.dir/src/network/channel.cpp.o -c /home/runner/StreamCryptoDFS/src/network/channel.cpp
-
-CMakeFiles/dfs_network.dir/src/network/channel.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/dfs_network.dir/src/network/channel.cpp.i"
-	/nix/store/9bv7dcvmfcjnmg5mnqwqlq2wxfn8d7yi-gcc-wrapper-13.2.0/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/runner/StreamCryptoDFS/src/network/channel.cpp > CMakeFiles/dfs_network.dir/src/network/channel.cpp.i
-
-CMakeFiles/dfs_network.dir/src/network/channel.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/dfs_network.dir/src/network/channel.cpp.s"
-	/nix/store/9bv7dcvmfcjnmg5mnqwqlq2wxfn8d7yi-gcc-wrapper-13.2.0/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/runner/StreamCryptoDFS/src/network/channel.cpp -o CMakeFiles/dfs_network.dir/src/network/channel.cpp.s
-
 # Object files for target dfs_network
 dfs_network_OBJECTS = \
 "CMakeFiles/dfs_network.dir/src/network/tcp_peer.cpp.o" \
-"CMakeFiles/dfs_network.dir/src/network/peer_manager.cpp.o" \
-"CMakeFiles/dfs_network.dir/src/network/codec.cpp.o" \
-"CMakeFiles/dfs_network.dir/src/network/channel.cpp.o"
+"CMakeFiles/dfs_network.dir/src/network/peer_manager.cpp.o"
 
 # External object files for target dfs_network
 dfs_network_EXTERNAL_OBJECTS =
 
 libdfs_network.a: CMakeFiles/dfs_network.dir/src/network/tcp_peer.cpp.o
 libdfs_network.a: CMakeFiles/dfs_network.dir/src/network/peer_manager.cpp.o
-libdfs_network.a: CMakeFiles/dfs_network.dir/src/network/codec.cpp.o
-libdfs_network.a: CMakeFiles/dfs_network.dir/src/network/channel.cpp.o
 libdfs_network.a: CMakeFiles/dfs_network.dir/build.make
 libdfs_network.a: CMakeFiles/dfs_network.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/runner/StreamCryptoDFS/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Linking CXX static library libdfs_network.a"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/runner/StreamCryptoDFS/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Linking CXX static library libdfs_network.a"
 	$(CMAKE_COMMAND) -P CMakeFiles/dfs_network.dir/cmake_clean_target.cmake
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/dfs_network.dir/link.txt --verbose=$(VERBOSE)
 
