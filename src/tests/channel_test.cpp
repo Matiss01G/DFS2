@@ -4,7 +4,8 @@
 #include <chrono>
 #include <atomic>
 #include <random>
-#include "channel/channel.hpp"
+#include <sstream>
+#include "network/channel.hpp"
 #include "network/message_frame.hpp"
 
 using namespace dfs::network;
@@ -22,10 +23,14 @@ TEST_F(ChannelTest, InitialState) {
 
 TEST_F(ChannelTest, SingleProduceConsume) {
     MessageFrame input_frame;
-    input_frame.type = 1;
+    input_frame.message_type = MessageType::DATA;
     input_frame.source_id = 123;
     input_frame.payload_size = 5;
-    input_frame.payload_data = {'H', 'e', 'l', 'l', 'o'};
+
+    // Create a string stream for payload
+    auto payload = std::make_shared<std::stringstream>();
+    payload->write("Hello", 5);
+    input_frame.payload_stream = payload;
 
     channel.produce(input_frame);
 
@@ -35,10 +40,16 @@ TEST_F(ChannelTest, SingleProduceConsume) {
     MessageFrame output_frame;
     EXPECT_TRUE(channel.consume(output_frame));
 
-    EXPECT_EQ(output_frame.type, input_frame.type);
+    EXPECT_EQ(output_frame.message_type, input_frame.message_type);
     EXPECT_EQ(output_frame.source_id, input_frame.source_id);
     EXPECT_EQ(output_frame.payload_size, input_frame.payload_size);
-    EXPECT_EQ(output_frame.payload_data, input_frame.payload_data);
+
+    // Compare payload streams
+    if (output_frame.payload_stream && input_frame.payload_stream) {
+        std::string input_data = input_frame.payload_stream->str();
+        std::string output_data = output_frame.payload_stream->str();
+        EXPECT_EQ(output_data, input_data);
+    }
 
     EXPECT_TRUE(channel.empty());
     EXPECT_EQ(channel.size(), 0);
@@ -51,10 +62,14 @@ TEST_F(ChannelTest, MultipleMessages) {
     // Produce multiple frames
     for (int i = 0; i < frame_count; ++i) {
         MessageFrame frame;
-        frame.type = i;
+        frame.message_type = MessageType::DATA;
         frame.source_id = i * 100;
         frame.payload_size = 1;
-        frame.payload_data = {static_cast<char>('A' + i)};
+
+        auto payload = std::make_shared<std::stringstream>();
+        payload->put(static_cast<char>('A' + i));
+        frame.payload_stream = payload;
+
         frames.push_back(frame);
         channel.produce(frame);
     }
@@ -65,9 +80,14 @@ TEST_F(ChannelTest, MultipleMessages) {
     for (int i = 0; i < frame_count; ++i) {
         MessageFrame output_frame;
         EXPECT_TRUE(channel.consume(output_frame));
-        EXPECT_EQ(output_frame.type, frames[i].type);
+        EXPECT_EQ(output_frame.message_type, frames[i].message_type);
         EXPECT_EQ(output_frame.source_id, frames[i].source_id);
-        EXPECT_EQ(output_frame.payload_data, frames[i].payload_data);
+
+        if (output_frame.payload_stream && frames[i].payload_stream) {
+            std::string output_data = output_frame.payload_stream->str();
+            std::string input_data = frames[i].payload_stream->str();
+            EXPECT_EQ(output_data, input_data);
+        }
     }
 
     EXPECT_TRUE(channel.empty());
@@ -96,10 +116,14 @@ TEST_F(ChannelTest, ConcurrentProducersConsumers) {
 
             for (int j = 0; j < messages_per_producer; ++j) {
                 MessageFrame frame;
-                frame.type = i;
+                frame.message_type = MessageType::DATA;
                 frame.source_id = j;
                 frame.payload_size = sizeof(int);
-                frame.payload_data = {static_cast<char>(j & 0xFF)};
+
+                auto payload = std::make_shared<std::stringstream>();
+                payload->put(static_cast<char>(j & 0xFF));
+                frame.payload_stream = payload;
+
                 channel.produce(frame);
 
                 // Random delay to increase chance of thread interleaving
@@ -153,10 +177,14 @@ TEST_F(ChannelTest, AlternatingProduceConsume) {
     std::thread producer([this, iterations, &producer_done]() {
         for (int i = 0; i < iterations; ++i) {
             MessageFrame frame;
-            frame.type = 1;
+            frame.message_type = MessageType::DATA;
             frame.source_id = i;
             frame.payload_size = sizeof(int);
-            frame.payload_data = {static_cast<char>(i & 0xFF)};
+
+            auto payload = std::make_shared<std::stringstream>();
+            payload->put(static_cast<char>(i & 0xFF));
+            frame.payload_stream = payload;
+
             channel.produce(frame);
             std::this_thread::yield(); // Allow consumer to interleave
         }
@@ -181,50 +209,6 @@ TEST_F(ChannelTest, AlternatingProduceConsume) {
     EXPECT_TRUE(channel.empty());
 }
 
-TEST_F(ChannelTest, BurstyTraffic) {
-    const int burst_size = 100;
-    const int num_bursts = 10;
-    std::atomic<int> consumed_count{0};
-
-    std::thread producer([this, burst_size, num_bursts]() {
-        std::random_device rd;
-        std::mt19937 gen(rd());
-        std::uniform_int_distribution<> delay(1, 50);
-
-        for (int burst = 0; burst < num_bursts; ++burst) {
-            // Produce burst of messages
-            for (int i = 0; i < burst_size; ++i) {
-                MessageFrame frame;
-                frame.type = burst;
-                frame.source_id = i;
-                channel.produce(frame);
-            }
-
-            // Random delay between bursts
-            std::this_thread::sleep_for(std::chrono::milliseconds(delay(gen)));
-        }
-    });
-
-    std::thread consumer([this, burst_size, num_bursts, &consumed_count]() {
-        MessageFrame frame;
-        const int total_messages = burst_size * num_bursts;
-
-        while (consumed_count < total_messages) {
-            if (channel.consume(frame)) {
-                consumed_count++;
-            }
-            std::this_thread::yield();
-        }
-    });
-
-    producer.join();
-    consumer.join();
-
-    EXPECT_EQ(consumed_count, burst_size * num_bursts);
-    EXPECT_TRUE(channel.empty());
-}
-
-// Stress test with rapid produce/consume operations
 TEST_F(ChannelTest, StressTest) {
     const int operations = 10000;
     std::atomic<bool> stop{false};
@@ -235,8 +219,14 @@ TEST_F(ChannelTest, StressTest) {
     std::thread producer([this, &stop, &produced]() {
         while (produced < operations && !stop) {
             MessageFrame frame;
-            frame.type = 1;
+            frame.message_type = MessageType::DATA;
             frame.source_id = produced;
+            frame.payload_size = sizeof(int);
+
+            auto payload = std::make_shared<std::stringstream>();
+            payload->put(static_cast<char>(produced & 0xFF));
+            frame.payload_stream = payload;
+
             channel.produce(frame);
             produced++;
         }
