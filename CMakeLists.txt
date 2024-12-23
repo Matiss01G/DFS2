@@ -108,8 +108,7 @@ gtest_discover_tests(network_tests)
 add_custom_target(run_tests ALL
     COMMAND crypto_tests
     COMMAND store_tests
-    COMMAND network_tests
-    DEPENDS crypto_tests store_tests network_tests
+    DEPENDS crypto_tests store_tests
     WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
 )
 
