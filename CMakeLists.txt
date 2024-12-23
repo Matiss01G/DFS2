@@ -45,6 +45,7 @@ target_link_libraries(dfs_store PUBLIC
 add_library(dfs_network
     src/network/tcp_peer.cpp
     src/network/peer_manager.cpp
+    src/network/channel.cpp  
 )
 target_include_directories(dfs_network PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
@@ -101,8 +102,7 @@ target_link_libraries(network_tests
 
 # Channel tests
 add_executable(channel_tests
-    src/tests/channel_test.cpp
-    src/network/channel.cpp)
+    src/tests/channel_test.cpp)
 
 target_include_directories(channel_tests PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/include
