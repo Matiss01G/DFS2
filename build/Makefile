@@ -304,7 +304,7 @@ src/network/channel.o: src/network/channel.cpp.o
 
 # target to build an object file
 src/network/channel.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/dfs_network.dir/build.make CMakeFiles/dfs_network.dir/src/network/channel.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/channel_tests.dir/build.make CMakeFiles/channel_tests.dir/src/network/channel.cpp.o
 .PHONY : src/network/channel.cpp.o
 
 src/network/channel.i: src/network/channel.cpp.i
@@ -312,7 +312,7 @@ src/network/channel.i: src/network/channel.cpp.i
 
 # target to preprocess a source file
 src/network/channel.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/dfs_network.dir/build.make CMakeFiles/dfs_network.dir/src/network/channel.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/channel_tests.dir/build.make CMakeFiles/channel_tests.dir/src/network/channel.cpp.i
 .PHONY : src/network/channel.cpp.i
 
 src/network/channel.s: src/network/channel.cpp.s
@@ -320,7 +320,7 @@ src/network/channel.s: src/network/channel.cpp.s
 
 # target to generate assembly for a file
 src/network/channel.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/dfs_network.dir/build.make CMakeFiles/dfs_network.dir/src/network/channel.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/channel_tests.dir/build.make CMakeFiles/channel_tests.dir/src/network/channel.cpp.s
 .PHONY : src/network/channel.cpp.s
 
 src/network/peer_manager.o: src/network/peer_manager.cpp.o

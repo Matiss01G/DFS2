@@ -83,14 +83,30 @@ CMakeFiles/channel_tests.dir/src/tests/channel_test.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/channel_tests.dir/src/tests/channel_test.cpp.s"
 	/nix/store/9bv7dcvmfcjnmg5mnqwqlq2wxfn8d7yi-gcc-wrapper-13.2.0/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/runner/StreamCryptoDFS/src/tests/channel_test.cpp -o CMakeFiles/channel_tests.dir/src/tests/channel_test.cpp.s
 
+CMakeFiles/channel_tests.dir/src/network/channel.cpp.o: CMakeFiles/channel_tests.dir/flags.make
+CMakeFiles/channel_tests.dir/src/network/channel.cpp.o: /home/runner/StreamCryptoDFS/src/network/channel.cpp
+CMakeFiles/channel_tests.dir/src/network/channel.cpp.o: CMakeFiles/channel_tests.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/StreamCryptoDFS/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/channel_tests.dir/src/network/channel.cpp.o"
+	/nix/store/9bv7dcvmfcjnmg5mnqwqlq2wxfn8d7yi-gcc-wrapper-13.2.0/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/channel_tests.dir/src/network/channel.cpp.o -MF CMakeFiles/channel_tests.dir/src/network/channel.cpp.o.d -o CMakeFiles/channel_tests.dir/src/network/channel.cpp.o -c /home/runner/StreamCryptoDFS/src/network/channel.cpp
+
+CMakeFiles/channel_tests.dir/src/network/channel.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/channel_tests.dir/src/network/channel.cpp.i"
+	/nix/store/9bv7dcvmfcjnmg5mnqwqlq2wxfn8d7yi-gcc-wrapper-13.2.0/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/runner/StreamCryptoDFS/src/network/channel.cpp > CMakeFiles/channel_tests.dir/src/network/channel.cpp.i
+
+CMakeFiles/channel_tests.dir/src/network/channel.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/channel_tests.dir/src/network/channel.cpp.s"
+	/nix/store/9bv7dcvmfcjnmg5mnqwqlq2wxfn8d7yi-gcc-wrapper-13.2.0/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/runner/StreamCryptoDFS/src/network/channel.cpp -o CMakeFiles/channel_tests.dir/src/network/channel.cpp.s
+
 # Object files for target channel_tests
 channel_tests_OBJECTS = \
-"CMakeFiles/channel_tests.dir/src/tests/channel_test.cpp.o"
+"CMakeFiles/channel_tests.dir/src/tests/channel_test.cpp.o" \
+"CMakeFiles/channel_tests.dir/src/network/channel.cpp.o"
 
 # External object files for target channel_tests
 channel_tests_EXTERNAL_OBJECTS =
 
 channel_tests: CMakeFiles/channel_tests.dir/src/tests/channel_test.cpp.o
+channel_tests: CMakeFiles/channel_tests.dir/src/network/channel.cpp.o
 channel_tests: CMakeFiles/channel_tests.dir/build.make
 channel_tests: libdfs_network.a
 channel_tests: libdfs_crypto.a
@@ -106,7 +122,7 @@ channel_tests: /nix/store/62sh2bwllmkl8zzpqhglzgpk7lmsmrsa-boost-1.81.0/lib/libb
 channel_tests: /nix/store/g1xqvy5p9xgl33iywjy8192xpsfw33b1-gtest-1.14.0/lib/libgtest_main.so.1.14.0
 channel_tests: /nix/store/g1xqvy5p9xgl33iywjy8192xpsfw33b1-gtest-1.14.0/lib/libgtest.so.1.14.0
 channel_tests: CMakeFiles/channel_tests.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/runner/StreamCryptoDFS/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking CXX executable channel_tests"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/runner/StreamCryptoDFS/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Linking CXX executable channel_tests"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/channel_tests.dir/link.txt --verbose=$(VERBOSE)
 	/nix/store/q1nssraba326p2kp6627hldd2bhg254c-cmake-3.29.2/bin/cmake -D TEST_TARGET=channel_tests -D TEST_EXECUTABLE=/home/runner/StreamCryptoDFS/build/channel_tests -D TEST_EXECUTOR= -D TEST_WORKING_DIR=/home/runner/StreamCryptoDFS/build -D TEST_EXTRA_ARGS= -D TEST_PROPERTIES= -D TEST_PREFIX= -D TEST_SUFFIX= -D TEST_FILTER= -D NO_PRETTY_TYPES=FALSE -D NO_PRETTY_VALUES=FALSE -D TEST_LIST=channel_tests_TESTS -D CTEST_FILE=/home/runner/StreamCryptoDFS/build/channel_tests[1]_tests.cmake -D TEST_DISCOVERY_TIMEOUT=5 -D TEST_XML_OUTPUT_DIR= -P /nix/store/q1nssraba326p2kp6627hldd2bhg254c-cmake-3.29.2/share/cmake-3.29/Modules/GoogleTestAddTests.cmake
 
