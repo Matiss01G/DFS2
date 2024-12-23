@@ -68,8 +68,12 @@ include CMakeFiles/run_tests.dir/progress.make
 
 CMakeFiles/run_tests: crypto_tests
 CMakeFiles/run_tests: store_tests
+CMakeFiles/run_tests: network_tests
+CMakeFiles/run_tests: channel_tests
 	/home/runner/StreamCryptoDFS/build/crypto_tests
 	/home/runner/StreamCryptoDFS/build/store_tests
+	/home/runner/StreamCryptoDFS/build/network_tests
+	/home/runner/StreamCryptoDFS/build/channel_tests
 
 run_tests: CMakeFiles/run_tests
 run_tests: CMakeFiles/run_tests.dir/build.make

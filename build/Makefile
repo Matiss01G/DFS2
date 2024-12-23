@@ -250,6 +250,19 @@ network_tests/fast:
 .PHONY : network_tests/fast
 
 #=============================================================================
+# Target rules for targets named channel_tests
+
+# Build rule for target.
+channel_tests: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 channel_tests
+.PHONY : channel_tests
+
+# fast build rule for target.
+channel_tests/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/channel_tests.dir/build.make CMakeFiles/channel_tests.dir/build
+.PHONY : channel_tests/fast
+
+#=============================================================================
 # Target rules for targets named run_tests
 
 # Build rule for target.
@@ -357,6 +370,30 @@ src/store/store.s: src/store/store.cpp.s
 src/store/store.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/dfs_store.dir/build.make CMakeFiles/dfs_store.dir/src/store/store.cpp.s
 .PHONY : src/store/store.cpp.s
+
+src/tests/channel_test.o: src/tests/channel_test.cpp.o
+.PHONY : src/tests/channel_test.o
+
+# target to build an object file
+src/tests/channel_test.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/channel_tests.dir/build.make CMakeFiles/channel_tests.dir/src/tests/channel_test.cpp.o
+.PHONY : src/tests/channel_test.cpp.o
+
+src/tests/channel_test.i: src/tests/channel_test.cpp.i
+.PHONY : src/tests/channel_test.i
+
+# target to preprocess a source file
+src/tests/channel_test.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/channel_tests.dir/build.make CMakeFiles/channel_tests.dir/src/tests/channel_test.cpp.i
+.PHONY : src/tests/channel_test.cpp.i
+
+src/tests/channel_test.s: src/tests/channel_test.cpp.s
+.PHONY : src/tests/channel_test.s
+
+# target to generate assembly for a file
+src/tests/channel_test.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/channel_tests.dir/build.make CMakeFiles/channel_tests.dir/src/tests/channel_test.cpp.s
+.PHONY : src/tests/channel_test.cpp.s
 
 src/tests/crypto_stream_test.o: src/tests/crypto_stream_test.cpp.o
 .PHONY : src/tests/crypto_stream_test.o
@@ -468,6 +505,7 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... test"
 	@echo "... run_tests"
+	@echo "... channel_tests"
 	@echo "... crypto_tests"
 	@echo "... dfs_crypto"
 	@echo "... dfs_network"
@@ -486,6 +524,9 @@ help:
 	@echo "... src/store/store.o"
 	@echo "... src/store/store.i"
 	@echo "... src/store/store.s"
+	@echo "... src/tests/channel_test.o"
+	@echo "... src/tests/channel_test.i"
+	@echo "... src/tests/channel_test.s"
 	@echo "... src/tests/crypto_stream_test.o"
 	@echo "... src/tests/crypto_stream_test.i"
 	@echo "... src/tests/crypto_stream_test.s"
