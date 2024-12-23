@@ -42,6 +42,9 @@ std::size_t Codec::serialize(const MessageFrame& frame, std::ostream& output) {
             char buffer[4096];  // 4KB chunks for efficient streaming
             std::size_t remaining = frame.payload_size;
 
+            // Reset stream position to beginning
+            frame.payload_stream->seekg(0, std::ios::beg);
+
             while (remaining > 0 && frame.payload_stream->good()) {
                 std::size_t chunk_size = std::min(remaining, sizeof(buffer));
                 frame.payload_stream->read(buffer, chunk_size);
@@ -59,6 +62,9 @@ std::size_t Codec::serialize(const MessageFrame& frame, std::ostream& output) {
             if (remaining > 0) {
                 throw std::runtime_error("Failed to write complete payload");
             }
+
+            // Reset stream position back to beginning
+            frame.payload_stream->seekg(0, std::ios::beg);
         }
 
         return total_bytes;
@@ -97,12 +103,6 @@ MessageFrame Codec::deserialize(std::istream& input, Channel& channel) {
         read_bytes(input, &network_payload_size, sizeof(uint64_t));
         frame.payload_size = from_network_order(network_payload_size);
 
-        // Thread-safe channel push
-        {
-            std::lock_guard<std::mutex> lock(mutex_);
-            channel.produce(frame);
-        }
-  
         // If payload exists, create stream and read data
         if (frame.payload_size > 0) {
             auto payload_stream = std::make_shared<std::stringstream>();
@@ -120,7 +120,25 @@ MessageFrame Codec::deserialize(std::istream& input, Channel& channel) {
                 throw std::runtime_error("Failed to read complete payload");
             }
 
+            // Reset stream position to beginning
+            payload_stream->seekg(0, std::ios::beg);
             frame.payload_stream = payload_stream;
+        }
+
+        // Create a copy of the frame for the channel
+        MessageFrame channel_frame = frame;
+        if (frame.payload_stream) {
+            auto channel_payload = std::make_shared<std::stringstream>();
+            *channel_payload << frame.payload_stream->rdbuf();
+            channel_frame.payload_stream = channel_payload;
+            // Reset original stream position
+            frame.payload_stream->seekg(0, std::ios::beg);
+        }
+
+        // Thread-safe channel push with proper stream handling
+        {
+            std::lock_guard<std::mutex> lock(mutex_);
+            channel.produce(channel_frame);
         }
 
         return frame;

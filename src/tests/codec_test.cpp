@@ -269,3 +269,74 @@ TEST_F(CodecTest, ChannelIntegration) {
         input_frame.initialization_vector.begin()
     ));
 }
+
+/**
+ * @brief Tests Channel integration with payload data
+ * @details Verifies that:
+ * - Messages with payloads are properly added to the channel
+ * - Channel size increases appropriately
+ * - Messages can be retrieved from the channel
+ * - Payload data is preserved through the channel operations
+ */
+TEST_F(CodecTest, ChannelIntegrationWithPayload) {
+    MessageFrame input_frame;
+    input_frame.message_type = MessageType::STORE_FILE;
+    input_frame.source_id = 12345;
+    input_frame.filename_length = 8;  // "test.txt"
+
+    // Create a test payload with some varied content
+    const std::string test_data = "Hello, this is a test payload with some \0 binary \xFF data!";
+    auto payload = std::make_shared<std::stringstream>();
+    payload->write(test_data.c_str(), test_data.size());
+    input_frame.payload_size = test_data.size();
+    input_frame.payload_stream = payload;
+
+    // Set initialization vector
+    for (size_t i = 0; i < input_frame.initialization_vector.size(); ++i) {
+        input_frame.initialization_vector[i] = static_cast<uint8_t>(i & 0xFF);
+    }
+
+    // Reset stream position to beginning for reading
+    input_frame.payload_stream->seekg(0);
+
+    // Serialize message
+    std::stringstream buffer;
+    codec.serialize(input_frame, buffer);
+
+    EXPECT_TRUE(channel.empty());
+
+    // Deserialize should add to channel
+    MessageFrame output_frame = codec.deserialize(buffer, channel);
+
+    EXPECT_FALSE(channel.empty());
+    EXPECT_EQ(channel.size(), 1);
+
+    // Verify message in channel
+    MessageFrame retrieved_frame;
+    EXPECT_TRUE(channel.consume(retrieved_frame));
+
+    // Verify all fields
+    EXPECT_EQ(retrieved_frame.message_type, input_frame.message_type);
+    EXPECT_EQ(retrieved_frame.source_id, input_frame.source_id);
+    EXPECT_EQ(retrieved_frame.filename_length, input_frame.filename_length);
+    EXPECT_EQ(retrieved_frame.payload_size, input_frame.payload_size);
+
+    // Verify initialization vector
+    EXPECT_TRUE(std::equal(
+        retrieved_frame.initialization_vector.begin(),
+        retrieved_frame.initialization_vector.end(),
+        input_frame.initialization_vector.begin()
+    ));
+
+    // Verify payload content
+    ASSERT_TRUE(retrieved_frame.payload_stream) << "Retrieved frame payload stream is null";
+
+    // Reset stream position for reading
+    retrieved_frame.payload_stream->seekg(0);
+
+    std::string retrieved_data = retrieved_frame.payload_stream->str();
+    EXPECT_EQ(retrieved_data.size(), test_data.size()) 
+        << "Payload sizes don't match";
+    EXPECT_EQ(retrieved_data, test_data) 
+        << "Payload contents don't match";
+}

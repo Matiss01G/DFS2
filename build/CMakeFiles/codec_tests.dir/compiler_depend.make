@@ -77,6 +77,7 @@ CMakeFiles/codec_tests.dir/src/network/channel.cpp.o: /home/runner/StreamCryptoD
   /nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/bits/shared_ptr.h \
   /nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/bits/shared_ptr_atomic.h \
   /nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/bits/shared_ptr_base.h \
+  /nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/bits/sstream.tcc \
   /nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/bits/std_abs.h \
   /nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/bits/std_function.h \
   /nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/bits/std_mutex.h \
@@ -157,6 +158,7 @@ CMakeFiles/codec_tests.dir/src/network/channel.cpp.o: /home/runner/StreamCryptoD
   /nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/queue \
   /nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/ratio \
   /nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/source_location \
+  /nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/sstream \
   /nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/stdexcept \
   /nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/streambuf \
   /nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/string \
@@ -2170,10 +2172,6 @@ CMakeFiles/codec_tests.dir/src/tests/codec_test.cpp.o: /home/runner/StreamCrypto
 
 /home/runner/StreamCryptoDFS/src/tests/codec_test.cpp:
 
-/nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/map:
-
-/nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/sstream:
-
 /nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/iostream:
 
 /nix/store/ikmzrr3a8gd4jx31lkdhx7bk045j16fi-gtest-1.14.0-dev/include/gtest/internal/custom/gtest-printers.h:
@@ -2548,6 +2546,10 @@ CMakeFiles/codec_tests.dir/src/tests/codec_test.cpp.o: /home/runner/StreamCrypto
 
 /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/mpl/int_fwd.hpp:
 
+/nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/preprocessor/repetition/repeat.hpp:
+
+/nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/mpl/int.hpp:
+
 /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/mpl/pair.hpp:
 
 /nix/store/fwh4fxd747m0py3ib3s5abamia9nrf90-glibc-2.39-52-dev/include/bits/types/error_t.h:
@@ -2591,6 +2593,10 @@ CMakeFiles/codec_tests.dir/src/tests/codec_test.cpp.o: /home/runner/StreamCrypto
 /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/predef/os/macos.h:
 
 /nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/x86_64-unknown-linux-gnu/bits/cxxabi_tweaks.h:
+
+/nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/map:
+
+/nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/sstream:
 
 /nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/bits/stl_function.h:
 
@@ -2720,10 +2726,6 @@ CMakeFiles/codec_tests.dir/src/tests/codec_test.cpp.o: /home/runner/StreamCrypto
 
 /nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/streambuf:
 
-/nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/mpl/or.hpp:
-
-/nix/store/fwh4fxd747m0py3ib3s5abamia9nrf90-glibc-2.39-52-dev/include/bits/types/sigset_t.h:
-
 /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/predef/os/linux.h:
 
 /nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/source_location:
@@ -2777,6 +2779,14 @@ CMakeFiles/codec_tests.dir/src/tests/codec_test.cpp.o: /home/runner/StreamCrypto
 /nix/store/fwh4fxd747m0py3ib3s5abamia9nrf90-glibc-2.39-52-dev/include/bits/types/clock_t.h:
 
 /nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/limits:
+
+/nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/mpl/or.hpp:
+
+/nix/store/fwh4fxd747m0py3ib3s5abamia9nrf90-glibc-2.39-52-dev/include/bits/types/sigset_t.h:
+
+/nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/lib/gcc/x86_64-unknown-linux-gnu/13.2.0/include-fixed/pthread.h:
+
+/nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/log/detail/is_character_type.hpp:
 
 /nix/store/fwh4fxd747m0py3ib3s5abamia9nrf90-glibc-2.39-52-dev/include/bits/select2.h:
 
@@ -2840,18 +2850,6 @@ CMakeFiles/codec_tests.dir/src/tests/codec_test.cpp.o: /home/runner/StreamCrypto
 
 /nix/store/fwh4fxd747m0py3ib3s5abamia9nrf90-glibc-2.39-52-dev/include/bits/types/mbstate_t.h:
 
-/nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/system_error:
-
-/nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/log/utility/formatting_ostream.hpp:
-
-/nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/thread/detail/platform.hpp:
-
-/nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/bits/max_size_type.h:
-
-/nix/store/fwh4fxd747m0py3ib3s5abamia9nrf90-glibc-2.39-52-dev/include/bits/unistd_ext.h:
-
-/nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/x86_64-unknown-linux-gnu/bits/c++locale.h:
-
 /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/preprocessor/inc.hpp:
 
 /nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/exception:
@@ -2859,10 +2857,6 @@ CMakeFiles/codec_tests.dir/src/tests/codec_test.cpp.o: /home/runner/StreamCrypto
 /nix/store/fwh4fxd747m0py3ib3s5abamia9nrf90-glibc-2.39-52-dev/include/stdio.h:
 
 /nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/bits/stl_deque.h:
-
-/nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/bits/sstream.tcc:
-
-/nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/ext/alloc_traits.h:
 
 /nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/bits/stl_queue.h:
 
@@ -2926,6 +2920,16 @@ CMakeFiles/codec_tests.dir/src/tests/codec_test.cpp.o: /home/runner/StreamCrypto
 
 /nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/bits/allocated_ptr.h:
 
+/nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/type_traits/is_const.hpp:
+
+/nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/mpl/long.hpp:
+
+/nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/mpl/if.hpp:
+
+/nix/store/fwh4fxd747m0py3ib3s5abamia9nrf90-glibc-2.39-52-dev/include/bits/timesize.h:
+
+/nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/mpl/bind_fwd.hpp:
+
 /nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/iterator:
 
 /nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/string:
@@ -2964,6 +2968,12 @@ CMakeFiles/codec_tests.dir/src/tests/codec_test.cpp.o: /home/runner/StreamCrypto
 
 /nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/bits/range_access.h:
 
+/nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/x86_64-unknown-linux-gnu/bits/ctype_base.h:
+
+/nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/debug/debug.h:
+
+/nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/bits/stl_tempbuf.h:
+
 /nix/store/fwh4fxd747m0py3ib3s5abamia9nrf90-glibc-2.39-52-dev/include/bits/stdio.h:
 
 /nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/bits/istream.tcc:
@@ -2977,6 +2987,14 @@ CMakeFiles/codec_tests.dir/src/tests/codec_test.cpp.o: /home/runner/StreamCrypto
 /nix/store/fwh4fxd747m0py3ib3s5abamia9nrf90-glibc-2.39-52-dev/include/bits/time.h:
 
 /nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/memory:
+
+/nix/store/fwh4fxd747m0py3ib3s5abamia9nrf90-glibc-2.39-52-dev/include/bits/unistd_ext.h:
+
+/nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/x86_64-unknown-linux-gnu/bits/c++locale.h:
+
+/nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/thread/detail/platform.hpp:
+
+/nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/bits/max_size_type.h:
 
 /nix/store/fwh4fxd747m0py3ib3s5abamia9nrf90-glibc-2.39-52-dev/include/bits/stdio_lim.h:
 
@@ -3053,6 +3071,12 @@ CMakeFiles/codec_tests.dir/src/tests/codec_test.cpp.o: /home/runner/StreamCrypto
 /nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/bits/locale_classes.h:
 
 /nix/store/fwh4fxd747m0py3ib3s5abamia9nrf90-glibc-2.39-52-dev/include/bits/uio_lim.h:
+
+/nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/preprocessor/logical/not.hpp:
+
+/nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/bits/stl_raw_storage_iter.h:
+
+/nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/mpl/eval_if.hpp:
 
 /nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/semaphore:
 
@@ -3172,6 +3196,14 @@ CMakeFiles/codec_tests.dir/src/tests/codec_test.cpp.o: /home/runner/StreamCrypto
 
 /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/mpl/aux_/common_name_wknd.hpp:
 
+/nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/system_error:
+
+/nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/log/utility/formatting_ostream.hpp:
+
+/nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/ext/alloc_traits.h:
+
+/nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/bits/sstream.tcc:
+
 /nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/x86_64-unknown-linux-gnu/bits/ctype_inline.h:
 
 /nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/bits/std_abs.h:
@@ -3215,18 +3247,6 @@ CMakeFiles/codec_tests.dir/src/tests/codec_test.cpp.o: /home/runner/StreamCrypto
 /nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/bits/stl_pair.h:
 
 /nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/bits/stl_bvector.h:
-
-/nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/preprocessor/logical/not.hpp:
-
-/nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/mpl/eval_if.hpp:
-
-/nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/bits/stl_raw_storage_iter.h:
-
-/nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/x86_64-unknown-linux-gnu/bits/ctype_base.h:
-
-/nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/bits/stl_tempbuf.h:
-
-/nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/debug/debug.h:
 
 /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/type_traits/detail/yes_no_type.hpp:
 
@@ -3297,10 +3317,6 @@ CMakeFiles/codec_tests.dir/src/tests/codec_test.cpp.o: /home/runner/StreamCrypto
 /nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/ext/type_traits.h:
 
 /nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/debug/assertions.h:
-
-/nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/lib/gcc/x86_64-unknown-linux-gnu/13.2.0/include-fixed/pthread.h:
-
-/nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/log/detail/is_character_type.hpp:
 
 /nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/bits/stl_uninitialized.h:
 
@@ -3770,10 +3786,6 @@ CMakeFiles/codec_tests.dir/src/tests/codec_test.cpp.o: /home/runner/StreamCrypto
 
 /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/mpl/aux_/template_arity_fwd.hpp:
 
-/nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/preprocessor/repetition/repeat.hpp:
-
-/nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/mpl/int.hpp:
-
 /nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/bits/uses_allocator_args.h:
 
 /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/mpl/aux_/find_if_pred.hpp:
@@ -3859,13 +3871,3 @@ CMakeFiles/codec_tests.dir/src/tests/codec_test.cpp.o: /home/runner/StreamCrypto
 /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/mpl/aux_/preprocessed/gcc/full_lambda.hpp:
 
 /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/mpl/find.hpp:
-
-/nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/type_traits/is_const.hpp:
-
-/nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/mpl/long.hpp:
-
-/nix/store/fwh4fxd747m0py3ib3s5abamia9nrf90-glibc-2.39-52-dev/include/bits/timesize.h:
-
-/nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/mpl/bind_fwd.hpp:
-
-/nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/mpl/if.hpp:

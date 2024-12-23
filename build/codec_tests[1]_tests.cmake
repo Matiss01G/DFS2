@@ -8,4 +8,6 @@ add_test([=[CodecTest.ErrorHandling]=]  /home/runner/StreamCryptoDFS/build/codec
 set_tests_properties([=[CodecTest.ErrorHandling]=]  PROPERTIES WORKING_DIRECTORY /home/runner/StreamCryptoDFS/build SKIP_REGULAR_EXPRESSION [==[\[  SKIPPED \]]==])
 add_test([=[CodecTest.ChannelIntegration]=]  /home/runner/StreamCryptoDFS/build/codec_tests [==[--gtest_filter=CodecTest.ChannelIntegration]==] --gtest_also_run_disabled_tests)
 set_tests_properties([=[CodecTest.ChannelIntegration]=]  PROPERTIES WORKING_DIRECTORY /home/runner/StreamCryptoDFS/build SKIP_REGULAR_EXPRESSION [==[\[  SKIPPED \]]==])
-set(  codec_tests_TESTS CodecTest.BasicSerializeDeserialize CodecTest.LargePayloadSerializeDeserialize CodecTest.EmptyPayload CodecTest.ErrorHandling CodecTest.ChannelIntegration)
+add_test([=[CodecTest.ChannelIntegrationWithPayload]=]  /home/runner/StreamCryptoDFS/build/codec_tests [==[--gtest_filter=CodecTest.ChannelIntegrationWithPayload]==] --gtest_also_run_disabled_tests)
+set_tests_properties([=[CodecTest.ChannelIntegrationWithPayload]=]  PROPERTIES WORKING_DIRECTORY /home/runner/StreamCryptoDFS/build SKIP_REGULAR_EXPRESSION [==[\[  SKIPPED \]]==])
+set(  codec_tests_TESTS CodecTest.BasicSerializeDeserialize CodecTest.LargePayloadSerializeDeserialize CodecTest.EmptyPayload CodecTest.ErrorHandling CodecTest.ChannelIntegration CodecTest.ChannelIntegrationWithPayload)
