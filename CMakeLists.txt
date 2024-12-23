@@ -106,7 +106,9 @@ gtest_discover_tests(network_tests)
 
 # Add custom target to run tests
 add_custom_target(run_tests ALL
-    COMMAND ${CMAKE_CTEST_COMMAND}
+    COMMAND crypto_tests
+    COMMAND store_tests
+    COMMAND network_tests
     DEPENDS crypto_tests store_tests network_tests
     WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
 )
