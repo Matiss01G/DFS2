@@ -15,12 +15,28 @@ protected:
     Channel channel;
 };
 
-// Basic functionality tests
+/**
+ * @brief Tests the initial state of a newly created Channel
+ * @details Verifies that a newly created Channel:
+ * - Is empty (contains no messages)
+ * - Has a size of 0
+ * Expected outcome: Both empty() returns true and size() returns 0
+ */
 TEST_F(ChannelTest, InitialState) {
     EXPECT_TRUE(channel.empty());
     EXPECT_EQ(channel.size(), 0);
 }
 
+/**
+ * @brief Tests basic produce and consume operations with a single message
+ * @details Verifies that:
+ * - A single message can be produced (added) to the channel
+ * - The same message can be consumed (retrieved) from the channel
+ * - The message contents remain intact during the process
+ * - The channel returns to empty state after consumption
+ * Expected outcome: Message is successfully stored and retrieved with all fields matching,
+ * and channel becomes empty after consumption
+ */
 TEST_F(ChannelTest, SingleProduceConsume) {
     MessageFrame input_frame;
     input_frame.message_type = MessageType::STORE_FILE;
@@ -55,6 +71,16 @@ TEST_F(ChannelTest, SingleProduceConsume) {
     EXPECT_EQ(channel.size(), 0);
 }
 
+/**
+ * @brief Tests handling of multiple messages in sequence
+ * @details Verifies that:
+ * - Multiple messages can be produced in sequence
+ * - Messages are consumed in FIFO (First-In-First-Out) order
+ * - All message properties are preserved
+ * - Channel size updates correctly with each operation
+ * Expected outcome: All messages are retrieved in the same order they were added,
+ * with all properties matching their original values
+ */
 TEST_F(ChannelTest, MultipleMessages) {
     std::vector<MessageFrame> frames;
     const int frame_count = 5;
@@ -93,12 +119,28 @@ TEST_F(ChannelTest, MultipleMessages) {
     EXPECT_TRUE(channel.empty());
 }
 
+/**
+ * @brief Tests behavior when consuming from an empty channel
+ * @details Verifies that:
+ * - Attempting to consume from an empty channel returns false
+ * - The output frame remains unmodified
+ * Expected outcome: consume() returns false and the channel remains empty
+ */
 TEST_F(ChannelTest, ConsumeEmptyChannel) {
     MessageFrame frame;
     EXPECT_FALSE(channel.consume(frame));
 }
 
-// Thread safety tests
+/**
+ * @brief Tests thread safety with multiple concurrent producers and consumers
+ * @details Verifies that:
+ * - Multiple threads can safely produce and consume messages simultaneously
+ * - No messages are lost or corrupted during concurrent operations
+ * - Channel maintains consistency under high concurrency
+ * - All produced messages are successfully consumed exactly once
+ * Expected outcome: All messages are successfully produced and consumed,
+ * with the final consumed count matching the total number of produced messages
+ */
 TEST_F(ChannelTest, ConcurrentProducersConsumers) {
     const int num_producers = 4;
     const int num_consumers = 4;
@@ -167,7 +209,15 @@ TEST_F(ChannelTest, ConcurrentProducersConsumers) {
     EXPECT_TRUE(channel.empty());
 }
 
-// Edge cases and stress testing
+/**
+ * @brief Tests alternating produce-consume pattern with timing variations
+ * @details Verifies that:
+ * - Channel handles alternating produce and consume operations correctly
+ * - Operations work correctly with different timing patterns
+ * - All messages are processed in order without loss
+ * Expected outcome: All produced messages are consumed successfully,
+ * with the final consumed count matching the number of iterations
+ */
 TEST_F(ChannelTest, AlternatingProduceConsume) {
     const int iterations = 50;  // Reduced from 1000 to 50
     std::atomic<bool> producer_done{false};
