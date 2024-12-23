@@ -3,7 +3,7 @@
 
 CMakeFiles/channel_tests.dir/src/tests/channel_test.cpp.o
  /home/runner/StreamCryptoDFS/src/tests/channel_test.cpp
- /home/runner/StreamCryptoDFS/include/channel/channel.hpp
+ /home/runner/StreamCryptoDFS/include/network/channel.hpp
  /home/runner/StreamCryptoDFS/include/network/message_frame.hpp
  /nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/any
  /nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/array

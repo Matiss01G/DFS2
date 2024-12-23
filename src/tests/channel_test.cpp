@@ -23,7 +23,7 @@ TEST_F(ChannelTest, InitialState) {
 
 TEST_F(ChannelTest, SingleProduceConsume) {
     MessageFrame input_frame;
-    input_frame.message_type = MessageType::DATA;
+    input_frame.message_type = MessageType::STORE_FILE;
     input_frame.source_id = 123;
     input_frame.payload_size = 5;
 
@@ -62,7 +62,7 @@ TEST_F(ChannelTest, MultipleMessages) {
     // Produce multiple frames
     for (int i = 0; i < frame_count; ++i) {
         MessageFrame frame;
-        frame.message_type = MessageType::DATA;
+        frame.message_type = MessageType::STORE_FILE;
         frame.source_id = i * 100;
         frame.payload_size = 1;
 
@@ -116,7 +116,7 @@ TEST_F(ChannelTest, ConcurrentProducersConsumers) {
 
             for (int j = 0; j < messages_per_producer; ++j) {
                 MessageFrame frame;
-                frame.message_type = MessageType::DATA;
+                frame.message_type = MessageType::STORE_FILE;
                 frame.source_id = j;
                 frame.payload_size = sizeof(int);
 
@@ -177,7 +177,7 @@ TEST_F(ChannelTest, AlternatingProduceConsume) {
     std::thread producer([this, iterations, &producer_done]() {
         for (int i = 0; i < iterations; ++i) {
             MessageFrame frame;
-            frame.message_type = MessageType::DATA;
+            frame.message_type = MessageType::STORE_FILE;
             frame.source_id = i;
             frame.payload_size = sizeof(int);
 
@@ -219,7 +219,7 @@ TEST_F(ChannelTest, StressTest) {
     std::thread producer([this, &stop, &produced]() {
         while (produced < operations && !stop) {
             MessageFrame frame;
-            frame.message_type = MessageType::DATA;
+            frame.message_type = MessageType::STORE_FILE;
             frame.source_id = produced;
             frame.payload_size = sizeof(int);
 

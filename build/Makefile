@@ -299,6 +299,30 @@ src/crypto/crypto_stream.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/dfs_crypto.dir/build.make CMakeFiles/dfs_crypto.dir/src/crypto/crypto_stream.cpp.s
 .PHONY : src/crypto/crypto_stream.cpp.s
 
+src/network/channel.o: src/network/channel.cpp.o
+.PHONY : src/network/channel.o
+
+# target to build an object file
+src/network/channel.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/channel_tests.dir/build.make CMakeFiles/channel_tests.dir/src/network/channel.cpp.o
+.PHONY : src/network/channel.cpp.o
+
+src/network/channel.i: src/network/channel.cpp.i
+.PHONY : src/network/channel.i
+
+# target to preprocess a source file
+src/network/channel.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/channel_tests.dir/build.make CMakeFiles/channel_tests.dir/src/network/channel.cpp.i
+.PHONY : src/network/channel.cpp.i
+
+src/network/channel.s: src/network/channel.cpp.s
+.PHONY : src/network/channel.s
+
+# target to generate assembly for a file
+src/network/channel.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/channel_tests.dir/build.make CMakeFiles/channel_tests.dir/src/network/channel.cpp.s
+.PHONY : src/network/channel.cpp.s
+
 src/network/peer_manager.o: src/network/peer_manager.cpp.o
 .PHONY : src/network/peer_manager.o
 
@@ -515,6 +539,9 @@ help:
 	@echo "... src/crypto/crypto_stream.o"
 	@echo "... src/crypto/crypto_stream.i"
 	@echo "... src/crypto/crypto_stream.s"
+	@echo "... src/network/channel.o"
+	@echo "... src/network/channel.i"
+	@echo "... src/network/channel.s"
 	@echo "... src/network/peer_manager.o"
 	@echo "... src/network/peer_manager.i"
 	@echo "... src/network/peer_manager.s"

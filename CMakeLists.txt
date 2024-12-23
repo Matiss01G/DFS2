@@ -101,7 +101,12 @@ target_link_libraries(network_tests
 
 # Channel tests
 add_executable(channel_tests
-    src/tests/channel_test.cpp)
+    src/tests/channel_test.cpp
+    src/network/channel.cpp)
+
+target_include_directories(channel_tests PUBLIC
+    ${CMAKE_CURRENT_SOURCE_DIR}/include
+)
 
 target_link_libraries(channel_tests
     PRIVATE
