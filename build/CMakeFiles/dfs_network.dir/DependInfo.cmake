@@ -8,6 +8,8 @@ set(CMAKE_DEPENDS_LANGUAGES
 
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
+  "/home/runner/StreamCryptoDFS/src/network/channel.cpp" "CMakeFiles/dfs_network.dir/src/network/channel.cpp.o" "gcc" "CMakeFiles/dfs_network.dir/src/network/channel.cpp.o.d"
+  "/home/runner/StreamCryptoDFS/src/network/codec.cpp" "CMakeFiles/dfs_network.dir/src/network/codec.cpp.o" "gcc" "CMakeFiles/dfs_network.dir/src/network/codec.cpp.o.d"
   "/home/runner/StreamCryptoDFS/src/network/peer_manager.cpp" "CMakeFiles/dfs_network.dir/src/network/peer_manager.cpp.o" "gcc" "CMakeFiles/dfs_network.dir/src/network/peer_manager.cpp.o.d"
   "/home/runner/StreamCryptoDFS/src/network/tcp_peer.cpp" "CMakeFiles/dfs_network.dir/src/network/tcp_peer.cpp.o" "gcc" "CMakeFiles/dfs_network.dir/src/network/tcp_peer.cpp.o.d"
   )

@@ -5,6 +5,7 @@
 /home/runner/StreamCryptoDFS/build/CMakeFiles/store_tests.dir
 /home/runner/StreamCryptoDFS/build/CMakeFiles/network_tests.dir
 /home/runner/StreamCryptoDFS/build/CMakeFiles/channel_tests.dir
+/home/runner/StreamCryptoDFS/build/CMakeFiles/codec_tests.dir
 /home/runner/StreamCryptoDFS/build/CMakeFiles/run_tests.dir
 /home/runner/StreamCryptoDFS/build/CMakeFiles/test.dir
 /home/runner/StreamCryptoDFS/build/CMakeFiles/edit_cache.dir

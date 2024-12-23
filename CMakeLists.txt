@@ -45,6 +45,8 @@ target_link_libraries(dfs_store PUBLIC
 add_library(dfs_network
     src/network/tcp_peer.cpp
     src/network/peer_manager.cpp
+    src/network/codec.cpp
+    src/network/channel.cpp
 )
 target_include_directories(dfs_network PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
@@ -115,11 +117,27 @@ target_link_libraries(channel_tests
     GTest::Main
 )
 
+# Codec tests
+add_executable(codec_tests
+    src/tests/codec_test.cpp)
+
+target_include_directories(codec_tests PUBLIC
+    ${CMAKE_CURRENT_SOURCE_DIR}/include
+)
+
+target_link_libraries(codec_tests
+    PRIVATE
+    dfs_network
+    GTest::GTest
+    GTest::Main
+)
+
 include(GoogleTest)
 gtest_discover_tests(crypto_tests)
 gtest_discover_tests(store_tests)
 gtest_discover_tests(network_tests)
 gtest_discover_tests(channel_tests)
+gtest_discover_tests(codec_tests)
 
 # Add custom target to run tests
 add_custom_target(run_tests ALL
@@ -127,7 +145,8 @@ add_custom_target(run_tests ALL
     COMMAND store_tests
     COMMAND network_tests
     COMMAND channel_tests
-    DEPENDS crypto_tests store_tests network_tests channel_tests
+    COMMAND codec_tests
+    DEPENDS crypto_tests store_tests network_tests channel_tests codec_tests
     WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
 )
 

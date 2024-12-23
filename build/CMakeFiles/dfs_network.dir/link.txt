@@ -1,2 +1,2 @@
-/nix/store/9bv7dcvmfcjnmg5mnqwqlq2wxfn8d7yi-gcc-wrapper-13.2.0/bin/ar qc libdfs_network.a CMakeFiles/dfs_network.dir/src/network/tcp_peer.cpp.o CMakeFiles/dfs_network.dir/src/network/peer_manager.cpp.o
+/nix/store/9bv7dcvmfcjnmg5mnqwqlq2wxfn8d7yi-gcc-wrapper-13.2.0/bin/ar qc libdfs_network.a CMakeFiles/dfs_network.dir/src/network/tcp_peer.cpp.o CMakeFiles/dfs_network.dir/src/network/peer_manager.cpp.o CMakeFiles/dfs_network.dir/src/network/codec.cpp.o CMakeFiles/dfs_network.dir/src/network/channel.cpp.o
 /nix/store/9bv7dcvmfcjnmg5mnqwqlq2wxfn8d7yi-gcc-wrapper-13.2.0/bin/ranlib libdfs_network.a
