@@ -804,6 +804,8 @@ CMakeFiles/codec_tests.dir/src/network/channel.cpp.o: /home/runner/StreamCryptoD
   /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/version.hpp
 
 CMakeFiles/codec_tests.dir/src/network/codec.cpp.o: /home/runner/StreamCryptoDFS/src/network/codec.cpp \
+  /home/runner/StreamCryptoDFS/include/crypto/crypto_error.hpp \
+  /home/runner/StreamCryptoDFS/include/crypto/crypto_stream.hpp \
   /home/runner/StreamCryptoDFS/include/network/channel.hpp \
   /home/runner/StreamCryptoDFS/include/network/codec.hpp \
   /home/runner/StreamCryptoDFS/include/network/message_frame.hpp \
@@ -2173,6 +2175,10 @@ CMakeFiles/codec_tests.dir/src/tests/codec_test.cpp.o: /home/runner/StreamCrypto
 /home/runner/StreamCryptoDFS/src/tests/codec_test.cpp:
 
 /nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/iostream:
+
+/home/runner/StreamCryptoDFS/include/crypto/crypto_stream.hpp:
+
+/home/runner/StreamCryptoDFS/include/crypto/crypto_error.hpp:
 
 /nix/store/ikmzrr3a8gd4jx31lkdhx7bk045j16fi-gtest-1.14.0-dev/include/gtest/internal/custom/gtest-printers.h:
 
