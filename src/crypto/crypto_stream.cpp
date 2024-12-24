@@ -2,6 +2,7 @@
 #include <openssl/evp.h>
 #include <openssl/aes.h>
 #include <openssl/err.h>
+#include <openssl/rand.h>  // Added for RAND_bytes
 #include <array>
 #include <stdexcept>
 #include <boost/log/trivial.hpp>
@@ -203,6 +204,20 @@ CryptoStream& CryptoStream::operator<<(std::istream& input) {
     // Store input stream for later processing by operator>>
     pending_input_ = &input;
     return *this;
+}
+
+// Add the generate_IV function before the end of namespace
+std::array<uint8_t, CryptoStream::IV_SIZE> CryptoStream::generate_IV() const {
+    BOOST_LOG_TRIVIAL(debug) << "Generating initialization vector";
+
+    std::array<uint8_t, IV_SIZE> iv;
+    if (RAND_bytes(iv.data(), static_cast<int>(iv.size())) != 1) {
+        BOOST_LOG_TRIVIAL(error) << "Failed to generate random IV";
+        throw std::runtime_error("Failed to generate secure random IV");
+    }
+
+    BOOST_LOG_TRIVIAL(debug) << "Successfully generated initialization vector";
+    return iv;
 }
 
 } // namespace dfs::crypto

@@ -79,7 +79,7 @@ TEST_F(CryptoStreamTest, EmptyStream) {
     std::stringstream empty, output;
     crypto.encrypt(empty, output);
     ASSERT_FALSE(output.str().empty()); // Should contain at least padding
-    
+
     std::stringstream decrypted;
     crypto.decrypt(output, decrypted);
     ASSERT_TRUE(decrypted.str().empty());
@@ -89,18 +89,18 @@ TEST_F(CryptoStreamTest, EmptyStream) {
 TEST_F(CryptoStreamTest, LargeStream) {
     std::stringstream input;
     const size_t TEST_SIZE = 1024 * 1024; // 1MB
-    
+
     // Generate test data
     for (size_t i = 0; i < TEST_SIZE; ++i) {
         input.put(static_cast<char>(i & 0xFF));
     }
 
     std::stringstream encrypted, decrypted;
-    
+
     // Process large stream
     crypto.encrypt(input, encrypted);
     crypto.decrypt(encrypted, decrypted);
-    
+
     ASSERT_TRUE(streamsEqual(input, decrypted));
 }
 
@@ -109,7 +109,7 @@ TEST_F(CryptoStreamTest, InvalidStreamState) {
     std::stringstream input("test"), output;
     input.setstate(std::ios::badbit);
     EXPECT_THROW(crypto.encrypt(input, output), std::runtime_error);
-    
+
     input.clear();
     output.setstate(std::ios::badbit);
     EXPECT_THROW(crypto.encrypt(input, output), std::runtime_error);
@@ -123,13 +123,13 @@ TEST_F(CryptoStreamTest, BlockAlignment) {
         for (size_t i = 0; i < size; ++i) {
             input.put('A' + (i % 26));
         }
-        
+
         std::stringstream encrypted, decrypted;
         crypto.encrypt(input, encrypted);
         crypto.decrypt(encrypted, decrypted);
-        
+
         input.seekg(0);
-        ASSERT_TRUE(streamsEqual(input, decrypted)) 
+        ASSERT_TRUE(streamsEqual(input, decrypted))
             << "Failed for size: " << size;
     }
 }
@@ -139,22 +139,22 @@ TEST_F(CryptoStreamTest, StreamOperators) {
     const std::string plaintext = "Testing stream operator chaining functionality";
     std::stringstream input(plaintext);
     std::stringstream encrypted;
-    
+
     // Test stream operator chaining for encryption
     crypto.setMode(CryptoStream::Mode::Encrypt);
     crypto << input >> encrypted;
     ASSERT_NE(encrypted.str(), plaintext);
-    
+
     // Test stream operator chaining for decryption
     std::stringstream decrypted;
     crypto.setMode(CryptoStream::Mode::Decrypt);
     crypto << encrypted >> decrypted;
     ASSERT_EQ(decrypted.str(), plaintext);
-    
+
     // Test error case - using operator>> without prior operator<<
     std::stringstream output;
     EXPECT_THROW(crypto >> output, std::runtime_error);
-    
+
     // Test switching modes
     crypto.setMode(CryptoStream::Mode::Encrypt);
     ASSERT_EQ(crypto.getMode(), CryptoStream::Mode::Encrypt);
@@ -162,3 +162,38 @@ TEST_F(CryptoStreamTest, StreamOperators) {
     ASSERT_EQ(crypto.getMode(), CryptoStream::Mode::Decrypt);
 }
 
+// Test IV generation functionality
+TEST_F(CryptoStreamTest, IVGeneration) {
+    CryptoStream crypto_gen;
+
+    // Test IV size
+    auto iv1 = crypto_gen.generate_IV();
+    ASSERT_EQ(iv1.size(), CryptoStream::IV_SIZE);
+
+    // Test that multiple calls generate different IVs
+    auto iv2 = crypto_gen.generate_IV();
+    ASSERT_NE(std::memcmp(iv1.data(), iv2.data(), CryptoStream::IV_SIZE), 0)
+        << "Generated IVs should be different";
+
+    // Test that generated IV can be used for initialization
+    std::vector<uint8_t> test_key(CryptoStream::KEY_SIZE, 0x42);
+    std::vector<uint8_t> test_iv(iv1.begin(), iv1.end());
+
+    ASSERT_NO_THROW({
+        crypto_gen.initialize(test_key, test_iv);
+    }) << "Generated IV should be valid for initialization";
+
+    // Test encryption with generated IV
+    std::string test_data = "Test encryption with generated IV";
+    std::stringstream input(test_data);
+    std::stringstream encrypted;
+    std::stringstream decrypted;
+
+    ASSERT_NO_THROW({
+        crypto_gen.encrypt(input, encrypted);
+        crypto_gen.decrypt(encrypted, decrypted);
+    }) << "Encryption/decryption with generated IV should work";
+
+    ASSERT_EQ(decrypted.str(), test_data)
+        << "Data encrypted with generated IV should decrypt correctly";
+}

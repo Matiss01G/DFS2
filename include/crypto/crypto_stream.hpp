@@ -5,6 +5,7 @@
 #include <ostream>
 #include <vector>
 #include <memory>
+#include <array>
 #include "crypto_error.hpp"
 
 namespace dfs::crypto {
@@ -41,6 +42,9 @@ public:
     std::ostream& encrypt(std::istream& input, std::ostream& output);
     std::ostream& decrypt(std::istream& input, std::ostream& output);
 
+    // Generate a cryptographically secure initialization vector
+    std::array<uint8_t, IV_SIZE> generate_IV() const;
+
 private:
     std::vector<uint8_t> key_;
     std::vector<uint8_t> iv_;
@@ -48,7 +52,7 @@ private:
     bool is_initialized_ = false;
     Mode mode_ = Mode::Encrypt;  // Default to encryption mode
     std::istream* pending_input_ = nullptr;  // Store input stream for operator>> to process
-    
+
     // Process data through OpenSSL cipher context
     void processStream(std::istream& input, std::ostream& output, bool encrypting);
     void initializeCipher(bool encrypting);

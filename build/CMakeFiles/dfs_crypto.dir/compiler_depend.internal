@@ -204,6 +204,8 @@ CMakeFiles/dfs_crypto.dir/src/crypto/crypto_stream.cpp.o
  /nix/store/191vca5vdxdlr32k2hpzd66mic98930f-openssl-3.0.13-dev/include/openssl/opensslconf.h
  /nix/store/191vca5vdxdlr32k2hpzd66mic98930f-openssl-3.0.13-dev/include/openssl/opensslv.h
  /nix/store/191vca5vdxdlr32k2hpzd66mic98930f-openssl-3.0.13-dev/include/openssl/params.h
+ /nix/store/191vca5vdxdlr32k2hpzd66mic98930f-openssl-3.0.13-dev/include/openssl/rand.h
+ /nix/store/191vca5vdxdlr32k2hpzd66mic98930f-openssl-3.0.13-dev/include/openssl/randerr.h
  /nix/store/191vca5vdxdlr32k2hpzd66mic98930f-openssl-3.0.13-dev/include/openssl/safestack.h
  /nix/store/191vca5vdxdlr32k2hpzd66mic98930f-openssl-3.0.13-dev/include/openssl/stack.h
  /nix/store/191vca5vdxdlr32k2hpzd66mic98930f-openssl-3.0.13-dev/include/openssl/symhacks.h

@@ -12,4 +12,6 @@ add_test([=[CryptoStreamTest.BlockAlignment]=]  /home/runner/StreamCryptoDFS/bui
 set_tests_properties([=[CryptoStreamTest.BlockAlignment]=]  PROPERTIES WORKING_DIRECTORY /home/runner/StreamCryptoDFS/build SKIP_REGULAR_EXPRESSION [==[\[  SKIPPED \]]==])
 add_test([=[CryptoStreamTest.StreamOperators]=]  /home/runner/StreamCryptoDFS/build/crypto_tests [==[--gtest_filter=CryptoStreamTest.StreamOperators]==] --gtest_also_run_disabled_tests)
 set_tests_properties([=[CryptoStreamTest.StreamOperators]=]  PROPERTIES WORKING_DIRECTORY /home/runner/StreamCryptoDFS/build SKIP_REGULAR_EXPRESSION [==[\[  SKIPPED \]]==])
-set(  crypto_tests_TESTS CryptoStreamTest.BasicStreamOperation CryptoStreamTest.UninitializedError CryptoStreamTest.EmptyStream CryptoStreamTest.LargeStream CryptoStreamTest.InvalidStreamState CryptoStreamTest.BlockAlignment CryptoStreamTest.StreamOperators)
+add_test([=[CryptoStreamTest.IVGeneration]=]  /home/runner/StreamCryptoDFS/build/crypto_tests [==[--gtest_filter=CryptoStreamTest.IVGeneration]==] --gtest_also_run_disabled_tests)
+set_tests_properties([=[CryptoStreamTest.IVGeneration]=]  PROPERTIES WORKING_DIRECTORY /home/runner/StreamCryptoDFS/build SKIP_REGULAR_EXPRESSION [==[\[  SKIPPED \]]==])
+set(  crypto_tests_TESTS CryptoStreamTest.BasicStreamOperation CryptoStreamTest.UninitializedError CryptoStreamTest.EmptyStream CryptoStreamTest.LargeStream CryptoStreamTest.InvalidStreamState CryptoStreamTest.BlockAlignment CryptoStreamTest.StreamOperators CryptoStreamTest.IVGeneration)
