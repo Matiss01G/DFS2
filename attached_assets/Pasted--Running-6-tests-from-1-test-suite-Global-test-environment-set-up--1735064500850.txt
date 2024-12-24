@@ -1,0 +1,88 @@
+[==========] Running 6 tests from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 6 tests from CodecTest
+[ RUN      ] CodecTest.BasicSerializeDeserialize
+[2024-12-24 18:21:23.135686] [0x00007fca67a45c40] [info]    Initializing CryptoStream
+[2024-12-24 18:21:23.135824] [0x00007fca67a45c40] [debug]   CryptoStream initialization complete
+[2024-12-24 18:21:23.135833] [0x00007fca67a45c40] [debug]   Generating initialization vector
+[2024-12-24 18:21:23.137587] [0x00007fca67a45c40] [debug]   Successfully generated initialization vector
+[2024-12-24 18:21:23.137600] [0x00007fca67a45c40] [debug]   Cleaning up CryptoStream resources
+[2024-12-24 18:21:23.137609] [0x00007fca67a45c40] [debug]   Added message frame to channel. Channel size: 1
+/home/runner/StreamCryptoDFS/src/tests/codec_test.cpp:63: Failure
+Value of: std::equal( output_frame.initialization_vector.begin(), output_frame.initialization_vector.end(), input_frame.initialization_vector.begin() )
+  Actual: false
+Expected: true
+
+[  FAILED  ] CodecTest.BasicSerializeDeserialize (2 ms)
+[ RUN      ] CodecTest.LargePayloadSerializeDeserialize
+[2024-12-24 18:21:23.137710] [0x00007fca67a45c40] [info]    Initializing CryptoStream
+[2024-12-24 18:21:23.137719] [0x00007fca67a45c40] [debug]   CryptoStream initialization complete
+[2024-12-24 18:21:23.137723] [0x00007fca67a45c40] [debug]   Generating initialization vector
+[2024-12-24 18:21:23.137731] [0x00007fca67a45c40] [debug]   Successfully generated initialization vector
+[2024-12-24 18:21:23.137788] [0x00007fca67a45c40] [debug]   Cleaning up CryptoStream resources
+[2024-12-24 18:21:23.137898] [0x00007fca67a45c40] [debug]   Added message frame to channel. Channel size: 1
+/home/runner/StreamCryptoDFS/src/tests/codec_test.cpp:147: Failure
+Value of: std::equal( output_frame.initialization_vector.begin(), output_frame.initialization_vector.end(), input_frame.initialization_vector.begin() )
+  Actual: false
+Expected: true
+
+[  FAILED  ] CodecTest.LargePayloadSerializeDeserialize (0 ms)
+[ RUN      ] CodecTest.EmptyPayload
+[2024-12-24 18:21:23.137959] [0x00007fca67a45c40] [info]    Initializing CryptoStream
+[2024-12-24 18:21:23.137963] [0x00007fca67a45c40] [debug]   CryptoStream initialization complete
+[2024-12-24 18:21:23.137966] [0x00007fca67a45c40] [debug]   Generating initialization vector
+[2024-12-24 18:21:23.137973] [0x00007fca67a45c40] [debug]   Successfully generated initialization vector
+[2024-12-24 18:21:23.137977] [0x00007fca67a45c40] [debug]   Cleaning up CryptoStream resources
+[2024-12-24 18:21:23.137981] [0x00007fca67a45c40] [debug]   Added message frame to channel. Channel size: 1
+/home/runner/StreamCryptoDFS/src/tests/codec_test.cpp:205: Failure
+Value of: std::equal( output_frame.initialization_vector.begin(), output_frame.initialization_vector.end(), input_frame.initialization_vector.begin() )
+  Actual: false
+Expected: true
+
+[  FAILED  ] CodecTest.EmptyPayload (0 ms)
+[ RUN      ] CodecTest.ErrorHandling
+[       OK ] CodecTest.ErrorHandling (0 ms)
+[ RUN      ] CodecTest.ChannelIntegration
+[2024-12-24 18:21:23.138117] [0x00007fca67a45c40] [info]    Initializing CryptoStream
+[2024-12-24 18:21:23.138122] [0x00007fca67a45c40] [debug]   CryptoStream initialization complete
+[2024-12-24 18:21:23.138125] [0x00007fca67a45c40] [debug]   Generating initialization vector
+[2024-12-24 18:21:23.138132] [0x00007fca67a45c40] [debug]   Successfully generated initialization vector
+[2024-12-24 18:21:23.138136] [0x00007fca67a45c40] [debug]   Cleaning up CryptoStream resources
+[2024-12-24 18:21:23.138140] [0x00007fca67a45c40] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-24 18:21:23.138145] [0x00007fca67a45c40] [debug]   Retrieved message frame from channel. Channel size: 0
+/home/runner/StreamCryptoDFS/src/tests/codec_test.cpp:266: Failure
+Value of: std::equal( retrieved_frame.initialization_vector.begin(), retrieved_frame.initialization_vector.end(), input_frame.initialization_vector.begin() )
+  Actual: false
+Expected: true
+
+[  FAILED  ] CodecTest.ChannelIntegration (0 ms)
+[ RUN      ] CodecTest.ChannelIntegrationWithPayload
+[2024-12-24 18:21:23.138167] [0x00007fca67a45c40] [info]    Initializing CryptoStream
+[2024-12-24 18:21:23.138171] [0x00007fca67a45c40] [debug]   CryptoStream initialization complete
+[2024-12-24 18:21:23.138174] [0x00007fca67a45c40] [debug]   Generating initialization vector
+[2024-12-24 18:21:23.138181] [0x00007fca67a45c40] [debug]   Successfully generated initialization vector
+[2024-12-24 18:21:23.138185] [0x00007fca67a45c40] [debug]   Cleaning up CryptoStream resources
+[2024-12-24 18:21:23.138191] [0x00007fca67a45c40] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-24 18:21:23.138196] [0x00007fca67a45c40] [debug]   Retrieved message frame from channel. Channel size: 0
+/home/runner/StreamCryptoDFS/src/tests/codec_test.cpp:325: Failure
+Value of: std::equal( retrieved_frame.initialization_vector.begin(), retrieved_frame.initialization_vector.end(), input_frame.initialization_vector.begin() )
+  Actual: false
+Expected: true
+
+[  FAILED  ] CodecTest.ChannelIntegrationWithPayload (0 ms)
+[----------] 6 tests from CodecTest (2 ms total)
+
+[----------] Global test environment tear-down
+[==========] 6 tests from 1 test suite ran. (2 ms total)
+[  PASSED  ] 1 test.
+[  FAILED  ] 5 tests, listed below:
+[  FAILED  ] CodecTest.BasicSerializeDeserialize
+[  FAILED  ] CodecTest.LargePayloadSerializeDeserialize
+[  FAILED  ] CodecTest.EmptyPayload
+[  FAILED  ] CodecTest.ChannelIntegration
+[  FAILED  ] CodecTest.ChannelIntegrationWithPayload
+
+ 5 FAILED TESTS
+make[2]: *** [CMakeFiles/run_tests.dir/build.make:78: CMakeFiles/run_tests] Error 1
+make[1]: *** [CMakeFiles/Makefile2:314: CMakeFiles/run_tests.dir/all] Error 2
+make: *** [Makefile:146: all] Error 2
