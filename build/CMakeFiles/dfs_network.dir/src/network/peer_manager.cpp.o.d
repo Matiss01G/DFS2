@@ -1643,6 +1643,4 @@ CMakeFiles/dfs_network.dir/src/network/peer_manager.cpp.o: \
  /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/log/detail/code_conversion.hpp \
  /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/log/detail/is_character_type.hpp \
  /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/log/utility/string_literal_fwd.hpp \
- /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/log/utility/formatting_ostream_fwd.hpp \
- /home/runner/StreamCryptoDFS/include/crypto/crypto_stream.hpp \
- /home/runner/StreamCryptoDFS/include/crypto/crypto_error.hpp
+ /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/log/utility/formatting_ostream_fwd.hpp

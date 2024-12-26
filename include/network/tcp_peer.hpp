@@ -5,22 +5,12 @@
 #include <memory>
 #include <thread>
 #include <atomic>
-#include <array>
 #include <boost/asio.hpp>
 #include <boost/log/trivial.hpp>
 #include "peer.hpp"
-#include "crypto/crypto_stream.hpp"
 
 namespace dfs {
 namespace network {
-
-// Message header structure for network communication
-struct MessageHeader {
-    std::array<uint8_t, crypto::CryptoStream::IV_SIZE> iv;  // Initialization vector
-    uint32_t message_type;                                   // Type of message
-    uint32_t source_id;                                      // Source identifier
-    uint64_t payload_size;                                   // Size of payload
-};
 
 /**
  * @brief TCP implementation of the Peer interface
@@ -65,9 +55,6 @@ public:
     bool send_stream(std::istream& input_stream, std::size_t buffer_size = 8192);
     void async_read_next();
 
-    // Error handling
-    bool handle_write_error(const boost::system::error_code& ec);
-
     // Getter
     const std::string& get_peer_id() const { return peer_id_; }
 
@@ -81,7 +68,7 @@ private:
     std::unique_ptr<boost::asio::ip::tcp::socket> socket_;
     std::unique_ptr<boost::asio::ip::tcp::endpoint> endpoint_;
     std::mutex io_mutex_;  // Mutex for synchronizing I/O operations
-
+    
     // Processing thread
     std::unique_ptr<std::thread> processing_thread_;
     std::atomic<bool> processing_active_{false};
