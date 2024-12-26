@@ -1,5 +1,4 @@
 #include "network/tcp_peer.hpp"
-#include "crypto/crypto_stream.hpp"  // Add this include
 #include <stdexcept>
 
 namespace dfs {
@@ -72,10 +71,10 @@ bool TCP_Peer::start_stream_processing() {
 void TCP_Peer::stop_stream_processing() {
     if (processing_active_) {
         BOOST_LOG_TRIVIAL(debug) << "[" << peer_id_ << "] Stopping stream processing";
-
+        
         // Signal processing to stop
         processing_active_ = false;
-
+        
         // Cancel any pending asynchronous operations
         if (socket_ && socket_->is_open()) {
             boost::system::error_code ec;
@@ -84,20 +83,20 @@ void TCP_Peer::stop_stream_processing() {
                 BOOST_LOG_TRIVIAL(error) << "[" << peer_id_ << "] Error canceling socket operations: " << ec.message();
             }
         }
-
+        
         // Stop io_context
         io_context_.stop();
-
+        
         // Wait for processing thread to complete
         if (processing_thread_ && processing_thread_->joinable()) {
             processing_thread_->join();
             processing_thread_.reset();
             BOOST_LOG_TRIVIAL(debug) << "[" << peer_id_ << "] Processing thread joined";
         }
-
+        
         // Reset io_context for potential reuse
         io_context_.restart();
-
+        
         BOOST_LOG_TRIVIAL(info) << "[" << peer_id_ << "] Stream processing stopped";
     }
 }
@@ -105,27 +104,27 @@ void TCP_Peer::stop_stream_processing() {
 // Main processing function that sets up async reading
 void TCP_Peer::process_stream() {
     BOOST_LOG_TRIVIAL(debug) << "[" << peer_id_ << "] Setting up stream processing";
-
+    
     try {
         // Create work guard to keep io_context running
         auto work_guard = boost::asio::make_work_guard(io_context_);
-
+        
         // Start the initial async read operation
         if (processing_active_ && socket_->is_open()) {
             async_read_next();
         }
-
+        
         // Run IO context in this thread
         while (processing_active_ && socket_->is_open()) {
             io_context_.run_one();
         }
-
+        
         // Release work guard to allow io_context to stop
         work_guard.reset();
-
+        
         // Run any remaining handlers
         while (io_context_.poll_one()) {}
-
+        
     } catch (const std::exception& e) {
         BOOST_LOG_TRIVIAL(error) << "[" << peer_id_ << "] Stream processing error: " << e.what();
     }
@@ -141,7 +140,7 @@ void TCP_Peer::async_read_next() {
     }
 
     BOOST_LOG_TRIVIAL(trace) << "[" << peer_id_ << "] Setting up next async read";
-
+    
     // Set up asynchronous read operation that continues until newline character
     boost::asio::async_read_until(
         *socket_,
@@ -156,7 +155,7 @@ void TCP_Peer::async_read_next() {
 
                 if (!data.empty()) {
                     BOOST_LOG_TRIVIAL(debug) << "[" << peer_id_ << "] Received data: " << data;
-
+                    
                     if (stream_processor_) {
                         // If stream processor exists, pass data through it
                         std::string framed_data = data + '\n';
@@ -281,118 +280,39 @@ bool TCP_Peer::send_stream(std::istream& input_stream, std::size_t buffer_size) 
     try {
         // Lock to prevent concurrent socket writes
         std::unique_lock<std::mutex> lock(io_mutex_);
-
-        // Create CryptoStream instance for encryption
-        dfs::crypto::CryptoStream crypto;  // Use fully qualified namespace
-
-        // Create temporary buffer for the encrypted data
-        std::stringstream encrypted_stream;
-
-        // Read the IV from message headers (first 16 bytes)
-        std::vector<uint8_t> iv(dfs::crypto::CryptoStream::IV_SIZE);
-        input_stream.read(reinterpret_cast<char*>(iv.data()), iv.size());
-        if (input_stream.gcount() != iv.size()) {
-            BOOST_LOG_TRIVIAL(error) << "[" << peer_id_ << "] Failed to read IV from message headers";
-            return false;
-        }
-
-        // Send IV unencrypted
+        std::vector<char> buffer(buffer_size);  // Temporary buffer for chunked reading
         boost::system::error_code ec;
-        boost::asio::write(
-            *socket_,
-            boost::asio::buffer(iv.data(), iv.size()),
-            boost::asio::transfer_exactly(iv.size()),
-            ec
-        );
 
-        if (ec) {
-            BOOST_LOG_TRIVIAL(error) << "[" << peer_id_ << "] Failed to send IV: " << ec.message();
-            return false;
-        }
+        // Continue reading and sending while input stream is valid
+        while (input_stream.good()) {
+            // Read chunk from input stream into buffer
+            input_stream.read(buffer.data(), buffer_size);
+            std::size_t bytes_read = input_stream.gcount();  // Get actual bytes read
 
-        try {
-            // Initialize crypto with key and IV from headers
-            std::vector<uint8_t> key(dfs::crypto::CryptoStream::KEY_SIZE, 0x42); // Use fully qualified namespace
-            crypto.initialize(key, iv);
-
-            // Read and send message type (unencrypted)
-            char message_type;
-            input_stream.read(&message_type, sizeof(message_type));
-            boost::asio::write(*socket_, boost::asio::buffer(&message_type, sizeof(message_type)), ec);
-            if (ec) return false;
-
-            // Read and send source_id (unencrypted)
-            uint32_t source_id;
-            input_stream.read(reinterpret_cast<char*>(&source_id), sizeof(source_id));
-            boost::asio::write(*socket_, boost::asio::buffer(&source_id, sizeof(source_id)), ec);
-            if (ec) return false;
-
-            // Create a separate stream for the parts that need encryption (filename_length and payload)
-            std::stringstream to_encrypt;
-
-            // Read filename_length and payload_size
-            uint32_t filename_length;
-            uint64_t payload_size;
-            input_stream.read(reinterpret_cast<char*>(&filename_length), sizeof(filename_length));
-            input_stream.read(reinterpret_cast<char*>(&payload_size), sizeof(payload_size));
-
-            // Send payload_size unencrypted
-            boost::asio::write(*socket_, boost::asio::buffer(&payload_size, sizeof(payload_size)), ec);
-            if (ec) return false;
-
-            // Write filename_length to encryption stream
-            to_encrypt.write(reinterpret_cast<char*>(&filename_length), sizeof(filename_length));
-
-            // Copy remaining payload to encryption stream
-            if (payload_size > 0) {
-                char buffer[4096];
-                size_t remaining = payload_size;
-                while (remaining > 0 && input_stream.good()) {
-                    size_t chunk_size = std::min(remaining, sizeof(buffer));
-                    input_stream.read(buffer, chunk_size);
-                    size_t bytes_read = input_stream.gcount();
-                    if (bytes_read == 0) break;
-                    to_encrypt.write(buffer, bytes_read);
-                    remaining -= bytes_read;
-                }
+            if (bytes_read == 0) {
+                break;  // Exit if no more data to read
             }
 
-            // Encrypt the filename_length and payload
-            crypto.encrypt(to_encrypt, encrypted_stream);
-
-        } catch (const std::exception& e) {
-            BOOST_LOG_TRIVIAL(error) << "[" << peer_id_ << "] Encryption error: " << e.what();
-            return false;
-        }
-
-        // Reset encrypted stream position for reading
-        encrypted_stream.seekg(0);
-
-        // Send encrypted data in chunks
-        std::vector<char> buffer(buffer_size);
-        while (encrypted_stream.good()) {
-            encrypted_stream.read(buffer.data(), buffer_size);
-            std::size_t bytes_read = encrypted_stream.gcount();
-
-            if (bytes_read == 0) break;
-
+            // Transmit chunk through socket synchronous write with exact transfer size guarantee
             std::size_t bytes_written = boost::asio::write(
                 *socket_,
                 boost::asio::buffer(buffer.data(), bytes_read),
-                boost::asio::transfer_exactly(bytes_read),
+                boost::asio::transfer_exactly(bytes_read),  // Ensure all bytes are written
                 ec
             );
 
+            // Verify transmission success
             if (ec || bytes_written != bytes_read) {
                 BOOST_LOG_TRIVIAL(error) << "[" << peer_id_ << "] Stream send error: " << ec.message();
-                return false;
+                return false;  // Return on any transmission error
             }
 
-            BOOST_LOG_TRIVIAL(debug) << "[" << peer_id_ << "] Sent " << bytes_written << " bytes of encrypted data";
+            BOOST_LOG_TRIVIAL(debug) << "[" << peer_id_ << "] Sent " << bytes_written << " bytes from stream";
         }
 
-        return true;
+        return true;  // All data sent successfully
     } catch (const std::exception& e) {
+        // Handle any unexpected errors during transmission
         BOOST_LOG_TRIVIAL(error) << "[" << peer_id_ << "] Stream send error: " << e.what();
         return false;
     }
