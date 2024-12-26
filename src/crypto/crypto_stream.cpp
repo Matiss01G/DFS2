@@ -12,20 +12,20 @@ namespace dfs::crypto {
 // Wrapper for OpenSSL cipher context
 struct CipherContext {
     EVP_CIPHER_CTX* ctx = nullptr;
-    
+
     CipherContext() {
         ctx = EVP_CIPHER_CTX_new();
         if (!ctx) {
             throw std::runtime_error("Failed to create cipher context");
         }
     }
-    
+
     ~CipherContext() {
         if (ctx) {
             EVP_CIPHER_CTX_free(ctx);
         }
     }
-    
+
     EVP_CIPHER_CTX* get() { return ctx; }
 };
 
@@ -46,13 +46,13 @@ CryptoStream::~CryptoStream() {
 // Initialize with encryption key and initialization vector (IV)
 void CryptoStream::initialize(const std::vector<uint8_t>& key, const std::vector<uint8_t>& iv) {
     BOOST_LOG_TRIVIAL(info) << "Initializing crypto parameters";
-    
+
     // Validate key size (256 bits for AES-256)
     if (key.size() != KEY_SIZE) {
         BOOST_LOG_TRIVIAL(error) << "Invalid key size: " << key.size() << " bytes (expected " << KEY_SIZE << " bytes)";
         throw InitializationError("Invalid key size");
     }
-    
+
     // Validate IV size (128 bits for CBC mode)
     if (iv.size() != IV_SIZE) {
         BOOST_LOG_TRIVIAL(error) << "Invalid IV size: " << iv.size() << " bytes (expected " << IV_SIZE << " bytes)";
@@ -68,7 +68,7 @@ void CryptoStream::initialize(const std::vector<uint8_t>& key, const std::vector
 
 void CryptoStream::initializeCipher(bool encrypting) {
     BOOST_LOG_TRIVIAL(debug) << "Initializing cipher for " << (encrypting ? "encryption" : "decryption");
-    
+
     if (!is_initialized_) {
         BOOST_LOG_TRIVIAL(error) << "Attempted to use uninitialized CryptoStream";
         throw InitializationError("CryptoStream not initialized");
@@ -87,14 +87,14 @@ void CryptoStream::initializeCipher(bool encrypting) {
             throw DecryptionError("Failed to initialize decryption");
         }
     }
-    
+
     BOOST_LOG_TRIVIAL(debug) << "Cipher initialization complete";
 }
 
 // Process input stream through the cipher (encryption or decryption)
 void CryptoStream::processStream(std::istream& input, std::ostream& output, bool encrypting) {
     BOOST_LOG_TRIVIAL(info) << "Starting stream " << (encrypting ? "encryption" : "decryption");
-    
+
     // Verify stream states before processing
     if (!input.good() || !output.good()) {
         BOOST_LOG_TRIVIAL(error) << "Invalid stream state detected";
@@ -103,7 +103,7 @@ void CryptoStream::processStream(std::istream& input, std::ostream& output, bool
 
     // Initialize cipher context for either encryption or decryption
     initializeCipher(encrypting);
-    
+
     // Process input stream in blocks with larger buffer for efficiency
     static constexpr size_t BUFFER_SIZE = 8192; // 8KB buffer for better performance
     std::array<uint8_t, BUFFER_SIZE> inbuf;
@@ -114,7 +114,7 @@ void CryptoStream::processStream(std::istream& input, std::ostream& output, bool
         // Read a block of data
         input.read(reinterpret_cast<char*>(inbuf.data()), inbuf.size());
         auto bytes_read = input.gcount();
-        
+
         if (bytes_read <= 0) {
             if (!input.eof()) {
                 throw std::runtime_error("Failed to read from input stream");
@@ -177,24 +177,24 @@ std::ostream& CryptoStream::decrypt(std::istream& input, std::ostream& output) {
 // Stream operator for outputting processed data (encryption or decryption)
 CryptoStream& CryptoStream::operator>>(std::ostream& output) {
     BOOST_LOG_TRIVIAL(debug) << "Stream operator>> called in " << (mode_ == Mode::Encrypt ? "encryption" : "decryption") << " mode";
-    
+
     // Ensure we have an input stream to process
     if (!pending_input_) {
         BOOST_LOG_TRIVIAL(error) << "Stream operator>> called without prior input stream";
         throw std::runtime_error("No pending input stream. Use operator<< first.");
     }
-    
+
     // Process the stored input stream based on current mode (encrypt or decrypt)
     if (mode_ == Mode::Encrypt) {
         encrypt(*pending_input_, output);
     } else {
         decrypt(*pending_input_, output);
     }
-    
+
     // Clear the stored stream after processing to prevent accidental reuse
     pending_input_ = nullptr;
     BOOST_LOG_TRIVIAL(debug) << "Stream processing complete";
-    
+
     return *this;
 }
 
@@ -206,7 +206,7 @@ CryptoStream& CryptoStream::operator<<(std::istream& input) {
     return *this;
 }
 
-// Add the generate_IV function before the end of namespace
+// Generate a secure random IV
 std::array<uint8_t, CryptoStream::IV_SIZE> CryptoStream::generate_IV() const {
     BOOST_LOG_TRIVIAL(debug) << "Generating initialization vector";
 
@@ -218,6 +218,20 @@ std::array<uint8_t, CryptoStream::IV_SIZE> CryptoStream::generate_IV() const {
 
     BOOST_LOG_TRIVIAL(debug) << "Successfully generated initialization vector";
     return iv;
+}
+
+// Generate a secure random key
+std::vector<uint8_t> CryptoStream::generate_key() const {
+    BOOST_LOG_TRIVIAL(debug) << "Generating encryption key";
+
+    std::vector<uint8_t> key(KEY_SIZE);
+    if (RAND_bytes(key.data(), static_cast<int>(key.size())) != 1) {
+        BOOST_LOG_TRIVIAL(error) << "Failed to generate random key";
+        throw std::runtime_error("Failed to generate secure random key");
+    }
+
+    BOOST_LOG_TRIVIAL(debug) << "Successfully generated encryption key";
+    return key;
 }
 
 } // namespace dfs::crypto

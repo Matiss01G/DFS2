@@ -38,39 +38,51 @@ std::size_t Codec::serialize(const MessageFrame& frame, std::ostream& output) {
         write_bytes(output, &network_filename_length, sizeof(uint32_t));
         total_bytes += sizeof(uint32_t);
 
-        // Convert and write payload_size in network byte order
-        uint64_t network_payload_size = to_network_order(frame.payload_size);
-        write_bytes(output, &network_payload_size, sizeof(uint64_t));
-        total_bytes += sizeof(uint64_t);
+        // Initialize crypto for payload encryption using generated IV and key
+        auto key = crypto.generate_key();
+        // Convert array to vector for IV
+        std::vector<uint8_t> iv_vec(frame.initialization_vector.begin(), 
+                                  frame.initialization_vector.end());
+        crypto.initialize(key, iv_vec);
 
-        // Stream payload data if present
+        // Stream and encrypt payload data if present
         if (frame.payload_size > 0 && frame.payload_stream) {
-            char buffer[4096];  // 4KB chunks for efficient streaming
-            std::size_t remaining = frame.payload_size;
+            // Create a temporary buffer for the encrypted data
+            std::stringstream encrypted_stream;
 
             // Reset stream position to beginning
             frame.payload_stream->seekg(0, std::ios::beg);
 
-            while (remaining > 0 && frame.payload_stream->good()) {
-                std::size_t chunk_size = std::min(remaining, sizeof(buffer));
-                frame.payload_stream->read(buffer, chunk_size);
-                std::size_t bytes_read = frame.payload_stream->gcount();
+            // Encrypt the payload stream
+            crypto.encrypt(*frame.payload_stream, encrypted_stream);
 
-                if (bytes_read == 0) {
-                    throw std::runtime_error("Unexpected end of payload stream");
+            // Get the encrypted size
+            auto encrypted_size = encrypted_stream.tellp();
+            uint64_t network_encrypted_size = to_network_order(static_cast<uint64_t>(encrypted_size));
+
+            // Write encrypted payload size
+            write_bytes(output, &network_encrypted_size, sizeof(uint64_t));
+            total_bytes += sizeof(uint64_t);
+
+            // Write encrypted payload data
+            encrypted_stream.seekg(0, std::ios::beg);
+            char buffer[4096];  // 4KB chunks for efficient streaming
+            while (encrypted_stream.good() && !encrypted_stream.eof()) {
+                encrypted_stream.read(buffer, sizeof(buffer));
+                std::size_t bytes_read = encrypted_stream.gcount();
+                if (bytes_read > 0) {
+                    write_bytes(output, buffer, bytes_read);
+                    total_bytes += bytes_read;
                 }
-
-                write_bytes(output, buffer, bytes_read);
-                total_bytes += bytes_read;
-                remaining -= bytes_read;
             }
 
-            if (remaining > 0) {
-                throw std::runtime_error("Failed to write complete payload");
-            }
-
-            // Reset stream position back to beginning
+            // Reset original stream position back to beginning
             frame.payload_stream->seekg(0, std::ios::beg);
+        } else {
+            // Write zero payload size if no payload
+            uint64_t network_payload_size = 0;
+            write_bytes(output, &network_payload_size, sizeof(uint64_t));
+            total_bytes += sizeof(uint64_t);
         }
 
         return total_bytes;
@@ -109,16 +121,24 @@ MessageFrame Codec::deserialize(std::istream& input, Channel& channel) {
         read_bytes(input, &network_payload_size, sizeof(uint64_t));
         frame.payload_size = from_network_order(network_payload_size);
 
-        // If payload exists, create stream and read data
+        // Initialize crypto for decryption using frame's IV
+        crypto::CryptoStream crypto;
+        // Convert array to vector for IV
+        std::vector<uint8_t> iv_vec(frame.initialization_vector.begin(), 
+                                  frame.initialization_vector.end());
+        crypto.initialize(crypto.generate_key(), iv_vec);
+
+        // If payload exists, create stream and read encrypted data
         if (frame.payload_size > 0) {
-            auto payload_stream = std::make_shared<std::stringstream>();
-            char buffer[4096];  // 4KB chunks for efficient streaming
+            // Read encrypted payload into temporary stream
+            auto encrypted_stream = std::make_shared<std::stringstream>();
+            char buffer[4096];  // 4KB chunks
             std::size_t remaining = frame.payload_size;
 
             while (remaining > 0 && input.good()) {
                 std::size_t chunk_size = std::min(remaining, sizeof(buffer));
                 read_bytes(input, buffer, chunk_size);
-                payload_stream->write(buffer, chunk_size);
+                encrypted_stream->write(buffer, chunk_size);
                 remaining -= chunk_size;
             }
 
@@ -126,9 +146,14 @@ MessageFrame Codec::deserialize(std::istream& input, Channel& channel) {
                 throw std::runtime_error("Failed to read complete payload");
             }
 
-            // Reset stream position to beginning
-            payload_stream->seekg(0, std::ios::beg);
-            frame.payload_stream = payload_stream;
+            // Create decrypted payload stream
+            auto decrypted_stream = std::make_shared<std::stringstream>();
+            encrypted_stream->seekg(0);
+            crypto.decrypt(*encrypted_stream, *decrypted_stream);
+
+            // Set decrypted stream as frame's payload
+            decrypted_stream->seekg(0);
+            frame.payload_stream = decrypted_stream;
         }
 
         // Create a copy of the frame for the channel
