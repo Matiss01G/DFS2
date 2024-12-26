@@ -1,4 +1,5 @@
 #include "network/tcp_peer.hpp"
+#include "crypto/crypto_stream.hpp"  // Add CryptoStream include
 #include <stdexcept>
 
 namespace dfs {
@@ -71,10 +72,10 @@ bool TCP_Peer::start_stream_processing() {
 void TCP_Peer::stop_stream_processing() {
     if (processing_active_) {
         BOOST_LOG_TRIVIAL(debug) << "[" << peer_id_ << "] Stopping stream processing";
-        
+
         // Signal processing to stop
         processing_active_ = false;
-        
+
         // Cancel any pending asynchronous operations
         if (socket_ && socket_->is_open()) {
             boost::system::error_code ec;
@@ -83,20 +84,20 @@ void TCP_Peer::stop_stream_processing() {
                 BOOST_LOG_TRIVIAL(error) << "[" << peer_id_ << "] Error canceling socket operations: " << ec.message();
             }
         }
-        
+
         // Stop io_context
         io_context_.stop();
-        
+
         // Wait for processing thread to complete
         if (processing_thread_ && processing_thread_->joinable()) {
             processing_thread_->join();
             processing_thread_.reset();
             BOOST_LOG_TRIVIAL(debug) << "[" << peer_id_ << "] Processing thread joined";
         }
-        
+
         // Reset io_context for potential reuse
         io_context_.restart();
-        
+
         BOOST_LOG_TRIVIAL(info) << "[" << peer_id_ << "] Stream processing stopped";
     }
 }
@@ -104,31 +105,31 @@ void TCP_Peer::stop_stream_processing() {
 // Main processing function that sets up async reading
 void TCP_Peer::process_stream() {
     BOOST_LOG_TRIVIAL(debug) << "[" << peer_id_ << "] Setting up stream processing";
-    
+
     try {
         // Create work guard to keep io_context running
         auto work_guard = boost::asio::make_work_guard(io_context_);
-        
+
         // Start the initial async read operation
         if (processing_active_ && socket_->is_open()) {
             async_read_next();
         }
-        
+
         // Run IO context in this thread
         while (processing_active_ && socket_->is_open()) {
             io_context_.run_one();
         }
-        
+
         // Release work guard to allow io_context to stop
         work_guard.reset();
-        
+
         // Run any remaining handlers
         while (io_context_.poll_one()) {}
-        
+
     } catch (const std::exception& e) {
         BOOST_LOG_TRIVIAL(error) << "[" << peer_id_ << "] Stream processing error: " << e.what();
     }
-    
+
     BOOST_LOG_TRIVIAL(info) << "[" << peer_id_ << "] Stream processing stopped";
 }
 
@@ -140,7 +141,7 @@ void TCP_Peer::async_read_next() {
     }
 
     BOOST_LOG_TRIVIAL(trace) << "[" << peer_id_ << "] Setting up next async read";
-    
+
     // Set up asynchronous read operation that continues until newline character
     boost::asio::async_read_until(
         *socket_,
@@ -155,7 +156,7 @@ void TCP_Peer::async_read_next() {
 
                 if (!data.empty()) {
                     BOOST_LOG_TRIVIAL(debug) << "[" << peer_id_ << "] Received data: " << data;
-                    
+
                     if (stream_processor_) {
                         // If stream processor exists, pass data through it
                         std::string framed_data = data + '\n';
@@ -282,7 +283,7 @@ bool TCP_Peer::send_stream(std::istream& input_stream, std::size_t buffer_size) 
         std::unique_lock<std::mutex> lock(io_mutex_);
 
         // Create CryptoStream instance for encryption
-        crypto::CryptoStream crypto;
+        dfs::crypto::CryptoStream crypto;  // Use fully qualified namespace
 
         // Create temporary buffer for the encrypted data
         std::stringstream encrypted_stream;
@@ -291,7 +292,7 @@ bool TCP_Peer::send_stream(std::istream& input_stream, std::size_t buffer_size) 
         try {
             // Generate IV for this transmission
             auto iv = crypto.generate_IV();
-            std::vector<uint8_t> key(crypto::CryptoStream::KEY_SIZE, 0x42); // TODO: Replace with actual key
+            std::vector<uint8_t> key(dfs::crypto::CryptoStream::KEY_SIZE, 0x42); // Use fully qualified namespace
 
             // Initialize crypto with key and IV
             crypto.initialize(key, iv);
