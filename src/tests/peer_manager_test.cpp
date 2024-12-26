@@ -9,6 +9,7 @@
 #include <thread>
 #include <chrono>
 #include <vector>
+#include <sstream>
 
 using namespace dfs::network;
 using ::testing::Return;
@@ -148,4 +149,48 @@ TEST_F(PeerManagerTest, ShutdownTest) {
     }
 }
 
-// Additional test cases can be added here
+// Test broadcasting to multiple peers
+TEST_F(PeerManagerTest, BroadcastStreamTest) {
+    // Create multiple peers
+    std::vector<std::shared_ptr<TCP_Peer>> test_peers;
+    const int num_peers = 3;
+
+    for (int i = 0; i < num_peers; ++i) {
+        auto peer = std::make_shared<TCP_Peer>("test_peer_" + std::to_string(i));
+        test_peers.push_back(peer);
+        manager->add_peer(peer);
+    }
+
+    // Prepare test data
+    std::string test_message = "Test broadcast message\n";
+    std::istringstream input_stream(test_message);
+
+    // Test broadcasting when peers are not connected
+    EXPECT_FALSE(manager->broadcast_stream(input_stream));
+
+    // Test broadcasting with invalid stream
+    std::istringstream empty_stream("");
+    empty_stream.setstate(std::ios::failbit);
+    EXPECT_FALSE(manager->broadcast_stream(empty_stream));
+
+    // Clean up
+    manager->shutdown();
+}
+
+// Test broadcasting with mixed success/failure scenarios
+TEST_F(PeerManagerTest, BroadcastMixedResultsTest) {
+    auto peer1 = std::make_shared<TCP_Peer>("peer1");
+    auto peer2 = std::make_shared<TCP_Peer>("peer2");
+
+    manager->add_peer(peer1);
+    manager->add_peer(peer2);
+
+    std::string test_message = "Test broadcast message\n";
+    std::istringstream input_stream(test_message);
+
+    // Test broadcasting to disconnected peers
+    EXPECT_FALSE(manager->broadcast_stream(input_stream));
+
+    // Clean up
+    manager->shutdown();
+}

@@ -5,6 +5,7 @@
 #include <memory>
 #include <mutex>
 #include <string>
+#include <istream>
 #include "peer.hpp"
 #include "tcp_peer.hpp"
 
@@ -18,16 +19,21 @@ public:
 
     // Add a new peer to the manager
     void add_peer(std::shared_ptr<TCP_Peer> peer);
-    
+
     // Remove a peer by its ID
     void remove_peer(const std::string& peer_id);
-    
+
     // Get a peer by its ID
     std::shared_ptr<TCP_Peer> get_peer(const std::string& peer_id);
-    
+
+    // Broadcast data from input stream to all connected peers
+    // @param input_stream The input stream containing data to broadcast
+    // @return true if all connected peers received the data successfully, false otherwise
+    bool broadcast_stream(std::istream& input_stream);
+
     // Shutdown all peer connections and clear the peers map
     void shutdown();
-    
+
     // Delete copy constructor and assignment operator
     PeerManager(const PeerManager&) = delete;
     PeerManager& operator=(const PeerManager&) = delete;

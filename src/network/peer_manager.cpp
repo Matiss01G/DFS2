@@ -20,7 +20,7 @@ void PeerManager::add_peer(std::shared_ptr<TCP_Peer> peer) {
 
     std::lock_guard<std::mutex> lock(mutex_);
     const std::string& peer_id = peer->get_peer_id();
-    
+
     auto it = peers_.find(peer_id);
     if (it != peers_.end()) {
         BOOST_LOG_TRIVIAL(warning) << "Peer with ID " << peer_id << " already exists";
@@ -33,7 +33,7 @@ void PeerManager::add_peer(std::shared_ptr<TCP_Peer> peer) {
 
 void PeerManager::remove_peer(const std::string& peer_id) {
     std::lock_guard<std::mutex> lock(mutex_);
-    
+
     auto it = peers_.find(peer_id);
     if (it != peers_.end()) {
         it->second->disconnect();
@@ -46,20 +46,70 @@ void PeerManager::remove_peer(const std::string& peer_id) {
 
 std::shared_ptr<TCP_Peer> PeerManager::get_peer(const std::string& peer_id) {
     std::lock_guard<std::mutex> lock(mutex_);
-    
+
     auto it = peers_.find(peer_id);
     if (it != peers_.end()) {
         return it->second;
     }
-    
+
     return nullptr;
+}
+
+bool PeerManager::broadcast_stream(std::istream& input_stream) {
+    if (!input_stream.good()) {
+        BOOST_LOG_TRIVIAL(error) << "Invalid input stream provided for broadcast";
+        return false;
+    }
+
+    std::lock_guard<std::mutex> lock(mutex_);
+
+    if (peers_.empty()) {
+        BOOST_LOG_TRIVIAL(warning) << "No peers available for broadcast";
+        return false;
+    }
+
+    bool all_success = true;
+    size_t success_count = 0;
+
+    // Store the current position in the stream
+    std::streampos initial_pos = input_stream.tellg();
+
+    for (auto& peer_pair : peers_) {
+        try {
+            // Reset stream position for each peer
+            input_stream.seekg(initial_pos);
+
+            if (!peer_pair.second->is_connected()) {
+                BOOST_LOG_TRIVIAL(warning) << "Skipping disconnected peer: " << peer_pair.first;
+                all_success = false;
+                continue;
+            }
+
+            if (peer_pair.second->send_stream(input_stream)) {
+                success_count++;
+                BOOST_LOG_TRIVIAL(debug) << "Successfully broadcast to peer: " << peer_pair.first;
+            } else {
+                all_success = false;
+                BOOST_LOG_TRIVIAL(error) << "Failed to broadcast to peer: " << peer_pair.first;
+            }
+        } catch (const std::exception& e) {
+            all_success = false;
+            BOOST_LOG_TRIVIAL(error) << "Exception while broadcasting to peer " 
+                                   << peer_pair.first << ": " << e.what();
+        }
+    }
+
+    BOOST_LOG_TRIVIAL(info) << "Broadcast completed. Successfully sent to " 
+                           << success_count << " out of " << peers_.size() << " peers";
+
+    return all_success;
 }
 
 void PeerManager::shutdown() {
     std::lock_guard<std::mutex> lock(mutex_);
-    
+
     BOOST_LOG_TRIVIAL(info) << "Initiating PeerManager shutdown";
-    
+
     for (auto& peer_pair : peers_) {
         try {
             peer_pair.second->disconnect();
@@ -69,7 +119,7 @@ void PeerManager::shutdown() {
                                    << ": " << e.what();
         }
     }
-    
+
     peers_.clear();
     BOOST_LOG_TRIVIAL(info) << "PeerManager shutdown complete";
 }
