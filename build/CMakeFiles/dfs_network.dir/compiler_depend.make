@@ -1648,6 +1648,8 @@ CMakeFiles/dfs_network.dir/src/network/peer_manager.cpp.o: /home/runner/StreamCr
   /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/version.hpp
 
 CMakeFiles/dfs_network.dir/src/network/tcp_peer.cpp.o: /home/runner/StreamCryptoDFS/src/network/tcp_peer.cpp \
+  /home/runner/StreamCryptoDFS/include/crypto/crypto_error.hpp \
+  /home/runner/StreamCryptoDFS/include/crypto/crypto_stream.hpp \
   /home/runner/StreamCryptoDFS/include/network/message_frame.hpp \
   /home/runner/StreamCryptoDFS/include/network/peer.hpp \
   /home/runner/StreamCryptoDFS/include/network/tcp_peer.hpp \
@@ -4431,6 +4433,8 @@ CMakeFiles/dfs_network.dir/src/network/tcp_peer.cpp.o: /home/runner/StreamCrypto
 
 /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/asio/execution/start.hpp:
 
+/home/runner/StreamCryptoDFS/include/crypto/crypto_error.hpp:
+
 /nix/store/fwh4fxd747m0py3ib3s5abamia9nrf90-glibc-2.39-52-dev/include/bits/mathcalls-narrow.h:
 
 /nix/store/fwh4fxd747m0py3ib3s5abamia9nrf90-glibc-2.39-52-dev/include/features.h:
@@ -6180,6 +6184,8 @@ CMakeFiles/dfs_network.dir/src/network/tcp_peer.cpp.o: /home/runner/StreamCrypto
 /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/mpl/aux_/has_tag.hpp:
 
 /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/asio/read_at.hpp:
+
+/home/runner/StreamCryptoDFS/include/crypto/crypto_stream.hpp:
 
 /nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/coroutine:
 

@@ -1,5 +1,5 @@
 #include "network/tcp_peer.hpp"
-#include "crypto/crypto_stream.hpp"  // Add CryptoStream include
+#include "crypto/crypto_stream.hpp"  // Add this include
 #include <stdexcept>
 
 namespace dfs {
@@ -291,7 +291,9 @@ bool TCP_Peer::send_stream(std::istream& input_stream, std::size_t buffer_size) 
         // Encrypt the input stream before sending
         try {
             // Generate IV for this transmission
-            auto iv = crypto.generate_IV();
+            auto iv_array = crypto.generate_IV();
+            // Convert array to vector for initialize method
+            std::vector<uint8_t> iv(iv_array.begin(), iv_array.end());
             std::vector<uint8_t> key(dfs::crypto::CryptoStream::KEY_SIZE, 0x42); // Use fully qualified namespace
 
             // Initialize crypto with key and IV
