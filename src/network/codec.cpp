@@ -2,14 +2,25 @@
 #include <boost/log/trivial.hpp>
 #include <sstream>
 #include <stdexcept>
-#include "crypto/crypto_stream.hpp"  // Add this include
+#include "crypto/crypto_stream.hpp"
 
 namespace dfs {
 namespace network {
 
+void Codec::set_encryption_key(const std::vector<uint8_t>& key) {
+    if (key.size() != crypto::CryptoStream::KEY_SIZE) {
+        throw std::invalid_argument("Invalid key size");
+    }
+    encryption_key_ = key;
+}
+
 std::size_t Codec::serialize(const MessageFrame& frame, std::ostream& output) {
     if (!output.good()) {
         throw std::runtime_error("Invalid output stream");
+    }
+
+    if (encryption_key_.empty()) {
+        throw std::runtime_error("Encryption key not set");
     }
 
     std::size_t total_bytes = 0;
@@ -38,45 +49,23 @@ std::size_t Codec::serialize(const MessageFrame& frame, std::ostream& output) {
         write_bytes(output, &network_filename_length, sizeof(uint32_t));
         total_bytes += sizeof(uint32_t);
 
-        // Initialize crypto for payload encryption using generated IV and key
-        auto key = crypto.generate_key();
-        // Convert array to vector for IV
+        // Initialize crypto for encryption
         std::vector<uint8_t> iv_vec(frame.initialization_vector.begin(), 
                                   frame.initialization_vector.end());
-        crypto.initialize(key, iv_vec);
+        crypto.initialize(encryption_key_, iv_vec);
 
-        // Stream and encrypt payload data if present
         if (frame.payload_size > 0 && frame.payload_stream) {
-            // Create a temporary buffer for the encrypted data
-            std::stringstream encrypted_stream;
-
-            // Reset stream position to beginning
-            frame.payload_stream->seekg(0, std::ios::beg);
-
-            // Encrypt the payload stream
-            crypto.encrypt(*frame.payload_stream, encrypted_stream);
-
-            // Get the encrypted size
-            auto encrypted_size = encrypted_stream.tellp();
-            uint64_t network_encrypted_size = to_network_order(static_cast<uint64_t>(encrypted_size));
-
-            // Write encrypted payload size
-            write_bytes(output, &network_encrypted_size, sizeof(uint64_t));
+            // Write the payload size first
+            uint64_t network_payload_size = to_network_order(frame.payload_size);
+            write_bytes(output, &network_payload_size, sizeof(uint64_t));
             total_bytes += sizeof(uint64_t);
 
-            // Write encrypted payload data
-            encrypted_stream.seekg(0, std::ios::beg);
-            char buffer[4096];  // 4KB chunks for efficient streaming
-            while (encrypted_stream.good() && !encrypted_stream.eof()) {
-                encrypted_stream.read(buffer, sizeof(buffer));
-                std::size_t bytes_read = encrypted_stream.gcount();
-                if (bytes_read > 0) {
-                    write_bytes(output, buffer, bytes_read);
-                    total_bytes += bytes_read;
-                }
-            }
+            // Process the payload stream directly through encryption
+            frame.payload_stream->seekg(0, std::ios::beg);
+            crypto.process_stream(*frame.payload_stream, output);
+            total_bytes += frame.payload_size;
 
-            // Reset original stream position back to beginning
+            // Reset original stream position
             frame.payload_stream->seekg(0, std::ios::beg);
         } else {
             // Write zero payload size if no payload
@@ -96,6 +85,10 @@ std::size_t Codec::serialize(const MessageFrame& frame, std::ostream& output) {
 MessageFrame Codec::deserialize(std::istream& input, Channel& channel) {
     if (!input.good()) {
         throw std::runtime_error("Invalid input stream");
+    }
+
+    if (encryption_key_.empty()) {
+        throw std::runtime_error("Encryption key not set");
     }
 
     MessageFrame frame;
@@ -121,35 +114,16 @@ MessageFrame Codec::deserialize(std::istream& input, Channel& channel) {
         read_bytes(input, &network_payload_size, sizeof(uint64_t));
         frame.payload_size = from_network_order(network_payload_size);
 
-        // Initialize crypto for decryption using frame's IV
-        crypto::CryptoStream crypto;
-        // Convert array to vector for IV
-        std::vector<uint8_t> iv_vec(frame.initialization_vector.begin(), 
-                                  frame.initialization_vector.end());
-        crypto.initialize(crypto.generate_key(), iv_vec);
-
-        // If payload exists, create stream and read encrypted data
+        // If payload exists, decrypt it directly to a new stream
         if (frame.payload_size > 0) {
-            // Read encrypted payload into temporary stream
-            auto encrypted_stream = std::make_shared<std::stringstream>();
-            char buffer[4096];  // 4KB chunks
-            std::size_t remaining = frame.payload_size;
+            // Initialize crypto for decryption using frame's IV
+            crypto::CryptoStream crypto;
+            std::vector<uint8_t> iv_vec(frame.initialization_vector.begin(), 
+                                      frame.initialization_vector.end());
+            crypto.initialize(encryption_key_, iv_vec);
 
-            while (remaining > 0 && input.good()) {
-                std::size_t chunk_size = std::min(remaining, sizeof(buffer));
-                read_bytes(input, buffer, chunk_size);
-                encrypted_stream->write(buffer, chunk_size);
-                remaining -= chunk_size;
-            }
-
-            if (remaining > 0) {
-                throw std::runtime_error("Failed to read complete payload");
-            }
-
-            // Create decrypted payload stream
             auto decrypted_stream = std::make_shared<std::stringstream>();
-            encrypted_stream->seekg(0);
-            crypto.decrypt(*encrypted_stream, *decrypted_stream);
+            crypto.process_stream(input, *decrypted_stream);
 
             // Set decrypted stream as frame's payload
             decrypted_stream->seekg(0);
@@ -166,7 +140,7 @@ MessageFrame Codec::deserialize(std::istream& input, Channel& channel) {
             frame.payload_stream->seekg(0, std::ios::beg);
         }
 
-        // Thread-safe channel push with proper stream handling
+        // Thread-safe channel push
         {
             std::lock_guard<std::mutex> lock(mutex_);
             channel.produce(channel_frame);
