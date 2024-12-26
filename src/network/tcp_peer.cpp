@@ -128,7 +128,7 @@ void TCP_Peer::process_stream() {
     } catch (const std::exception& e) {
         BOOST_LOG_TRIVIAL(error) << "[" << peer_id_ << "] Stream processing error: " << e.what();
     }
-
+    
     BOOST_LOG_TRIVIAL(info) << "[" << peer_id_ << "] Stream processing stopped";
 }
 
@@ -280,14 +280,55 @@ bool TCP_Peer::send_stream(std::istream& input_stream, std::size_t buffer_size) 
     try {
         // Lock to prevent concurrent socket writes
         std::unique_lock<std::mutex> lock(io_mutex_);
+
+        // Create CryptoStream instance for encryption
+        crypto::CryptoStream crypto;
+
+        // Create temporary buffer for the encrypted data
+        std::stringstream encrypted_stream;
+
+        // Encrypt the input stream before sending
+        try {
+            // Generate IV for this transmission
+            auto iv = crypto.generate_IV();
+            std::vector<uint8_t> key(crypto::CryptoStream::KEY_SIZE, 0x42); // TODO: Replace with actual key
+
+            // Initialize crypto with key and IV
+            crypto.initialize(key, iv);
+
+            // First send the IV
+            boost::system::error_code ec;
+            boost::asio::write(
+                *socket_,
+                boost::asio::buffer(iv.data(), iv.size()),
+                boost::asio::transfer_exactly(iv.size()),
+                ec
+            );
+
+            if (ec) {
+                BOOST_LOG_TRIVIAL(error) << "[" << peer_id_ << "] Failed to send IV: " << ec.message();
+                return false;
+            }
+
+            // Encrypt the input stream
+            crypto.encrypt(input_stream, encrypted_stream);
+
+        } catch (const std::exception& e) {
+            BOOST_LOG_TRIVIAL(error) << "[" << peer_id_ << "] Encryption error: " << e.what();
+            return false;
+        }
+
+        // Reset encrypted stream position for reading
+        encrypted_stream.seekg(0);
+
         std::vector<char> buffer(buffer_size);  // Temporary buffer for chunked reading
         boost::system::error_code ec;
 
-        // Continue reading and sending while input stream is valid
-        while (input_stream.good()) {
-            // Read chunk from input stream into buffer
-            input_stream.read(buffer.data(), buffer_size);
-            std::size_t bytes_read = input_stream.gcount();  // Get actual bytes read
+        // Send encrypted data in chunks
+        while (encrypted_stream.good()) {
+            // Read chunk from encrypted stream into buffer
+            encrypted_stream.read(buffer.data(), buffer_size);
+            std::size_t bytes_read = encrypted_stream.gcount();  // Get actual bytes read
 
             if (bytes_read == 0) {
                 break;  // Exit if no more data to read
@@ -307,7 +348,7 @@ bool TCP_Peer::send_stream(std::istream& input_stream, std::size_t buffer_size) 
                 return false;  // Return on any transmission error
             }
 
-            BOOST_LOG_TRIVIAL(debug) << "[" << peer_id_ << "] Sent " << bytes_written << " bytes from stream";
+            BOOST_LOG_TRIVIAL(debug) << "[" << peer_id_ << "] Sent " << bytes_written << " bytes of encrypted data";
         }
 
         return true;  // All data sent successfully
