@@ -12,10 +12,6 @@ std::size_t Codec::serialize(const MessageFrame& frame, std::ostream& output) {
     throw std::runtime_error("Invalid output stream");
   }
 
-  if (encryption_key_.empty()) {
-    throw std::runtime_error("Encryption key not set");
-  }
-
   std::size_t total_bytes = 0;
 
   try {
@@ -82,33 +78,39 @@ std::size_t Codec::serialize(const MessageFrame& frame, std::ostream& output) {
   }
 }
 
-MessageFrame Codec::deserialize(std::istream& input, Channel& channel) {
+std::size_t Codec::deserialize(MessageFrame& frame, std::istream& input, Channel& channel) {
   if (!input.good()) {
     throw std::runtime_error("Invalid input stream");
   }
 
-  MessageFrame frame;
+  std::size_t total_bytes = 0;
+
   try {
     // Read initialization vector
     read_bytes(input, frame.initialization_vector.data(), frame.initialization_vector.size());
+    total_bytes += frame.initialization_vector.size();
 
     // Read message type
     read_bytes(input, &frame.message_type, sizeof(MessageType));
+    total_bytes += sizeof(MessageType);
 
     // Read and convert source_id from network byte order
     uint32_t network_source_id;
     read_bytes(input, &network_source_id, sizeof(uint32_t));
     frame.source_id = from_network_order(network_source_id);
+    total_bytes += sizeof(uint32_t);
 
     // Read and convert payload_size from network byte order
     uint64_t network_payload_size;
     read_bytes(input, &network_payload_size, sizeof(uint64_t));
     frame.payload_size = from_network_order(network_payload_size);
+    total_bytes += sizeof(uint64_t);
 
     // Read and convert filename_length from network byte order
     uint32_t network_filename_length;
     read_bytes(input, &network_filename_length, sizeof(uint32_t));
     frame.filename_length = from_network_order(network_filename_length);
+    total_bytes += sizeof(uint32_t);
 
     // If payload exists, create stream and read data
     if (frame.payload_size > 0) {
@@ -121,6 +123,7 @@ MessageFrame Codec::deserialize(std::istream& input, Channel& channel) {
         read_bytes(input, buffer, chunk_size);
         payload_stream->write(buffer, chunk_size);
         remaining -= chunk_size;
+        total_bytes += chunk_size;
       }
 
       if (remaining > 0) {
@@ -148,7 +151,7 @@ MessageFrame Codec::deserialize(std::istream& input, Channel& channel) {
       channel.produce(channel_frame);
     }
 
-    return frame;
+    return total_bytes;
   }
   catch (const std::exception& e) {
     BOOST_LOG_TRIVIAL(error) << "Deserialization error: " << e.what();
