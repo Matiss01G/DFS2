@@ -26,33 +26,24 @@ std::size_t Codec::serialize(const MessageFrame& frame, std::ostream& output) {
     std::size_t total_bytes = 0;
 
     try {
-        // Generate and set new IV in the original frame
-        crypto::CryptoStream crypto;
-        auto& mutable_frame = const_cast<MessageFrame&>(frame);
-        mutable_frame.initialization_vector = crypto.generate_IV();
-
-        // Write initialization vector (fixed size array)
+        // Write initialization vector
         write_bytes(output, frame.initialization_vector.data(), frame.initialization_vector.size());
         total_bytes += frame.initialization_vector.size();
 
-        // Write message type (underlying uint8_t)
-        write_bytes(output, &frame.message_type, sizeof(MessageType));
-        total_bytes += sizeof(MessageType);
+        // Write message type
+        uint8_t msg_type = static_cast<uint8_t>(frame.message_type);
+        write_bytes(output, &msg_type, sizeof(uint8_t));
+        total_bytes += sizeof(uint8_t);
 
-        // Convert and write source_id in network byte order
+        // Write source_id in network byte order
         uint32_t network_source_id = to_network_order(frame.source_id);
         write_bytes(output, &network_source_id, sizeof(uint32_t));
         total_bytes += sizeof(uint32_t);
 
-        // Convert and write filename_length in network byte order
+        // Write filename_length in network byte order
         uint32_t network_filename_length = to_network_order(frame.filename_length);
         write_bytes(output, &network_filename_length, sizeof(uint32_t));
         total_bytes += sizeof(uint32_t);
-
-        // Initialize crypto for encryption
-        std::vector<uint8_t> iv_vec(frame.initialization_vector.begin(), 
-                                  frame.initialization_vector.end());
-        crypto.initialize(encryption_key_, iv_vec);
 
         if (frame.payload_size > 0 && frame.payload_stream) {
             // Write the payload size first
@@ -60,12 +51,18 @@ std::size_t Codec::serialize(const MessageFrame& frame, std::ostream& output) {
             write_bytes(output, &network_payload_size, sizeof(uint64_t));
             total_bytes += sizeof(uint64_t);
 
-            // Process the payload stream directly through encryption
+            // Initialize crypto for encryption using the frame's IV
+            crypto::CryptoStream crypto;
+            std::vector<uint8_t> iv(frame.initialization_vector.begin(), 
+                                  frame.initialization_vector.end());
+            crypto.initialize(encryption_key_, iv);
+
+            // Encrypt payload stream directly to output
             frame.payload_stream->seekg(0, std::ios::beg);
-            crypto.processStream(*frame.payload_stream, output);
+            crypto.encrypt(*frame.payload_stream, output);
             total_bytes += frame.payload_size;
 
-            // Reset original stream position
+            // Reset stream position
             frame.payload_stream->seekg(0, std::ios::beg);
         } else {
             // Write zero payload size if no payload
@@ -97,7 +94,9 @@ MessageFrame Codec::deserialize(std::istream& input, Channel& channel) {
         read_bytes(input, frame.initialization_vector.data(), frame.initialization_vector.size());
 
         // Read message type
-        read_bytes(input, &frame.message_type, sizeof(MessageType));
+        uint8_t msg_type;
+        read_bytes(input, &msg_type, sizeof(uint8_t));
+        frame.message_type = static_cast<MessageType>(msg_type);
 
         // Read and convert source_id from network byte order
         uint32_t network_source_id;
@@ -114,36 +113,37 @@ MessageFrame Codec::deserialize(std::istream& input, Channel& channel) {
         read_bytes(input, &network_payload_size, sizeof(uint64_t));
         frame.payload_size = from_network_order(network_payload_size);
 
-        // If payload exists, decrypt it directly to a new stream
+        // If payload exists, decrypt it
         if (frame.payload_size > 0) {
             // Initialize crypto for decryption using frame's IV
             crypto::CryptoStream crypto;
-            std::vector<uint8_t> iv_vec(frame.initialization_vector.begin(), 
-                                      frame.initialization_vector.end());
-            crypto.initialize(encryption_key_, iv_vec);
+            std::vector<uint8_t> iv(frame.initialization_vector.begin(), 
+                                  frame.initialization_vector.end());
+            crypto.initialize(encryption_key_, iv);
 
+            // Create a new stream for decrypted data
             auto decrypted_stream = std::make_shared<std::stringstream>();
-            crypto.processStream(input, *decrypted_stream);
+            crypto.decrypt(input, *decrypted_stream);
 
             // Set decrypted stream as frame's payload
             decrypted_stream->seekg(0);
             frame.payload_stream = decrypted_stream;
-        }
 
-        // Create a copy of the frame for the channel
-        MessageFrame channel_frame = frame;
-        if (frame.payload_stream) {
+            // Create a copy of the frame for the channel
+            MessageFrame channel_frame = frame;
             auto channel_payload = std::make_shared<std::stringstream>();
-            *channel_payload << frame.payload_stream->rdbuf();
+            *channel_payload << decrypted_stream->rdbuf();
             channel_frame.payload_stream = channel_payload;
-            // Reset original stream position
-            frame.payload_stream->seekg(0, std::ios::beg);
-        }
 
-        // Thread-safe channel push
-        {
-            std::lock_guard<std::mutex> lock(mutex_);
-            channel.produce(channel_frame);
+            // Reset stream positions
+            decrypted_stream->seekg(0);
+            channel_payload->seekg(0);
+
+            // Thread-safe channel push
+            {
+                std::lock_guard<std::mutex> lock(mutex_);
+                channel.produce(channel_frame);
+            }
         }
 
         return frame;
