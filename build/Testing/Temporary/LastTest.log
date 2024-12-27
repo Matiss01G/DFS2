@@ -1,0 +1,2024 @@
+Start testing: Dec 27 23:43 UTC
+----------------------------------------------------------
+1/40 Testing: CryptoStreamTest.BasicStreamOperation
+1/40 Test: CryptoStreamTest.BasicStreamOperation
+Command: "/home/runner/StreamCryptoDFS/build/crypto_tests" "--gtest_filter=CryptoStreamTest.BasicStreamOperation" "--gtest_also_run_disabled_tests"
+Directory: /home/runner/StreamCryptoDFS/build
+"CryptoStreamTest.BasicStreamOperation" start time: Dec 27 23:43 UTC
+Output:
+----------------------------------------------------------
+Running main() from /build/source/googletest/src/gtest_main.cc
+Note: Google Test filter = CryptoStreamTest.BasicStreamOperation
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from CryptoStreamTest
+[ RUN      ] CryptoStreamTest.BasicStreamOperation
+[2024-12-27 23:43:29.225885] [0x00007f3c3074fb80] [info]    Initializing CryptoStream
+[2024-12-27 23:43:29.226020] [0x00007f3c3074fb80] [debug]   CryptoStream initialization complete
+[2024-12-27 23:43:29.226027] [0x00007f3c3074fb80] [info]    Initializing crypto parameters
+[2024-12-27 23:43:29.226029] [0x00007f3c3074fb80] [debug]   Crypto parameters initialized successfully
+[2024-12-27 23:43:29.226034] [0x00007f3c3074fb80] [info]    Starting stream encryption
+[2024-12-27 23:43:29.226036] [0x00007f3c3074fb80] [debug]   Initializing cipher for encryption
+[2024-12-27 23:43:29.227441] [0x00007f3c3074fb80] [debug]   Cipher initialization complete
+[2024-12-27 23:43:29.227457] [0x00007f3c3074fb80] [info]    Starting stream decryption
+[2024-12-27 23:43:29.227459] [0x00007f3c3074fb80] [debug]   Initializing cipher for decryption
+[2024-12-27 23:43:29.227463] [0x00007f3c3074fb80] [debug]   Cipher initialization complete
+[2024-12-27 23:43:29.227468] [0x00007f3c3074fb80] [debug]   Cleaning up CryptoStream resources
+[       OK ] CryptoStreamTest.BasicStreamOperation (1 ms)
+[----------] 1 test from CryptoStreamTest (1 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (1 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"CryptoStreamTest.BasicStreamOperation" end time: Dec 27 23:43 UTC
+"CryptoStreamTest.BasicStreamOperation" time elapsed: 00:00:00
+----------------------------------------------------------
+
+2/40 Testing: CryptoStreamTest.UninitializedError
+2/40 Test: CryptoStreamTest.UninitializedError
+Command: "/home/runner/StreamCryptoDFS/build/crypto_tests" "--gtest_filter=CryptoStreamTest.UninitializedError" "--gtest_also_run_disabled_tests"
+Directory: /home/runner/StreamCryptoDFS/build
+"CryptoStreamTest.UninitializedError" start time: Dec 27 23:43 UTC
+Output:
+----------------------------------------------------------
+Running main() from /build/source/googletest/src/gtest_main.cc
+Note: Google Test filter = CryptoStreamTest.UninitializedError
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from CryptoStreamTest
+[ RUN      ] CryptoStreamTest.UninitializedError
+[2024-12-27 23:43:29.233110] [0x00007fac3ea4fb80] [info]    Initializing CryptoStream
+[2024-12-27 23:43:29.233250] [0x00007fac3ea4fb80] [debug]   CryptoStream initialization complete
+[2024-12-27 23:43:29.233260] [0x00007fac3ea4fb80] [info]    Initializing crypto parameters
+[2024-12-27 23:43:29.233262] [0x00007fac3ea4fb80] [debug]   Crypto parameters initialized successfully
+[2024-12-27 23:43:29.233264] [0x00007fac3ea4fb80] [info]    Initializing CryptoStream
+[2024-12-27 23:43:29.233265] [0x00007fac3ea4fb80] [debug]   CryptoStream initialization complete
+[2024-12-27 23:43:29.233270] [0x00007fac3ea4fb80] [info]    Starting stream encryption
+[2024-12-27 23:43:29.233272] [0x00007fac3ea4fb80] [debug]   Initializing cipher for encryption
+[2024-12-27 23:43:29.233273] [0x00007fac3ea4fb80] [error]   Attempted to use uninitialized CryptoStream
+[2024-12-27 23:43:29.233299] [0x00007fac3ea4fb80] [debug]   Cleaning up CryptoStream resources
+[2024-12-27 23:43:29.233307] [0x00007fac3ea4fb80] [debug]   Cleaning up CryptoStream resources
+[       OK ] CryptoStreamTest.UninitializedError (0 ms)
+[----------] 1 test from CryptoStreamTest (0 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (0 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"CryptoStreamTest.UninitializedError" end time: Dec 27 23:43 UTC
+"CryptoStreamTest.UninitializedError" time elapsed: 00:00:00
+----------------------------------------------------------
+
+3/40 Testing: CryptoStreamTest.EmptyStream
+3/40 Test: CryptoStreamTest.EmptyStream
+Command: "/home/runner/StreamCryptoDFS/build/crypto_tests" "--gtest_filter=CryptoStreamTest.EmptyStream" "--gtest_also_run_disabled_tests"
+Directory: /home/runner/StreamCryptoDFS/build
+"CryptoStreamTest.EmptyStream" start time: Dec 27 23:43 UTC
+Output:
+----------------------------------------------------------
+Running main() from /build/source/googletest/src/gtest_main.cc
+Note: Google Test filter = CryptoStreamTest.EmptyStream
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from CryptoStreamTest
+[ RUN      ] CryptoStreamTest.EmptyStream
+[2024-12-27 23:43:29.238567] [0x00007f74e4250b80] [info]    Initializing CryptoStream
+[2024-12-27 23:43:29.238674] [0x00007f74e4250b80] [debug]   CryptoStream initialization complete
+[2024-12-27 23:43:29.238681] [0x00007f74e4250b80] [info]    Initializing crypto parameters
+[2024-12-27 23:43:29.238683] [0x00007f74e4250b80] [debug]   Crypto parameters initialized successfully
+[2024-12-27 23:43:29.238687] [0x00007f74e4250b80] [info]    Starting stream encryption
+[2024-12-27 23:43:29.238688] [0x00007f74e4250b80] [debug]   Initializing cipher for encryption
+[2024-12-27 23:43:29.240074] [0x00007f74e4250b80] [debug]   Cipher initialization complete
+[2024-12-27 23:43:29.240089] [0x00007f74e4250b80] [info]    Starting stream decryption
+[2024-12-27 23:43:29.240092] [0x00007f74e4250b80] [debug]   Initializing cipher for decryption
+[2024-12-27 23:43:29.240096] [0x00007f74e4250b80] [debug]   Cipher initialization complete
+[2024-12-27 23:43:29.240100] [0x00007f74e4250b80] [debug]   Cleaning up CryptoStream resources
+[       OK ] CryptoStreamTest.EmptyStream (1 ms)
+[----------] 1 test from CryptoStreamTest (1 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (1 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"CryptoStreamTest.EmptyStream" end time: Dec 27 23:43 UTC
+"CryptoStreamTest.EmptyStream" time elapsed: 00:00:00
+----------------------------------------------------------
+
+4/40 Testing: CryptoStreamTest.LargeStream
+4/40 Test: CryptoStreamTest.LargeStream
+Command: "/home/runner/StreamCryptoDFS/build/crypto_tests" "--gtest_filter=CryptoStreamTest.LargeStream" "--gtest_also_run_disabled_tests"
+Directory: /home/runner/StreamCryptoDFS/build
+"CryptoStreamTest.LargeStream" start time: Dec 27 23:43 UTC
+Output:
+----------------------------------------------------------
+Running main() from /build/source/googletest/src/gtest_main.cc
+Note: Google Test filter = CryptoStreamTest.LargeStream
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from CryptoStreamTest
+[ RUN      ] CryptoStreamTest.LargeStream
+[2024-12-27 23:43:29.245873] [0x00007fe2c765eb80] [info]    Initializing CryptoStream
+[2024-12-27 23:43:29.245955] [0x00007fe2c765eb80] [debug]   CryptoStream initialization complete
+[2024-12-27 23:43:29.245964] [0x00007fe2c765eb80] [info]    Initializing crypto parameters
+[2024-12-27 23:43:29.245968] [0x00007fe2c765eb80] [debug]   Crypto parameters initialized successfully
+[2024-12-27 23:43:29.253140] [0x00007fe2c765eb80] [info]    Starting stream encryption
+[2024-12-27 23:43:29.253153] [0x00007fe2c765eb80] [debug]   Initializing cipher for encryption
+[2024-12-27 23:43:29.254642] [0x00007fe2c765eb80] [debug]   Cipher initialization complete
+[2024-12-27 23:43:29.257248] [0x00007fe2c765eb80] [info]    Starting stream decryption
+[2024-12-27 23:43:29.257260] [0x00007fe2c765eb80] [debug]   Initializing cipher for decryption
+[2024-12-27 23:43:29.257267] [0x00007fe2c765eb80] [debug]   Cipher initialization complete
+[2024-12-27 23:43:29.258337] [0x00007fe2c765eb80] [debug]   Cleaning up CryptoStream resources
+[       OK ] CryptoStreamTest.LargeStream (12 ms)
+[----------] 1 test from CryptoStreamTest (12 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (12 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.02 sec
+----------------------------------------------------------
+Test Passed.
+"CryptoStreamTest.LargeStream" end time: Dec 27 23:43 UTC
+"CryptoStreamTest.LargeStream" time elapsed: 00:00:00
+----------------------------------------------------------
+
+5/40 Testing: CryptoStreamTest.InvalidStreamState
+5/40 Test: CryptoStreamTest.InvalidStreamState
+Command: "/home/runner/StreamCryptoDFS/build/crypto_tests" "--gtest_filter=CryptoStreamTest.InvalidStreamState" "--gtest_also_run_disabled_tests"
+Directory: /home/runner/StreamCryptoDFS/build
+"CryptoStreamTest.InvalidStreamState" start time: Dec 27 23:43 UTC
+Output:
+----------------------------------------------------------
+Running main() from /build/source/googletest/src/gtest_main.cc
+Note: Google Test filter = CryptoStreamTest.InvalidStreamState
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from CryptoStreamTest
+[ RUN      ] CryptoStreamTest.InvalidStreamState
+[2024-12-27 23:43:29.264637] [0x00007f8f3b1deb80] [info]    Initializing CryptoStream
+[2024-12-27 23:43:29.264741] [0x00007f8f3b1deb80] [debug]   CryptoStream initialization complete
+[2024-12-27 23:43:29.264751] [0x00007f8f3b1deb80] [info]    Initializing crypto parameters
+[2024-12-27 23:43:29.264754] [0x00007f8f3b1deb80] [debug]   Crypto parameters initialized successfully
+[2024-12-27 23:43:29.264762] [0x00007f8f3b1deb80] [info]    Starting stream encryption
+[2024-12-27 23:43:29.264771] [0x00007f8f3b1deb80] [error]   Invalid stream state detected
+[2024-12-27 23:43:29.264798] [0x00007f8f3b1deb80] [info]    Starting stream encryption
+[2024-12-27 23:43:29.264802] [0x00007f8f3b1deb80] [error]   Invalid stream state detected
+[2024-12-27 23:43:29.264808] [0x00007f8f3b1deb80] [debug]   Cleaning up CryptoStream resources
+[       OK ] CryptoStreamTest.InvalidStreamState (0 ms)
+[----------] 1 test from CryptoStreamTest (0 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (0 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"CryptoStreamTest.InvalidStreamState" end time: Dec 27 23:43 UTC
+"CryptoStreamTest.InvalidStreamState" time elapsed: 00:00:00
+----------------------------------------------------------
+
+6/40 Testing: CryptoStreamTest.BlockAlignment
+6/40 Test: CryptoStreamTest.BlockAlignment
+Command: "/home/runner/StreamCryptoDFS/build/crypto_tests" "--gtest_filter=CryptoStreamTest.BlockAlignment" "--gtest_also_run_disabled_tests"
+Directory: /home/runner/StreamCryptoDFS/build
+"CryptoStreamTest.BlockAlignment" start time: Dec 27 23:43 UTC
+Output:
+----------------------------------------------------------
+Running main() from /build/source/googletest/src/gtest_main.cc
+Note: Google Test filter = CryptoStreamTest.BlockAlignment
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from CryptoStreamTest
+[ RUN      ] CryptoStreamTest.BlockAlignment
+[2024-12-27 23:43:29.269966] [0x00007faa7ad13b80] [info]    Initializing CryptoStream
+[2024-12-27 23:43:29.270076] [0x00007faa7ad13b80] [debug]   CryptoStream initialization complete
+[2024-12-27 23:43:29.270085] [0x00007faa7ad13b80] [info]    Initializing crypto parameters
+[2024-12-27 23:43:29.270088] [0x00007faa7ad13b80] [debug]   Crypto parameters initialized successfully
+[2024-12-27 23:43:29.270095] [0x00007faa7ad13b80] [info]    Starting stream encryption
+[2024-12-27 23:43:29.270099] [0x00007faa7ad13b80] [debug]   Initializing cipher for encryption
+[2024-12-27 23:43:29.271307] [0x00007faa7ad13b80] [debug]   Cipher initialization complete
+[2024-12-27 23:43:29.271323] [0x00007faa7ad13b80] [info]    Starting stream decryption
+[2024-12-27 23:43:29.271326] [0x00007faa7ad13b80] [debug]   Initializing cipher for decryption
+[2024-12-27 23:43:29.271332] [0x00007faa7ad13b80] [debug]   Cipher initialization complete
+[2024-12-27 23:43:29.271345] [0x00007faa7ad13b80] [info]    Starting stream encryption
+[2024-12-27 23:43:29.271352] [0x00007faa7ad13b80] [debug]   Initializing cipher for encryption
+[2024-12-27 23:43:29.271356] [0x00007faa7ad13b80] [debug]   Cipher initialization complete
+[2024-12-27 23:43:29.271360] [0x00007faa7ad13b80] [info]    Starting stream decryption
+[2024-12-27 23:43:29.271363] [0x00007faa7ad13b80] [debug]   Initializing cipher for decryption
+[2024-12-27 23:43:29.271367] [0x00007faa7ad13b80] [debug]   Cipher initialization complete
+[2024-12-27 23:43:29.271374] [0x00007faa7ad13b80] [info]    Starting stream encryption
+[2024-12-27 23:43:29.271378] [0x00007faa7ad13b80] [debug]   Initializing cipher for encryption
+[2024-12-27 23:43:29.271384] [0x00007faa7ad13b80] [debug]   Cipher initialization complete
+[2024-12-27 23:43:29.271388] [0x00007faa7ad13b80] [info]    Starting stream decryption
+[2024-12-27 23:43:29.271391] [0x00007faa7ad13b80] [debug]   Initializing cipher for decryption
+[2024-12-27 23:43:29.271395] [0x00007faa7ad13b80] [debug]   Cipher initialization complete
+[2024-12-27 23:43:29.271401] [0x00007faa7ad13b80] [info]    Starting stream encryption
+[2024-12-27 23:43:29.271407] [0x00007faa7ad13b80] [debug]   Initializing cipher for encryption
+[2024-12-27 23:43:29.271411] [0x00007faa7ad13b80] [debug]   Cipher initialization complete
+[2024-12-27 23:43:29.271414] [0x00007faa7ad13b80] [info]    Starting stream decryption
+[2024-12-27 23:43:29.271417] [0x00007faa7ad13b80] [debug]   Initializing cipher for decryption
+[2024-12-27 23:43:29.271421] [0x00007faa7ad13b80] [debug]   Cipher initialization complete
+[2024-12-27 23:43:29.271429] [0x00007faa7ad13b80] [info]    Starting stream encryption
+[2024-12-27 23:43:29.271432] [0x00007faa7ad13b80] [debug]   Initializing cipher for encryption
+[2024-12-27 23:43:29.271436] [0x00007faa7ad13b80] [debug]   Cipher initialization complete
+[2024-12-27 23:43:29.271442] [0x00007faa7ad13b80] [info]    Starting stream decryption
+[2024-12-27 23:43:29.271445] [0x00007faa7ad13b80] [debug]   Initializing cipher for decryption
+[2024-12-27 23:43:29.271449] [0x00007faa7ad13b80] [debug]   Cipher initialization complete
+[2024-12-27 23:43:29.271454] [0x00007faa7ad13b80] [info]    Starting stream encryption
+[2024-12-27 23:43:29.271460] [0x00007faa7ad13b80] [debug]   Initializing cipher for encryption
+[2024-12-27 23:43:29.271464] [0x00007faa7ad13b80] [debug]   Cipher initialization complete
+[2024-12-27 23:43:29.271467] [0x00007faa7ad13b80] [info]    Starting stream decryption
+[2024-12-27 23:43:29.271470] [0x00007faa7ad13b80] [debug]   Initializing cipher for decryption
+[2024-12-27 23:43:29.271474] [0x00007faa7ad13b80] [debug]   Cipher initialization complete
+[2024-12-27 23:43:29.271479] [0x00007faa7ad13b80] [debug]   Cleaning up CryptoStream resources
+[       OK ] CryptoStreamTest.BlockAlignment (1 ms)
+[----------] 1 test from CryptoStreamTest (1 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (1 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"CryptoStreamTest.BlockAlignment" end time: Dec 27 23:43 UTC
+"CryptoStreamTest.BlockAlignment" time elapsed: 00:00:00
+----------------------------------------------------------
+
+7/40 Testing: CryptoStreamTest.StreamOperators
+7/40 Test: CryptoStreamTest.StreamOperators
+Command: "/home/runner/StreamCryptoDFS/build/crypto_tests" "--gtest_filter=CryptoStreamTest.StreamOperators" "--gtest_also_run_disabled_tests"
+Directory: /home/runner/StreamCryptoDFS/build
+"CryptoStreamTest.StreamOperators" start time: Dec 27 23:43 UTC
+Output:
+----------------------------------------------------------
+Running main() from /build/source/googletest/src/gtest_main.cc
+Note: Google Test filter = CryptoStreamTest.StreamOperators
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from CryptoStreamTest
+[ RUN      ] CryptoStreamTest.StreamOperators
+[2024-12-27 23:43:29.277758] [0x00007fdd07f43b80] [info]    Initializing CryptoStream
+[2024-12-27 23:43:29.277931] [0x00007fdd07f43b80] [debug]   CryptoStream initialization complete
+[2024-12-27 23:43:29.277938] [0x00007fdd07f43b80] [info]    Initializing crypto parameters
+[2024-12-27 23:43:29.277941] [0x00007fdd07f43b80] [debug]   Crypto parameters initialized successfully
+[2024-12-27 23:43:29.277944] [0x00007fdd07f43b80] [debug]   Stream operator<< called, storing input stream for processing
+[2024-12-27 23:43:29.277950] [0x00007fdd07f43b80] [debug]   Stream operator>> called in encryption mode
+[2024-12-27 23:43:29.277954] [0x00007fdd07f43b80] [info]    Starting stream encryption
+[2024-12-27 23:43:29.277957] [0x00007fdd07f43b80] [debug]   Initializing cipher for encryption
+[2024-12-27 23:43:29.279635] [0x00007fdd07f43b80] [debug]   Cipher initialization complete
+[2024-12-27 23:43:29.279650] [0x00007fdd07f43b80] [debug]   Stream processing complete
+[2024-12-27 23:43:29.279654] [0x00007fdd07f43b80] [debug]   Stream operator<< called, storing input stream for processing
+[2024-12-27 23:43:29.279657] [0x00007fdd07f43b80] [debug]   Stream operator>> called in decryption mode
+[2024-12-27 23:43:29.279660] [0x00007fdd07f43b80] [info]    Starting stream decryption
+[2024-12-27 23:43:29.279663] [0x00007fdd07f43b80] [debug]   Initializing cipher for decryption
+[2024-12-27 23:43:29.279668] [0x00007fdd07f43b80] [debug]   Cipher initialization complete
+[2024-12-27 23:43:29.279674] [0x00007fdd07f43b80] [debug]   Stream processing complete
+[2024-12-27 23:43:29.279678] [0x00007fdd07f43b80] [debug]   Stream operator>> called in decryption mode
+[2024-12-27 23:43:29.279681] [0x00007fdd07f43b80] [error]   Stream operator>> called without prior input stream
+[2024-12-27 23:43:29.279710] [0x00007fdd07f43b80] [debug]   Cleaning up CryptoStream resources
+[       OK ] CryptoStreamTest.StreamOperators (2 ms)
+[----------] 1 test from CryptoStreamTest (2 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (2 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"CryptoStreamTest.StreamOperators" end time: Dec 27 23:43 UTC
+"CryptoStreamTest.StreamOperators" time elapsed: 00:00:00
+----------------------------------------------------------
+
+8/40 Testing: CryptoStreamTest.IVGeneration
+8/40 Test: CryptoStreamTest.IVGeneration
+Command: "/home/runner/StreamCryptoDFS/build/crypto_tests" "--gtest_filter=CryptoStreamTest.IVGeneration" "--gtest_also_run_disabled_tests"
+Directory: /home/runner/StreamCryptoDFS/build
+"CryptoStreamTest.IVGeneration" start time: Dec 27 23:43 UTC
+Output:
+----------------------------------------------------------
+Running main() from /build/source/googletest/src/gtest_main.cc
+Note: Google Test filter = CryptoStreamTest.IVGeneration
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from CryptoStreamTest
+[ RUN      ] CryptoStreamTest.IVGeneration
+[2024-12-27 23:43:29.285424] [0x00007f3834156b80] [info]    Initializing CryptoStream
+[2024-12-27 23:43:29.285542] [0x00007f3834156b80] [debug]   CryptoStream initialization complete
+[2024-12-27 23:43:29.285553] [0x00007f3834156b80] [info]    Initializing crypto parameters
+[2024-12-27 23:43:29.285556] [0x00007f3834156b80] [debug]   Crypto parameters initialized successfully
+[2024-12-27 23:43:29.285558] [0x00007f3834156b80] [info]    Initializing CryptoStream
+[2024-12-27 23:43:29.285559] [0x00007f3834156b80] [debug]   CryptoStream initialization complete
+[2024-12-27 23:43:29.285561] [0x00007f3834156b80] [debug]   Generating initialization vector
+[2024-12-27 23:43:29.286831] [0x00007f3834156b80] [debug]   Successfully generated initialization vector
+[2024-12-27 23:43:29.286841] [0x00007f3834156b80] [debug]   Generating initialization vector
+[2024-12-27 23:43:29.286844] [0x00007f3834156b80] [debug]   Successfully generated initialization vector
+[2024-12-27 23:43:29.286848] [0x00007f3834156b80] [info]    Initializing crypto parameters
+[2024-12-27 23:43:29.286850] [0x00007f3834156b80] [debug]   Crypto parameters initialized successfully
+[2024-12-27 23:43:29.286854] [0x00007f3834156b80] [info]    Starting stream encryption
+[2024-12-27 23:43:29.286857] [0x00007f3834156b80] [debug]   Initializing cipher for encryption
+[2024-12-27 23:43:29.286861] [0x00007f3834156b80] [debug]   Cipher initialization complete
+[2024-12-27 23:43:29.286868] [0x00007f3834156b80] [info]    Starting stream decryption
+[2024-12-27 23:43:29.286878] [0x00007f3834156b80] [debug]   Initializing cipher for decryption
+[2024-12-27 23:43:29.286882] [0x00007f3834156b80] [debug]   Cipher initialization complete
+[2024-12-27 23:43:29.286887] [0x00007f3834156b80] [debug]   Cleaning up CryptoStream resources
+[2024-12-27 23:43:29.286892] [0x00007f3834156b80] [debug]   Cleaning up CryptoStream resources
+[       OK ] CryptoStreamTest.IVGeneration (1 ms)
+[----------] 1 test from CryptoStreamTest (1 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (1 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"CryptoStreamTest.IVGeneration" end time: Dec 27 23:43 UTC
+"CryptoStreamTest.IVGeneration" time elapsed: 00:00:00
+----------------------------------------------------------
+
+9/40 Testing: StoreTest.BasicStoreAndRetrieve
+9/40 Test: StoreTest.BasicStoreAndRetrieve
+Command: "/home/runner/StreamCryptoDFS/build/store_tests" "--gtest_filter=StoreTest.BasicStoreAndRetrieve" "--gtest_also_run_disabled_tests"
+Directory: /home/runner/StreamCryptoDFS/build
+"StoreTest.BasicStoreAndRetrieve" start time: Dec 27 23:43 UTC
+Output:
+----------------------------------------------------------
+Running main() from /build/source/googletest/src/gtest_main.cc
+Note: Google Test filter = StoreTest.BasicStoreAndRetrieve
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from StoreTest
+[ RUN      ] StoreTest.BasicStoreAndRetrieve
+[2024-12-27 23:43:29.291933] [0x00007f4ce23d7b80] [info]    Initializing Store with base path: /tmp/store_test_1735343009291841483
+[2024-12-27 23:43:29.291943] [0x00007f4ce23d7b80] [debug]   Store directory created/verified at: /tmp/store_test_1735343009291841483
+[2024-12-27 23:43:29.291947] [0x00007f4ce23d7b80] [info]    Storing data with key: test_key
+[2024-12-27 23:43:29.291953] [0x00007f4ce23d7b80] [debug]   Generating hash for key: test_key
+[2024-12-27 23:43:29.292744] [0x00007f4ce23d7b80] [debug]   Generated hash: 92488e1e3eeecdf99f3ed2ce59233efb4b4fb612d5655c0ce9ea52b5a502e655
+[2024-12-27 23:43:29.292755] [0x00007f4ce23d7b80] [debug]   Calculated hierarchical path: /tmp/store_test_1735343009291841483/92/48/8e/1e3eeecdf99f3ed2ce59233efb4b4fb612d5655c0ce9ea52b5a502e655
+[2024-12-27 23:43:29.292799] [0x00007f4ce23d7b80] [debug]   Calculated file path: /tmp/store_test_1735343009291841483/92/48/8e/1e3eeecdf99f3ed2ce59233efb4b4fb612d5655c0ce9ea52b5a502e655
+[2024-12-27 23:43:29.292835] [0x00007f4ce23d7b80] [info]    Successfully stored 13 bytes with key: test_key
+[2024-12-27 23:43:29.292842] [0x00007f4ce23d7b80] [debug]   Generating hash for key: test_key
+[2024-12-27 23:43:29.292844] [0x00007f4ce23d7b80] [debug]   Generating hash for key: test_key
+[2024-12-27 23:43:29.292850] [0x00007f4ce23d7b80] [debug]   Generated hash: 92488e1e3eeecdf99f3ed2ce59233efb4b4fb612d5655c0ce9ea52b5a502e655
+[2024-12-27 23:43:29.292856] [0x00007f4ce23d7b80] [debug]   Calculated hierarchical path: /tmp/store_test_1735343009291841483/92/48/8e/1e3eeecdf99f3ed2ce59233efb4b4fb612d5655c0ce9ea52b5a502e655
+[2024-12-27 23:43:29.292861] [0x00007f4ce23d7b80] [debug]   Checking existence of key: test_key at path: /tmp/store_test_1735343009291841483/92/48/8e/1e3eeecdf99f3ed2ce59233efb4b4fb612d5655c0ce9ea52b5a502e655 - exists
+[2024-12-27 23:43:29.292866] [0x00007f4ce23d7b80] [info]    Retrieving data for key: test_key
+[2024-12-27 23:43:29.292868] [0x00007f4ce23d7b80] [debug]   Generating hash for key: test_key
+[2024-12-27 23:43:29.292871] [0x00007f4ce23d7b80] [debug]   Generated hash: 92488e1e3eeecdf99f3ed2ce59233efb4b4fb612d5655c0ce9ea52b5a502e655
+[2024-12-27 23:43:29.292874] [0x00007f4ce23d7b80] [debug]   Calculated hierarchical path: /tmp/store_test_1735343009291841483/92/48/8e/1e3eeecdf99f3ed2ce59233efb4b4fb612d5655c0ce9ea52b5a502e655
+[2024-12-27 23:43:29.292885] [0x00007f4ce23d7b80] [debug]   Successfully retrieved data for key: test_key
+[2024-12-27 23:43:29.292893] [0x00007f4ce23d7b80] [info]    Clearing entire store at: "/tmp/store_test_1735343009291841483"
+[2024-12-27 23:43:29.293031] [0x00007f4ce23d7b80] [info]    Store cleared successfully
+[       OK ] StoreTest.BasicStoreAndRetrieve (1 ms)
+[----------] 1 test from StoreTest (1 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (1 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"StoreTest.BasicStoreAndRetrieve" end time: Dec 27 23:43 UTC
+"StoreTest.BasicStoreAndRetrieve" time elapsed: 00:00:00
+----------------------------------------------------------
+
+10/40 Testing: StoreTest.EmptyInput
+10/40 Test: StoreTest.EmptyInput
+Command: "/home/runner/StreamCryptoDFS/build/store_tests" "--gtest_filter=StoreTest.EmptyInput" "--gtest_also_run_disabled_tests"
+Directory: /home/runner/StreamCryptoDFS/build
+"StoreTest.EmptyInput" start time: Dec 27 23:43 UTC
+Output:
+----------------------------------------------------------
+Running main() from /build/source/googletest/src/gtest_main.cc
+Note: Google Test filter = StoreTest.EmptyInput
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from StoreTest
+[ RUN      ] StoreTest.EmptyInput
+[2024-12-27 23:43:29.298319] [0x00007f2fddbd0b80] [info]    Initializing Store with base path: /tmp/store_test_1735343009298213003
+[2024-12-27 23:43:29.298332] [0x00007f2fddbd0b80] [debug]   Store directory created/verified at: /tmp/store_test_1735343009298213003
+[2024-12-27 23:43:29.298338] [0x00007f2fddbd0b80] [info]    Storing data with key: empty_test
+[2024-12-27 23:43:29.298345] [0x00007f2fddbd0b80] [debug]   Generating hash for key: empty_test
+[2024-12-27 23:43:29.299209] [0x00007f2fddbd0b80] [debug]   Generated hash: f1b6800e9ca01dac557744adec3477366cbe3888d44fcabefb3078c4c069f3a8
+[2024-12-27 23:43:29.299263] [0x00007f2fddbd0b80] [debug]   Calculated hierarchical path: /tmp/store_test_1735343009298213003/f1/b6/80/0e9ca01dac557744adec3477366cbe3888d44fcabefb3078c4c069f3a8
+[2024-12-27 23:43:29.299315] [0x00007f2fddbd0b80] [debug]   Calculated file path: /tmp/store_test_1735343009298213003/f1/b6/80/0e9ca01dac557744adec3477366cbe3888d44fcabefb3078c4c069f3a8
+[2024-12-27 23:43:29.299348] [0x00007f2fddbd0b80] [debug]   Storing empty content for key: empty_test
+[2024-12-27 23:43:29.299358] [0x00007f2fddbd0b80] [info]    Successfully stored 0 bytes with key: empty_test
+[2024-12-27 23:43:29.299363] [0x00007f2fddbd0b80] [debug]   Generating hash for key: empty_test
+[2024-12-27 23:43:29.299368] [0x00007f2fddbd0b80] [debug]   Generating hash for key: empty_test
+[2024-12-27 23:43:29.299378] [0x00007f2fddbd0b80] [debug]   Generated hash: f1b6800e9ca01dac557744adec3477366cbe3888d44fcabefb3078c4c069f3a8
+[2024-12-27 23:43:29.299386] [0x00007f2fddbd0b80] [debug]   Calculated hierarchical path: /tmp/store_test_1735343009298213003/f1/b6/80/0e9ca01dac557744adec3477366cbe3888d44fcabefb3078c4c069f3a8
+[2024-12-27 23:43:29.299394] [0x00007f2fddbd0b80] [debug]   Checking existence of key: empty_test at path: /tmp/store_test_1735343009298213003/f1/b6/80/0e9ca01dac557744adec3477366cbe3888d44fcabefb3078c4c069f3a8 - exists
+[2024-12-27 23:43:29.299398] [0x00007f2fddbd0b80] [info]    Retrieving data for key: empty_test
+[2024-12-27 23:43:29.299401] [0x00007f2fddbd0b80] [debug]   Generating hash for key: empty_test
+[2024-12-27 23:43:29.299407] [0x00007f2fddbd0b80] [debug]   Generated hash: f1b6800e9ca01dac557744adec3477366cbe3888d44fcabefb3078c4c069f3a8
+[2024-12-27 23:43:29.299415] [0x00007f2fddbd0b80] [debug]   Calculated hierarchical path: /tmp/store_test_1735343009298213003/f1/b6/80/0e9ca01dac557744adec3477366cbe3888d44fcabefb3078c4c069f3a8
+[2024-12-27 23:43:29.299424] [0x00007f2fddbd0b80] [debug]   Retrieved empty content for key: empty_test
+[2024-12-27 23:43:29.299433] [0x00007f2fddbd0b80] [info]    Clearing entire store at: "/tmp/store_test_1735343009298213003"
+[2024-12-27 23:43:29.299581] [0x00007f2fddbd0b80] [info]    Store cleared successfully
+[       OK ] StoreTest.EmptyInput (1 ms)
+[----------] 1 test from StoreTest (1 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (1 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"StoreTest.EmptyInput" end time: Dec 27 23:43 UTC
+"StoreTest.EmptyInput" time elapsed: 00:00:00
+----------------------------------------------------------
+
+11/40 Testing: StoreTest.MultipleFiles
+11/40 Test: StoreTest.MultipleFiles
+Command: "/home/runner/StreamCryptoDFS/build/store_tests" "--gtest_filter=StoreTest.MultipleFiles" "--gtest_also_run_disabled_tests"
+Directory: /home/runner/StreamCryptoDFS/build
+"StoreTest.MultipleFiles" start time: Dec 27 23:43 UTC
+Output:
+----------------------------------------------------------
+Running main() from /build/source/googletest/src/gtest_main.cc
+Note: Google Test filter = StoreTest.MultipleFiles
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from StoreTest
+[ RUN      ] StoreTest.MultipleFiles
+[2024-12-27 23:43:29.305453] [0x00007fb60e341b80] [info]    Initializing Store with base path: /tmp/store_test_1735343009305354632
+[2024-12-27 23:43:29.305464] [0x00007fb60e341b80] [debug]   Store directory created/verified at: /tmp/store_test_1735343009305354632
+[2024-12-27 23:43:29.305469] [0x00007fb60e341b80] [info]    Storing data with key: key1
+[2024-12-27 23:43:29.305471] [0x00007fb60e341b80] [debug]   Generating hash for key: key1
+[2024-12-27 23:43:29.306388] [0x00007fb60e341b80] [debug]   Generated hash: 8174099687a26621f4e2cdd7cc03b3dacedb3fb962255b1aafd033cabe831530
+[2024-12-27 23:43:29.306402] [0x00007fb60e341b80] [debug]   Calculated hierarchical path: /tmp/store_test_1735343009305354632/81/74/09/9687a26621f4e2cdd7cc03b3dacedb3fb962255b1aafd033cabe831530
+[2024-12-27 23:43:29.306447] [0x00007fb60e341b80] [debug]   Calculated file path: /tmp/store_test_1735343009305354632/81/74/09/9687a26621f4e2cdd7cc03b3dacedb3fb962255b1aafd033cabe831530
+[2024-12-27 23:43:29.306498] [0x00007fb60e341b80] [info]    Successfully stored 18 bytes with key: key1
+[2024-12-27 23:43:29.306505] [0x00007fb60e341b80] [debug]   Generating hash for key: key1
+[2024-12-27 23:43:29.306507] [0x00007fb60e341b80] [debug]   Generating hash for key: key1
+[2024-12-27 23:43:29.306515] [0x00007fb60e341b80] [debug]   Generated hash: 8174099687a26621f4e2cdd7cc03b3dacedb3fb962255b1aafd033cabe831530
+[2024-12-27 23:43:29.306521] [0x00007fb60e341b80] [debug]   Calculated hierarchical path: /tmp/store_test_1735343009305354632/81/74/09/9687a26621f4e2cdd7cc03b3dacedb3fb962255b1aafd033cabe831530
+[2024-12-27 23:43:29.306529] [0x00007fb60e341b80] [debug]   Checking existence of key: key1 at path: /tmp/store_test_1735343009305354632/81/74/09/9687a26621f4e2cdd7cc03b3dacedb3fb962255b1aafd033cabe831530 - exists
+[2024-12-27 23:43:29.306538] [0x00007fb60e341b80] [info]    Storing data with key: key2
+[2024-12-27 23:43:29.306539] [0x00007fb60e341b80] [debug]   Generating hash for key: key2
+[2024-12-27 23:43:29.306546] [0x00007fb60e341b80] [debug]   Generated hash: b10253764c8b233fb37542e23401c7b450e5a6f9751f3b5a014f6f67e8bc999d
+[2024-12-27 23:43:29.306556] [0x00007fb60e341b80] [debug]   Calculated hierarchical path: /tmp/store_test_1735343009305354632/b1/02/53/764c8b233fb37542e23401c7b450e5a6f9751f3b5a014f6f67e8bc999d
+[2024-12-27 23:43:29.306592] [0x00007fb60e341b80] [debug]   Calculated file path: /tmp/store_test_1735343009305354632/b1/02/53/764c8b233fb37542e23401c7b450e5a6f9751f3b5a014f6f67e8bc999d
+[2024-12-27 23:43:29.306629] [0x00007fb60e341b80] [info]    Successfully stored 19 bytes with key: key2
+[2024-12-27 23:43:29.306636] [0x00007fb60e341b80] [debug]   Generating hash for key: key2
+[2024-12-27 23:43:29.306637] [0x00007fb60e341b80] [debug]   Generating hash for key: key2
+[2024-12-27 23:43:29.306643] [0x00007fb60e341b80] [debug]   Generated hash: b10253764c8b233fb37542e23401c7b450e5a6f9751f3b5a014f6f67e8bc999d
+[2024-12-27 23:43:29.306649] [0x00007fb60e341b80] [debug]   Calculated hierarchical path: /tmp/store_test_1735343009305354632/b1/02/53/764c8b233fb37542e23401c7b450e5a6f9751f3b5a014f6f67e8bc999d
+[2024-12-27 23:43:29.306654] [0x00007fb60e341b80] [debug]   Checking existence of key: key2 at path: /tmp/store_test_1735343009305354632/b1/02/53/764c8b233fb37542e23401c7b450e5a6f9751f3b5a014f6f67e8bc999d - exists
+[2024-12-27 23:43:29.306657] [0x00007fb60e341b80] [info]    Storing data with key: key3
+[2024-12-27 23:43:29.306661] [0x00007fb60e341b80] [debug]   Generating hash for key: key3
+[2024-12-27 23:43:29.306664] [0x00007fb60e341b80] [debug]   Generated hash: f576104eebeab09651d83acffc77c8b8c6eaa4b767aeab24d7da80f83f51d865
+[2024-12-27 23:43:29.306667] [0x00007fb60e341b80] [debug]   Calculated hierarchical path: /tmp/store_test_1735343009305354632/f5/76/10/4eebeab09651d83acffc77c8b8c6eaa4b767aeab24d7da80f83f51d865
+[2024-12-27 23:43:29.306713] [0x00007fb60e341b80] [debug]   Calculated file path: /tmp/store_test_1735343009305354632/f5/76/10/4eebeab09651d83acffc77c8b8c6eaa4b767aeab24d7da80f83f51d865
+[2024-12-27 23:43:29.306745] [0x00007fb60e341b80] [info]    Successfully stored 18 bytes with key: key3
+[2024-12-27 23:43:29.306754] [0x00007fb60e341b80] [debug]   Generating hash for key: key3
+[2024-12-27 23:43:29.306758] [0x00007fb60e341b80] [debug]   Generating hash for key: key3
+[2024-12-27 23:43:29.306764] [0x00007fb60e341b80] [debug]   Generated hash: f576104eebeab09651d83acffc77c8b8c6eaa4b767aeab24d7da80f83f51d865
+[2024-12-27 23:43:29.306772] [0x00007fb60e341b80] [debug]   Calculated hierarchical path: /tmp/store_test_1735343009305354632/f5/76/10/4eebeab09651d83acffc77c8b8c6eaa4b767aeab24d7da80f83f51d865
+[2024-12-27 23:43:29.306780] [0x00007fb60e341b80] [debug]   Checking existence of key: key3 at path: /tmp/store_test_1735343009305354632/f5/76/10/4eebeab09651d83acffc77c8b8c6eaa4b767aeab24d7da80f83f51d865 - exists
+[2024-12-27 23:43:29.306789] [0x00007fb60e341b80] [debug]   Generating hash for key: key1
+[2024-12-27 23:43:29.306791] [0x00007fb60e341b80] [debug]   Generating hash for key: key1
+[2024-12-27 23:43:29.306796] [0x00007fb60e341b80] [debug]   Generated hash: 8174099687a26621f4e2cdd7cc03b3dacedb3fb962255b1aafd033cabe831530
+[2024-12-27 23:43:29.306801] [0x00007fb60e341b80] [debug]   Calculated hierarchical path: /tmp/store_test_1735343009305354632/81/74/09/9687a26621f4e2cdd7cc03b3dacedb3fb962255b1aafd033cabe831530
+[2024-12-27 23:43:29.306805] [0x00007fb60e341b80] [debug]   Checking existence of key: key1 at path: /tmp/store_test_1735343009305354632/81/74/09/9687a26621f4e2cdd7cc03b3dacedb3fb962255b1aafd033cabe831530 - exists
+[2024-12-27 23:43:29.306807] [0x00007fb60e341b80] [info]    Retrieving data for key: key1
+[2024-12-27 23:43:29.306808] [0x00007fb60e341b80] [debug]   Generating hash for key: key1
+[2024-12-27 23:43:29.306812] [0x00007fb60e341b80] [debug]   Generated hash: 8174099687a26621f4e2cdd7cc03b3dacedb3fb962255b1aafd033cabe831530
+[2024-12-27 23:43:29.306814] [0x00007fb60e341b80] [debug]   Calculated hierarchical path: /tmp/store_test_1735343009305354632/81/74/09/9687a26621f4e2cdd7cc03b3dacedb3fb962255b1aafd033cabe831530
+[2024-12-27 23:43:29.306828] [0x00007fb60e341b80] [debug]   Successfully retrieved data for key: key1
+[2024-12-27 23:43:29.306840] [0x00007fb60e341b80] [debug]   Generating hash for key: key2
+[2024-12-27 23:43:29.306841] [0x00007fb60e341b80] [debug]   Generating hash for key: key2
+[2024-12-27 23:43:29.306845] [0x00007fb60e341b80] [debug]   Generated hash: b10253764c8b233fb37542e23401c7b450e5a6f9751f3b5a014f6f67e8bc999d
+[2024-12-27 23:43:29.306847] [0x00007fb60e341b80] [debug]   Calculated hierarchical path: /tmp/store_test_1735343009305354632/b1/02/53/764c8b233fb37542e23401c7b450e5a6f9751f3b5a014f6f67e8bc999d
+[2024-12-27 23:43:29.306851] [0x00007fb60e341b80] [debug]   Checking existence of key: key2 at path: /tmp/store_test_1735343009305354632/b1/02/53/764c8b233fb37542e23401c7b450e5a6f9751f3b5a014f6f67e8bc999d - exists
+[2024-12-27 23:43:29.306853] [0x00007fb60e341b80] [info]    Retrieving data for key: key2
+[2024-12-27 23:43:29.306854] [0x00007fb60e341b80] [debug]   Generating hash for key: key2
+[2024-12-27 23:43:29.306857] [0x00007fb60e341b80] [debug]   Generated hash: b10253764c8b233fb37542e23401c7b450e5a6f9751f3b5a014f6f67e8bc999d
+[2024-12-27 23:43:29.306899] [0x00007fb60e341b80] [debug]   Calculated hierarchical path: /tmp/store_test_1735343009305354632/b1/02/53/764c8b233fb37542e23401c7b450e5a6f9751f3b5a014f6f67e8bc999d
+[2024-12-27 23:43:29.306914] [0x00007fb60e341b80] [debug]   Successfully retrieved data for key: key2
+[2024-12-27 23:43:29.306918] [0x00007fb60e341b80] [debug]   Generating hash for key: key3
+[2024-12-27 23:43:29.306920] [0x00007fb60e341b80] [debug]   Generating hash for key: key3
+[2024-12-27 23:43:29.306925] [0x00007fb60e341b80] [debug]   Generated hash: f576104eebeab09651d83acffc77c8b8c6eaa4b767aeab24d7da80f83f51d865
+[2024-12-27 23:43:29.306927] [0x00007fb60e341b80] [debug]   Calculated hierarchical path: /tmp/store_test_1735343009305354632/f5/76/10/4eebeab09651d83acffc77c8b8c6eaa4b767aeab24d7da80f83f51d865
+[2024-12-27 23:43:29.306931] [0x00007fb60e341b80] [debug]   Checking existence of key: key3 at path: /tmp/store_test_1735343009305354632/f5/76/10/4eebeab09651d83acffc77c8b8c6eaa4b767aeab24d7da80f83f51d865 - exists
+[2024-12-27 23:43:29.306932] [0x00007fb60e341b80] [info]    Retrieving data for key: key3
+[2024-12-27 23:43:29.306945] [0x00007fb60e341b80] [debug]   Generating hash for key: key3
+[2024-12-27 23:43:29.306948] [0x00007fb60e341b80] [debug]   Generated hash: f576104eebeab09651d83acffc77c8b8c6eaa4b767aeab24d7da80f83f51d865
+[2024-12-27 23:43:29.306951] [0x00007fb60e341b80] [debug]   Calculated hierarchical path: /tmp/store_test_1735343009305354632/f5/76/10/4eebeab09651d83acffc77c8b8c6eaa4b767aeab24d7da80f83f51d865
+[2024-12-27 23:43:29.306958] [0x00007fb60e341b80] [debug]   Successfully retrieved data for key: key3
+[2024-12-27 23:43:29.306966] [0x00007fb60e341b80] [info]    Clearing entire store at: "/tmp/store_test_1735343009305354632"
+[2024-12-27 23:43:29.307330] [0x00007fb60e341b80] [info]    Store cleared successfully
+[       OK ] StoreTest.MultipleFiles (2 ms)
+[----------] 1 test from StoreTest (2 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (2 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"StoreTest.MultipleFiles" end time: Dec 27 23:43 UTC
+"StoreTest.MultipleFiles" time elapsed: 00:00:00
+----------------------------------------------------------
+
+12/40 Testing: StoreTest.ErrorHandling
+12/40 Test: StoreTest.ErrorHandling
+Command: "/home/runner/StreamCryptoDFS/build/store_tests" "--gtest_filter=StoreTest.ErrorHandling" "--gtest_also_run_disabled_tests"
+Directory: /home/runner/StreamCryptoDFS/build
+"StoreTest.ErrorHandling" start time: Dec 27 23:43 UTC
+Output:
+----------------------------------------------------------
+Running main() from /build/source/googletest/src/gtest_main.cc
+Note: Google Test filter = StoreTest.ErrorHandling
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from StoreTest
+[ RUN      ] StoreTest.ErrorHandling
+[2024-12-27 23:43:29.313550] [0x00007f66f2552b80] [info]    Initializing Store with base path: /tmp/store_test_1735343009313451102
+[2024-12-27 23:43:29.313568] [0x00007f66f2552b80] [debug]   Store directory created/verified at: /tmp/store_test_1735343009313451102
+[2024-12-27 23:43:29.313572] [0x00007f66f2552b80] [debug]   Generating hash for key: error_key
+[2024-12-27 23:43:29.313574] [0x00007f66f2552b80] [debug]   Generating hash for key: error_key
+[2024-12-27 23:43:29.314816] [0x00007f66f2552b80] [debug]   Generated hash: 7a0a1ce4f1c58ba0fb867426e1bbf7c475cf4a6fb6902cf56852bd2b980d900b
+[2024-12-27 23:43:29.314836] [0x00007f66f2552b80] [debug]   Calculated hierarchical path: /tmp/store_test_1735343009313451102/7a/0a/1c/e4f1c58ba0fb867426e1bbf7c475cf4a6fb6902cf56852bd2b980d900b
+[2024-12-27 23:43:29.314850] [0x00007f66f2552b80] [debug]   Checking existence of key: error_key at path: /tmp/store_test_1735343009313451102/7a/0a/1c/e4f1c58ba0fb867426e1bbf7c475cf4a6fb6902cf56852bd2b980d900b - not found
+[2024-12-27 23:43:29.314854] [0x00007f66f2552b80] [info]    Retrieving data for key: error_key
+[2024-12-27 23:43:29.314857] [0x00007f66f2552b80] [debug]   Generating hash for key: error_key
+[2024-12-27 23:43:29.314893] [0x00007f66f2552b80] [debug]   Generated hash: 7a0a1ce4f1c58ba0fb867426e1bbf7c475cf4a6fb6902cf56852bd2b980d900b
+[2024-12-27 23:43:29.314901] [0x00007f66f2552b80] [debug]   Calculated hierarchical path: /tmp/store_test_1735343009313451102/7a/0a/1c/e4f1c58ba0fb867426e1bbf7c475cf4a6fb6902cf56852bd2b980d900b
+[2024-12-27 23:43:29.314907] [0x00007f66f2552b80] [error]   File not found: /tmp/store_test_1735343009313451102/7a/0a/1c/e4f1c58ba0fb867426e1bbf7c475cf4a6fb6902cf56852bd2b980d900b
+[2024-12-27 23:43:29.314944] [0x00007f66f2552b80] [info]    Storing data with key: error_key
+[2024-12-27 23:43:29.314957] [0x00007f66f2552b80] [error]   Invalid input stream provided for key: error_key
+[2024-12-27 23:43:29.314967] [0x00007f66f2552b80] [info]    Clearing entire store at: "/tmp/store_test_1735343009313451102"
+[2024-12-27 23:43:29.315045] [0x00007f66f2552b80] [info]    Store cleared successfully
+[       OK ] StoreTest.ErrorHandling (1 ms)
+[----------] 1 test from StoreTest (1 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (1 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"StoreTest.ErrorHandling" end time: Dec 27 23:43 UTC
+"StoreTest.ErrorHandling" time elapsed: 00:00:00
+----------------------------------------------------------
+
+13/40 Testing: StoreTest.Clear
+13/40 Test: StoreTest.Clear
+Command: "/home/runner/StreamCryptoDFS/build/store_tests" "--gtest_filter=StoreTest.Clear" "--gtest_also_run_disabled_tests"
+Directory: /home/runner/StreamCryptoDFS/build
+"StoreTest.Clear" start time: Dec 27 23:43 UTC
+Output:
+----------------------------------------------------------
+Running main() from /build/source/googletest/src/gtest_main.cc
+Note: Google Test filter = StoreTest.Clear
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from StoreTest
+[ RUN      ] StoreTest.Clear
+[2024-12-27 23:43:29.322017] [0x00007fbf0a526b80] [info]    Initializing Store with base path: /tmp/store_test_1735343009321898181
+[2024-12-27 23:43:29.322026] [0x00007fbf0a526b80] [debug]   Store directory created/verified at: /tmp/store_test_1735343009321898181
+[2024-12-27 23:43:29.322031] [0x00007fbf0a526b80] [info]    Storing data with key: key1
+[2024-12-27 23:43:29.322037] [0x00007fbf0a526b80] [debug]   Generating hash for key: key1
+[2024-12-27 23:43:29.323102] [0x00007fbf0a526b80] [debug]   Generated hash: 8174099687a26621f4e2cdd7cc03b3dacedb3fb962255b1aafd033cabe831530
+[2024-12-27 23:43:29.323116] [0x00007fbf0a526b80] [debug]   Calculated hierarchical path: /tmp/store_test_1735343009321898181/81/74/09/9687a26621f4e2cdd7cc03b3dacedb3fb962255b1aafd033cabe831530
+[2024-12-27 23:43:29.323181] [0x00007fbf0a526b80] [debug]   Calculated file path: /tmp/store_test_1735343009321898181/81/74/09/9687a26621f4e2cdd7cc03b3dacedb3fb962255b1aafd033cabe831530
+[2024-12-27 23:43:29.323257] [0x00007fbf0a526b80] [info]    Successfully stored 9 bytes with key: key1
+[2024-12-27 23:43:29.323266] [0x00007fbf0a526b80] [debug]   Generating hash for key: key1
+[2024-12-27 23:43:29.323269] [0x00007fbf0a526b80] [debug]   Generating hash for key: key1
+[2024-12-27 23:43:29.323279] [0x00007fbf0a526b80] [debug]   Generated hash: 8174099687a26621f4e2cdd7cc03b3dacedb3fb962255b1aafd033cabe831530
+[2024-12-27 23:43:29.323322] [0x00007fbf0a526b80] [debug]   Calculated hierarchical path: /tmp/store_test_1735343009321898181/81/74/09/9687a26621f4e2cdd7cc03b3dacedb3fb962255b1aafd033cabe831530
+[2024-12-27 23:43:29.323334] [0x00007fbf0a526b80] [debug]   Checking existence of key: key1 at path: /tmp/store_test_1735343009321898181/81/74/09/9687a26621f4e2cdd7cc03b3dacedb3fb962255b1aafd033cabe831530 - exists
+[2024-12-27 23:43:29.323338] [0x00007fbf0a526b80] [info]    Storing data with key: key2
+[2024-12-27 23:43:29.323341] [0x00007fbf0a526b80] [debug]   Generating hash for key: key2
+[2024-12-27 23:43:29.323348] [0x00007fbf0a526b80] [debug]   Generated hash: b10253764c8b233fb37542e23401c7b450e5a6f9751f3b5a014f6f67e8bc999d
+[2024-12-27 23:43:29.323353] [0x00007fbf0a526b80] [debug]   Calculated hierarchical path: /tmp/store_test_1735343009321898181/b1/02/53/764c8b233fb37542e23401c7b450e5a6f9751f3b5a014f6f67e8bc999d
+[2024-12-27 23:43:29.323416] [0x00007fbf0a526b80] [debug]   Calculated file path: /tmp/store_test_1735343009321898181/b1/02/53/764c8b233fb37542e23401c7b450e5a6f9751f3b5a014f6f67e8bc999d
+[2024-12-27 23:43:29.323459] [0x00007fbf0a526b80] [info]    Successfully stored 9 bytes with key: key2
+[2024-12-27 23:43:29.323468] [0x00007fbf0a526b80] [debug]   Generating hash for key: key2
+[2024-12-27 23:43:29.323471] [0x00007fbf0a526b80] [debug]   Generating hash for key: key2
+[2024-12-27 23:43:29.323480] [0x00007fbf0a526b80] [debug]   Generated hash: b10253764c8b233fb37542e23401c7b450e5a6f9751f3b5a014f6f67e8bc999d
+[2024-12-27 23:43:29.323487] [0x00007fbf0a526b80] [debug]   Calculated hierarchical path: /tmp/store_test_1735343009321898181/b1/02/53/764c8b233fb37542e23401c7b450e5a6f9751f3b5a014f6f67e8bc999d
+[2024-12-27 23:43:29.323495] [0x00007fbf0a526b80] [debug]   Checking existence of key: key2 at path: /tmp/store_test_1735343009321898181/b1/02/53/764c8b233fb37542e23401c7b450e5a6f9751f3b5a014f6f67e8bc999d - exists
+[2024-12-27 23:43:29.323502] [0x00007fbf0a526b80] [info]    Storing data with key: key3
+[2024-12-27 23:43:29.323505] [0x00007fbf0a526b80] [debug]   Generating hash for key: key3
+[2024-12-27 23:43:29.323512] [0x00007fbf0a526b80] [debug]   Generated hash: f576104eebeab09651d83acffc77c8b8c6eaa4b767aeab24d7da80f83f51d865
+[2024-12-27 23:43:29.323517] [0x00007fbf0a526b80] [debug]   Calculated hierarchical path: /tmp/store_test_1735343009321898181/f5/76/10/4eebeab09651d83acffc77c8b8c6eaa4b767aeab24d7da80f83f51d865
+[2024-12-27 23:43:29.323567] [0x00007fbf0a526b80] [debug]   Calculated file path: /tmp/store_test_1735343009321898181/f5/76/10/4eebeab09651d83acffc77c8b8c6eaa4b767aeab24d7da80f83f51d865
+[2024-12-27 23:43:29.323627] [0x00007fbf0a526b80] [info]    Successfully stored 9 bytes with key: key3
+[2024-12-27 23:43:29.323647] [0x00007fbf0a526b80] [debug]   Generating hash for key: key3
+[2024-12-27 23:43:29.323661] [0x00007fbf0a526b80] [debug]   Generating hash for key: key3
+[2024-12-27 23:43:29.323680] [0x00007fbf0a526b80] [debug]   Generated hash: f576104eebeab09651d83acffc77c8b8c6eaa4b767aeab24d7da80f83f51d865
+[2024-12-27 23:43:29.323689] [0x00007fbf0a526b80] [debug]   Calculated hierarchical path: /tmp/store_test_1735343009321898181/f5/76/10/4eebeab09651d83acffc77c8b8c6eaa4b767aeab24d7da80f83f51d865
+[2024-12-27 23:43:29.323698] [0x00007fbf0a526b80] [debug]   Checking existence of key: key3 at path: /tmp/store_test_1735343009321898181/f5/76/10/4eebeab09651d83acffc77c8b8c6eaa4b767aeab24d7da80f83f51d865 - exists
+[2024-12-27 23:43:29.323704] [0x00007fbf0a526b80] [info]    Clearing entire store at: "/tmp/store_test_1735343009321898181"
+[2024-12-27 23:43:29.324143] [0x00007fbf0a526b80] [info]    Store cleared successfully
+[2024-12-27 23:43:29.324154] [0x00007fbf0a526b80] [debug]   Generating hash for key: key1
+[2024-12-27 23:43:29.324157] [0x00007fbf0a526b80] [debug]   Generating hash for key: key1
+[2024-12-27 23:43:29.324167] [0x00007fbf0a526b80] [debug]   Generated hash: 8174099687a26621f4e2cdd7cc03b3dacedb3fb962255b1aafd033cabe831530
+[2024-12-27 23:43:29.324172] [0x00007fbf0a526b80] [debug]   Calculated hierarchical path: /tmp/store_test_1735343009321898181/81/74/09/9687a26621f4e2cdd7cc03b3dacedb3fb962255b1aafd033cabe831530
+[2024-12-27 23:43:29.324182] [0x00007fbf0a526b80] [debug]   Checking existence of key: key1 at path: /tmp/store_test_1735343009321898181/81/74/09/9687a26621f4e2cdd7cc03b3dacedb3fb962255b1aafd033cabe831530 - not found
+[2024-12-27 23:43:29.324186] [0x00007fbf0a526b80] [info]    Retrieving data for key: key1
+[2024-12-27 23:43:29.324188] [0x00007fbf0a526b80] [debug]   Generating hash for key: key1
+[2024-12-27 23:43:29.324207] [0x00007fbf0a526b80] [debug]   Generated hash: 8174099687a26621f4e2cdd7cc03b3dacedb3fb962255b1aafd033cabe831530
+[2024-12-27 23:43:29.324213] [0x00007fbf0a526b80] [debug]   Calculated hierarchical path: /tmp/store_test_1735343009321898181/81/74/09/9687a26621f4e2cdd7cc03b3dacedb3fb962255b1aafd033cabe831530
+[2024-12-27 23:43:29.324218] [0x00007fbf0a526b80] [error]   File not found: /tmp/store_test_1735343009321898181/81/74/09/9687a26621f4e2cdd7cc03b3dacedb3fb962255b1aafd033cabe831530
+[2024-12-27 23:43:29.324251] [0x00007fbf0a526b80] [debug]   Generating hash for key: key2
+[2024-12-27 23:43:29.324254] [0x00007fbf0a526b80] [debug]   Generating hash for key: key2
+[2024-12-27 23:43:29.324260] [0x00007fbf0a526b80] [debug]   Generated hash: b10253764c8b233fb37542e23401c7b450e5a6f9751f3b5a014f6f67e8bc999d
+[2024-12-27 23:43:29.324264] [0x00007fbf0a526b80] [debug]   Calculated hierarchical path: /tmp/store_test_1735343009321898181/b1/02/53/764c8b233fb37542e23401c7b450e5a6f9751f3b5a014f6f67e8bc999d
+[2024-12-27 23:43:29.324272] [0x00007fbf0a526b80] [debug]   Checking existence of key: key2 at path: /tmp/store_test_1735343009321898181/b1/02/53/764c8b233fb37542e23401c7b450e5a6f9751f3b5a014f6f67e8bc999d - not found
+[2024-12-27 23:43:29.324275] [0x00007fbf0a526b80] [info]    Retrieving data for key: key2
+[2024-12-27 23:43:29.324278] [0x00007fbf0a526b80] [debug]   Generating hash for key: key2
+[2024-12-27 23:43:29.324284] [0x00007fbf0a526b80] [debug]   Generated hash: b10253764c8b233fb37542e23401c7b450e5a6f9751f3b5a014f6f67e8bc999d
+[2024-12-27 23:43:29.324288] [0x00007fbf0a526b80] [debug]   Calculated hierarchical path: /tmp/store_test_1735343009321898181/b1/02/53/764c8b233fb37542e23401c7b450e5a6f9751f3b5a014f6f67e8bc999d
+[2024-12-27 23:43:29.324293] [0x00007fbf0a526b80] [error]   File not found: /tmp/store_test_1735343009321898181/b1/02/53/764c8b233fb37542e23401c7b450e5a6f9751f3b5a014f6f67e8bc999d
+[2024-12-27 23:43:29.324302] [0x00007fbf0a526b80] [debug]   Generating hash for key: key3
+[2024-12-27 23:43:29.324305] [0x00007fbf0a526b80] [debug]   Generating hash for key: key3
+[2024-12-27 23:43:29.324310] [0x00007fbf0a526b80] [debug]   Generated hash: f576104eebeab09651d83acffc77c8b8c6eaa4b767aeab24d7da80f83f51d865
+[2024-12-27 23:43:29.324315] [0x00007fbf0a526b80] [debug]   Calculated hierarchical path: /tmp/store_test_1735343009321898181/f5/76/10/4eebeab09651d83acffc77c8b8c6eaa4b767aeab24d7da80f83f51d865
+[2024-12-27 23:43:29.324323] [0x00007fbf0a526b80] [debug]   Checking existence of key: key3 at path: /tmp/store_test_1735343009321898181/f5/76/10/4eebeab09651d83acffc77c8b8c6eaa4b767aeab24d7da80f83f51d865 - not found
+[2024-12-27 23:43:29.324330] [0x00007fbf0a526b80] [info]    Retrieving data for key: key3
+[2024-12-27 23:43:29.324333] [0x00007fbf0a526b80] [debug]   Generating hash for key: key3
+[2024-12-27 23:43:29.324339] [0x00007fbf0a526b80] [debug]   Generated hash: f576104eebeab09651d83acffc77c8b8c6eaa4b767aeab24d7da80f83f51d865
+[2024-12-27 23:43:29.324344] [0x00007fbf0a526b80] [debug]   Calculated hierarchical path: /tmp/store_test_1735343009321898181/f5/76/10/4eebeab09651d83acffc77c8b8c6eaa4b767aeab24d7da80f83f51d865
+[2024-12-27 23:43:29.324349] [0x00007fbf0a526b80] [error]   File not found: /tmp/store_test_1735343009321898181/f5/76/10/4eebeab09651d83acffc77c8b8c6eaa4b767aeab24d7da80f83f51d865
+[2024-12-27 23:43:29.324359] [0x00007fbf0a526b80] [info]    Clearing entire store at: "/tmp/store_test_1735343009321898181"
+[2024-12-27 23:43:29.324422] [0x00007fbf0a526b80] [info]    Store cleared successfully
+[       OK ] StoreTest.Clear (2 ms)
+[----------] 1 test from StoreTest (2 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (2 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"StoreTest.Clear" end time: Dec 27 23:43 UTC
+"StoreTest.Clear" time elapsed: 00:00:00
+----------------------------------------------------------
+
+14/40 Testing: StoreTest.LargeFileHandling
+14/40 Test: StoreTest.LargeFileHandling
+Command: "/home/runner/StreamCryptoDFS/build/store_tests" "--gtest_filter=StoreTest.LargeFileHandling" "--gtest_also_run_disabled_tests"
+Directory: /home/runner/StreamCryptoDFS/build
+"StoreTest.LargeFileHandling" start time: Dec 27 23:43 UTC
+Output:
+----------------------------------------------------------
+Running main() from /build/source/googletest/src/gtest_main.cc
+Note: Google Test filter = StoreTest.LargeFileHandling
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from StoreTest
+[ RUN      ] StoreTest.LargeFileHandling
+[2024-12-27 23:43:29.331570] [0x00007f3f05fe1b80] [info]    Initializing Store with base path: /tmp/store_test_1735343009331446141
+[2024-12-27 23:43:29.331584] [0x00007f3f05fe1b80] [debug]   Store directory created/verified at: /tmp/store_test_1735343009331446141
+[2024-12-27 23:43:29.345739] [0x00007f3f05fe1b80] [info]    Storing data with key: large_file
+[2024-12-27 23:43:29.345759] [0x00007f3f05fe1b80] [debug]   Generating hash for key: large_file
+[2024-12-27 23:43:29.346787] [0x00007f3f05fe1b80] [debug]   Generated hash: df1fbde40271055bb026eaa5094faa107c4a4987061ed6c7def9df06f885f2f3
+[2024-12-27 23:43:29.346802] [0x00007f3f05fe1b80] [debug]   Calculated hierarchical path: /tmp/store_test_1735343009331446141/df/1f/bd/e40271055bb026eaa5094faa107c4a4987061ed6c7def9df06f885f2f3
+[2024-12-27 23:43:29.346876] [0x00007f3f05fe1b80] [debug]   Calculated file path: /tmp/store_test_1735343009331446141/df/1f/bd/e40271055bb026eaa5094faa107c4a4987061ed6c7def9df06f885f2f3
+[2024-12-27 23:43:29.355788] [0x00007f3f05fe1b80] [info]    Successfully stored 10485760 bytes with key: large_file
+[2024-12-27 23:43:29.355803] [0x00007f3f05fe1b80] [debug]   Generating hash for key: large_file
+[2024-12-27 23:43:29.355805] [0x00007f3f05fe1b80] [debug]   Generating hash for key: large_file
+[2024-12-27 23:43:29.355823] [0x00007f3f05fe1b80] [debug]   Generated hash: df1fbde40271055bb026eaa5094faa107c4a4987061ed6c7def9df06f885f2f3
+[2024-12-27 23:43:29.355830] [0x00007f3f05fe1b80] [debug]   Calculated hierarchical path: /tmp/store_test_1735343009331446141/df/1f/bd/e40271055bb026eaa5094faa107c4a4987061ed6c7def9df06f885f2f3
+[2024-12-27 23:43:29.355846] [0x00007f3f05fe1b80] [debug]   Checking existence of key: large_file at path: /tmp/store_test_1735343009331446141/df/1f/bd/e40271055bb026eaa5094faa107c4a4987061ed6c7def9df06f885f2f3 - exists
+[2024-12-27 23:43:29.355852] [0x00007f3f05fe1b80] [info]    Retrieving data for key: large_file
+[2024-12-27 23:43:29.355854] [0x00007f3f05fe1b80] [debug]   Generating hash for key: large_file
+[2024-12-27 23:43:29.355859] [0x00007f3f05fe1b80] [debug]   Generated hash: df1fbde40271055bb026eaa5094faa107c4a4987061ed6c7def9df06f885f2f3
+[2024-12-27 23:43:29.355861] [0x00007f3f05fe1b80] [debug]   Calculated hierarchical path: /tmp/store_test_1735343009331446141/df/1f/bd/e40271055bb026eaa5094faa107c4a4987061ed6c7def9df06f885f2f3
+[2024-12-27 23:43:29.369957] [0x00007f3f05fe1b80] [debug]   Successfully retrieved data for key: large_file
+[2024-12-27 23:43:29.391886] [0x00007f3f05fe1b80] [info]    Clearing entire store at: "/tmp/store_test_1735343009331446141"
+[2024-12-27 23:43:29.394535] [0x00007f3f05fe1b80] [info]    Store cleared successfully
+[       OK ] StoreTest.LargeFileHandling (63 ms)
+[----------] 1 test from StoreTest (63 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (63 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.07 sec
+----------------------------------------------------------
+Test Passed.
+"StoreTest.LargeFileHandling" end time: Dec 27 23:43 UTC
+"StoreTest.LargeFileHandling" time elapsed: 00:00:00
+----------------------------------------------------------
+
+15/40 Testing: StoreTest.OverwriteBehavior
+15/40 Test: StoreTest.OverwriteBehavior
+Command: "/home/runner/StreamCryptoDFS/build/store_tests" "--gtest_filter=StoreTest.OverwriteBehavior" "--gtest_also_run_disabled_tests"
+Directory: /home/runner/StreamCryptoDFS/build
+"StoreTest.OverwriteBehavior" start time: Dec 27 23:43 UTC
+Output:
+----------------------------------------------------------
+Running main() from /build/source/googletest/src/gtest_main.cc
+Note: Google Test filter = StoreTest.OverwriteBehavior
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from StoreTest
+[ RUN      ] StoreTest.OverwriteBehavior
+[2024-12-27 23:43:29.403264] [0x00007fa392f6db80] [info]    Initializing Store with base path: /tmp/store_test_1735343009403140045
+[2024-12-27 23:43:29.403276] [0x00007fa392f6db80] [debug]   Store directory created/verified at: /tmp/store_test_1735343009403140045
+[2024-12-27 23:43:29.403283] [0x00007fa392f6db80] [info]    Storing data with key: overwrite_test
+[2024-12-27 23:43:29.403291] [0x00007fa392f6db80] [debug]   Generating hash for key: overwrite_test
+[2024-12-27 23:43:29.404185] [0x00007fa392f6db80] [debug]   Generated hash: 30952b659b529afe6343c608ec6d8a565347d89ad4d22eec203b90234d48b36e
+[2024-12-27 23:43:29.404209] [0x00007fa392f6db80] [debug]   Calculated hierarchical path: /tmp/store_test_1735343009403140045/30/95/2b/659b529afe6343c608ec6d8a565347d89ad4d22eec203b90234d48b36e
+[2024-12-27 23:43:29.404266] [0x00007fa392f6db80] [debug]   Calculated file path: /tmp/store_test_1735343009403140045/30/95/2b/659b529afe6343c608ec6d8a565347d89ad4d22eec203b90234d48b36e
+[2024-12-27 23:43:29.404314] [0x00007fa392f6db80] [info]    Successfully stored 15 bytes with key: overwrite_test
+[2024-12-27 23:43:29.404323] [0x00007fa392f6db80] [debug]   Generating hash for key: overwrite_test
+[2024-12-27 23:43:29.404326] [0x00007fa392f6db80] [debug]   Generating hash for key: overwrite_test
+[2024-12-27 23:43:29.404335] [0x00007fa392f6db80] [debug]   Generated hash: 30952b659b529afe6343c608ec6d8a565347d89ad4d22eec203b90234d48b36e
+[2024-12-27 23:43:29.404343] [0x00007fa392f6db80] [debug]   Calculated hierarchical path: /tmp/store_test_1735343009403140045/30/95/2b/659b529afe6343c608ec6d8a565347d89ad4d22eec203b90234d48b36e
+[2024-12-27 23:43:29.404351] [0x00007fa392f6db80] [debug]   Checking existence of key: overwrite_test at path: /tmp/store_test_1735343009403140045/30/95/2b/659b529afe6343c608ec6d8a565347d89ad4d22eec203b90234d48b36e - exists
+[2024-12-27 23:43:29.404357] [0x00007fa392f6db80] [info]    Retrieving data for key: overwrite_test
+[2024-12-27 23:43:29.404360] [0x00007fa392f6db80] [debug]   Generating hash for key: overwrite_test
+[2024-12-27 23:43:29.404368] [0x00007fa392f6db80] [debug]   Generated hash: 30952b659b529afe6343c608ec6d8a565347d89ad4d22eec203b90234d48b36e
+[2024-12-27 23:43:29.404373] [0x00007fa392f6db80] [debug]   Calculated hierarchical path: /tmp/store_test_1735343009403140045/30/95/2b/659b529afe6343c608ec6d8a565347d89ad4d22eec203b90234d48b36e
+[2024-12-27 23:43:29.404389] [0x00007fa392f6db80] [debug]   Successfully retrieved data for key: overwrite_test
+[2024-12-27 23:43:29.404400] [0x00007fa392f6db80] [info]    Storing data with key: overwrite_test
+[2024-12-27 23:43:29.404403] [0x00007fa392f6db80] [debug]   Generating hash for key: overwrite_test
+[2024-12-27 23:43:29.404411] [0x00007fa392f6db80] [debug]   Generated hash: 30952b659b529afe6343c608ec6d8a565347d89ad4d22eec203b90234d48b36e
+[2024-12-27 23:43:29.404419] [0x00007fa392f6db80] [debug]   Calculated hierarchical path: /tmp/store_test_1735343009403140045/30/95/2b/659b529afe6343c608ec6d8a565347d89ad4d22eec203b90234d48b36e
+[2024-12-27 23:43:29.404426] [0x00007fa392f6db80] [debug]   Calculated file path: /tmp/store_test_1735343009403140045/30/95/2b/659b529afe6343c608ec6d8a565347d89ad4d22eec203b90234d48b36e
+[2024-12-27 23:43:29.404474] [0x00007fa392f6db80] [info]    Successfully stored 15 bytes with key: overwrite_test
+[2024-12-27 23:43:29.404482] [0x00007fa392f6db80] [info]    Retrieving data for key: overwrite_test
+[2024-12-27 23:43:29.404485] [0x00007fa392f6db80] [debug]   Generating hash for key: overwrite_test
+[2024-12-27 23:43:29.404494] [0x00007fa392f6db80] [debug]   Generated hash: 30952b659b529afe6343c608ec6d8a565347d89ad4d22eec203b90234d48b36e
+[2024-12-27 23:43:29.404499] [0x00007fa392f6db80] [debug]   Calculated hierarchical path: /tmp/store_test_1735343009403140045/30/95/2b/659b529afe6343c608ec6d8a565347d89ad4d22eec203b90234d48b36e
+[2024-12-27 23:43:29.404520] [0x00007fa392f6db80] [debug]   Successfully retrieved data for key: overwrite_test
+[2024-12-27 23:43:29.404531] [0x00007fa392f6db80] [info]    Clearing entire store at: "/tmp/store_test_1735343009403140045"
+[2024-12-27 23:43:29.404667] [0x00007fa392f6db80] [info]    Store cleared successfully
+[       OK ] StoreTest.OverwriteBehavior (1 ms)
+[----------] 1 test from StoreTest (1 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (1 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"StoreTest.OverwriteBehavior" end time: Dec 27 23:43 UTC
+"StoreTest.OverwriteBehavior" time elapsed: 00:00:00
+----------------------------------------------------------
+
+16/40 Testing: StoreTest.StreamStatePreservation
+16/40 Test: StoreTest.StreamStatePreservation
+Command: "/home/runner/StreamCryptoDFS/build/store_tests" "--gtest_filter=StoreTest.StreamStatePreservation" "--gtest_also_run_disabled_tests"
+Directory: /home/runner/StreamCryptoDFS/build
+"StoreTest.StreamStatePreservation" start time: Dec 27 23:43 UTC
+Output:
+----------------------------------------------------------
+Running main() from /build/source/googletest/src/gtest_main.cc
+Note: Google Test filter = StoreTest.StreamStatePreservation
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from StoreTest
+[ RUN      ] StoreTest.StreamStatePreservation
+[2024-12-27 23:43:29.410562] [0x00007fcc644aab80] [info]    Initializing Store with base path: /tmp/store_test_1735343009410474255
+[2024-12-27 23:43:29.410575] [0x00007fcc644aab80] [debug]   Store directory created/verified at: /tmp/store_test_1735343009410474255
+[2024-12-27 23:43:29.410582] [0x00007fcc644aab80] [info]    Storing data with key: stream_state_test
+[2024-12-27 23:43:29.410588] [0x00007fcc644aab80] [debug]   Generating hash for key: stream_state_test
+[2024-12-27 23:43:29.411452] [0x00007fcc644aab80] [debug]   Generated hash: a9e413f31ab1fd98797abd4d4d50fc4ccfbf9abaec049f8d5f9e9c5b294d61c8
+[2024-12-27 23:43:29.411465] [0x00007fcc644aab80] [debug]   Calculated hierarchical path: /tmp/store_test_1735343009410474255/a9/e4/13/f31ab1fd98797abd4d4d50fc4ccfbf9abaec049f8d5f9e9c5b294d61c8
+[2024-12-27 23:43:29.411520] [0x00007fcc644aab80] [debug]   Calculated file path: /tmp/store_test_1735343009410474255/a9/e4/13/f31ab1fd98797abd4d4d50fc4ccfbf9abaec049f8d5f9e9c5b294d61c8
+[2024-12-27 23:43:29.411566] [0x00007fcc644aab80] [info]    Successfully stored 26 bytes with key: stream_state_test
+[2024-12-27 23:43:29.411574] [0x00007fcc644aab80] [info]    Retrieving data for key: stream_state_test
+[2024-12-27 23:43:29.411578] [0x00007fcc644aab80] [debug]   Generating hash for key: stream_state_test
+[2024-12-27 23:43:29.411588] [0x00007fcc644aab80] [debug]   Generated hash: a9e413f31ab1fd98797abd4d4d50fc4ccfbf9abaec049f8d5f9e9c5b294d61c8
+[2024-12-27 23:43:29.411595] [0x00007fcc644aab80] [debug]   Calculated hierarchical path: /tmp/store_test_1735343009410474255/a9/e4/13/f31ab1fd98797abd4d4d50fc4ccfbf9abaec049f8d5f9e9c5b294d61c8
+[2024-12-27 23:43:29.411613] [0x00007fcc644aab80] [debug]   Successfully retrieved data for key: stream_state_test
+[2024-12-27 23:43:29.411625] [0x00007fcc644aab80] [info]    Clearing entire store at: "/tmp/store_test_1735343009410474255"
+[2024-12-27 23:43:29.411806] [0x00007fcc644aab80] [info]    Store cleared successfully
+[       OK ] StoreTest.StreamStatePreservation (1 ms)
+[----------] 1 test from StoreTest (1 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (1 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"StoreTest.StreamStatePreservation" end time: Dec 27 23:43 UTC
+"StoreTest.StreamStatePreservation" time elapsed: 00:00:00
+----------------------------------------------------------
+
+17/40 Testing: StoreTest.FileSizeRetrieval
+17/40 Test: StoreTest.FileSizeRetrieval
+Command: "/home/runner/StreamCryptoDFS/build/store_tests" "--gtest_filter=StoreTest.FileSizeRetrieval" "--gtest_also_run_disabled_tests"
+Directory: /home/runner/StreamCryptoDFS/build
+"StoreTest.FileSizeRetrieval" start time: Dec 27 23:43 UTC
+Output:
+----------------------------------------------------------
+Running main() from /build/source/googletest/src/gtest_main.cc
+Note: Google Test filter = StoreTest.FileSizeRetrieval
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from StoreTest
+[ RUN      ] StoreTest.FileSizeRetrieval
+[2024-12-27 23:43:29.416993] [0x00007fa7c78cdb80] [info]    Initializing Store with base path: /tmp/store_test_1735343009416917424
+[2024-12-27 23:43:29.416998] [0x00007fa7c78cdb80] [debug]   Store directory created/verified at: /tmp/store_test_1735343009416917424
+[2024-12-27 23:43:29.417002] [0x00007fa7c78cdb80] [info]    Storing data with key: size_test
+[2024-12-27 23:43:29.417005] [0x00007fa7c78cdb80] [debug]   Generating hash for key: size_test
+[2024-12-27 23:43:29.418336] [0x00007fa7c78cdb80] [debug]   Generated hash: d2283af70f36b068be549fdee1255a41540b931c457a992112d4cab9c89de74e
+[2024-12-27 23:43:29.418365] [0x00007fa7c78cdb80] [debug]   Calculated hierarchical path: /tmp/store_test_1735343009416917424/d2/28/3a/f70f36b068be549fdee1255a41540b931c457a992112d4cab9c89de74e
+[2024-12-27 23:43:29.418418] [0x00007fa7c78cdb80] [debug]   Calculated file path: /tmp/store_test_1735343009416917424/d2/28/3a/f70f36b068be549fdee1255a41540b931c457a992112d4cab9c89de74e
+[2024-12-27 23:43:29.418460] [0x00007fa7c78cdb80] [info]    Successfully stored 13 bytes with key: size_test
+[2024-12-27 23:43:29.418468] [0x00007fa7c78cdb80] [debug]   Getting file size for key: size_test
+[2024-12-27 23:43:29.418471] [0x00007fa7c78cdb80] [debug]   Generating hash for key: size_test
+[2024-12-27 23:43:29.418478] [0x00007fa7c78cdb80] [debug]   Generated hash: d2283af70f36b068be549fdee1255a41540b931c457a992112d4cab9c89de74e
+[2024-12-27 23:43:29.418486] [0x00007fa7c78cdb80] [debug]   Calculated hierarchical path: /tmp/store_test_1735343009416917424/d2/28/3a/f70f36b068be549fdee1255a41540b931c457a992112d4cab9c89de74e
+[2024-12-27 23:43:29.418496] [0x00007fa7c78cdb80] [debug]   File size for key size_test: 13 bytes
+[2024-12-27 23:43:29.418503] [0x00007fa7c78cdb80] [info]    Storing data with key: empty_test
+[2024-12-27 23:43:29.418506] [0x00007fa7c78cdb80] [debug]   Generating hash for key: empty_test
+[2024-12-27 23:43:29.418513] [0x00007fa7c78cdb80] [debug]   Generated hash: f1b6800e9ca01dac557744adec3477366cbe3888d44fcabefb3078c4c069f3a8
+[2024-12-27 23:43:29.418518] [0x00007fa7c78cdb80] [debug]   Calculated hierarchical path: /tmp/store_test_1735343009416917424/f1/b6/80/0e9ca01dac557744adec3477366cbe3888d44fcabefb3078c4c069f3a8
+[2024-12-27 23:43:29.418574] [0x00007fa7c78cdb80] [debug]   Calculated file path: /tmp/store_test_1735343009416917424/f1/b6/80/0e9ca01dac557744adec3477366cbe3888d44fcabefb3078c4c069f3a8
+[2024-12-27 23:43:29.418601] [0x00007fa7c78cdb80] [debug]   Storing empty content for key: empty_test
+[2024-12-27 23:43:29.418610] [0x00007fa7c78cdb80] [info]    Successfully stored 0 bytes with key: empty_test
+[2024-12-27 23:43:29.418613] [0x00007fa7c78cdb80] [debug]   Getting file size for key: empty_test
+[2024-12-27 23:43:29.418615] [0x00007fa7c78cdb80] [debug]   Generating hash for key: empty_test
+[2024-12-27 23:43:29.418622] [0x00007fa7c78cdb80] [debug]   Generated hash: f1b6800e9ca01dac557744adec3477366cbe3888d44fcabefb3078c4c069f3a8
+[2024-12-27 23:43:29.418630] [0x00007fa7c78cdb80] [debug]   Calculated hierarchical path: /tmp/store_test_1735343009416917424/f1/b6/80/0e9ca01dac557744adec3477366cbe3888d44fcabefb3078c4c069f3a8
+[2024-12-27 23:43:29.418638] [0x00007fa7c78cdb80] [debug]   File size for key empty_test: 0 bytes
+[2024-12-27 23:43:29.418644] [0x00007fa7c78cdb80] [debug]   Getting file size for key: nonexistent_key
+[2024-12-27 23:43:29.418646] [0x00007fa7c78cdb80] [debug]   Generating hash for key: nonexistent_key
+[2024-12-27 23:43:29.418651] [0x00007fa7c78cdb80] [debug]   Generated hash: 5fbaf0fb39a2369c07d1aa653dd2386202abdff0c69ceb6060083b29af61fd2f
+[2024-12-27 23:43:29.418658] [0x00007fa7c78cdb80] [debug]   Calculated hierarchical path: /tmp/store_test_1735343009416917424/5f/ba/f0/fb39a2369c07d1aa653dd2386202abdff0c69ceb6060083b29af61fd2f
+[2024-12-27 23:43:29.418666] [0x00007fa7c78cdb80] [error]   File not found: /tmp/store_test_1735343009416917424/5f/ba/f0/fb39a2369c07d1aa653dd2386202abdff0c69ceb6060083b29af61fd2f
+[2024-12-27 23:43:29.418706] [0x00007fa7c78cdb80] [info]    Clearing entire store at: "/tmp/store_test_1735343009416917424"
+[2024-12-27 23:43:29.419001] [0x00007fa7c78cdb80] [info]    Store cleared successfully
+[       OK ] StoreTest.FileSizeRetrieval (2 ms)
+[----------] 1 test from StoreTest (2 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (2 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"StoreTest.FileSizeRetrieval" end time: Dec 27 23:43 UTC
+"StoreTest.FileSizeRetrieval" time elapsed: 00:00:00
+----------------------------------------------------------
+
+18/40 Testing: TCPPeerTest.ConnectionTest
+18/40 Test: TCPPeerTest.ConnectionTest
+Command: "/home/runner/StreamCryptoDFS/build/network_tests" "--gtest_filter=TCPPeerTest.ConnectionTest" "--gtest_also_run_disabled_tests"
+Directory: /home/runner/StreamCryptoDFS/build
+"TCPPeerTest.ConnectionTest" start time: Dec 27 23:43 UTC
+Output:
+----------------------------------------------------------
+Running main() from /build/source/googletest/src/gtest_main.cc
+Note: Google Test filter = TCPPeerTest.ConnectionTest
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from TCPPeerTest
+[ RUN      ] TCPPeerTest.ConnectionTest
+[       OK ] TCPPeerTest.ConnectionTest (1 ms)
+[----------] 1 test from TCPPeerTest (1 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (1 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"TCPPeerTest.ConnectionTest" end time: Dec 27 23:43 UTC
+"TCPPeerTest.ConnectionTest" time elapsed: 00:00:00
+----------------------------------------------------------
+
+19/40 Testing: TCPPeerTest.DisconnectionTest
+19/40 Test: TCPPeerTest.DisconnectionTest
+Command: "/home/runner/StreamCryptoDFS/build/network_tests" "--gtest_filter=TCPPeerTest.DisconnectionTest" "--gtest_also_run_disabled_tests"
+Directory: /home/runner/StreamCryptoDFS/build
+"TCPPeerTest.DisconnectionTest" start time: Dec 27 23:43 UTC
+Output:
+----------------------------------------------------------
+Running main() from /build/source/googletest/src/gtest_main.cc
+Note: Google Test filter = TCPPeerTest.DisconnectionTest
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from TCPPeerTest
+[ RUN      ] TCPPeerTest.DisconnectionTest
+[       OK ] TCPPeerTest.DisconnectionTest (7 ms)
+[----------] 1 test from TCPPeerTest (7 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (7 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"TCPPeerTest.DisconnectionTest" end time: Dec 27 23:43 UTC
+"TCPPeerTest.DisconnectionTest" time elapsed: 00:00:00
+----------------------------------------------------------
+
+20/40 Testing: TCPPeerTest.SendStreamTest
+20/40 Test: TCPPeerTest.SendStreamTest
+Command: "/home/runner/StreamCryptoDFS/build/network_tests" "--gtest_filter=TCPPeerTest.SendStreamTest" "--gtest_also_run_disabled_tests"
+Directory: /home/runner/StreamCryptoDFS/build
+"TCPPeerTest.SendStreamTest" start time: Dec 27 23:43 UTC
+Output:
+----------------------------------------------------------
+Running main() from /build/source/googletest/src/gtest_main.cc
+Note: Google Test filter = TCPPeerTest.SendStreamTest
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from TCPPeerTest
+[ RUN      ] TCPPeerTest.SendStreamTest
+[       OK ] TCPPeerTest.SendStreamTest (2 ms)
+[----------] 1 test from TCPPeerTest (2 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (2 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"TCPPeerTest.SendStreamTest" end time: Dec 27 23:43 UTC
+"TCPPeerTest.SendStreamTest" time elapsed: 00:00:00
+----------------------------------------------------------
+
+21/40 Testing: TCPPeerTest.ReceiveStreamTest
+21/40 Test: TCPPeerTest.ReceiveStreamTest
+Command: "/home/runner/StreamCryptoDFS/build/network_tests" "--gtest_filter=TCPPeerTest.ReceiveStreamTest" "--gtest_also_run_disabled_tests"
+Directory: /home/runner/StreamCryptoDFS/build
+"TCPPeerTest.ReceiveStreamTest" start time: Dec 27 23:43 UTC
+Output:
+----------------------------------------------------------
+Running main() from /build/source/googletest/src/gtest_main.cc
+Note: Google Test filter = TCPPeerTest.ReceiveStreamTest
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from TCPPeerTest
+[ RUN      ] TCPPeerTest.ReceiveStreamTest
+[       OK ] TCPPeerTest.ReceiveStreamTest (2 ms)
+[----------] 1 test from TCPPeerTest (2 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (2 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"TCPPeerTest.ReceiveStreamTest" end time: Dec 27 23:43 UTC
+"TCPPeerTest.ReceiveStreamTest" time elapsed: 00:00:00
+----------------------------------------------------------
+
+22/40 Testing: TCPPeerTest.MultipleMessagesTest
+22/40 Test: TCPPeerTest.MultipleMessagesTest
+Command: "/home/runner/StreamCryptoDFS/build/network_tests" "--gtest_filter=TCPPeerTest.MultipleMessagesTest" "--gtest_also_run_disabled_tests"
+Directory: /home/runner/StreamCryptoDFS/build
+"TCPPeerTest.MultipleMessagesTest" start time: Dec 27 23:43 UTC
+Output:
+----------------------------------------------------------
+Running main() from /build/source/googletest/src/gtest_main.cc
+Note: Google Test filter = TCPPeerTest.MultipleMessagesTest
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from TCPPeerTest
+[ RUN      ] TCPPeerTest.MultipleMessagesTest
+[       OK ] TCPPeerTest.MultipleMessagesTest (32 ms)
+[----------] 1 test from TCPPeerTest (32 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (32 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.04 sec
+----------------------------------------------------------
+Test Passed.
+"TCPPeerTest.MultipleMessagesTest" end time: Dec 27 23:43 UTC
+"TCPPeerTest.MultipleMessagesTest" time elapsed: 00:00:00
+----------------------------------------------------------
+
+23/40 Testing: TCPPeerTest.EdgeCasesTest
+23/40 Test: TCPPeerTest.EdgeCasesTest
+Command: "/home/runner/StreamCryptoDFS/build/network_tests" "--gtest_filter=TCPPeerTest.EdgeCasesTest" "--gtest_also_run_disabled_tests"
+Directory: /home/runner/StreamCryptoDFS/build
+"TCPPeerTest.EdgeCasesTest" start time: Dec 27 23:43 UTC
+Output:
+----------------------------------------------------------
+Running main() from /build/source/googletest/src/gtest_main.cc
+Note: Google Test filter = TCPPeerTest.EdgeCasesTest
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from TCPPeerTest
+[ RUN      ] TCPPeerTest.EdgeCasesTest
+[2024-12-27 23:43:29.506274] [0x00007f9b6a8c7d80] [error]   [test_peer] Connection failed: Connection refused
+[2024-12-27 23:43:29.506286] [0x00007f9b6a8c7d80] [error]   [test_peer] Socket shutdown error: Transport endpoint is not connected
+[2024-12-27 23:43:29.506298] [0x00007f9b6a8c7d80] [error]   [test_peer] Cannot send stream - socket not connected
+[       OK ] TCPPeerTest.EdgeCasesTest (1 ms)
+[----------] 1 test from TCPPeerTest (1 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (1 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"TCPPeerTest.EdgeCasesTest" end time: Dec 27 23:43 UTC
+"TCPPeerTest.EdgeCasesTest" time elapsed: 00:00:00
+----------------------------------------------------------
+
+24/40 Testing: PeerManagerTest.InitializationTest
+24/40 Test: PeerManagerTest.InitializationTest
+Command: "/home/runner/StreamCryptoDFS/build/network_tests" "--gtest_filter=PeerManagerTest.InitializationTest" "--gtest_also_run_disabled_tests"
+Directory: /home/runner/StreamCryptoDFS/build
+"PeerManagerTest.InitializationTest" start time: Dec 27 23:43 UTC
+Output:
+----------------------------------------------------------
+Running main() from /build/source/googletest/src/gtest_main.cc
+Note: Google Test filter = PeerManagerTest.InitializationTest
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from PeerManagerTest
+[ RUN      ] PeerManagerTest.InitializationTest
+[       OK ] PeerManagerTest.InitializationTest (0 ms)
+[----------] 1 test from PeerManagerTest (0 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (0 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"PeerManagerTest.InitializationTest" end time: Dec 27 23:43 UTC
+"PeerManagerTest.InitializationTest" time elapsed: 00:00:00
+----------------------------------------------------------
+
+25/40 Testing: PeerManagerTest.AddValidPeerTest
+25/40 Test: PeerManagerTest.AddValidPeerTest
+Command: "/home/runner/StreamCryptoDFS/build/network_tests" "--gtest_filter=PeerManagerTest.AddValidPeerTest" "--gtest_also_run_disabled_tests"
+Directory: /home/runner/StreamCryptoDFS/build
+"PeerManagerTest.AddValidPeerTest" start time: Dec 27 23:43 UTC
+Output:
+----------------------------------------------------------
+Running main() from /build/source/googletest/src/gtest_main.cc
+Note: Google Test filter = PeerManagerTest.AddValidPeerTest
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from PeerManagerTest
+[ RUN      ] PeerManagerTest.AddValidPeerTest
+[       OK ] PeerManagerTest.AddValidPeerTest (0 ms)
+[----------] 1 test from PeerManagerTest (0 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (0 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"PeerManagerTest.AddValidPeerTest" end time: Dec 27 23:43 UTC
+"PeerManagerTest.AddValidPeerTest" time elapsed: 00:00:00
+----------------------------------------------------------
+
+26/40 Testing: PeerManagerTest.AddNullPeerTest
+26/40 Test: PeerManagerTest.AddNullPeerTest
+Command: "/home/runner/StreamCryptoDFS/build/network_tests" "--gtest_filter=PeerManagerTest.AddNullPeerTest" "--gtest_also_run_disabled_tests"
+Directory: /home/runner/StreamCryptoDFS/build
+"PeerManagerTest.AddNullPeerTest" start time: Dec 27 23:43 UTC
+Output:
+----------------------------------------------------------
+Running main() from /build/source/googletest/src/gtest_main.cc
+Note: Google Test filter = PeerManagerTest.AddNullPeerTest
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from PeerManagerTest
+[ RUN      ] PeerManagerTest.AddNullPeerTest
+[2024-12-27 23:43:29.522733] [0x00007fd78e0c1d80] [error]   Attempted to add null peer
+[       OK ] PeerManagerTest.AddNullPeerTest (0 ms)
+[----------] 1 test from PeerManagerTest (0 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (0 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"PeerManagerTest.AddNullPeerTest" end time: Dec 27 23:43 UTC
+"PeerManagerTest.AddNullPeerTest" time elapsed: 00:00:00
+----------------------------------------------------------
+
+27/40 Testing: PeerManagerTest.AddDuplicatePeerTest
+27/40 Test: PeerManagerTest.AddDuplicatePeerTest
+Command: "/home/runner/StreamCryptoDFS/build/network_tests" "--gtest_filter=PeerManagerTest.AddDuplicatePeerTest" "--gtest_also_run_disabled_tests"
+Directory: /home/runner/StreamCryptoDFS/build
+"PeerManagerTest.AddDuplicatePeerTest" start time: Dec 27 23:43 UTC
+Output:
+----------------------------------------------------------
+Running main() from /build/source/googletest/src/gtest_main.cc
+Note: Google Test filter = PeerManagerTest.AddDuplicatePeerTest
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from PeerManagerTest
+[ RUN      ] PeerManagerTest.AddDuplicatePeerTest
+[       OK ] PeerManagerTest.AddDuplicatePeerTest (0 ms)
+[----------] 1 test from PeerManagerTest (0 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (0 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"PeerManagerTest.AddDuplicatePeerTest" end time: Dec 27 23:43 UTC
+"PeerManagerTest.AddDuplicatePeerTest" time elapsed: 00:00:00
+----------------------------------------------------------
+
+28/40 Testing: PeerManagerTest.RemoveExistingPeerTest
+28/40 Test: PeerManagerTest.RemoveExistingPeerTest
+Command: "/home/runner/StreamCryptoDFS/build/network_tests" "--gtest_filter=PeerManagerTest.RemoveExistingPeerTest" "--gtest_also_run_disabled_tests"
+Directory: /home/runner/StreamCryptoDFS/build
+"PeerManagerTest.RemoveExistingPeerTest" start time: Dec 27 23:43 UTC
+Output:
+----------------------------------------------------------
+Running main() from /build/source/googletest/src/gtest_main.cc
+Note: Google Test filter = PeerManagerTest.RemoveExistingPeerTest
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from PeerManagerTest
+[ RUN      ] PeerManagerTest.RemoveExistingPeerTest
+[       OK ] PeerManagerTest.RemoveExistingPeerTest (0 ms)
+[----------] 1 test from PeerManagerTest (0 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (0 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"PeerManagerTest.RemoveExistingPeerTest" end time: Dec 27 23:43 UTC
+"PeerManagerTest.RemoveExistingPeerTest" time elapsed: 00:00:00
+----------------------------------------------------------
+
+29/40 Testing: PeerManagerTest.RemoveNonExistentPeerTest
+29/40 Test: PeerManagerTest.RemoveNonExistentPeerTest
+Command: "/home/runner/StreamCryptoDFS/build/network_tests" "--gtest_filter=PeerManagerTest.RemoveNonExistentPeerTest" "--gtest_also_run_disabled_tests"
+Directory: /home/runner/StreamCryptoDFS/build
+"PeerManagerTest.RemoveNonExistentPeerTest" start time: Dec 27 23:43 UTC
+Output:
+----------------------------------------------------------
+Running main() from /build/source/googletest/src/gtest_main.cc
+Note: Google Test filter = PeerManagerTest.RemoveNonExistentPeerTest
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from PeerManagerTest
+[ RUN      ] PeerManagerTest.RemoveNonExistentPeerTest
+[       OK ] PeerManagerTest.RemoveNonExistentPeerTest (0 ms)
+[----------] 1 test from PeerManagerTest (0 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (0 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"PeerManagerTest.RemoveNonExistentPeerTest" end time: Dec 27 23:43 UTC
+"PeerManagerTest.RemoveNonExistentPeerTest" time elapsed: 00:00:00
+----------------------------------------------------------
+
+30/40 Testing: PeerManagerTest.GetNonExistentPeerTest
+30/40 Test: PeerManagerTest.GetNonExistentPeerTest
+Command: "/home/runner/StreamCryptoDFS/build/network_tests" "--gtest_filter=PeerManagerTest.GetNonExistentPeerTest" "--gtest_also_run_disabled_tests"
+Directory: /home/runner/StreamCryptoDFS/build
+"PeerManagerTest.GetNonExistentPeerTest" start time: Dec 27 23:43 UTC
+Output:
+----------------------------------------------------------
+Running main() from /build/source/googletest/src/gtest_main.cc
+Note: Google Test filter = PeerManagerTest.GetNonExistentPeerTest
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from PeerManagerTest
+[ RUN      ] PeerManagerTest.GetNonExistentPeerTest
+[       OK ] PeerManagerTest.GetNonExistentPeerTest (0 ms)
+[----------] 1 test from PeerManagerTest (0 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (0 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"PeerManagerTest.GetNonExistentPeerTest" end time: Dec 27 23:43 UTC
+"PeerManagerTest.GetNonExistentPeerTest" time elapsed: 00:00:00
+----------------------------------------------------------
+
+31/40 Testing: PeerManagerTest.ThreadSafetyTest
+31/40 Test: PeerManagerTest.ThreadSafetyTest
+Command: "/home/runner/StreamCryptoDFS/build/network_tests" "--gtest_filter=PeerManagerTest.ThreadSafetyTest" "--gtest_also_run_disabled_tests"
+Directory: /home/runner/StreamCryptoDFS/build
+"PeerManagerTest.ThreadSafetyTest" start time: Dec 27 23:43 UTC
+Output:
+----------------------------------------------------------
+Running main() from /build/source/googletest/src/gtest_main.cc
+Note: Google Test filter = PeerManagerTest.ThreadSafetyTest
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from PeerManagerTest
+[ RUN      ] PeerManagerTest.ThreadSafetyTest
+[       OK ] PeerManagerTest.ThreadSafetyTest (5 ms)
+[----------] 1 test from PeerManagerTest (5 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (6 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"PeerManagerTest.ThreadSafetyTest" end time: Dec 27 23:43 UTC
+"PeerManagerTest.ThreadSafetyTest" time elapsed: 00:00:00
+----------------------------------------------------------
+
+32/40 Testing: PeerManagerTest.ShutdownTest
+32/40 Test: PeerManagerTest.ShutdownTest
+Command: "/home/runner/StreamCryptoDFS/build/network_tests" "--gtest_filter=PeerManagerTest.ShutdownTest" "--gtest_also_run_disabled_tests"
+Directory: /home/runner/StreamCryptoDFS/build
+"PeerManagerTest.ShutdownTest" start time: Dec 27 23:43 UTC
+Output:
+----------------------------------------------------------
+Running main() from /build/source/googletest/src/gtest_main.cc
+Note: Google Test filter = PeerManagerTest.ShutdownTest
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from PeerManagerTest
+[ RUN      ] PeerManagerTest.ShutdownTest
+[       OK ] PeerManagerTest.ShutdownTest (0 ms)
+[----------] 1 test from PeerManagerTest (0 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (0 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"PeerManagerTest.ShutdownTest" end time: Dec 27 23:43 UTC
+"PeerManagerTest.ShutdownTest" time elapsed: 00:00:00
+----------------------------------------------------------
+
+33/40 Testing: PeerManagerTest.BroadcastStreamTest
+33/40 Test: PeerManagerTest.BroadcastStreamTest
+Command: "/home/runner/StreamCryptoDFS/build/network_tests" "--gtest_filter=PeerManagerTest.BroadcastStreamTest" "--gtest_also_run_disabled_tests"
+Directory: /home/runner/StreamCryptoDFS/build
+"PeerManagerTest.BroadcastStreamTest" start time: Dec 27 23:43 UTC
+Output:
+----------------------------------------------------------
+Running main() from /build/source/googletest/src/gtest_main.cc
+Note: Google Test filter = PeerManagerTest.BroadcastStreamTest
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from PeerManagerTest
+[ RUN      ] PeerManagerTest.BroadcastStreamTest
+[2024-12-27 23:43:29.567766] [0x00007f0ae931ad80] [error]   Invalid input stream provided for broadcast
+[       OK ] PeerManagerTest.BroadcastStreamTest (0 ms)
+[----------] 1 test from PeerManagerTest (0 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (0 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"PeerManagerTest.BroadcastStreamTest" end time: Dec 27 23:43 UTC
+"PeerManagerTest.BroadcastStreamTest" time elapsed: 00:00:00
+----------------------------------------------------------
+
+34/40 Testing: PeerManagerTest.BroadcastMixedResultsTest
+34/40 Test: PeerManagerTest.BroadcastMixedResultsTest
+Command: "/home/runner/StreamCryptoDFS/build/network_tests" "--gtest_filter=PeerManagerTest.BroadcastMixedResultsTest" "--gtest_also_run_disabled_tests"
+Directory: /home/runner/StreamCryptoDFS/build
+"PeerManagerTest.BroadcastMixedResultsTest" start time: Dec 27 23:43 UTC
+Output:
+----------------------------------------------------------
+Running main() from /build/source/googletest/src/gtest_main.cc
+Note: Google Test filter = PeerManagerTest.BroadcastMixedResultsTest
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from PeerManagerTest
+[ RUN      ] PeerManagerTest.BroadcastMixedResultsTest
+[       OK ] PeerManagerTest.BroadcastMixedResultsTest (0 ms)
+[----------] 1 test from PeerManagerTest (0 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (0 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"PeerManagerTest.BroadcastMixedResultsTest" end time: Dec 27 23:43 UTC
+"PeerManagerTest.BroadcastMixedResultsTest" time elapsed: 00:00:00
+----------------------------------------------------------
+
+35/40 Testing: ChannelTest.InitialState
+35/40 Test: ChannelTest.InitialState
+Command: "/home/runner/StreamCryptoDFS/build/channel_tests" "--gtest_filter=ChannelTest.InitialState" "--gtest_also_run_disabled_tests"
+Directory: /home/runner/StreamCryptoDFS/build
+"ChannelTest.InitialState" start time: Dec 27 23:43 UTC
+Output:
+----------------------------------------------------------
+Running main() from /build/source/googletest/src/gtest_main.cc
+Note: Google Test filter = ChannelTest.InitialState
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from ChannelTest
+[ RUN      ] ChannelTest.InitialState
+[       OK ] ChannelTest.InitialState (0 ms)
+[----------] 1 test from ChannelTest (0 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (0 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"ChannelTest.InitialState" end time: Dec 27 23:43 UTC
+"ChannelTest.InitialState" time elapsed: 00:00:00
+----------------------------------------------------------
+
+36/40 Testing: ChannelTest.SingleProduceConsume
+36/40 Test: ChannelTest.SingleProduceConsume
+Command: "/home/runner/StreamCryptoDFS/build/channel_tests" "--gtest_filter=ChannelTest.SingleProduceConsume" "--gtest_also_run_disabled_tests"
+Directory: /home/runner/StreamCryptoDFS/build
+"ChannelTest.SingleProduceConsume" start time: Dec 27 23:43 UTC
+Output:
+----------------------------------------------------------
+Running main() from /build/source/googletest/src/gtest_main.cc
+Note: Google Test filter = ChannelTest.SingleProduceConsume
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from ChannelTest
+[ RUN      ] ChannelTest.SingleProduceConsume
+[2024-12-27 23:43:29.582311] [0x00007fc5eed96c40] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.582316] [0x00007fc5eed96c40] [debug]   Retrieved message frame from channel. Channel size: 0
+[       OK ] ChannelTest.SingleProduceConsume (0 ms)
+[----------] 1 test from ChannelTest (0 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (0 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"ChannelTest.SingleProduceConsume" end time: Dec 27 23:43 UTC
+"ChannelTest.SingleProduceConsume" time elapsed: 00:00:00
+----------------------------------------------------------
+
+37/40 Testing: ChannelTest.MultipleMessages
+37/40 Test: ChannelTest.MultipleMessages
+Command: "/home/runner/StreamCryptoDFS/build/channel_tests" "--gtest_filter=ChannelTest.MultipleMessages" "--gtest_also_run_disabled_tests"
+Directory: /home/runner/StreamCryptoDFS/build
+"ChannelTest.MultipleMessages" start time: Dec 27 23:43 UTC
+Output:
+----------------------------------------------------------
+Running main() from /build/source/googletest/src/gtest_main.cc
+Note: Google Test filter = ChannelTest.MultipleMessages
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from ChannelTest
+[ RUN      ] ChannelTest.MultipleMessages
+[2024-12-27 23:43:29.588262] [0x00007fc9c0934c40] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.588271] [0x00007fc9c0934c40] [debug]   Added message frame to channel. Channel size: 2
+[2024-12-27 23:43:29.588273] [0x00007fc9c0934c40] [debug]   Added message frame to channel. Channel size: 3
+[2024-12-27 23:43:29.588275] [0x00007fc9c0934c40] [debug]   Added message frame to channel. Channel size: 4
+[2024-12-27 23:43:29.588277] [0x00007fc9c0934c40] [debug]   Added message frame to channel. Channel size: 5
+[2024-12-27 23:43:29.588280] [0x00007fc9c0934c40] [debug]   Retrieved message frame from channel. Channel size: 4
+[2024-12-27 23:43:29.588282] [0x00007fc9c0934c40] [debug]   Retrieved message frame from channel. Channel size: 3
+[2024-12-27 23:43:29.588284] [0x00007fc9c0934c40] [debug]   Retrieved message frame from channel. Channel size: 2
+[2024-12-27 23:43:29.588285] [0x00007fc9c0934c40] [debug]   Retrieved message frame from channel. Channel size: 1
+[2024-12-27 23:43:29.588287] [0x00007fc9c0934c40] [debug]   Retrieved message frame from channel. Channel size: 0
+[       OK ] ChannelTest.MultipleMessages (0 ms)
+[----------] 1 test from ChannelTest (0 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (0 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"ChannelTest.MultipleMessages" end time: Dec 27 23:43 UTC
+"ChannelTest.MultipleMessages" time elapsed: 00:00:00
+----------------------------------------------------------
+
+38/40 Testing: ChannelTest.ConsumeEmptyChannel
+38/40 Test: ChannelTest.ConsumeEmptyChannel
+Command: "/home/runner/StreamCryptoDFS/build/channel_tests" "--gtest_filter=ChannelTest.ConsumeEmptyChannel" "--gtest_also_run_disabled_tests"
+Directory: /home/runner/StreamCryptoDFS/build
+"ChannelTest.ConsumeEmptyChannel" start time: Dec 27 23:43 UTC
+Output:
+----------------------------------------------------------
+Running main() from /build/source/googletest/src/gtest_main.cc
+Note: Google Test filter = ChannelTest.ConsumeEmptyChannel
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from ChannelTest
+[ RUN      ] ChannelTest.ConsumeEmptyChannel
+[       OK ] ChannelTest.ConsumeEmptyChannel (0 ms)
+[----------] 1 test from ChannelTest (0 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (0 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"ChannelTest.ConsumeEmptyChannel" end time: Dec 27 23:43 UTC
+"ChannelTest.ConsumeEmptyChannel" time elapsed: 00:00:00
+----------------------------------------------------------
+
+39/40 Testing: ChannelTest.ConcurrentProducersConsumers
+39/40 Test: ChannelTest.ConcurrentProducersConsumers
+Command: "/home/runner/StreamCryptoDFS/build/channel_tests" "--gtest_filter=ChannelTest.ConcurrentProducersConsumers" "--gtest_also_run_disabled_tests"
+Directory: /home/runner/StreamCryptoDFS/build
+"ChannelTest.ConcurrentProducersConsumers" start time: Dec 27 23:43 UTC
+Output:
+----------------------------------------------------------
+Running main() from /build/source/googletest/src/gtest_main.cc
+Note: Google Test filter = ChannelTest.ConcurrentProducersConsumers
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from ChannelTest
+[ RUN      ] ChannelTest.ConcurrentProducersConsumers
+[2024-12-27 23:43:29.599212] [0x00007fbb1ef286c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.599282] [0x00007fbb1e7276c0] [debug]   Added message frame to channel. Channel size: 2
+[2024-12-27 23:43:29.599318] [0x00007fbb1ef286c0] [debug]   Added message frame to channel. Channel size: 3
+[2024-12-27 23:43:29.599427] [0x00007fbb1ef286c0] [debug]   Added message frame to channel. Channel size: 4
+[2024-12-27 23:43:29.599481] [0x00007fbb16ffd6c0] [debug]   Retrieved message frame from channel. Channel size: 3
+[2024-12-27 23:43:29.599494] [0x00007fbb16ffd6c0] [debug]   Retrieved message frame from channel. Channel size: 2
+[2024-12-27 23:43:29.599498] [0x00007fbb16ffd6c0] [debug]   Retrieved message frame from channel. Channel size: 1
+[2024-12-27 23:43:29.599500] [0x00007fbb16ffd6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.599533] [0x00007fbb1e7276c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.599620] [0x00007fbb177fe6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.599666] [0x00007fbb1ef286c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.599689] [0x00007fbb16ffd6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.599737] [0x00007fbb1d7256c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.599764] [0x00007fbb1df266c0] [debug]   Added message frame to channel. Channel size: 2
+[2024-12-27 23:43:29.599801] [0x00007fbb177fe6c0] [debug]   Retrieved message frame from channel. Channel size: 1
+[2024-12-27 23:43:29.599820] [0x00007fbb177fe6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.599859] [0x00007fbb1ef286c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.599871] [0x00007fbb1e7276c0] [debug]   Added message frame to channel. Channel size: 2
+[2024-12-27 23:43:29.599882] [0x00007fbb177fe6c0] [debug]   Retrieved message frame from channel. Channel size: 1
+[2024-12-27 23:43:29.599888] [0x00007fbb177fe6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.599905] [0x00007fbb1df266c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.599932] [0x00007fbb1d7256c0] [debug]   Added message frame to channel. Channel size: 2
+[2024-12-27 23:43:29.599973] [0x00007fbb1ef286c0] [debug]   Added message frame to channel. Channel size: 3
+[2024-12-27 23:43:29.599983] [0x00007fbb16ffd6c0] [debug]   Retrieved message frame from channel. Channel size: 2
+[2024-12-27 23:43:29.599992] [0x00007fbb16ffd6c0] [debug]   Retrieved message frame from channel. Channel size: 1
+[2024-12-27 23:43:29.599999] [0x00007fbb16ffd6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.600030] [0x00007fbb1df266c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.600073] [0x00007fbb17fff6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.600116] [0x00007fbb1e7276c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.600163] [0x00007fbb1ef286c0] [debug]   Added message frame to channel. Channel size: 2
+[2024-12-27 23:43:29.600184] [0x00007fbb1df266c0] [debug]   Added message frame to channel. Channel size: 3
+[2024-12-27 23:43:29.600236] [0x00007fbb1d7256c0] [debug]   Added message frame to channel. Channel size: 4
+[2024-12-27 23:43:29.600290] [0x00007fbb17fff6c0] [debug]   Retrieved message frame from channel. Channel size: 3
+[2024-12-27 23:43:29.600301] [0x00007fbb17fff6c0] [debug]   Retrieved message frame from channel. Channel size: 2
+[2024-12-27 23:43:29.600306] [0x00007fbb17fff6c0] [debug]   Retrieved message frame from channel. Channel size: 1
+[2024-12-27 23:43:29.600312] [0x00007fbb17fff6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.600365] [0x00007fbb1ef286c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.600388] [0x00007fbb1df266c0] [debug]   Added message frame to channel. Channel size: 2
+[2024-12-27 23:43:29.600405] [0x00007fbb16ffd6c0] [debug]   Retrieved message frame from channel. Channel size: 1
+[2024-12-27 23:43:29.600415] [0x00007fbb16ffd6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.600456] [0x00007fbb1d7256c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.600477] [0x00007fbb1e7276c0] [debug]   Added message frame to channel. Channel size: 2
+[2024-12-27 23:43:29.600519] [0x00007fbb1ef286c0] [debug]   Added message frame to channel. Channel size: 3
+[2024-12-27 23:43:29.600566] [0x00007fbb1cf246c0] [debug]   Retrieved message frame from channel. Channel size: 2
+[2024-12-27 23:43:29.600578] [0x00007fbb1cf246c0] [debug]   Retrieved message frame from channel. Channel size: 1
+[2024-12-27 23:43:29.600581] [0x00007fbb1cf246c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.600617] [0x00007fbb1ef286c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.600643] [0x00007fbb1e7276c0] [debug]   Added message frame to channel. Channel size: 2
+[2024-12-27 23:43:29.600658] [0x00007fbb1cf246c0] [debug]   Retrieved message frame from channel. Channel size: 1
+[2024-12-27 23:43:29.600667] [0x00007fbb1cf246c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.600728] [0x00007fbb1ef286c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.600742] [0x00007fbb17fff6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.600780] [0x00007fbb1d7256c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.600807] [0x00007fbb1cf246c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.600826] [0x00007fbb1e7276c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.600843] [0x00007fbb177fe6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.600887] [0x00007fbb1d7256c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.600903] [0x00007fbb1ef286c0] [debug]   Added message frame to channel. Channel size: 2
+[2024-12-27 23:43:29.600922] [0x00007fbb1cf246c0] [debug]   Retrieved message frame from channel. Channel size: 1
+[2024-12-27 23:43:29.600936] [0x00007fbb1cf246c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.600992] [0x00007fbb1ef286c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.601009] [0x00007fbb17fff6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.601119] [0x00007fbb1d7256c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.601148] [0x00007fbb177fe6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.601288] [0x00007fbb1ef286c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.601305] [0x00007fbb1e7276c0] [debug]   Added message frame to channel. Channel size: 2
+[2024-12-27 23:43:29.601329] [0x00007fbb16ffd6c0] [debug]   Retrieved message frame from channel. Channel size: 1
+[2024-12-27 23:43:29.601347] [0x00007fbb1cf246c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.601433] [0x00007fbb1ef286c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.601448] [0x00007fbb1e7276c0] [debug]   Added message frame to channel. Channel size: 2
+[2024-12-27 23:43:29.601457] [0x00007fbb177fe6c0] [debug]   Retrieved message frame from channel. Channel size: 1
+[2024-12-27 23:43:29.601472] [0x00007fbb177fe6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.601495] [0x00007fbb1d7256c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.601533] [0x00007fbb1cf246c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.601619] [0x00007fbb1d7256c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.601641] [0x00007fbb17fff6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.601667] [0x00007fbb1df266c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.601700] [0x00007fbb1ef286c0] [debug]   Added message frame to channel. Channel size: 2
+[2024-12-27 23:43:29.601724] [0x00007fbb1e7276c0] [debug]   Added message frame to channel. Channel size: 3
+[2024-12-27 23:43:29.601751] [0x00007fbb1cf246c0] [debug]   Retrieved message frame from channel. Channel size: 2
+[2024-12-27 23:43:29.601769] [0x00007fbb1cf246c0] [debug]   Retrieved message frame from channel. Channel size: 1
+[2024-12-27 23:43:29.601779] [0x00007fbb1cf246c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.601835] [0x00007fbb1e7276c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.601868] [0x00007fbb16ffd6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.601918] [0x00007fbb1e7276c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.601939] [0x00007fbb177fe6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.601956] [0x00007fbb1df266c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.601988] [0x00007fbb1ef286c0] [debug]   Added message frame to channel. Channel size: 2
+[2024-12-27 23:43:29.602016] [0x00007fbb1cf246c0] [debug]   Retrieved message frame from channel. Channel size: 1
+[2024-12-27 23:43:29.602035] [0x00007fbb16ffd6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.602072] [0x00007fbb1e7276c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.602094] [0x00007fbb177fe6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.602142] [0x00007fbb1d7256c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.602151] [0x00007fbb16ffd6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.602181] [0x00007fbb1df266c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.602245] [0x00007fbb1ef286c0] [debug]   Added message frame to channel. Channel size: 2
+[2024-12-27 23:43:29.602261] [0x00007fbb1d7256c0] [debug]   Added message frame to channel. Channel size: 3
+[2024-12-27 23:43:29.602283] [0x00007fbb16ffd6c0] [debug]   Retrieved message frame from channel. Channel size: 2
+[2024-12-27 23:43:29.602292] [0x00007fbb16ffd6c0] [debug]   Retrieved message frame from channel. Channel size: 1
+[2024-12-27 23:43:29.602297] [0x00007fbb16ffd6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.602303] [0x00007fbb1d7256c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.602319] [0x00007fbb177fe6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.602349] [0x00007fbb1e7276c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.602373] [0x00007fbb16ffd6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.602412] [0x00007fbb1ef286c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.602432] [0x00007fbb1d7256c0] [debug]   Added message frame to channel. Channel size: 2
+[2024-12-27 23:43:29.602455] [0x00007fbb1df266c0] [debug]   Added message frame to channel. Channel size: 3
+[2024-12-27 23:43:29.602475] [0x00007fbb1cf246c0] [debug]   Retrieved message frame from channel. Channel size: 2
+[2024-12-27 23:43:29.602490] [0x00007fbb1cf246c0] [debug]   Retrieved message frame from channel. Channel size: 1
+[2024-12-27 23:43:29.602501] [0x00007fbb1cf246c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.602522] [0x00007fbb1ef286c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.602533] [0x00007fbb177fe6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.602577] [0x00007fbb1d7256c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.602597] [0x00007fbb1cf246c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.602631] [0x00007fbb1ef286c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.602645] [0x00007fbb1df266c0] [debug]   Added message frame to channel. Channel size: 2
+[2024-12-27 23:43:29.602653] [0x00007fbb16ffd6c0] [debug]   Retrieved message frame from channel. Channel size: 1
+[2024-12-27 23:43:29.602658] [0x00007fbb17fff6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.602674] [0x00007fbb1e7276c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.602683] [0x00007fbb1cf246c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.603707] [0x00007fbb1ef286c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.603721] [0x00007fbb1e7276c0] [debug]   Added message frame to channel. Channel size: 2
+[2024-12-27 23:43:29.603729] [0x00007fbb17fff6c0] [debug]   Retrieved message frame from channel. Channel size: 1
+[2024-12-27 23:43:29.603735] [0x00007fbb17fff6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.603761] [0x00007fbb1df266c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.603786] [0x00007fbb1cf246c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.603809] [0x00007fbb1d7256c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.603862] [0x00007fbb16ffd6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.603908] [0x00007fbb1ef286c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.603927] [0x00007fbb1df266c0] [debug]   Added message frame to channel. Channel size: 2
+[2024-12-27 23:43:29.603946] [0x00007fbb177fe6c0] [debug]   Retrieved message frame from channel. Channel size: 1
+[2024-12-27 23:43:29.603955] [0x00007fbb177fe6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.603967] [0x00007fbb1e7276c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.603987] [0x00007fbb1cf246c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.604007] [0x00007fbb1d7256c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.604035] [0x00007fbb17fff6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.604075] [0x00007fbb1ef286c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.604088] [0x00007fbb1cf246c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.604116] [0x00007fbb1df266c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.604126] [0x00007fbb1cf246c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.604157] [0x00007fbb1d7256c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.604182] [0x00007fbb17fff6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.604194] [0x00007fbb1ef286c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.604255] [0x00007fbb16ffd6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.604293] [0x00007fbb1df266c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.604327] [0x00007fbb1d7256c0] [debug]   Added message frame to channel. Channel size: 2
+[2024-12-27 23:43:29.604346] [0x00007fbb1ef286c0] [debug]   Added message frame to channel. Channel size: 3
+[2024-12-27 23:43:29.604371] [0x00007fbb16ffd6c0] [debug]   Retrieved message frame from channel. Channel size: 2
+[2024-12-27 23:43:29.604382] [0x00007fbb1df266c0] [debug]   Added message frame to channel. Channel size: 3
+[2024-12-27 23:43:29.604400] [0x00007fbb1e7276c0] [debug]   Added message frame to channel. Channel size: 4
+[2024-12-27 23:43:29.604469] [0x00007fbb17fff6c0] [debug]   Retrieved message frame from channel. Channel size: 3
+[2024-12-27 23:43:29.604490] [0x00007fbb17fff6c0] [debug]   Retrieved message frame from channel. Channel size: 2
+[2024-12-27 23:43:29.604504] [0x00007fbb17fff6c0] [debug]   Retrieved message frame from channel. Channel size: 1
+[2024-12-27 23:43:29.604513] [0x00007fbb17fff6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.604542] [0x00007fbb1ef286c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.604557] [0x00007fbb1d7256c0] [debug]   Added message frame to channel. Channel size: 2
+[2024-12-27 23:43:29.604568] [0x00007fbb16ffd6c0] [debug]   Retrieved message frame from channel. Channel size: 1
+[2024-12-27 23:43:29.604579] [0x00007fbb17fff6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.604589] [0x00007fbb1df266c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.604612] [0x00007fbb177fe6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.604638] [0x00007fbb1ef286c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.604653] [0x00007fbb1d7256c0] [debug]   Added message frame to channel. Channel size: 2
+[2024-12-27 23:43:29.604661] [0x00007fbb16ffd6c0] [debug]   Retrieved message frame from channel. Channel size: 1
+[2024-12-27 23:43:29.604671] [0x00007fbb16ffd6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.604710] [0x00007fbb1e7276c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.604735] [0x00007fbb17fff6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.604750] [0x00007fbb1ef286c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.604772] [0x00007fbb16ffd6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.604808] [0x00007fbb1d7256c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.604819] [0x00007fbb1e7276c0] [debug]   Added message frame to channel. Channel size: 2
+[2024-12-27 23:43:29.604827] [0x00007fbb16ffd6c0] [debug]   Retrieved message frame from channel. Channel size: 1
+[2024-12-27 23:43:29.604841] [0x00007fbb17fff6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.604896] [0x00007fbb1ef286c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.604912] [0x00007fbb1cf246c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.604950] [0x00007fbb1d7256c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.604965] [0x00007fbb17fff6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.604969] [0x00007fbb1ef286c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.604981] [0x00007fbb1cf246c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.605034] [0x00007fbb1ef286c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.605047] [0x00007fbb1cf246c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.605058] [0x00007fbb1d7256c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.605065] [0x00007fbb1cf246c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.605148] [0x00007fbb1ef286c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.605157] [0x00007fbb16ffd6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.605166] [0x00007fbb1d7256c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.605178] [0x00007fbb16ffd6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.605240] [0x00007fbb1d7256c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.605251] [0x00007fbb16ffd6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.605298] [0x00007fbb1ef286c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.605312] [0x00007fbb1cf246c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.605330] [0x00007fbb1d7256c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.605342] [0x00007fbb1e7276c0] [debug]   Added message frame to channel. Channel size: 2
+[2024-12-27 23:43:29.605351] [0x00007fbb16ffd6c0] [debug]   Retrieved message frame from channel. Channel size: 1
+[2024-12-27 23:43:29.605369] [0x00007fbb16ffd6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.605424] [0x00007fbb1d7256c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.605435] [0x00007fbb1df266c0] [debug]   Added message frame to channel. Channel size: 2
+[2024-12-27 23:43:29.605445] [0x00007fbb16ffd6c0] [debug]   Retrieved message frame from channel. Channel size: 1
+[2024-12-27 23:43:29.605458] [0x00007fbb177fe6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.605487] [0x00007fbb1ef286c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.605494] [0x00007fbb1e7276c0] [debug]   Added message frame to channel. Channel size: 2
+[2024-12-27 23:43:29.605504] [0x00007fbb16ffd6c0] [debug]   Retrieved message frame from channel. Channel size: 1
+[2024-12-27 23:43:29.605514] [0x00007fbb16ffd6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.605520] [0x00007fbb1df266c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.605538] [0x00007fbb16ffd6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.605644] [0x00007fbb1ef286c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.605658] [0x00007fbb1df266c0] [debug]   Added message frame to channel. Channel size: 2
+[2024-12-27 23:43:29.605665] [0x00007fbb177fe6c0] [debug]   Retrieved message frame from channel. Channel size: 1
+[2024-12-27 23:43:29.605680] [0x00007fbb1d7256c0] [debug]   Added message frame to channel. Channel size: 2
+[2024-12-27 23:43:29.605688] [0x00007fbb16ffd6c0] [debug]   Retrieved message frame from channel. Channel size: 1
+[2024-12-27 23:43:29.605697] [0x00007fbb177fe6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.605727] [0x00007fbb1ef286c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.605738] [0x00007fbb1cf246c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.605762] [0x00007fbb1e7276c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.605780] [0x00007fbb1df266c0] [debug]   Added message frame to channel. Channel size: 2
+[2024-12-27 23:43:29.605793] [0x00007fbb177fe6c0] [debug]   Retrieved message frame from channel. Channel size: 1
+[2024-12-27 23:43:29.605800] [0x00007fbb177fe6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.605813] [0x00007fbb1d7256c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.605839] [0x00007fbb16ffd6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.605865] [0x00007fbb1ef286c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.605875] [0x00007fbb16ffd6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.605889] [0x00007fbb1d7256c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.605902] [0x00007fbb17fff6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.605944] [0x00007fbb1e7276c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.605961] [0x00007fbb1cf246c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.605974] [0x00007fbb1df266c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.605998] [0x00007fbb17fff6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.606023] [0x00007fbb1d7256c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.606043] [0x00007fbb177fe6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.606090] [0x00007fbb1ef286c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.606105] [0x00007fbb1cf246c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.606150] [0x00007fbb1df266c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.606183] [0x00007fbb1d7256c0] [debug]   Added message frame to channel. Channel size: 2
+[2024-12-27 23:43:29.606266] [0x00007fbb177fe6c0] [debug]   Retrieved message frame from channel. Channel size: 1
+[2024-12-27 23:43:29.606286] [0x00007fbb177fe6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.606317] [0x00007fbb1e7276c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.606333] [0x00007fbb1d7256c0] [debug]   Added message frame to channel. Channel size: 2
+[2024-12-27 23:43:29.606359] [0x00007fbb1ef286c0] [debug]   Added message frame to channel. Channel size: 3
+[2024-12-27 23:43:29.606380] [0x00007fbb1cf246c0] [debug]   Retrieved message frame from channel. Channel size: 2
+[2024-12-27 23:43:29.606392] [0x00007fbb1cf246c0] [debug]   Retrieved message frame from channel. Channel size: 1
+[2024-12-27 23:43:29.606395] [0x00007fbb1cf246c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.606425] [0x00007fbb1df266c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.606441] [0x00007fbb1cf246c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.606452] [0x00007fbb1e7276c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.606461] [0x00007fbb1cf246c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.606477] [0x00007fbb1ef286c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.606488] [0x00007fbb177fe6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.606501] [0x00007fbb1df266c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.606506] [0x00007fbb177fe6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.606589] [0x00007fbb1e7276c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.606608] [0x00007fbb1ef286c0] [debug]   Added message frame to channel. Channel size: 2
+[2024-12-27 23:43:29.606617] [0x00007fbb177fe6c0] [debug]   Retrieved message frame from channel. Channel size: 1
+[2024-12-27 23:43:29.606630] [0x00007fbb177fe6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.606705] [0x00007fbb1ef286c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.606714] [0x00007fbb1df266c0] [debug]   Added message frame to channel. Channel size: 2
+[2024-12-27 23:43:29.606746] [0x00007fbb16ffd6c0] [debug]   Retrieved message frame from channel. Channel size: 1
+[2024-12-27 23:43:29.606766] [0x00007fbb16ffd6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.606795] [0x00007fbb1ef286c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.606819] [0x00007fbb1e7276c0] [debug]   Added message frame to channel. Channel size: 2
+[2024-12-27 23:43:29.606853] [0x00007fbb177fe6c0] [debug]   Retrieved message frame from channel. Channel size: 1
+[2024-12-27 23:43:29.606863] [0x00007fbb177fe6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.606872] [0x00007fbb1df266c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.606881] [0x00007fbb177fe6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.606893] [0x00007fbb1d7256c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.606914] [0x00007fbb17fff6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.606939] [0x00007fbb1ef286c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.606960] [0x00007fbb177fe6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.606994] [0x00007fbb1ef286c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.607022] [0x00007fbb1cf246c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.607062] [0x00007fbb1df266c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.607087] [0x00007fbb16ffd6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.607109] [0x00007fbb1e7276c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.607137] [0x00007fbb17fff6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.607171] [0x00007fbb1d7256c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.607182] [0x00007fbb1e7276c0] [debug]   Added message frame to channel. Channel size: 2
+[2024-12-27 23:43:29.607187] [0x00007fbb1df266c0] [debug]   Added message frame to channel. Channel size: 3
+[2024-12-27 23:43:29.607270] [0x00007fbb177fe6c0] [debug]   Retrieved message frame from channel. Channel size: 2
+[2024-12-27 23:43:29.607290] [0x00007fbb177fe6c0] [debug]   Retrieved message frame from channel. Channel size: 1
+[2024-12-27 23:43:29.607299] [0x00007fbb177fe6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.607335] [0x00007fbb1d7256c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.607352] [0x00007fbb1e7276c0] [debug]   Added message frame to channel. Channel size: 2
+[2024-12-27 23:43:29.607361] [0x00007fbb1df266c0] [debug]   Added message frame to channel. Channel size: 3
+[2024-12-27 23:43:29.607384] [0x00007fbb17fff6c0] [debug]   Retrieved message frame from channel. Channel size: 2
+[2024-12-27 23:43:29.607394] [0x00007fbb17fff6c0] [debug]   Retrieved message frame from channel. Channel size: 1
+[2024-12-27 23:43:29.607398] [0x00007fbb17fff6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.607432] [0x00007fbb1ef286c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.607453] [0x00007fbb16ffd6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.607485] [0x00007fbb1e7276c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.607504] [0x00007fbb1cf246c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.607523] [0x00007fbb1df266c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.607543] [0x00007fbb177fe6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.607573] [0x00007fbb1ef286c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.607590] [0x00007fbb1cf246c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.607638] [0x00007fbb1d7256c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.607655] [0x00007fbb1e7276c0] [debug]   Added message frame to channel. Channel size: 2
+[2024-12-27 23:43:29.607682] [0x00007fbb1df266c0] [debug]   Added message frame to channel. Channel size: 3
+[2024-12-27 23:43:29.607700] [0x00007fbb16ffd6c0] [debug]   Retrieved message frame from channel. Channel size: 2
+[2024-12-27 23:43:29.607709] [0x00007fbb16ffd6c0] [debug]   Retrieved message frame from channel. Channel size: 1
+[2024-12-27 23:43:29.607712] [0x00007fbb16ffd6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.607767] [0x00007fbb1ef286c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.607804] [0x00007fbb1ef286c0] [debug]   Added message frame to channel. Channel size: 2
+[2024-12-27 23:43:29.607817] [0x00007fbb16ffd6c0] [debug]   Retrieved message frame from channel. Channel size: 1
+[2024-12-27 23:43:29.607827] [0x00007fbb1cf246c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.607855] [0x00007fbb1d7256c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.607876] [0x00007fbb177fe6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.607896] [0x00007fbb1df266c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.607914] [0x00007fbb16ffd6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.608032] [0x00007fbb1d7256c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.608054] [0x00007fbb1cf246c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.608163] [0x00007fbb1d7256c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.608247] [0x00007fbb17fff6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.608309] [0x00007fbb1e7276c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.608336] [0x00007fbb1df266c0] [debug]   Added message frame to channel. Channel size: 2
+[2024-12-27 23:43:29.608350] [0x00007fbb1d7256c0] [debug]   Added message frame to channel. Channel size: 3
+[2024-12-27 23:43:29.608376] [0x00007fbb177fe6c0] [debug]   Retrieved message frame from channel. Channel size: 2
+[2024-12-27 23:43:29.608389] [0x00007fbb177fe6c0] [debug]   Retrieved message frame from channel. Channel size: 1
+[2024-12-27 23:43:29.608392] [0x00007fbb177fe6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.608476] [0x00007fbb1d7256c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.608494] [0x00007fbb1cf246c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.608561] [0x00007fbb1d7256c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.608583] [0x00007fbb17fff6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.608607] [0x00007fbb1e7276c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.608626] [0x00007fbb1cf246c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.608660] [0x00007fbb1e7276c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.608676] [0x00007fbb177fe6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.608739] [0x00007fbb1d7256c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.608763] [0x00007fbb16ffd6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.608778] [0x00007fbb1e7276c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.608800] [0x00007fbb17fff6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.608832] [0x00007fbb1df266c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.608861] [0x00007fbb16ffd6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.608906] [0x00007fbb1d7256c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.608921] [0x00007fbb1e7276c0] [debug]   Added message frame to channel. Channel size: 2
+[2024-12-27 23:43:29.608938] [0x00007fbb1cf246c0] [debug]   Retrieved message frame from channel. Channel size: 1
+[2024-12-27 23:43:29.608945] [0x00007fbb1df266c0] [debug]   Added message frame to channel. Channel size: 2
+[2024-12-27 23:43:29.608956] [0x00007fbb1d7256c0] [debug]   Added message frame to channel. Channel size: 3
+[2024-12-27 23:43:29.608976] [0x00007fbb177fe6c0] [debug]   Retrieved message frame from channel. Channel size: 2
+[2024-12-27 23:43:29.608985] [0x00007fbb177fe6c0] [debug]   Retrieved message frame from channel. Channel size: 1
+[2024-12-27 23:43:29.608988] [0x00007fbb177fe6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.609044] [0x00007fbb1d7256c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.609066] [0x00007fbb1cf246c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.609080] [0x00007fbb1e7276c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.609102] [0x00007fbb17fff6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.609161] [0x00007fbb1d7256c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.609169] [0x00007fbb16ffd6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.609176] [0x00007fbb1df266c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.609187] [0x00007fbb177fe6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.609220] [0x00007fbb1e7276c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.609232] [0x00007fbb17fff6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.609278] [0x00007fbb1d7256c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.609285] [0x00007fbb17fff6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.609336] [0x00007fbb1d7256c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.609347] [0x00007fbb177fe6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.609378] [0x00007fbb1df266c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.609396] [0x00007fbb1cf246c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.609437] [0x00007fbb1e7276c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.609459] [0x00007fbb177fe6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.609499] [0x00007fbb1df266c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.609523] [0x00007fbb177fe6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.609577] [0x00007fbb1e7276c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.609594] [0x00007fbb16ffd6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.609662] [0x00007fbb1df266c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.609678] [0x00007fbb177fe6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.609697] [0x00007fbb1e7276c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.609722] [0x00007fbb16ffd6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.610774] [0x00007fbb1df266c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.610790] [0x00007fbb177fe6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.610834] [0x00007fbb1e7276c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.610862] [0x00007fbb16ffd6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.610888] [0x00007fbb1df266c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.610902] [0x00007fbb1cf246c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.610929] [0x00007fbb1e7276c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.610954] [0x00007fbb177fe6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.610966] [0x00007fbb1df266c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.610981] [0x00007fbb1cf246c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.611076] [0x00007fbb1df266c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.611090] [0x00007fbb1e7276c0] [debug]   Added message frame to channel. Channel size: 2
+[2024-12-27 23:43:29.611109] [0x00007fbb16ffd6c0] [debug]   Retrieved message frame from channel. Channel size: 1
+[2024-12-27 23:43:29.611118] [0x00007fbb16ffd6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.611176] [0x00007fbb1e7276c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.611194] [0x00007fbb17fff6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.611240] [0x00007fbb1df266c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.611264] [0x00007fbb16ffd6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.611311] [0x00007fbb1e7276c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.611331] [0x00007fbb17fff6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.611380] [0x00007fbb1df266c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.611400] [0x00007fbb17fff6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.611437] [0x00007fbb1e7276c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.611454] [0x00007fbb16ffd6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.611486] [0x00007fbb1df266c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.611502] [0x00007fbb17fff6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.611571] [0x00007fbb1e7276c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.611579] [0x00007fbb16ffd6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.611587] [0x00007fbb1df266c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.611599] [0x00007fbb177fe6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.611707] [0x00007fbb1df266c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.611722] [0x00007fbb1cf246c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.611851] [0x00007fbb1df266c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.611868] [0x00007fbb1cf246c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.612038] [0x00007fbb1df266c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.612064] [0x00007fbb177fe6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[       OK ] ChannelTest.ConcurrentProducersConsumers (13 ms)
+[----------] 1 test from ChannelTest (13 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (13 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.02 sec
+----------------------------------------------------------
+Test Passed.
+"ChannelTest.ConcurrentProducersConsumers" end time: Dec 27 23:43 UTC
+"ChannelTest.ConcurrentProducersConsumers" time elapsed: 00:00:00
+----------------------------------------------------------
+
+40/40 Testing: ChannelTest.AlternatingProduceConsume
+40/40 Test: ChannelTest.AlternatingProduceConsume
+Command: "/home/runner/StreamCryptoDFS/build/channel_tests" "--gtest_filter=ChannelTest.AlternatingProduceConsume" "--gtest_also_run_disabled_tests"
+Directory: /home/runner/StreamCryptoDFS/build
+"ChannelTest.AlternatingProduceConsume" start time: Dec 27 23:43 UTC
+Output:
+----------------------------------------------------------
+Running main() from /build/source/googletest/src/gtest_main.cc
+Note: Google Test filter = ChannelTest.AlternatingProduceConsume
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from ChannelTest
+[ RUN      ] ChannelTest.AlternatingProduceConsume
+[2024-12-27 23:43:29.618578] [0x00007f54f7d2b6c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.618653] [0x00007f54f752a6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.618678] [0x00007f54f7d2b6c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.618689] [0x00007f54f752a6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.618694] [0x00007f54f7d2b6c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.618697] [0x00007f54f752a6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.618700] [0x00007f54f7d2b6c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.618703] [0x00007f54f752a6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.618707] [0x00007f54f7d2b6c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.618710] [0x00007f54f752a6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.618715] [0x00007f54f7d2b6c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.618718] [0x00007f54f752a6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.618721] [0x00007f54f7d2b6c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.618727] [0x00007f54f752a6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.618733] [0x00007f54f7d2b6c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.618736] [0x00007f54f752a6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.618740] [0x00007f54f7d2b6c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.618742] [0x00007f54f752a6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.618745] [0x00007f54f7d2b6c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.618750] [0x00007f54f752a6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.618753] [0x00007f54f7d2b6c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.618758] [0x00007f54f752a6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.618761] [0x00007f54f7d2b6c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.618764] [0x00007f54f752a6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.618768] [0x00007f54f7d2b6c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.618770] [0x00007f54f752a6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.618776] [0x00007f54f7d2b6c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.618779] [0x00007f54f752a6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.618782] [0x00007f54f7d2b6c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.618786] [0x00007f54f752a6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.618789] [0x00007f54f7d2b6c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.618792] [0x00007f54f752a6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.618796] [0x00007f54f7d2b6c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.618799] [0x00007f54f752a6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.618804] [0x00007f54f7d2b6c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.618806] [0x00007f54f752a6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.618809] [0x00007f54f7d2b6c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.618812] [0x00007f54f752a6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.618815] [0x00007f54f7d2b6c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.618819] [0x00007f54f752a6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.618822] [0x00007f54f7d2b6c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.618825] [0x00007f54f752a6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.618829] [0x00007f54f7d2b6c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.618832] [0x00007f54f752a6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.618835] [0x00007f54f7d2b6c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.618838] [0x00007f54f752a6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.618843] [0x00007f54f7d2b6c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.618846] [0x00007f54f752a6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.618858] [0x00007f54f7d2b6c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.618865] [0x00007f54f752a6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.618868] [0x00007f54f7d2b6c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.618871] [0x00007f54f752a6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.618874] [0x00007f54f7d2b6c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.618877] [0x00007f54f752a6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.618880] [0x00007f54f7d2b6c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.618883] [0x00007f54f752a6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.618885] [0x00007f54f7d2b6c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.618889] [0x00007f54f752a6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.618892] [0x00007f54f7d2b6c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.618896] [0x00007f54f752a6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.618899] [0x00007f54f7d2b6c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.618906] [0x00007f54f752a6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.618909] [0x00007f54f7d2b6c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.618912] [0x00007f54f752a6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.618916] [0x00007f54f7d2b6c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.618923] [0x00007f54f752a6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.618928] [0x00007f54f7d2b6c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.618937] [0x00007f54f752a6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.618943] [0x00007f54f7d2b6c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.618954] [0x00007f54f752a6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.618974] [0x00007f54f7d2b6c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.618983] [0x00007f54f752a6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.618986] [0x00007f54f7d2b6c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.618989] [0x00007f54f752a6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.618992] [0x00007f54f7d2b6c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.618999] [0x00007f54f752a6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.619002] [0x00007f54f7d2b6c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.619005] [0x00007f54f752a6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.619008] [0x00007f54f7d2b6c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.619013] [0x00007f54f752a6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.619016] [0x00007f54f7d2b6c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.619019] [0x00007f54f752a6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.619023] [0x00007f54f7d2b6c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.619028] [0x00007f54f752a6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.619032] [0x00007f54f7d2b6c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.619035] [0x00007f54f752a6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.619040] [0x00007f54f7d2b6c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.619049] [0x00007f54f752a6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.619054] [0x00007f54f7d2b6c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.619060] [0x00007f54f752a6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.619063] [0x00007f54f7d2b6c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.619066] [0x00007f54f752a6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.619069] [0x00007f54f7d2b6c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.619075] [0x00007f54f752a6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.619078] [0x00007f54f7d2b6c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.619081] [0x00007f54f752a6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.619087] [0x00007f54f7d2b6c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.619089] [0x00007f54f752a6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2024-12-27 23:43:29.619092] [0x00007f54f7d2b6c0] [debug]   Added message frame to channel. Channel size: 1
+[2024-12-27 23:43:29.619095] [0x00007f54f752a6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[       OK ] ChannelTest.AlternatingProduceConsume (0 ms)
+[----------] 1 test from ChannelTest (0 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (0 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"ChannelTest.AlternatingProduceConsume" end time: Dec 27 23:43 UTC
+"ChannelTest.AlternatingProduceConsume" time elapsed: 00:00:00
+----------------------------------------------------------
+
+End testing: Dec 27 23:43 UTC
