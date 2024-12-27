@@ -51,8 +51,13 @@ TEST_F(CodecTest, BasicSerializeDeserialize) {
         sizeof(uint64_t)   // payload_size
     );
 
-    // Deserialize and verify
-    MessageFrame output_frame = codec.deserialize(buffer, channel);
+    // Deserialize from buffer to channel
+    std::size_t read_bytes = codec.deserialize(buffer, channel);
+    EXPECT_EQ(written_bytes, read_bytes);
+
+    // Get the frame from channel
+    MessageFrame output_frame;
+    EXPECT_TRUE(channel.consume(output_frame));
 
     EXPECT_EQ(output_frame.message_type, input_frame.message_type);
     EXPECT_EQ(output_frame.source_id, input_frame.source_id);
@@ -135,8 +140,13 @@ TEST_F(CodecTest, LargePayloadSerializeDeserialize) {
 
     EXPECT_EQ(written_bytes, expected_size);
 
-    // Deserialize and verify
-    MessageFrame output_frame = codec.deserialize(buffer, channel);
+    // Deserialize from buffer to channel
+    std::size_t read_bytes = codec.deserialize(buffer, channel);
+    EXPECT_EQ(written_bytes, read_bytes);
+
+    // Get the frame from channel
+    MessageFrame output_frame;
+    EXPECT_TRUE(channel.consume(output_frame));
 
     EXPECT_EQ(output_frame.message_type, input_frame.message_type);
     EXPECT_EQ(output_frame.source_id, input_frame.source_id);
@@ -192,8 +202,13 @@ TEST_F(CodecTest, EmptyPayload) {
         sizeof(uint64_t);  // payload_size
     EXPECT_EQ(written_bytes, expected_size);
 
-    // Deserialize and verify
-    MessageFrame output_frame = codec.deserialize(buffer, channel);
+    // Deserialize from buffer to channel
+    std::size_t read_bytes = codec.deserialize(buffer, channel);
+    EXPECT_EQ(written_bytes, read_bytes);
+
+    // Get the frame from channel
+    MessageFrame output_frame;
+    EXPECT_TRUE(channel.consume(output_frame));
 
     EXPECT_EQ(output_frame.message_type, input_frame.message_type);
     EXPECT_EQ(output_frame.source_id, input_frame.source_id);
@@ -248,7 +263,7 @@ TEST_F(CodecTest, ChannelIntegration) {
     EXPECT_TRUE(channel.empty());
 
     // Deserialize should add to channel
-    MessageFrame output_frame = codec.deserialize(buffer, channel);
+    std::size_t read_bytes = codec.deserialize(buffer, channel);
 
     EXPECT_FALSE(channel.empty());
     EXPECT_EQ(channel.size(), 1);
@@ -306,7 +321,7 @@ TEST_F(CodecTest, ChannelIntegrationWithPayload) {
     EXPECT_TRUE(channel.empty());
 
     // Deserialize should add to channel
-    MessageFrame output_frame = codec.deserialize(buffer, channel);
+    std::size_t read_bytes = codec.deserialize(buffer, channel);
 
     EXPECT_FALSE(channel.empty());
     EXPECT_EQ(channel.size(), 1);

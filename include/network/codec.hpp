@@ -4,6 +4,7 @@
 #include <cstdint>
 #include <iostream>
 #include <mutex>
+#include <vector>
 #include <boost/endian/conversion.hpp>
 #include "network/message_frame.hpp"
 #include "network/channel.hpp"
@@ -13,10 +14,14 @@ namespace network {
 
 class Codec {
 public:
+    // Constructor initializes crypto key
+    Codec() : crypto_key_(32, 0) {} // Initialize with zeros, should be replaced with secure key
+
     // Serializes a message frame to an output stream
     std::size_t serialize(const MessageFrame& frame, std::ostream& output);
 
-    // Deserializes a message frame from an input stream and returns total bytes read
+    // Deserializes a message frame from an input stream, creates it internally,
+    // and pushes it to the channel. Returns total bytes read.
     std::size_t deserialize(std::istream& input, Channel& channel);
 
 private:
@@ -45,6 +50,7 @@ private:
     }
 
     std::mutex mutex_;  // Mutex for thread-safe channel operations
+    std::vector<uint8_t> crypto_key_;  // Cryptographic key for encryption/decryption
 };
 
 } // namespace network
