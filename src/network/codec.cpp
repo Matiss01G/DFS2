@@ -31,8 +31,23 @@ std::size_t Codec::serialize(const MessageFrame& frame, std::ostream& output) {
     write_bytes(output, &network_source_id, sizeof(uint32_t));
     total_bytes += sizeof(uint32_t);
 
+    // Convert filename_length to network byte order first
     uint32_t network_filename_length = to_network_order(frame.filename_length);
-    write_bytes(output, &network_filename_length, sizeof(uint32_t));
+
+    // Initialize CryptoStream for filename_length encryption
+    crypto::CryptoStream crypto_filename;
+    crypto_filename.initialize(encryption_key_, 
+            std::vector<uint8_t>(frame.initialization_vector.begin(), 
+                      frame.initialization_vector.end()));
+
+    // Create a temporary buffer for the encrypted filename_length
+    std::stringstream filename_length_stream;
+    filename_length_stream.write(reinterpret_cast<const char*>(&network_filename_length), sizeof(uint32_t));
+
+    // Encrypt and write the filename_length
+    std::stringstream encrypted_filename_length;
+    crypto_filename.encrypt(filename_length_stream, encrypted_filename_length);
+    write_bytes(output, encrypted_filename_length.str().data(), sizeof(uint32_t));
     total_bytes += sizeof(uint32_t);
 
     if (frame.payload_stream && frame.payload_size > 0) {
@@ -60,7 +75,7 @@ std::size_t Codec::serialize(const MessageFrame& frame, std::ostream& output) {
       total_bytes += sizeof(uint64_t);
     }
 
-      return total_bytes;
+    return total_bytes;
   }
   catch (const std::exception& e) {
     BOOST_LOG_TRIVIAL(error) << "Serialization error: " << e.what();
