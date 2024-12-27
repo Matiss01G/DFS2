@@ -57,9 +57,9 @@ TEST_F(CodecTest, BasicSerializeDeserialize) {
     std::size_t written_bytes = codec->serialize(input_frame, buffer);
 
     // Should write more than header size
-    EXPECT_GT(written_bytes, 
-        input_frame.initialization_vector.size() + 
-        sizeof(MessageType) + 
+    EXPECT_GT(written_bytes,
+        input_frame.initialization_vector.size() +
+        sizeof(MessageType) +
         sizeof(uint32_t) + // source_id
         sizeof(uint32_t) + // filename_length
         sizeof(uint64_t)   // payload_size
@@ -139,13 +139,12 @@ TEST_F(CodecTest, LargePayloadSerializeDeserialize) {
     std::size_t written_bytes = codec->serialize(input_frame, buffer);
 
     // Verify written bytes matches expected size
-    std::size_t expected_size = 
-        input_frame.initialization_vector.size() + 
-        sizeof(MessageType) + 
-        sizeof(uint32_t) + // source_id
-        sizeof(uint32_t) + // filename_length
-        sizeof(uint64_t) + // payload_size
-        input_frame.payload_size;
+    std::size_t expected_size =
+        input_frame.initialization_vector.size() + // 16 bytes
+        sizeof(MessageType) +                      // 1 byte
+        sizeof(uint32_t) +                         // source_id (4 bytes)
+        sizeof(uint64_t) +                         // payload_size (8 bytes)
+        ((sizeof(uint32_t) + input_frame.payload_size + 15) / 16) * 16; // Padded encrypted size
 
     EXPECT_EQ(written_bytes, expected_size);
 
@@ -171,9 +170,9 @@ TEST_F(CodecTest, LargePayloadSerializeDeserialize) {
     std::string input_data = input_frame.payload_stream->str();
     std::string output_data = output_frame.payload_stream->str();
 
-    EXPECT_EQ(output_data.size(), input_data.size()) 
+    EXPECT_EQ(output_data.size(), input_data.size())
         << "Payload sizes don't match";
-    EXPECT_EQ(output_data, input_data) 
+    EXPECT_EQ(output_data, input_data)
         << "Payload contents don't match";
 }
 
@@ -197,13 +196,15 @@ TEST_F(CodecTest, EmptyPayload) {
     std::stringstream buffer;
     std::size_t written_bytes = codec->serialize(input_frame, buffer);
 
-    // Should write exactly header size
-    std::size_t expected_size = 
-        input_frame.initialization_vector.size() + 
-        sizeof(MessageType) + 
-        sizeof(uint32_t) + // source_id
-        sizeof(uint32_t) + // filename_length
-        sizeof(uint64_t);  // payload_size
+    // Calculate expected size:
+    // Header fields + encrypted filename_length (padded to block size)
+    std::size_t expected_size =
+        input_frame.initialization_vector.size() +  // 16 bytes
+        sizeof(MessageType) +                       // 1 byte
+        sizeof(uint32_t) +                         // source_id (4 bytes)
+        sizeof(uint64_t) +                         // payload_size (8 bytes)
+        16;                                        // Minimal encrypted block size for filename_length
+
     EXPECT_EQ(written_bytes, expected_size);
 
     // Deserialize and verify
@@ -349,8 +350,8 @@ TEST_F(CodecTest, ChannelIntegrationWithPayload) {
     retrieved_frame.payload_stream->seekg(0);
 
     std::string retrieved_data = retrieved_frame.payload_stream->str();
-    EXPECT_EQ(retrieved_data.size(), test_data.size()) 
+    EXPECT_EQ(retrieved_data.size(), test_data.size())
         << "Payload sizes don't match";
-    EXPECT_EQ(retrieved_data, test_data) 
+    EXPECT_EQ(retrieved_data, test_data)
         << "Payload contents don't match";
 }
