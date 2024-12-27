@@ -2,57 +2,64 @@
 #include <openssl/evp.h>
 #include <openssl/aes.h>
 #include <openssl/err.h>
-#include <openssl/rand.h>
+#include <openssl/rand.h>  // Added for RAND_bytes
 #include <array>
 #include <stdexcept>
 #include <boost/log/trivial.hpp>
 
 namespace dfs::crypto {
 
+// Wrapper for OpenSSL cipher context
 struct CipherContext {
     EVP_CIPHER_CTX* ctx = nullptr;
-
+    
     CipherContext() {
         ctx = EVP_CIPHER_CTX_new();
         if (!ctx) {
             throw std::runtime_error("Failed to create cipher context");
         }
     }
-
+    
     ~CipherContext() {
         if (ctx) {
             EVP_CIPHER_CTX_free(ctx);
         }
     }
-
+    
     EVP_CIPHER_CTX* get() { return ctx; }
 };
 
+// Initialize cryptographic context and OpenSSL algorithms
 CryptoStream::CryptoStream() {
     BOOST_LOG_TRIVIAL(info) << "Initializing CryptoStream";
-    OpenSSL_add_all_algorithms();
-    context_ = std::make_unique<CipherContext>();
+    OpenSSL_add_all_algorithms();  // Required for OpenSSL operation
+    context_ = std::make_unique<CipherContext>();  // Create cipher context for AES operations
     BOOST_LOG_TRIVIAL(debug) << "CryptoStream initialization complete";
 }
 
+// Cleanup OpenSSL resources
 CryptoStream::~CryptoStream() {
     BOOST_LOG_TRIVIAL(debug) << "Cleaning up CryptoStream resources";
-    EVP_cleanup();
+    EVP_cleanup();  // Clean up OpenSSL algorithms to prevent memory leaks
 }
 
+// Initialize with encryption key and initialization vector (IV)
 void CryptoStream::initialize(const std::vector<uint8_t>& key, const std::vector<uint8_t>& iv) {
     BOOST_LOG_TRIVIAL(info) << "Initializing crypto parameters";
-
+    
+    // Validate key size (256 bits for AES-256)
     if (key.size() != KEY_SIZE) {
         BOOST_LOG_TRIVIAL(error) << "Invalid key size: " << key.size() << " bytes (expected " << KEY_SIZE << " bytes)";
         throw InitializationError("Invalid key size");
     }
-
+    
+    // Validate IV size (128 bits for CBC mode)
     if (iv.size() != IV_SIZE) {
         BOOST_LOG_TRIVIAL(error) << "Invalid IV size: " << iv.size() << " bytes (expected " << IV_SIZE << " bytes)";
         throw InitializationError("Invalid IV size");
     }
 
+    // Store key and IV for crypto operations
     key_ = key;
     iv_ = iv;
     is_initialized_ = true;
@@ -61,131 +68,99 @@ void CryptoStream::initialize(const std::vector<uint8_t>& key, const std::vector
 
 void CryptoStream::initializeCipher(bool encrypting) {
     BOOST_LOG_TRIVIAL(debug) << "Initializing cipher for " << (encrypting ? "encryption" : "decryption");
-
+    
     if (!is_initialized_) {
         BOOST_LOG_TRIVIAL(error) << "Attempted to use uninitialized CryptoStream";
         throw InitializationError("CryptoStream not initialized");
     }
 
-    // Create a new context for clean state
-    context_ = std::make_unique<CipherContext>();
-
-    // Initialize the cipher operation
     if (encrypting) {
-        if (!EVP_EncryptInit_ex(context_->get(), EVP_aes_256_cbc(), nullptr, key_.data(), iv_.data())) {
-            BOOST_LOG_TRIVIAL(error) << "Failed to initialize encryption";
+        if (!EVP_EncryptInit_ex(context_->get(), EVP_aes_256_cbc(), nullptr, 
+                            key_.data(), iv_.data())) {
+            BOOST_LOG_TRIVIAL(error) << "Failed to initialize encryption context";
             throw EncryptionError("Failed to initialize encryption");
         }
     } else {
-        if (!EVP_DecryptInit_ex(context_->get(), EVP_aes_256_cbc(), nullptr, key_.data(), iv_.data())) {
-            BOOST_LOG_TRIVIAL(error) << "Failed to initialize decryption";
+        if (!EVP_DecryptInit_ex(context_->get(), EVP_aes_256_cbc(), nullptr, 
+                            key_.data(), iv_.data())) {
+            BOOST_LOG_TRIVIAL(error) << "Failed to initialize decryption context";
             throw DecryptionError("Failed to initialize decryption");
         }
     }
-
-    // Enable padding
-    EVP_CIPHER_CTX_set_padding(context_->get(), 1);
+    
     BOOST_LOG_TRIVIAL(debug) << "Cipher initialization complete";
 }
 
+// Process input stream through the cipher (encryption or decryption)
 void CryptoStream::processStream(std::istream& input, std::ostream& output, bool encrypting) {
     BOOST_LOG_TRIVIAL(info) << "Starting stream " << (encrypting ? "encryption" : "decryption");
-
+    
+    // Verify stream states before processing
     if (!input.good() || !output.good()) {
         BOOST_LOG_TRIVIAL(error) << "Invalid stream state detected";
         throw std::runtime_error("Invalid stream state");
     }
 
-    try {
-        // Initialize cipher
-        initializeCipher(encrypting);
+    // Initialize cipher context for either encryption or decryption
+    initializeCipher(encrypting);
+    
+    // Process input stream in blocks with larger buffer for efficiency
+    static constexpr size_t BUFFER_SIZE = 8192; // 8KB buffer for better performance
+    std::array<uint8_t, BUFFER_SIZE> inbuf;
+    std::array<uint8_t, BUFFER_SIZE + EVP_MAX_BLOCK_LENGTH> outbuf;
+    int outlen;
 
-        // Save input stream position and get total size
-        auto initial_pos = input.tellg();
-        input.seekg(0, std::ios::end);
-        auto total_size = input.tellg() - initial_pos;
-        input.seekg(initial_pos);
-
-        // Use buffer size that's a multiple of AES block size (16 bytes)
-        static constexpr size_t BUFFER_SIZE = 16 * 512; // 8KB buffer
-        std::vector<uint8_t> inbuf(BUFFER_SIZE);
-        std::vector<uint8_t> outbuf(BUFFER_SIZE + EVP_MAX_BLOCK_LENGTH);
-        int outlen = 0;
-
-        // Process all complete blocks
-        while (total_size > 0) {
-            auto block_size = std::min(static_cast<std::streamsize>(BUFFER_SIZE), total_size);
-            input.read(reinterpret_cast<char*>(inbuf.data()), block_size);
-
-            if (!input.good() && !input.eof()) {
+    while (!input.eof()) {
+        // Read a block of data
+        input.read(reinterpret_cast<char*>(inbuf.data()), inbuf.size());
+        auto bytes_read = input.gcount();
+        
+        if (bytes_read <= 0) {
+            if (!input.eof()) {
                 throw std::runtime_error("Failed to read from input stream");
             }
-
-            // Process block
-            if (encrypting) {
-                if (!EVP_EncryptUpdate(context_->get(), outbuf.data(), &outlen,
-                                     inbuf.data(), static_cast<int>(block_size))) {
-                    unsigned long err = ERR_get_error();
-                    char err_msg[256];
-                    ERR_error_string_n(err, err_msg, sizeof(err_msg));
-                    BOOST_LOG_TRIVIAL(error) << "Encryption update failed: " << err_msg;
-                    throw EncryptionError("Failed to encrypt data block");
-                }
-            } else {
-                if (!EVP_DecryptUpdate(context_->get(), outbuf.data(), &outlen,
-                                     inbuf.data(), static_cast<int>(block_size))) {
-                    unsigned long err = ERR_get_error();
-                    char err_msg[256];
-                    ERR_error_string_n(err, err_msg, sizeof(err_msg));
-                    BOOST_LOG_TRIVIAL(error) << "Decryption update failed: " << err_msg;
-                    throw DecryptionError("Failed to decrypt data block");
-                }
-            }
-
-            if (outlen > 0) {
-                output.write(reinterpret_cast<char*>(outbuf.data()), outlen);
-                if (!output.good()) {
-                    throw std::runtime_error("Failed to write to output stream");
-                }
-            }
-
-            total_size -= block_size;
+            break;
         }
 
-        // Handle final block with padding
-        int final_len = 0;
+        // Process the block
         if (encrypting) {
-            if (!EVP_EncryptFinal_ex(context_->get(), outbuf.data(), &final_len)) {
-                unsigned long err = ERR_get_error();
-                char err_msg[256];
-                ERR_error_string_n(err, err_msg, sizeof(err_msg));
-                BOOST_LOG_TRIVIAL(error) << "Encryption finalization failed: " << err_msg;
-                throw EncryptionError("Failed to finalize encryption");
+            if (!EVP_EncryptUpdate(context_->get(), outbuf.data(), &outlen,
+                                 inbuf.data(), static_cast<int>(bytes_read))) {
+                throw EncryptionError("Failed to encrypt data block");
             }
         } else {
-            if (!EVP_DecryptFinal_ex(context_->get(), outbuf.data(), &final_len)) {
-                unsigned long err = ERR_get_error();
-                char err_msg[256];
-                ERR_error_string_n(err, err_msg, sizeof(err_msg));
-                BOOST_LOG_TRIVIAL(error) << "Decryption finalization failed: " << err_msg;
-                throw DecryptionError("Failed to finalize decryption");
+            if (!EVP_DecryptUpdate(context_->get(), outbuf.data(), &outlen,
+                                 inbuf.data(), static_cast<int>(bytes_read))) {
+                throw DecryptionError("Failed to decrypt data block");
             }
         }
 
-        // Write final block if any
-        if (final_len > 0) {
-            output.write(reinterpret_cast<char*>(outbuf.data()), final_len);
+        // Write processed block
+        if (outlen > 0) {
+            output.write(reinterpret_cast<char*>(outbuf.data()), outlen);
             if (!output.good()) {
-                throw std::runtime_error("Failed to write final block");
+                throw std::runtime_error("Failed to write to output stream");
             }
         }
+    }
 
-        // Ensure all data is written
-        output.flush();
+    // Finalize the operation
+    if (encrypting) {
+        if (!EVP_EncryptFinal_ex(context_->get(), outbuf.data(), &outlen)) {
+            throw EncryptionError("Failed to finalize encryption");
+        }
+    } else {
+        if (!EVP_DecryptFinal_ex(context_->get(), outbuf.data(), &outlen)) {
+            throw DecryptionError("Failed to finalize decryption");
+        }
+    }
 
-    } catch (const std::exception& e) {
-        BOOST_LOG_TRIVIAL(error) << "Error during stream processing: " << e.what();
-        throw;
+    // Write final block if any
+    if (outlen > 0) {
+        output.write(reinterpret_cast<char*>(outbuf.data()), outlen);
+        if (!output.good()) {
+            throw std::runtime_error("Failed to write final block");
+        }
     }
 }
 
@@ -199,33 +174,39 @@ std::ostream& CryptoStream::decrypt(std::istream& input, std::ostream& output) {
     return output;
 }
 
+// Stream operator for outputting processed data (encryption or decryption)
 CryptoStream& CryptoStream::operator>>(std::ostream& output) {
-    BOOST_LOG_TRIVIAL(debug) << "Stream operator>> called in " 
-                            << (mode_ == Mode::Encrypt ? "encryption" : "decryption") << " mode";
-
+    BOOST_LOG_TRIVIAL(debug) << "Stream operator>> called in " << (mode_ == Mode::Encrypt ? "encryption" : "decryption") << " mode";
+    
+    // Ensure we have an input stream to process
     if (!pending_input_) {
         BOOST_LOG_TRIVIAL(error) << "Stream operator>> called without prior input stream";
         throw std::runtime_error("No pending input stream. Use operator<< first.");
     }
-
+    
+    // Process the stored input stream based on current mode (encrypt or decrypt)
     if (mode_ == Mode::Encrypt) {
         encrypt(*pending_input_, output);
     } else {
         decrypt(*pending_input_, output);
     }
-
+    
+    // Clear the stored stream after processing to prevent accidental reuse
     pending_input_ = nullptr;
     BOOST_LOG_TRIVIAL(debug) << "Stream processing complete";
-
+    
     return *this;
 }
 
+// Stream operator for accepting input data
 CryptoStream& CryptoStream::operator<<(std::istream& input) {
     BOOST_LOG_TRIVIAL(debug) << "Stream operator<< called, storing input stream for processing";
+    // Store input stream for later processing by operator>>
     pending_input_ = &input;
     return *this;
 }
 
+// Add the generate_IV function before the end of namespace
 std::array<uint8_t, CryptoStream::IV_SIZE> CryptoStream::generate_IV() const {
     BOOST_LOG_TRIVIAL(debug) << "Generating initialization vector";
 

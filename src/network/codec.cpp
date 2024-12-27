@@ -2,7 +2,7 @@
 #include <boost/log/trivial.hpp>
 #include <sstream>
 #include <stdexcept>
-#include "crypto/crypto_stream.hpp"
+#include "crypto/crypto_stream.hpp"  
 
 namespace dfs {
 namespace network {
@@ -21,7 +21,6 @@ std::size_t Codec::serialize(const MessageFrame& frame, std::ostream& output) {
     std::size_t total_bytes = 0;
 
     try {
-        // Write header fields (unencrypted)
         // Write initialization vector
         write_bytes(output, frame.initialization_vector.data(), frame.initialization_vector.size());
         total_bytes += frame.initialization_vector.size();
@@ -36,37 +35,62 @@ std::size_t Codec::serialize(const MessageFrame& frame, std::ostream& output) {
         write_bytes(output, &network_source_id, sizeof(uint32_t));
         total_bytes += sizeof(uint32_t);
 
-        // Write filename length (network byte order)
-        uint32_t network_filename_length = to_network_order(frame.filename_length);
-        write_bytes(output, &network_filename_length, sizeof(uint32_t));
-        total_bytes += sizeof(uint32_t);
-
         // Write payload size (network byte order)
         uint64_t network_payload_size = to_network_order(frame.payload_size);
         write_bytes(output, &network_payload_size, sizeof(uint64_t));
         total_bytes += sizeof(uint64_t);
 
-        // Process payload if present
+        // Initialize CryptoStream for filename length encryption
+        crypto::CryptoStream filename_crypto;
+        filename_crypto.initialize(key_, std::vector<uint8_t>(frame.initialization_vector.begin(), 
+                                            frame.initialization_vector.end()));
+
+        // Encrypt and write filename length
+        uint32_t network_filename_length = to_network_order(frame.filename_length);
+        std::stringstream filename_length_stream;
+        filename_length_stream.write(reinterpret_cast<const char*>(&network_filename_length), sizeof(uint32_t));
+        filename_length_stream.seekg(0);
+
+        std::stringstream encrypted_filename_length;
+        filename_crypto.encrypt(filename_length_stream, encrypted_filename_length);
+
+        std::string encrypted_length = encrypted_filename_length.str();
+        write_bytes(output, encrypted_length.data(), encrypted_length.size());
+        total_bytes += encrypted_length.size();
+
         if (frame.payload_stream && frame.payload_size > 0) {
-            // Save stream position
-            auto initial_pos = frame.payload_stream->tellg();
+            // Initialize separate CryptoStream for payload encryption
+            crypto::CryptoStream payload_crypto;
+            payload_crypto.initialize(key_, std::vector<uint8_t>(frame.initialization_vector.begin(), 
+                                                frame.initialization_vector.end()));
 
-            // Initialize CryptoStream for encryption
-            crypto::CryptoStream crypto;
-            crypto.initialize(key_, std::vector<uint8_t>(frame.initialization_vector.begin(),
-                                                       frame.initialization_vector.end()));
+            // Reset stream position for reading
+            frame.payload_stream->seekg(0);
 
-            // Create temporary buffer for encrypted data
-            std::stringstream encrypted_buffer;
-            crypto.encrypt(*frame.payload_stream, encrypted_buffer);
+            // Process payload in chunks
+            char buffer[4096];
+            while (frame.payload_stream->good() && !frame.payload_stream->eof()) {
+                frame.payload_stream->read(buffer, sizeof(buffer));
+                std::streamsize bytes_read = frame.payload_stream->gcount();
+                if (bytes_read > 0) {
+                    // Create a temporary stream for the chunk
+                    std::stringstream chunk;
+                    chunk.write(buffer, bytes_read);
+                    chunk.seekg(0);
 
-            // Write encrypted payload
-            std::string encrypted_data = encrypted_buffer.str();
-            write_bytes(output, encrypted_data.data(), encrypted_data.size());
-            total_bytes += encrypted_data.size();
+                    // Create a temporary stream for encrypted chunk
+                    std::stringstream encrypted_chunk;
+                    payload_crypto.encrypt(chunk, encrypted_chunk);
 
-            // Restore stream position
-            frame.payload_stream->seekg(initial_pos);
+                    // Write encrypted chunk to output
+                    std::string encrypted_data = encrypted_chunk.str();
+                    write_bytes(output, encrypted_data.data(), encrypted_data.size());
+                    total_bytes += encrypted_data.size();
+                }
+            }
+
+            // Reset stream position
+            frame.payload_stream->seekg(0);
         }
 
         return total_bytes;
@@ -85,7 +109,6 @@ MessageFrame Codec::deserialize(std::istream& input, Channel& channel) {
     MessageFrame frame;
 
     try {
-        // Read header fields (unencrypted)
         // Read initialization vector
         read_bytes(input, frame.initialization_vector.data(), frame.initialization_vector.size());
 
@@ -94,27 +117,42 @@ MessageFrame Codec::deserialize(std::istream& input, Channel& channel) {
         read_bytes(input, &msg_type, sizeof(uint8_t));
         frame.message_type = static_cast<MessageType>(msg_type);
 
-        // Read source_id (network byte order)
+        // Read source_id from network byte order
         uint32_t network_source_id;
         read_bytes(input, &network_source_id, sizeof(uint32_t));
         frame.source_id = from_network_order(network_source_id);
 
-        // Read filename_length (network byte order)
-        uint32_t network_filename_length;
-        read_bytes(input, &network_filename_length, sizeof(uint32_t));
-        frame.filename_length = from_network_order(network_filename_length);
-
-        // Read payload_size (network byte order)
+        // Read payload_size from network byte order
         uint64_t network_payload_size;
         read_bytes(input, &network_payload_size, sizeof(uint64_t));
         frame.payload_size = from_network_order(network_payload_size);
 
-        // Create payload stream if needed
+        // Initialize CryptoStream for filename length decryption
+        crypto::CryptoStream filename_crypto;
+        filename_crypto.initialize(key_, std::vector<uint8_t>(frame.initialization_vector.begin(),
+                                            frame.initialization_vector.end()));
+
+        // Read and decrypt filename length
+        char filename_length_buffer[sizeof(uint32_t)];
+        read_bytes(input, filename_length_buffer, sizeof(uint32_t));
+
+        std::stringstream encrypted_filename_length;
+        encrypted_filename_length.write(filename_length_buffer, sizeof(uint32_t));
+        encrypted_filename_length.seekg(0);
+
+        std::stringstream decrypted_filename_length;
+        filename_crypto.decrypt(encrypted_filename_length, decrypted_filename_length);
+
+        uint32_t network_filename_length;
+        decrypted_filename_length.read(reinterpret_cast<char*>(&network_filename_length), sizeof(uint32_t));
+        frame.filename_length = from_network_order(network_filename_length);
+
+        // Create empty payload stream if payload expected
         if (frame.payload_size > 0) {
             frame.payload_stream = std::make_shared<std::stringstream>();
         }
 
-        // Add frame to channel before processing payload
+        // Push frame to channel before processing payload
         {
             std::lock_guard<std::mutex> lock(mutex_);
             channel.produce(frame);
@@ -122,22 +160,39 @@ MessageFrame Codec::deserialize(std::istream& input, Channel& channel) {
 
         // Process payload if present
         if (frame.payload_size > 0) {
-            // Initialize CryptoStream for decryption
-            crypto::CryptoStream crypto;
-            crypto.initialize(key_, std::vector<uint8_t>(frame.initialization_vector.begin(),
-                                                       frame.initialization_vector.end()));
+            // Initialize separate CryptoStream for payload decryption
+            crypto::CryptoStream payload_crypto;
+            payload_crypto.initialize(key_, std::vector<uint8_t>(frame.initialization_vector.begin(),
+                                                frame.initialization_vector.end()));
 
-            // Read encrypted payload into temporary buffer
-            std::vector<char> encrypted_buffer(frame.payload_size);
-            read_bytes(input, encrypted_buffer.data(), frame.payload_size);
+            // Process payload in chunks
+            std::size_t remaining = frame.payload_size;
+            char chunk_buffer[4096];  // 4KB chunks for streaming
 
-            // Create stream for encrypted data
-            std::stringstream encrypted_stream;
-            encrypted_stream.write(encrypted_buffer.data(), frame.payload_size);
-            encrypted_stream.seekg(0);
+            while (remaining > 0 && input.good()) {
+                std::size_t chunk_size = std::min(remaining, sizeof(chunk_buffer));
 
-            // Decrypt payload
-            crypto.decrypt(encrypted_stream, *frame.payload_stream);
+                // Read encrypted chunk
+                read_bytes(input, chunk_buffer, chunk_size);
+
+                // Create temporary stream for the encrypted chunk
+                std::stringstream encrypted_chunk;
+                encrypted_chunk.write(chunk_buffer, chunk_size);
+                encrypted_chunk.seekg(0);
+
+                // Create temporary stream for decrypted chunk
+                std::stringstream decrypted_chunk;
+                payload_crypto.decrypt(encrypted_chunk, decrypted_chunk);
+
+                // Write decrypted chunk to payload stream
+                frame.payload_stream->write(decrypted_chunk.str().data(), decrypted_chunk.str().size());
+
+                remaining -= chunk_size;
+            }
+
+            if (remaining > 0) {
+                throw std::runtime_error("Failed to read complete payload");
+            }
 
             // Reset stream position
             frame.payload_stream->seekg(0);
