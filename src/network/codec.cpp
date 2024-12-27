@@ -37,9 +37,8 @@ std::size_t Codec::serialize(const MessageFrame& frame, std::ostream& output) {
     if (frame.payload_stream && frame.payload_size > 0) {
       // Initialize CryptoStream and encrypt payload directly to output
       crypto::CryptoStream crypto;
-      crypto.initialize(encryption_key_, 
-              std::vector<uint8_t>(frame.initialization_vector.begin(), 
-                        frame.initialization_vector.end()));
+      crypto.initialize(std::vector<uint8_t>(frame.initialization_vector.begin(), 
+                               frame.initialization_vector.end()));
 
       // convert filename_length to network byte order
       uint32_t network_filename_length = to_network_order(frame.filename_length);
@@ -65,12 +64,12 @@ std::size_t Codec::serialize(const MessageFrame& frame, std::ostream& output) {
       // Reset stream position
       frame.payload_stream->seekg(0);
     } else {
-      uint64_t network_payload_size = 0;
-      write_bytes(output, &network_payload_size, sizeof(uint64_t));
-      total_bytes += sizeof(uint64_t);
+      uint32_t network_filename_length = 0;
+      write_bytes(output, &network_filename_length, sizeof(uint32_t));
+      total_bytes += sizeof(uint32_t);
     }
 
-      return total_bytes;
+    return total_bytes;
   }
   catch (const std::exception& e) {
     BOOST_LOG_TRIVIAL(error) << "Serialization error: " << e.what();

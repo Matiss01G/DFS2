@@ -1,0 +1,68 @@
+-- Configuring done (0.1s)
+-- Generating done (0.1s)
+-- Build files have been written to: /home/runner/StreamCryptoDFS/build
+[  9%] Built target dfs_crypto
+[ 19%] Built target dfs_store
+[ 33%] Built target dfs_network
+[ 42%] Built target crypto_tests
+[ 52%] Built target store_tests
+[ 66%] Built target network_tests
+[ 71%] Building CXX object CMakeFiles/codec_tests.dir/src/tests/codec_test.cpp.o
+/home/runner/StreamCryptoDFS/src/tests/codec_test.cpp: In member function ‘virtual void CodecTest_BasicSerializeDeserialize_Test::TestBody()’:
+/home/runner/StreamCryptoDFS/src/tests/codec_test.cpp:55:50: error: no matching function for call to ‘dfs::network::Codec::deserialize(std::stringstream&, dfs::network::Channel&)’
+   55 |     MessageFrame output_frame = codec.deserialize(buffer, channel);
+      |                                 ~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~
+In file included from /home/runner/StreamCryptoDFS/src/tests/codec_test.cpp:4:
+/home/runner/StreamCryptoDFS/include/network/codec.hpp:20:17: note: candidate: ‘std::size_t dfs::network::Codec::deserialize(dfs::network::MessageFrame&, std::istream&, dfs::network::Channel&)’
+   20 |     std::size_t deserialize(MessageFrame& frame, std::istream& input, Channel& channel);
+      |                 ^~~~~~~~~~~
+/home/runner/StreamCryptoDFS/include/network/codec.hpp:20:17: note:   candidate expects 3 arguments, 2 provided
+/home/runner/StreamCryptoDFS/src/tests/codec_test.cpp: In member function ‘virtual void CodecTest_LargePayloadSerializeDeserialize_Test::TestBody()’:
+/home/runner/StreamCryptoDFS/src/tests/codec_test.cpp:139:50: error: no matching function for call to ‘dfs::network::Codec::deserialize(std::stringstream&, dfs::network::Channel&)’
+  139 |     MessageFrame output_frame = codec.deserialize(buffer, channel);
+      |                                 ~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~
+/home/runner/StreamCryptoDFS/include/network/codec.hpp:20:17: note: candidate: ‘std::size_t dfs::network::Codec::deserialize(dfs::network::MessageFrame&, std::istream&, dfs::network::Channel&)’
+   20 |     std::size_t deserialize(MessageFrame& frame, std::istream& input, Channel& channel);
+      |                 ^~~~~~~~~~~
+/home/runner/StreamCryptoDFS/include/network/codec.hpp:20:17: note:   candidate expects 3 arguments, 2 provided
+/home/runner/StreamCryptoDFS/src/tests/codec_test.cpp: In member function ‘virtual void CodecTest_EmptyPayload_Test::TestBody()’:
+/home/runner/StreamCryptoDFS/src/tests/codec_test.cpp:196:50: error: no matching function for call to ‘dfs::network::Codec::deserialize(std::stringstream&, dfs::network::Channel&)’
+  196 |     MessageFrame output_frame = codec.deserialize(buffer, channel);
+      |                                 ~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~
+/home/runner/StreamCryptoDFS/include/network/codec.hpp:20:17: note: candidate: ‘std::size_t dfs::network::Codec::deserialize(dfs::network::MessageFrame&, std::istream&, dfs::network::Channel&)’
+   20 |     std::size_t deserialize(MessageFrame& frame, std::istream& input, Channel& channel);
+      |                 ^~~~~~~~~~~
+/home/runner/StreamCryptoDFS/include/network/codec.hpp:20:17: note:   candidate expects 3 arguments, 2 provided
+In file included from /nix/store/ikmzrr3a8gd4jx31lkdhx7bk045j16fi-gtest-1.14.0-dev/include/gtest/gtest-printers.h:122,
+                 from /nix/store/ikmzrr3a8gd4jx31lkdhx7bk045j16fi-gtest-1.14.0-dev/include/gtest/gtest-matchers.h:49,
+                 from /nix/store/ikmzrr3a8gd4jx31lkdhx7bk045j16fi-gtest-1.14.0-dev/include/gtest/internal/gtest-death-test-internal.h:47,
+                 from /nix/store/ikmzrr3a8gd4jx31lkdhx7bk045j16fi-gtest-1.14.0-dev/include/gtest/gtest-death-test.h:43,
+                 from /nix/store/ikmzrr3a8gd4jx31lkdhx7bk045j16fi-gtest-1.14.0-dev/include/gtest/gtest.h:65,
+                 from /home/runner/StreamCryptoDFS/src/tests/codec_test.cpp:1:
+/home/runner/StreamCryptoDFS/src/tests/codec_test.cpp: In member function ‘virtual void CodecTest_ErrorHandling_Test::TestBody()’:
+/home/runner/StreamCryptoDFS/src/tests/codec_test.cpp:222:35: error: no matching function for call to ‘dfs::network::Codec::deserialize(std::stringstream&, dfs::network::Channel&)’
+  222 |     EXPECT_THROW(codec.deserialize(bad_stream, channel), std::runtime_error);
+      |                  ~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~
+/home/runner/StreamCryptoDFS/include/network/codec.hpp:20:17: note: candidate: ‘std::size_t dfs::network::Codec::deserialize(dfs::network::MessageFrame&, std::istream&, dfs::network::Channel&)’
+   20 |     std::size_t deserialize(MessageFrame& frame, std::istream& input, Channel& channel);
+      |                 ^~~~~~~~~~~
+/home/runner/StreamCryptoDFS/include/network/codec.hpp:20:17: note:   candidate expects 3 arguments, 2 provided
+/home/runner/StreamCryptoDFS/src/tests/codec_test.cpp: In member function ‘virtual void CodecTest_ChannelIntegration_Test::TestBody()’:
+/home/runner/StreamCryptoDFS/src/tests/codec_test.cpp:251:50: error: no matching function for call to ‘dfs::network::Codec::deserialize(std::stringstream&, dfs::network::Channel&)’
+  251 |     MessageFrame output_frame = codec.deserialize(buffer, channel);
+      |                                 ~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~
+/home/runner/StreamCryptoDFS/include/network/codec.hpp:20:17: note: candidate: ‘std::size_t dfs::network::Codec::deserialize(dfs::network::MessageFrame&, std::istream&, dfs::network::Channel&)’
+   20 |     std::size_t deserialize(MessageFrame& frame, std::istream& input, Channel& channel);
+      |                 ^~~~~~~~~~~
+/home/runner/StreamCryptoDFS/include/network/codec.hpp:20:17: note:   candidate expects 3 arguments, 2 provided
+/home/runner/StreamCryptoDFS/src/tests/codec_test.cpp: In member function ‘virtual void CodecTest_ChannelIntegrationWithPayload_Test::TestBody()’:
+/home/runner/StreamCryptoDFS/src/tests/codec_test.cpp:309:50: error: no matching function for call to ‘dfs::network::Codec::deserialize(std::stringstream&, dfs::network::Channel&)’
+  309 |     MessageFrame output_frame = codec.deserialize(buffer, channel);
+      |                                 ~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~
+/home/runner/StreamCryptoDFS/include/network/codec.hpp:20:17: note: candidate: ‘std::size_t dfs::network::Codec::deserialize(dfs::network::MessageFrame&, std::istream&, dfs::network::Channel&)’
+   20 |     std::size_t deserialize(MessageFrame& frame, std::istream& input, Channel& channel);
+      |                 ^~~~~~~~~~~
+/home/runner/StreamCryptoDFS/include/network/codec.hpp:20:17: note:   candidate expects 3 arguments, 2 provided
+make[2]: *** [CMakeFiles/codec_tests.dir/build.make:76: CMakeFiles/codec_tests.dir/src/tests/codec_test.cpp.o] Error 1
+make[1]: *** [CMakeFiles/Makefile2:257: CMakeFiles/codec_tests.dir/all] Error 2
+make: *** [Makefile:146: all] Error 2
