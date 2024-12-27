@@ -4,26 +4,19 @@
 #include <cstdint>
 #include <iostream>
 #include <mutex>
-#include <vector>
 #include <boost/endian/conversion.hpp>
 #include "network/message_frame.hpp"
 #include "network/channel.hpp"
-#include "crypto/crypto_stream.hpp"
 
 namespace dfs {
 namespace network {
 
 class Codec {
 public:
-    // Sets the encryption key to be used for payload encryption/decryption
-    void set_encryption_key(const std::vector<uint8_t>& key);
-
     // Serializes a message frame to an output stream
-    // The payload (if any) is encrypted using the provided encryption key
     std::size_t serialize(const MessageFrame& frame, std::ostream& output);
 
     // Deserializes a message frame from an input stream
-    // The payload (if any) is decrypted using the provided encryption key
     MessageFrame deserialize(std::istream& input, Channel& channel);
 
 private:
@@ -52,7 +45,6 @@ private:
     }
 
     std::mutex mutex_;  // Mutex for thread-safe channel operations
-    std::vector<uint8_t> encryption_key_;  // Encryption key for payload encryption/decryption
 };
 
 } // namespace network

@@ -1610,8 +1610,6 @@ CMakeFiles/codec_tests.dir/src/network/codec.cpp.o: /home/runner/StreamCryptoDFS
   /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/version.hpp
 
 CMakeFiles/codec_tests.dir/src/tests/codec_test.cpp.o: /home/runner/StreamCryptoDFS/src/tests/codec_test.cpp \
-  /home/runner/StreamCryptoDFS/include/crypto/crypto_error.hpp \
-  /home/runner/StreamCryptoDFS/include/crypto/crypto_stream.hpp \
   /home/runner/StreamCryptoDFS/include/network/channel.hpp \
   /home/runner/StreamCryptoDFS/include/network/codec.hpp \
   /home/runner/StreamCryptoDFS/include/network/message_frame.hpp \

@@ -45,9 +45,6 @@ public:
     // Generate a cryptographically secure initialization vector
     std::array<uint8_t, IV_SIZE> generate_IV() const;
 
-    // Generate a cryptographically secure key
-    std::vector<uint8_t> generate_key() const;
-
 private:
     std::vector<uint8_t> key_;
     std::vector<uint8_t> iv_;
