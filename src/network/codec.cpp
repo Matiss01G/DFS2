@@ -19,35 +19,49 @@ std::size_t Codec::serialize(const MessageFrame& frame, std::ostream& output) {
   std::size_t total_bytes = 0;
 
   try {
-    // Write header fields in network byte order
+    // Write IV to socket
     write_bytes(output, frame.initialization_vector.data(), frame.initialization_vector.size());
     total_bytes += frame.initialization_vector.size();
 
+    // write message type to socket
     uint8_t msg_type = static_cast<uint8_t>(frame.message_type);
     write_bytes(output, &msg_type, sizeof(uint8_t));
     total_bytes += sizeof(uint8_t);
 
+    // write source ID to socket
     uint32_t network_source_id = to_network_order(frame.source_id);
     write_bytes(output, &network_source_id, sizeof(uint32_t));
     total_bytes += sizeof(uint32_t);
 
-    uint32_t network_filename_length = to_network_order(frame.filename_length);
-    write_bytes(output, &network_filename_length, sizeof(uint32_t));
-    total_bytes += sizeof(uint32_t);
+    // Write payload size to socket
+    uint64_t network_payload_size = to_network_order(frame.payload_size);
+    write_bytes(output, &network_payload_size, sizeof(uint64_t));
+    total_bytes += sizeof(uint64_t);
 
     if (frame.payload_stream && frame.payload_size > 0) {
-      // Write payload size
-      uint64_t network_payload_size = to_network_order(frame.payload_size);
-      write_bytes(output, &network_payload_size, sizeof(uint64_t));
-      total_bytes += sizeof(uint64_t);
-
       // Initialize CryptoStream and encrypt payload directly to output
       crypto::CryptoStream crypto;
       crypto.initialize(encryption_key_, 
               std::vector<uint8_t>(frame.initialization_vector.begin(), 
                         frame.initialization_vector.end()));
 
-      // Stream directly from input to encrypted output
+      // convert filename_length to network byte order
+      uint32_t network_filename_length = to_network_order(frame.filename_length);
+
+      // Write to temporary stream for encryption
+      std::stringstream filename_length_stream;
+      write_bytes(filename_length_stream, &network_filename_length, sizeof(uint32_t));
+
+      // Encrypt and write to output 
+      std::stringstream encrypted_filename_length;
+      crypto.encrypt(filename_length_stream, encrypted_filename_length);
+
+      // Write the encrypted filename_length to output stream
+      std::string encrypted_data = encrypted_filename_length.str();
+      write_bytes(output, encrypted_data.data(), encrypted_data.size());
+      total_bytes += encrypted_data.size();
+
+      // Encrypt payload using the same CryptoStream instance
       frame.payload_stream->seekg(0);
       crypto.encrypt(*frame.payload_stream, output);
       total_bytes += frame.payload_size;
