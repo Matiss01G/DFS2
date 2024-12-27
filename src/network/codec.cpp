@@ -38,7 +38,7 @@ std::size_t Codec::serialize(const MessageFrame& frame, std::ostream& output) {
       // Initialize CryptoStream and encrypt payload directly to output
       crypto::CryptoStream crypto;
       crypto.initialize(std::vector<uint8_t>(frame.initialization_vector.begin(), 
-                               frame.initialization_vector.end()));
+                                frame.initialization_vector.end()));
 
       // convert filename_length to network byte order
       uint32_t network_filename_length = to_network_order(frame.filename_length);
@@ -77,11 +77,12 @@ std::size_t Codec::serialize(const MessageFrame& frame, std::ostream& output) {
   }
 }
 
-std::size_t Codec::deserialize(MessageFrame& frame, std::istream& input, Channel& channel) {
+std::size_t Codec::deserialize(std::istream& input, Channel& channel) {
   if (!input.good()) {
     throw std::runtime_error("Invalid input stream");
   }
 
+  MessageFrame frame;
   std::size_t total_bytes = 0;
 
   try {
@@ -134,20 +135,10 @@ std::size_t Codec::deserialize(MessageFrame& frame, std::istream& input, Channel
       frame.payload_stream = payload_stream;
     }
 
-    // Create a copy of the frame for the channel
-    MessageFrame channel_frame = frame;
-    if (frame.payload_stream) {
-      auto channel_payload = std::make_shared<std::stringstream>();
-      *channel_payload << frame.payload_stream->rdbuf();
-      channel_frame.payload_stream = channel_payload;
-      // Reset original stream position
-      frame.payload_stream->seekg(0, std::ios::beg);
-    }
-
     // Thread-safe channel push with proper stream handling
     {
       std::lock_guard<std::mutex> lock(mutex_);
-      channel.produce(channel_frame);
+      channel.produce(frame);
     }
 
     return total_bytes;
