@@ -165,11 +165,10 @@ std::size_t Codec::deserialize(std::istream& input, MessageFrame& frame, Channel
         decrypted_length.read(reinterpret_cast<char*>(&network_filename_length), sizeof(uint32_t));
         frame.filename_length = from_network_order(network_filename_length);
 
-        // Push MessageFrame to channel before payload processing
-        channel.produce(frame);
-
         // Initialize payload stream
         frame.payload_stream = std::make_shared<std::stringstream>();
+
+        channel.produce(frame);
 
         // Process payload data using the same crypto instance
         if (frame.payload_size > 0) {
