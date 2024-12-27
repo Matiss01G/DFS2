@@ -26,46 +26,42 @@ std::size_t Codec::serialize(const MessageFrame& frame, std::ostream& output) {
     std::size_t total_bytes = 0;
 
     try {
-        // Write initialization vector
+        // Write header fields in network byte order
         write_bytes(output, frame.initialization_vector.data(), frame.initialization_vector.size());
         total_bytes += frame.initialization_vector.size();
 
-        // Write message type
         uint8_t msg_type = static_cast<uint8_t>(frame.message_type);
         write_bytes(output, &msg_type, sizeof(uint8_t));
         total_bytes += sizeof(uint8_t);
 
-        // Write source_id in network byte order
         uint32_t network_source_id = to_network_order(frame.source_id);
         write_bytes(output, &network_source_id, sizeof(uint32_t));
         total_bytes += sizeof(uint32_t);
 
-        // Write filename_length in network byte order
         uint32_t network_filename_length = to_network_order(frame.filename_length);
         write_bytes(output, &network_filename_length, sizeof(uint32_t));
         total_bytes += sizeof(uint32_t);
 
-        if (frame.payload_size > 0 && frame.payload_stream) {
-            // Write the payload size first
+        if (frame.payload_stream && frame.payload_size > 0) {
+            // Write payload size
             uint64_t network_payload_size = to_network_order(frame.payload_size);
             write_bytes(output, &network_payload_size, sizeof(uint64_t));
             total_bytes += sizeof(uint64_t);
 
-            // Initialize crypto for encryption using the frame's IV
+            // Initialize CryptoStream and encrypt payload directly to output
             crypto::CryptoStream crypto;
-            std::vector<uint8_t> iv(frame.initialization_vector.begin(), 
-                                  frame.initialization_vector.end());
-            crypto.initialize(encryption_key_, iv);
+            crypto.initialize(encryption_key_, 
+                            std::vector<uint8_t>(frame.initialization_vector.begin(), 
+                                                frame.initialization_vector.end()));
 
-            // Encrypt payload stream directly to output
-            frame.payload_stream->seekg(0, std::ios::beg);
+            // Stream directly from input to encrypted output
+            frame.payload_stream->seekg(0);
             crypto.encrypt(*frame.payload_stream, output);
             total_bytes += frame.payload_size;
 
             // Reset stream position
-            frame.payload_stream->seekg(0, std::ios::beg);
+            frame.payload_stream->seekg(0);
         } else {
-            // Write zero payload size if no payload
             uint64_t network_payload_size = 0;
             write_bytes(output, &network_payload_size, sizeof(uint64_t));
             total_bytes += sizeof(uint64_t);
@@ -90,60 +86,42 @@ MessageFrame Codec::deserialize(std::istream& input, Channel& channel) {
 
     MessageFrame frame;
     try {
-        // Read initialization vector
+        // Read header fields
         read_bytes(input, frame.initialization_vector.data(), frame.initialization_vector.size());
 
-        // Read message type
         uint8_t msg_type;
         read_bytes(input, &msg_type, sizeof(uint8_t));
         frame.message_type = static_cast<MessageType>(msg_type);
 
-        // Read and convert source_id from network byte order
         uint32_t network_source_id;
         read_bytes(input, &network_source_id, sizeof(uint32_t));
         frame.source_id = from_network_order(network_source_id);
 
-        // Read and convert filename_length from network byte order
         uint32_t network_filename_length;
         read_bytes(input, &network_filename_length, sizeof(uint32_t));
         frame.filename_length = from_network_order(network_filename_length);
 
-        // Read and convert payload_size from network byte order
         uint64_t network_payload_size;
         read_bytes(input, &network_payload_size, sizeof(uint64_t));
         frame.payload_size = from_network_order(network_payload_size);
 
-        // If payload exists, decrypt it
         if (frame.payload_size > 0) {
-            // Initialize crypto for decryption using frame's IV
+            // Initialize CryptoStream for decryption
             crypto::CryptoStream crypto;
-            std::vector<uint8_t> iv(frame.initialization_vector.begin(), 
-                                  frame.initialization_vector.end());
-            crypto.initialize(encryption_key_, iv);
+            crypto.initialize(encryption_key_, 
+                            std::vector<uint8_t>(frame.initialization_vector.begin(), 
+                                                frame.initialization_vector.end()));
 
-            // Create a new stream for decrypted data
-            auto decrypted_stream = std::make_shared<std::stringstream>();
-            crypto.decrypt(input, *decrypted_stream);
+            // Create a shared stream for the decrypted data
+            frame.payload_stream = std::make_shared<std::stringstream>();
 
-            // Set decrypted stream as frame's payload
-            decrypted_stream->seekg(0);
-            frame.payload_stream = decrypted_stream;
+            // Decrypt input directly to the payload stream
+            crypto.decrypt(input, *frame.payload_stream);
+            frame.payload_stream->seekg(0);
 
-            // Create a copy of the frame for the channel
-            MessageFrame channel_frame = frame;
-            auto channel_payload = std::make_shared<std::stringstream>();
-            *channel_payload << decrypted_stream->rdbuf();
-            channel_frame.payload_stream = channel_payload;
-
-            // Reset stream positions
-            decrypted_stream->seekg(0);
-            channel_payload->seekg(0);
-
-            // Thread-safe channel push
-            {
-                std::lock_guard<std::mutex> lock(mutex_);
-                channel.produce(channel_frame);
-            }
+            // Use same decrypted stream for channel
+            std::lock_guard<std::mutex> lock(mutex_);
+            channel.produce(frame);
         }
 
         return frame;
