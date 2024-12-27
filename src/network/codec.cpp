@@ -117,27 +117,31 @@ std::size_t Codec::serialize(const MessageFrame& frame, std::ostream& output) {
     }
 }
 
-MessageFrame Codec::deserialize(std::istream& input, Channel& channel) {
+std::size_t Codec::deserialize(std::istream& input, MessageFrame& frame, Channel& channel) {
     if (!input.good()) {
         throw std::runtime_error("Invalid input stream");
     }
 
-    MessageFrame frame;
+    std::size_t total_bytes = 0;
 
     try {
         // Read unencrypted header fields
         read_bytes(input, frame.initialization_vector.data(), frame.initialization_vector.size());
+        total_bytes += frame.initialization_vector.size();
 
         uint8_t msg_type;
         read_bytes(input, &msg_type, sizeof(uint8_t));
+        total_bytes += sizeof(uint8_t);
         frame.message_type = static_cast<MessageType>(msg_type);
 
         uint32_t network_source_id;
         read_bytes(input, &network_source_id, sizeof(uint32_t));
+        total_bytes += sizeof(uint32_t);
         frame.source_id = from_network_order(network_source_id);
 
         uint64_t network_payload_size;
         read_bytes(input, &network_payload_size, sizeof(uint64_t));
+        total_bytes += sizeof(uint64_t);
         frame.payload_size = from_network_order(network_payload_size);
 
         // Initialize single crypto stream instance for entire method
@@ -148,6 +152,7 @@ MessageFrame Codec::deserialize(std::istream& input, Channel& channel) {
         const std::size_t block_size = 16;  // AES block size
         std::vector<char> encrypted_buffer(block_size);
         read_bytes(input, encrypted_buffer.data(), block_size);
+        total_bytes += block_size;
 
         std::stringstream encrypted_length;
         encrypted_length.write(encrypted_buffer.data(), block_size);
@@ -174,6 +179,7 @@ MessageFrame Codec::deserialize(std::istream& input, Channel& channel) {
 
                 std::vector<char> encrypted_chunk(padded_size);
                 read_bytes(input, encrypted_chunk.data(), padded_size);
+                total_bytes += padded_size;
 
                 std::stringstream encrypted_stream;
                 encrypted_stream.write(encrypted_chunk.data(), padded_size);
@@ -195,10 +201,11 @@ MessageFrame Codec::deserialize(std::istream& input, Channel& channel) {
             // For empty payloads, read and discard the padding block
             std::vector<char> padding_block(block_size);
             read_bytes(input, padding_block.data(), block_size);
+            total_bytes += block_size;
         }
 
         channel.produce(frame);
-        return frame;
+        return total_bytes;
     }
     catch (const std::exception& e) {
         throw std::runtime_error(std::string("Deserialization failed: ") + e.what());

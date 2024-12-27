@@ -57,16 +57,20 @@ TEST_F(CodecTest, BasicSerializeDeserialize) {
     std::size_t written_bytes = codec->serialize(input_frame, buffer);
 
     // Should write more than header size
-    EXPECT_GT(written_bytes, 
-        input_frame.initialization_vector.size() + 
-        sizeof(MessageType) + 
+    EXPECT_GT(written_bytes,
+        input_frame.initialization_vector.size() +
+        sizeof(MessageType) +
         sizeof(uint32_t) + // source_id
         sizeof(uint32_t) + // filename_length
         sizeof(uint64_t)   // payload_size
     );
 
     // Deserialize and verify
-    MessageFrame output_frame = codec->deserialize(buffer, channel);
+    MessageFrame output_frame;
+    std::size_t bytes_read = codec->deserialize(buffer, output_frame, channel);
+
+    // Verify bytes read matches written bytes
+    EXPECT_EQ(bytes_read, written_bytes);
 
     EXPECT_EQ(output_frame.message_type, input_frame.message_type);
     EXPECT_EQ(output_frame.source_id, input_frame.source_id);
@@ -139,9 +143,9 @@ TEST_F(CodecTest, LargePayloadSerializeDeserialize) {
     std::size_t written_bytes = codec->serialize(input_frame, buffer);
 
     // Verify written bytes matches expected size
-    std::size_t expected_size = 
-        input_frame.initialization_vector.size() + 
-        sizeof(MessageType) + 
+    std::size_t expected_size =
+        input_frame.initialization_vector.size() +
+        sizeof(MessageType) +
         sizeof(uint32_t) + // source_id
         sizeof(uint32_t) + // filename_length
         sizeof(uint64_t) + // payload_size
@@ -150,7 +154,11 @@ TEST_F(CodecTest, LargePayloadSerializeDeserialize) {
     EXPECT_EQ(written_bytes, expected_size);
 
     // Deserialize and verify
-    MessageFrame output_frame = codec->deserialize(buffer, channel);
+    MessageFrame output_frame;
+    std::size_t bytes_read = codec->deserialize(buffer, output_frame, channel);
+
+    // Verify bytes read matches written bytes
+    EXPECT_EQ(bytes_read, written_bytes);
 
     EXPECT_EQ(output_frame.message_type, input_frame.message_type);
     EXPECT_EQ(output_frame.source_id, input_frame.source_id);
@@ -171,9 +179,9 @@ TEST_F(CodecTest, LargePayloadSerializeDeserialize) {
     std::string input_data = input_frame.payload_stream->str();
     std::string output_data = output_frame.payload_stream->str();
 
-    EXPECT_EQ(output_data.size(), input_data.size()) 
+    EXPECT_EQ(output_data.size(), input_data.size())
         << "Payload sizes don't match";
-    EXPECT_EQ(output_data, input_data) 
+    EXPECT_EQ(output_data, input_data)
         << "Payload contents don't match";
 }
 
@@ -198,16 +206,20 @@ TEST_F(CodecTest, EmptyPayload) {
     std::size_t written_bytes = codec->serialize(input_frame, buffer);
 
     // Should write exactly header size
-    std::size_t expected_size = 
-        input_frame.initialization_vector.size() + 
-        sizeof(MessageType) + 
+    std::size_t expected_size =
+        input_frame.initialization_vector.size() +
+        sizeof(MessageType) +
         sizeof(uint32_t) + // source_id
         sizeof(uint32_t) + // filename_length
         sizeof(uint64_t);  // payload_size
     EXPECT_EQ(written_bytes, expected_size);
 
     // Deserialize and verify
-    MessageFrame output_frame = codec->deserialize(buffer, channel);
+    MessageFrame output_frame;
+    std::size_t bytes_read = codec->deserialize(buffer, output_frame, channel);
+
+    // Verify bytes read matches written bytes
+    EXPECT_EQ(bytes_read, written_bytes);
 
     EXPECT_EQ(output_frame.message_type, input_frame.message_type);
     EXPECT_EQ(output_frame.source_id, input_frame.source_id);
@@ -233,7 +245,8 @@ TEST_F(CodecTest, ErrorHandling) {
 
     MessageFrame frame;
     EXPECT_THROW(codec->serialize(frame, bad_stream), std::runtime_error);
-    EXPECT_THROW(codec->deserialize(bad_stream, channel), std::runtime_error);
+    MessageFrame output_frame;
+    EXPECT_THROW(codec->deserialize(bad_stream, output_frame, channel), std::runtime_error);
 }
 
 /**
@@ -262,7 +275,11 @@ TEST_F(CodecTest, ChannelIntegration) {
     EXPECT_TRUE(channel.empty());
 
     // Deserialize should add to channel
-    MessageFrame output_frame = codec->deserialize(buffer, channel);
+    MessageFrame output_frame;
+    std::size_t bytes_read = codec->deserialize(buffer, output_frame, channel);
+
+    // Verify bytes read is non-zero
+    EXPECT_GT(bytes_read, 0);
 
     EXPECT_FALSE(channel.empty());
     EXPECT_EQ(channel.size(), 1);
@@ -320,7 +337,11 @@ TEST_F(CodecTest, ChannelIntegrationWithPayload) {
     EXPECT_TRUE(channel.empty());
 
     // Deserialize should add to channel
-    MessageFrame output_frame = codec->deserialize(buffer, channel);
+    MessageFrame output_frame;
+    std::size_t bytes_read = codec->deserialize(buffer, output_frame, channel);
+
+    // Verify bytes read is non-zero
+    EXPECT_GT(bytes_read, 0);
 
     EXPECT_FALSE(channel.empty());
     EXPECT_EQ(channel.size(), 1);
@@ -349,8 +370,8 @@ TEST_F(CodecTest, ChannelIntegrationWithPayload) {
     retrieved_frame.payload_stream->seekg(0);
 
     std::string retrieved_data = retrieved_frame.payload_stream->str();
-    EXPECT_EQ(retrieved_data.size(), test_data.size()) 
+    EXPECT_EQ(retrieved_data.size(), test_data.size())
         << "Payload sizes don't match";
-    EXPECT_EQ(retrieved_data, test_data) 
+    EXPECT_EQ(retrieved_data, test_data)
         << "Payload contents don't match";
 }
