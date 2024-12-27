@@ -17,7 +17,7 @@ public:
     std::size_t serialize(const MessageFrame& frame, std::ostream& output);
 
     // Deserializes a message frame from an input stream and returns total bytes read
-    std::size_t deserialize(MessageFrame& frame, std::istream& input, Channel& channel);
+    std::size_t deserialize(std::istream& input, Channel& channel);
 
 private:
     // Writes bytes to an output stream
