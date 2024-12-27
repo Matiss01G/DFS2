@@ -16,7 +16,6 @@ std::vector<uint8_t> to_vector(const std::array<uint8_t, 16>& arr) {
 // Calculate padding size for complete blocks
 std::size_t get_padded_size(std::size_t input_size) {
     const std::size_t block_size = 16;  // AES block size
-    // Round up to next block size, PKCS7 padding will be handled by CryptoStream
     return ((input_size + block_size - 1) / block_size) * block_size;
 }
 }  // namespace
@@ -51,32 +50,65 @@ std::size_t Codec::serialize(const MessageFrame& frame, std::ostream& output) {
         write_bytes(output, &network_payload_size, sizeof(uint64_t));
         total_bytes += sizeof(uint64_t);
 
-        // Initialize single CryptoStream instance for all encryption
+        // Initialize single crypto stream instance for entire method
         crypto::CryptoStream crypto;
         crypto.initialize(key_, to_vector(frame.initialization_vector));
 
-        // Prepare complete data buffer for encryption
-        std::stringstream complete_data;
-
-        // Add filename length
+        // Handle filename length
         uint32_t network_filename_length = to_network_order(frame.filename_length);
-        complete_data.write(reinterpret_cast<const char*>(&network_filename_length), sizeof(uint32_t));
+        std::stringstream filename_length_stream;
+        filename_length_stream.write(reinterpret_cast<const char*>(&network_filename_length), sizeof(uint32_t));
+        filename_length_stream.seekg(0);
 
-        // Add payload if present
+        // Encrypt and pad filename length using the same crypto instance
+        std::stringstream encrypted_length;
+        crypto.encrypt(filename_length_stream, encrypted_length);
+        std::string encrypted_length_data = encrypted_length.str();
+
+        const std::size_t block_size = 16;  // AES block size
+        std::size_t padded_size = get_padded_size(encrypted_length_data.size());
+        encrypted_length_data.resize(padded_size, 0);
+        write_bytes(output, encrypted_length_data.data(), padded_size);
+        total_bytes += padded_size;
+
+        // Process payload data if present using the same crypto instance
         if (frame.payload_size > 0 && frame.payload_stream) {
             frame.payload_stream->seekg(0);
-            complete_data << frame.payload_stream->rdbuf();
+            const std::size_t chunk_size = 4096;
+            std::vector<char> buffer(chunk_size);
+            std::size_t remaining = frame.payload_size;
+
+            while (remaining > 0 && frame.payload_stream->good()) {
+                std::size_t current_chunk = std::min(remaining, chunk_size);
+                frame.payload_stream->read(buffer.data(), current_chunk);
+                std::streamsize bytes_read = frame.payload_stream->gcount();
+
+                if (bytes_read > 0) {
+                    std::stringstream chunk;
+                    chunk.write(buffer.data(), bytes_read);
+                    chunk.seekg(0);
+
+                    std::stringstream encrypted_chunk;
+                    crypto.encrypt(chunk, encrypted_chunk);
+                    std::string encrypted_data = encrypted_chunk.str();
+
+                    padded_size = get_padded_size(encrypted_data.size());
+                    encrypted_data.resize(padded_size, 0);
+                    write_bytes(output, encrypted_data.data(), padded_size);
+                    total_bytes += padded_size;
+
+                    remaining -= bytes_read;
+                }
+            }
             frame.payload_stream->seekg(0);
         }
 
-        // Encrypt all data at once (CryptoStream will handle PKCS7 padding)
-        std::stringstream encrypted_stream;
-        crypto.encrypt(complete_data, encrypted_stream);
-
-        // Write encrypted data
-        std::string encrypted_data = encrypted_stream.str();
-        write_bytes(output, encrypted_data.data(), encrypted_data.size());
-        total_bytes += encrypted_data.size();
+        // For empty payloads, write a single padding block
+        if (frame.payload_size == 0) {
+            std::string padding_block(block_size, 0);
+            write_bytes(output, padding_block.data(), block_size);
+            total_bytes += block_size;
+        }
 
         return total_bytes;
     }
@@ -108,44 +140,61 @@ MessageFrame Codec::deserialize(std::istream& input, Channel& channel) {
         read_bytes(input, &network_payload_size, sizeof(uint64_t));
         frame.payload_size = from_network_order(network_payload_size);
 
-        // Initialize CryptoStream for decryption
+        // Initialize single crypto stream instance for entire method
         crypto::CryptoStream crypto;
         crypto.initialize(key_, to_vector(frame.initialization_vector));
 
-        // Calculate total encrypted size
-        std::size_t total_encrypted_size = sizeof(uint32_t);  // Start with filename_length
-        if (frame.payload_size > 0) {
-            total_encrypted_size += frame.payload_size;
-        }
-        std::size_t padded_size = ((total_encrypted_size + 15) / 16) * 16;  // Round up to block size
+        // Read and decrypt filename length using the same crypto instance
+        const std::size_t block_size = 16;  // AES block size
+        std::vector<char> encrypted_buffer(block_size);
+        read_bytes(input, encrypted_buffer.data(), block_size);
 
-        // Read the entire encrypted block
-        std::vector<char> encrypted_data(padded_size);
-        read_bytes(input, encrypted_data.data(), padded_size);
+        std::stringstream encrypted_length;
+        encrypted_length.write(encrypted_buffer.data(), block_size);
+        encrypted_length.seekg(0);
 
-        // Decrypt all data at once
-        std::stringstream encrypted_stream;
-        encrypted_stream.write(encrypted_data.data(), padded_size);
-        encrypted_stream.seekg(0);
+        std::stringstream decrypted_length;
+        crypto.decrypt(encrypted_length, decrypted_length);
 
-        std::stringstream decrypted_stream;
-        crypto.decrypt(encrypted_stream, decrypted_stream);
-
-        // Read filename length
         uint32_t network_filename_length;
-        decrypted_stream.read(reinterpret_cast<char*>(&network_filename_length), sizeof(uint32_t));
+        decrypted_length.read(reinterpret_cast<char*>(&network_filename_length), sizeof(uint32_t));
         frame.filename_length = from_network_order(network_filename_length);
 
-        // Handle payload if present
+        // Initialize payload stream
+        frame.payload_stream = std::make_shared<std::stringstream>();
+
+        // Process payload data using the same crypto instance
         if (frame.payload_size > 0) {
-            frame.payload_stream = std::make_shared<std::stringstream>();
+            const std::size_t chunk_size = 4096;
+            std::size_t remaining = frame.payload_size;
 
-            // Read the remaining data as payload
-            std::vector<char> payload_data(frame.payload_size);
-            decrypted_stream.read(payload_data.data(), frame.payload_size);
+            while (remaining > 0 && input.good()) {
+                std::size_t current_chunk = std::min(remaining, chunk_size);
+                std::size_t padded_size = get_padded_size(current_chunk);
 
-            frame.payload_stream->write(payload_data.data(), frame.payload_size);
+                std::vector<char> encrypted_chunk(padded_size);
+                read_bytes(input, encrypted_chunk.data(), padded_size);
+
+                std::stringstream encrypted_stream;
+                encrypted_stream.write(encrypted_chunk.data(), padded_size);
+                encrypted_stream.seekg(0);
+
+                std::stringstream decrypted_stream;
+                crypto.decrypt(encrypted_stream, decrypted_stream);
+
+                frame.payload_stream->write(decrypted_stream.str().data(), current_chunk);
+                remaining -= current_chunk;
+            }
+
+            if (remaining > 0) {
+                throw std::runtime_error("Failed to read complete payload");
+            }
+
             frame.payload_stream->seekg(0);
+        } else {
+            // For empty payloads, read and discard the padding block
+            std::vector<char> padding_block(block_size);
+            read_bytes(input, padding_block.data(), block_size);
         }
 
         channel.produce(frame);
