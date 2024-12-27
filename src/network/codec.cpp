@@ -50,7 +50,7 @@ std::size_t Codec::serialize(const MessageFrame& frame, std::ostream& output) {
         write_bytes(output, &network_payload_size, sizeof(uint64_t));
         total_bytes += sizeof(uint64_t);
 
-        // Initialize crypto stream
+        // Initialize single crypto stream instance for entire method
         crypto::CryptoStream crypto;
         crypto.initialize(key_, to_vector(frame.initialization_vector));
 
@@ -60,7 +60,7 @@ std::size_t Codec::serialize(const MessageFrame& frame, std::ostream& output) {
         filename_length_stream.write(reinterpret_cast<const char*>(&network_filename_length), sizeof(uint32_t));
         filename_length_stream.seekg(0);
 
-        // Encrypt and pad filename length
+        // Encrypt and pad filename length using the same crypto instance
         std::stringstream encrypted_length;
         crypto.encrypt(filename_length_stream, encrypted_length);
         std::string encrypted_length_data = encrypted_length.str();
@@ -71,7 +71,7 @@ std::size_t Codec::serialize(const MessageFrame& frame, std::ostream& output) {
         write_bytes(output, encrypted_length_data.data(), padded_size);
         total_bytes += padded_size;
 
-        // Process payload data if present
+        // Process payload data if present using the same crypto instance
         if (frame.payload_size > 0 && frame.payload_stream) {
             frame.payload_stream->seekg(0);
             const std::size_t chunk_size = 4096;
@@ -140,11 +140,11 @@ MessageFrame Codec::deserialize(std::istream& input, Channel& channel) {
         read_bytes(input, &network_payload_size, sizeof(uint64_t));
         frame.payload_size = from_network_order(network_payload_size);
 
-        // Initialize crypto stream
+        // Initialize single crypto stream instance for entire method
         crypto::CryptoStream crypto;
         crypto.initialize(key_, to_vector(frame.initialization_vector));
 
-        // Read and decrypt filename length
+        // Read and decrypt filename length using the same crypto instance
         const std::size_t block_size = 16;  // AES block size
         std::vector<char> encrypted_buffer(block_size);
         read_bytes(input, encrypted_buffer.data(), block_size);
@@ -163,7 +163,7 @@ MessageFrame Codec::deserialize(std::istream& input, Channel& channel) {
         // Initialize payload stream
         frame.payload_stream = std::make_shared<std::stringstream>();
 
-        // Process payload data
+        // Process payload data using the same crypto instance
         if (frame.payload_size > 0) {
             const std::size_t chunk_size = 4096;
             std::size_t remaining = frame.payload_size;
