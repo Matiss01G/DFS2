@@ -62,7 +62,7 @@ std::size_t Codec::serialize(const MessageFrame& frame, std::ostream& output) {
 
             // Process the payload stream directly through encryption
             frame.payload_stream->seekg(0, std::ios::beg);
-            crypto.process_stream(*frame.payload_stream, output);
+            crypto.processStream(*frame.payload_stream, output);
             total_bytes += frame.payload_size;
 
             // Reset original stream position
@@ -123,7 +123,7 @@ MessageFrame Codec::deserialize(std::istream& input, Channel& channel) {
             crypto.initialize(encryption_key_, iv_vec);
 
             auto decrypted_stream = std::make_shared<std::stringstream>();
-            crypto.process_stream(input, *decrypted_stream);
+            crypto.processStream(input, *decrypted_stream);
 
             // Set decrypted stream as frame's payload
             decrypted_stream->seekg(0);
