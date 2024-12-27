@@ -37,7 +37,9 @@ std::size_t Codec::serialize(const MessageFrame& frame, std::ostream& output) {
     if (frame.payload_stream && frame.payload_size > 0) {
       // Initialize CryptoStream and encrypt payload directly to output
       crypto::CryptoStream crypto;
-      crypto.initialize(crypto_key_, frame.initialization_vector);
+      // Convert initialization_vector from std::array to std::vector
+      std::vector<uint8_t> iv(frame.initialization_vector.begin(), frame.initialization_vector.end());
+      crypto.initialize(crypto_key_, iv);
 
       // convert filename_length to network byte order
       uint32_t network_filename_length = to_network_order(frame.filename_length);
@@ -110,7 +112,9 @@ std::size_t Codec::deserialize(std::istream& input, Channel& channel) {
     if (frame.payload_size > 0) {
       // Initialize crypto for decryption
       crypto::CryptoStream crypto;
-      crypto.initialize(crypto_key_, frame.initialization_vector);
+      // Convert initialization_vector from std::array to std::vector
+      std::vector<uint8_t> iv(frame.initialization_vector.begin(), frame.initialization_vector.end());
+      crypto.initialize(crypto_key_, iv);
 
       // Read and decrypt filename length
       std::stringstream encrypted_filename_length;
