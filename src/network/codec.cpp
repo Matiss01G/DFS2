@@ -2,7 +2,7 @@
 #include <boost/log/trivial.hpp>
 #include <sstream>
 #include <stdexcept>
-#include "crypto/crypto_stream.hpp"  // Add this include
+#include "crypto/crypto_stream.hpp"  
 
 namespace dfs {
 namespace network {
