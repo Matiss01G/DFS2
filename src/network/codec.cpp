@@ -84,9 +84,11 @@ std::size_t Codec::deserialize(std::istream& input, Channel& channel) {
   }
 
   std::size_t total_bytes = 0;
-  MessageFrame frame;
 
   try {
+    // Create MessageFrame internally
+    MessageFrame frame;
+
     // Read initialization vector
     read_bytes(input, frame.initialization_vector.data(), frame.initialization_vector.size());
     total_bytes += frame.initialization_vector.size();
