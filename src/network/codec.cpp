@@ -77,17 +77,20 @@ std::size_t Codec::serialize(const MessageFrame& frame, std::ostream& output) {
   }
 }
 
-std::size_t Codec::deserialize(MessageFrame& frame, std::istream& input, Channel& channel) {
+std::size_t Codec::deserialize(std::istream& input, Channel& channel) {
   if (!input.good()) {
     throw std::runtime_error("Invalid input stream");
   }
-
+  
+  MessageFrame frame;
   std::size_t total_bytes = 0;
+  char buffer[4096];  // 4KB buffer for reading chunks of data
 
   try {
     // Read initialization vector
     read_bytes(input, frame.initialization_vector.data(), frame.initialization_vector.size());
     total_bytes += frame.initialization_vector.size();
+    frame.initialization_vector = 
 
     // Read message type
     read_bytes(input, &frame.message_type, sizeof(MessageType));
@@ -105,22 +108,41 @@ std::size_t Codec::deserialize(MessageFrame& frame, std::istream& input, Channel
     frame.payload_size = from_network_order(network_payload_size);
     total_bytes += sizeof(uint64_t);
 
-    // Read and convert filename_length from network byte order
+    // Initialize CryptoStream with the IV
+    crypto::CryptoStream crypto;
+    crypto.initialize(std::vector<uint8_t>(frame.initialization_vector.begin(),
+                                         frame.initialization_vector.end()));
+
+    // Read the encrypted filename length into a temporary stream
+    std::stringstream encrypted_filename_length;
+    read_bytes(input, buffer, sizeof(uint32_t));  // Read encrypted data
+    encrypted_filename_length.write(buffer, sizeof(uint32_t));
+    encrypted_filename_length.seekg(0);
+
+    // Decrypt the filename length
+    std::stringstream decrypted_filename_length;
+    crypto.decrypt(encrypted_filename_length, decrypted_filename_length);
+
+    // Read the decrypted filename length from network byte order to local order
     uint32_t network_filename_length;
-    read_bytes(input, &network_filename_length, sizeof(uint32_t));
+    decrypted_filename_length.read(reinterpret_cast<char*>(&network_filename_length), sizeof(uint32_t));
     frame.filename_length = from_network_order(network_filename_length);
     total_bytes += sizeof(uint32_t);
 
+    // create empty payload_stream object
+    std::stringstream encrypted_payload;
+
+
     // If payload exists, create stream and read data
     if (frame.payload_size > 0) {
-      auto payload_stream = std::make_shared<std::stringstream>();
-      char buffer[4096];  // 4KB chunks for efficient streaming
       std::size_t remaining = frame.payload_size;
 
+      // Read and decrypt payload in chunks
+      std::stringstream encrypted_payload;
       while (remaining > 0 && input.good()) {
         std::size_t chunk_size = std::min(remaining, sizeof(buffer));
         read_bytes(input, buffer, chunk_size);
-        payload_stream->write(buffer, chunk_size);
+        encrypted_payload.write(buffer, chunk_size);
         remaining -= chunk_size;
         total_bytes += chunk_size;
       }
@@ -132,16 +154,6 @@ std::size_t Codec::deserialize(MessageFrame& frame, std::istream& input, Channel
       // Reset stream position to beginning
       payload_stream->seekg(0, std::ios::beg);
       frame.payload_stream = payload_stream;
-    }
-
-    // Create a copy of the frame for the channel
-    MessageFrame channel_frame = frame;
-    if (frame.payload_stream) {
-      auto channel_payload = std::make_shared<std::stringstream>();
-      *channel_payload << frame.payload_stream->rdbuf();
-      channel_frame.payload_stream = channel_payload;
-      // Reset original stream position
-      frame.payload_stream->seekg(0, std::ios::beg);
     }
 
     // Thread-safe channel push with proper stream handling
