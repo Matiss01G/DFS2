@@ -2,7 +2,7 @@
 #include <openssl/evp.h>
 #include <openssl/aes.h>
 #include <openssl/err.h>
-#include <openssl/rand.h>
+#include <openssl/rand.h>  // Added for RAND_bytes
 #include <array>
 #include <stdexcept>
 #include <boost/log/trivial.hpp>
@@ -44,32 +44,26 @@ CryptoStream::~CryptoStream() {
 }
 
 // Initialize with encryption key and initialization vector (IV)
-void CryptoStream::initialize(const std::vector<uint8_t>& key, const std::array<uint8_t, IV_SIZE>& iv) {
+void CryptoStream::initialize(const std::vector<uint8_t>& key, const std::vector<uint8_t>& iv) {
     BOOST_LOG_TRIVIAL(info) << "Initializing crypto parameters";
-
+    
     // Validate key size (256 bits for AES-256)
     if (key.size() != KEY_SIZE) {
         BOOST_LOG_TRIVIAL(error) << "Invalid key size: " << key.size() << " bytes (expected " << KEY_SIZE << " bytes)";
         throw InitializationError("Invalid key size");
     }
-
-    // Store key and convert IV from array to vector for internal use
-    key_ = key;
-    iv_.assign(iv.begin(), iv.end());
-    is_initialized_ = true;
-    BOOST_LOG_TRIVIAL(debug) << "Crypto parameters initialized successfully";
-}
-
-// Add overload for vector IV for backward compatibility
-void CryptoStream::initialize(const std::vector<uint8_t>& key, const std::vector<uint8_t>& iv) {
+    
+    // Validate IV size (128 bits for CBC mode)
     if (iv.size() != IV_SIZE) {
         BOOST_LOG_TRIVIAL(error) << "Invalid IV size: " << iv.size() << " bytes (expected " << IV_SIZE << " bytes)";
         throw InitializationError("Invalid IV size");
     }
 
-    std::array<uint8_t, IV_SIZE> iv_array;
-    std::copy(iv.begin(), iv.end(), iv_array.begin());
-    initialize(key, iv_array);
+    // Store key and IV for crypto operations
+    key_ = key;
+    iv_ = iv;
+    is_initialized_ = true;
+    BOOST_LOG_TRIVIAL(debug) << "Crypto parameters initialized successfully";
 }
 
 void CryptoStream::initializeCipher(bool encrypting) {
