@@ -1,0 +1,87 @@
+[ RUN      ] CodecTest.LargeMessageHandling
+[2024-12-28 01:15:51.720777] [0x00007fa0c1580fc0] [info] Setting up CodecTest fixture
+[2024-12-28 01:15:51.720777] [0x00007fa0c1580fc0] [info] Setting up CodecTest fixture
+[2024-12-28 01:15:51.720795] [0x00007fa0c1580fc0] [debug] Test fixture initialized with key size: 32
+[2024-12-28 01:15:51.720795] [0x00007fa0c1580fc0] [debug] Test fixture initialized with key size: 32
+[2024-12-28 01:15:51.720805] [0x00007fa0c1580fc0] [info] Starting LargeMessageHandling test
+[2024-12-28 01:15:51.720805] [0x00007fa0c1580fc0] [info] Starting LargeMessageHandling test
+[2024-12-28 01:15:51.723067] [0x00007fa0c1580fc0] [debug] Created large payload of size: 1048576
+[2024-12-28 01:15:51.723067] [0x00007fa0c1580fc0] [debug] Created large payload of size: 1048576
+[2024-12-28 01:15:51.723083] [0x00007fa0c1580fc0] [debug] Creating test frame with payload size: 1048576
+[2024-12-28 01:15:51.723083] [0x00007fa0c1580fc0] [debug] Creating test frame with payload size: 1048576
+[2024-12-28 01:15:51.723473] [0x00007fa0c1580fc0] [debug] Test frame created with type: 0
+[2024-12-28 01:15:51.723473] [0x00007fa0c1580fc0] [debug] Test frame created with type: 0
+[2024-12-28 01:15:51.723486] [0x00007fa0c1580fc0] [info] Initializing CryptoStream
+[2024-12-28 01:15:51.723486] [0x00007fa0c1580fc0] [info] Initializing CryptoStream
+[2024-12-28 01:15:51.723499] [0x00007fa0c1580fc0] [debug] CryptoStream initialization complete
+[2024-12-28 01:15:51.723499] [0x00007fa0c1580fc0] [debug] CryptoStream initialization complete
+[2024-12-28 01:15:51.723506] [0x00007fa0c1580fc0] [info] Initializing crypto parameters
+[2024-12-28 01:15:51.723506] [0x00007fa0c1580fc0] [info] Initializing crypto parameters
+[2024-12-28 01:15:51.723514] [0x00007fa0c1580fc0] [debug] Crypto parameters initialized successfully
+[2024-12-28 01:15:51.723514] [0x00007fa0c1580fc0] [debug] Crypto parameters initialized successfully
+[2024-12-28 01:15:51.723519] [0x00007fa0c1580fc0] [info] Starting stream encryption
+[2024-12-28 01:15:51.723519] [0x00007fa0c1580fc0] [info] Starting stream encryption
+[2024-12-28 01:15:51.723525] [0x00007fa0c1580fc0] [debug] Initializing cipher for encryption
+[2024-12-28 01:15:51.723525] [0x00007fa0c1580fc0] [debug] Initializing cipher for encryption
+[2024-12-28 01:15:51.723539] [0x00007fa0c1580fc0] [debug] Cipher initialization complete
+[2024-12-28 01:15:51.723539] [0x00007fa0c1580fc0] [debug] Cipher initialization complete
+[2024-12-28 01:15:51.723906] [0x00007fa0c1580fc0] [info] Initializing CryptoStream
+[2024-12-28 01:15:51.723906] [0x00007fa0c1580fc0] [info] Initializing CryptoStream
+[2024-12-28 01:15:51.723916] [0x00007fa0c1580fc0] [debug] CryptoStream initialization complete
+[2024-12-28 01:15:51.723916] [0x00007fa0c1580fc0] [debug] CryptoStream initialization complete
+[2024-12-28 01:15:51.723923] [0x00007fa0c1580fc0] [info] Initializing crypto parameters
+[2024-12-28 01:15:51.723923] [0x00007fa0c1580fc0] [info] Initializing crypto parameters
+[2024-12-28 01:15:51.723931] [0x00007fa0c1580fc0] [debug] Crypto parameters initialized successfully
+[2024-12-28 01:15:51.723931] [0x00007fa0c1580fc0] [debug] Crypto parameters initialized successfully
+[2024-12-28 01:15:51.724594] [0x00007fa0c1580fc0] [info] Starting stream encryption
+[2024-12-28 01:15:51.724594] [0x00007fa0c1580fc0] [info] Starting stream encryption
+[2024-12-28 01:15:51.724611] [0x00007fa0c1580fc0] [debug] Initializing cipher for encryption
+[2024-12-28 01:15:51.724611] [0x00007fa0c1580fc0] [debug] Initializing cipher for encryption
+[2024-12-28 01:15:51.724629] [0x00007fa0c1580fc0] [debug] Cipher initialization complete
+[2024-12-28 01:15:51.724629] [0x00007fa0c1580fc0] [debug] Cipher initialization complete
+[2024-12-28 01:15:51.728136] [0x00007fa0c1580fc0] [debug] Cleaning up CryptoStream resources
+[2024-12-28 01:15:51.728136] [0x00007fa0c1580fc0] [debug] Cleaning up CryptoStream resources
+[2024-12-28 01:15:51.728225] [0x00007fa0c1580fc0] [debug] Cleaning up CryptoStream resources
+[2024-12-28 01:15:51.728225] [0x00007fa0c1580fc0] [debug] Cleaning up CryptoStream resources
+[2024-12-28 01:15:51.728246] [0x00007fa0c1580fc0] [info] Serialized large message frame, bytes written: 1048637
+[2024-12-28 01:15:51.728246] [0x00007fa0c1580fc0] [info] Serialized large message frame, bytes written: 1048637
+[2024-12-28 01:15:51.728263] [0x00007fa0c1580fc0] [info] Initializing CryptoStream
+[2024-12-28 01:15:51.728263] [0x00007fa0c1580fc0] [info] Initializing CryptoStream
+[2024-12-28 01:15:51.728271] [0x00007fa0c1580fc0] [debug] CryptoStream initialization complete
+[2024-12-28 01:15:51.728271] [0x00007fa0c1580fc0] [debug] CryptoStream initialization complete
+[2024-12-28 01:15:51.728275] [0x00007fa0c1580fc0] [info] Initializing crypto parameters
+[2024-12-28 01:15:51.728275] [0x00007fa0c1580fc0] [info] Initializing crypto parameters
+[2024-12-28 01:15:51.728281] [0x00007fa0c1580fc0] [debug] Crypto parameters initialized successfully
+[2024-12-28 01:15:51.728281] [0x00007fa0c1580fc0] [debug] Crypto parameters initialized successfully
+[2024-12-28 01:15:51.728288] [0x00007fa0c1580fc0] [info] Starting stream decryption
+[2024-12-28 01:15:51.728288] [0x00007fa0c1580fc0] [info] Starting stream decryption
+[2024-12-28 01:15:51.728296] [0x00007fa0c1580fc0] [debug] Initializing cipher for decryption
+[2024-12-28 01:15:51.728296] [0x00007fa0c1580fc0] [debug] Initializing cipher for decryption
+[2024-12-28 01:15:51.728306] [0x00007fa0c1580fc0] [debug] Cipher initialization complete
+[2024-12-28 01:15:51.728306] [0x00007fa0c1580fc0] [debug] Cipher initialization complete
+[2024-12-28 01:15:51.728312] [0x00007fa0c1580fc0] [info] Initializing CryptoStream
+[2024-12-28 01:15:51.728312] [0x00007fa0c1580fc0] [info] Initializing CryptoStream
+[2024-12-28 01:15:51.728318] [0x00007fa0c1580fc0] [debug] CryptoStream initialization complete
+[2024-12-28 01:15:51.728318] [0x00007fa0c1580fc0] [debug] CryptoStream initialization complete
+[2024-12-28 01:15:51.728325] [0x00007fa0c1580fc0] [info] Initializing crypto parameters
+[2024-12-28 01:15:51.728325] [0x00007fa0c1580fc0] [info] Initializing crypto parameters
+[2024-12-28 01:15:51.728331] [0x00007fa0c1580fc0] [debug] Crypto parameters initialized successfully
+[2024-12-28 01:15:51.728331] [0x00007fa0c1580fc0] [debug] Crypto parameters initialized successfully
+[2024-12-28 01:15:51.728884] [0x00007fa0c1580fc0] [info] Starting stream decryption
+[2024-12-28 01:15:51.728884] [0x00007fa0c1580fc0] [info] Starting stream decryption
+[2024-12-28 01:15:51.728894] [0x00007fa0c1580fc0] [debug] Initializing cipher for decryption
+[2024-12-28 01:15:51.728894] [0x00007fa0c1580fc0] [debug] Initializing cipher for decryption
+[2024-12-28 01:15:51.728904] [0x00007fa0c1580fc0] [debug] Cipher initialization complete
+[2024-12-28 01:15:51.728904] [0x00007fa0c1580fc0] [debug] Cipher initialization complete
+[2024-12-28 01:15:51.729417] [0x00007fa0c1580fc0] [error] Stream processing failed: Decryption error: Failed to finalize decryption
+[2024-12-28 01:15:51.729417] [0x00007fa0c1580fc0] [error] Stream processing failed: Decryption error: Failed to finalize decryption
+[2024-12-28 01:15:51.729444] [0x00007fa0c1580fc0] [debug] Cleaning up CryptoStream resources
+[2024-12-28 01:15:51.729444] [0x00007fa0c1580fc0] [debug] Cleaning up CryptoStream resources
+[2024-12-28 01:15:51.729454] [0x00007fa0c1580fc0] [debug] Cleaning up CryptoStream resources
+[2024-12-28 01:15:51.729454] [0x00007fa0c1580fc0] [debug] Cleaning up CryptoStream resources
+unknown file: Failure
+C++ exception with description "Decryption error: Failed to finalize decryption" thrown in the test body.
+
+[2024-12-28 01:15:51.729628] [0x00007fa0c1580fc0] [debug] Tearing down CodecTest fixture
+[2024-12-28 01:15:51.729628] [0x00007fa0c1580fc0] [debug] Tearing down CodecTest fixture
+[  FAILED  ] CodecTest.LargeMessageHandling (8 ms)
