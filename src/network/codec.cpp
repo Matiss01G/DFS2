@@ -104,11 +104,14 @@ MessageFrame Codec::deserialize(std::istream& input, Channel& channel) {
         frame.filename_length = from_network_order(network_filename_length);
         BOOST_LOG_TRIVIAL(debug) << "Read filename length: " << frame.filename_length;
         total_bytes += sizeof(network_filename_length);
+        
+        frame.payload_stream = std::make_shared<std::stringstream>();
+
+        channel.produce(frame);
 
         // Handle payload if present
         if (frame.payload_size > 0) {
             BOOST_LOG_TRIVIAL(debug) << "Reading payload of size: " << frame.payload_size;
-            frame.payload_stream = std::make_shared<std::stringstream>();
             std::vector<char> buffer(frame.payload_size);
             read_bytes(input, buffer.data(), frame.payload_size);
             frame.payload_stream->write(buffer.data(), frame.payload_size);
@@ -116,7 +119,6 @@ MessageFrame Codec::deserialize(std::istream& input, Channel& channel) {
             total_bytes += frame.payload_size;
         }
 
-        channel.produce(frame);
         BOOST_LOG_TRIVIAL(info) << "Message frame deserialization complete. Total bytes read: " << total_bytes;
         return frame;
     }
