@@ -18,17 +18,6 @@ task = "packager.installForAll"
 task = "shell.exec"
 args = "cd build && cmake .. && make"
 
-[[workflows.workflow]]
-name = "Build and Test"
-mode = "sequential"
-
-[[workflows.workflow.tasks]]
-task = "packager.installForAll"
-
-[[workflows.workflow.tasks]]
-task = "shell.exec"
-args = "cd build && cmake -DCMAKE_BUILD_TYPE=Debug .. && make && ./network_tests"
-
 [[ports]]
 localPort = 12345
 externalPort = 80
