@@ -28,7 +28,7 @@ protected:
 
     // Helper to create a test message frame
     MessageFrame createTestFrame(const std::string& payload = "test payload", 
-                               MessageType type = MessageType::Data) {
+                               MessageType type = MessageType::STORE_FILE) {
         MessageFrame frame;
         frame.message_type = type;
         frame.source_id = 1;
@@ -82,9 +82,8 @@ TEST_F(CodecTest, BasicSerializationDeserialization) {
     ASSERT_GT(bytes_written, 0);
 
     // Deserialize
-    MessageFrame deserialized;
-    std::size_t bytes_read = codec_->deserialize(buffer, deserialized, *channel_);
-    ASSERT_EQ(bytes_written, bytes_read);
+    MessageFrame deserialized = codec_->deserialize(buffer, *channel_);
+    ASSERT_GT(deserialized.payload_size, 0);
 
     // Verify
     verifyFramesEqual(original, deserialized);
@@ -103,8 +102,7 @@ TEST_F(CodecTest, EncryptionVerification) {
     EXPECT_EQ(serialized.find("Sensitive Data"), std::string::npos);
 
     // Deserialize and verify we can recover the original data
-    MessageFrame deserialized;
-    codec_->deserialize(buffer, deserialized, *channel_);
+    MessageFrame deserialized = codec_->deserialize(buffer, *channel_);
 
     std::string recovered_payload;
     recovered_payload.resize(deserialized.payload_size);
@@ -129,9 +127,8 @@ TEST_F(CodecTest, LargeMessageHandling) {
     ASSERT_GT(bytes_written, large_payload.size());
 
     // Deserialize
-    MessageFrame deserialized;
-    std::size_t bytes_read = codec_->deserialize(buffer, deserialized, *channel_);
-    ASSERT_EQ(bytes_written, bytes_read);
+    MessageFrame deserialized = codec_->deserialize(buffer, *channel_);
+    ASSERT_GT(deserialized.payload_size, 0);
 
     // Verify
     verifyFramesEqual(original, deserialized);
@@ -144,19 +141,17 @@ TEST_F(CodecTest, ChannelIntegration) {
 
     // Serialize and deserialize through channel
     codec_->serialize(original, buffer);
-
-    MessageFrame deserialized;
-    codec_->deserialize(buffer, deserialized, *channel_);
+    MessageFrame deserialized = codec_->deserialize(buffer, *channel_);
 
     // Verify channel received the message
     ASSERT_EQ(channel_->size(), 1);
 
     // Consume from channel
-    auto received_frame = channel_->consume();
-    ASSERT_TRUE(received_frame.has_value());
+    MessageFrame received;
+    ASSERT_TRUE(channel_->consume(received));
 
     // Verify frame from channel matches original
-    verifyFramesEqual(original, *received_frame);
+    verifyFramesEqual(original, received);
 }
 
 // Test error handling
@@ -174,9 +169,7 @@ TEST_F(CodecTest, ErrorHandling) {
     EXPECT_THROW(codec_->serialize(frame, invalid_stream), std::runtime_error);
 
     // Test invalid output stream
-    std::stringstream input("test");
     std::stringstream invalid_output;
     invalid_output.setstate(std::ios::badbit);
-    MessageFrame frame2;
-    EXPECT_THROW(codec_->deserialize(invalid_output, frame2, *channel_), std::runtime_error);
+    EXPECT_THROW(codec_->deserialize(invalid_output, *channel_), std::runtime_error);
 }
