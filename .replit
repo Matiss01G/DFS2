@@ -63,7 +63,7 @@ task = "packager.installForAll"
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "cd build && rm -rf * && cmake -DCMAKE_BUILD_TYPE=Debug .. && make && ctest"
+args = "cd build && rm -rf * && BOOST_LOG_DYN_LINK=1 BOOST_LOG_CONSOLE=1 cmake -DCMAKE_BUILD_TYPE=Debug .. && make -j4 && ./network_tests"
 
 [deployment]
 run = ["sh", "-c", "cd build && cmake -DCMAKE_BUILD_TYPE=Debug .. && make && ./network_tests"]
