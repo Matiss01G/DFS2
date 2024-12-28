@@ -5,18 +5,7 @@ modules = ["cpp"]
 channel = "stable-24_05"
 
 [workflows]
-runButton = "Build"
-
-[[workflows.workflow]]
-name = "Build"
-mode = "sequential"
-
-[[workflows.workflow.tasks]]
-task = "packager.installForAll"
-
-[[workflows.workflow.tasks]]
-task = "shell.exec"
-args = "cd build && cmake .. && make"
+runButton = "Build and Test"
 
 [[workflows.workflow]]
 name = "Build and Test"
