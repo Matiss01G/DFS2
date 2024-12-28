@@ -222,8 +222,8 @@ CMakeFiles/store_tests.dir/clean:
 # Target rules for target CMakeFiles/network_tests.dir
 
 # All Build rule for target.
-CMakeFiles/network_tests.dir/all: CMakeFiles/dfs_crypto.dir/all
 CMakeFiles/network_tests.dir/all: CMakeFiles/dfs_network.dir/all
+CMakeFiles/network_tests.dir/all: CMakeFiles/dfs_crypto.dir/all
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/network_tests.dir/build.make CMakeFiles/network_tests.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/network_tests.dir/build.make CMakeFiles/network_tests.dir/build
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/runner/StreamCryptoDFS/build/CMakeFiles --progress-num=13,14,15,16,17,18 "Built target network_tests"
@@ -249,8 +249,8 @@ CMakeFiles/network_tests.dir/clean:
 # Target rules for target CMakeFiles/channel_tests.dir
 
 # All Build rule for target.
-CMakeFiles/channel_tests.dir/all: CMakeFiles/dfs_crypto.dir/all
 CMakeFiles/channel_tests.dir/all: CMakeFiles/dfs_network.dir/all
+CMakeFiles/channel_tests.dir/all: CMakeFiles/dfs_crypto.dir/all
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/channel_tests.dir/build.make CMakeFiles/channel_tests.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/channel_tests.dir/build.make CMakeFiles/channel_tests.dir/build
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/runner/StreamCryptoDFS/build/CMakeFiles --progress-num=1,2,3 "Built target channel_tests"

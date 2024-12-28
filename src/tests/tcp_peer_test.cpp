@@ -3,7 +3,6 @@
 #include "network/tcp_peer.hpp"
 #include "test_utils.hpp"
 #include <boost/asio.hpp>
-#include <boost/log/core.hpp>
 #include <boost/log/trivial.hpp>
 #include <boost/log/expressions.hpp>
 #include <thread>
@@ -63,11 +62,13 @@ protected:
 
 // Test basic connection functionality
 TEST_F(TCPPeerTest, ConnectionTest) {
+    BOOST_LOG_TRIVIAL(debug) << "Starting ConnectionTest";
     start_server_thread();
 
     // Test connection
     EXPECT_TRUE(test_peer->connect("127.0.0.1", 12345));
     EXPECT_TRUE(test_peer->is_connected());
+    BOOST_LOG_TRIVIAL(debug) << "Connection test completed successfully";
 
     if (server_thread.joinable()) {
         server_thread.join();
@@ -76,11 +77,13 @@ TEST_F(TCPPeerTest, ConnectionTest) {
 
 // Test disconnection functionality
 TEST_F(TCPPeerTest, DisconnectionTest) {
+    BOOST_LOG_TRIVIAL(debug) << "Starting DisconnectionTest";
     start_server_thread();
 
     ASSERT_TRUE(test_peer->connect("127.0.0.1", 12345));
     EXPECT_TRUE(test_peer->disconnect());
     EXPECT_FALSE(test_peer->is_connected());
+    BOOST_LOG_TRIVIAL(debug) << "Disconnection test completed successfully";
 
     if (server_thread.joinable()) {
         server_thread.join();
@@ -89,6 +92,7 @@ TEST_F(TCPPeerTest, DisconnectionTest) {
 
 // Test sending data through socket using send_stream
 TEST_F(TCPPeerTest, SendStreamTest) {
+    BOOST_LOG_TRIVIAL(debug) << "Starting SendStreamTest";
     start_server_thread();
 
     ASSERT_TRUE(test_peer->connect("127.0.0.1", 12345));
@@ -117,10 +121,12 @@ TEST_F(TCPPeerTest, SendStreamTest) {
     EXPECT_FALSE(ec);
     EXPECT_EQ(bytes_read, test_data.size());
     EXPECT_EQ(std::string(received_data.begin(), received_data.end()), test_data);
+    BOOST_LOG_TRIVIAL(debug) << "SendStream test completed successfully";
 }
 
 // Test receiving data through input stream
 TEST_F(TCPPeerTest, ReceiveStreamTest) {
+    BOOST_LOG_TRIVIAL(debug) << "Starting ReceiveStreamTest";
     start_server_thread();
 
     ASSERT_TRUE(test_peer->connect("127.0.0.1", 12345));
@@ -177,10 +183,12 @@ TEST_F(TCPPeerTest, ReceiveStreamTest) {
 
     // Stop processing and cleanup
     test_peer->stop_stream_processing();
+    BOOST_LOG_TRIVIAL(debug) << "ReceiveStream test completed successfully";
 }
 
 // Test receiving multiple messages through same connection
 TEST_F(TCPPeerTest, MultipleMessagesTest) {
+    BOOST_LOG_TRIVIAL(debug) << "Starting MultipleMessagesTest";
     start_server_thread();
 
     ASSERT_TRUE(test_peer->connect("127.0.0.1", 12345));
@@ -252,10 +260,12 @@ TEST_F(TCPPeerTest, MultipleMessagesTest) {
 
     // Stop processing and cleanup
     test_peer->stop_stream_processing();
+    BOOST_LOG_TRIVIAL(debug) << "MultipleMessagesTest completed successfully";
 }
 
 // Test edge cases and error conditions
 TEST_F(TCPPeerTest, EdgeCasesTest) {
+    BOOST_LOG_TRIVIAL(debug) << "Starting EdgeCasesTest";
     // Test connecting to non-existent server
     EXPECT_FALSE(test_peer->connect("127.0.0.1", 54321));
     EXPECT_FALSE(test_peer->is_connected());
@@ -269,4 +279,5 @@ TEST_F(TCPPeerTest, EdgeCasesTest) {
 
     // Test getting input stream when not connected
     EXPECT_EQ(test_peer->get_input_stream(), nullptr);
+    BOOST_LOG_TRIVIAL(debug) << "EdgeCasesTest completed successfully";
 }

@@ -93,7 +93,6 @@ store_tests_EXTERNAL_OBJECTS =
 store_tests: CMakeFiles/store_tests.dir/src/tests/store_test.cpp.o
 store_tests: CMakeFiles/store_tests.dir/build.make
 store_tests: libdfs_store.a
-store_tests: /nix/store/gp504m4dvw5k2pdx6pccf1km79fkcwgf-openssl-3.0.13/lib/libcrypto.so
 store_tests: /nix/store/62sh2bwllmkl8zzpqhglzgpk7lmsmrsa-boost-1.81.0/lib/libboost_log_setup.so.1.81.0
 store_tests: /nix/store/62sh2bwllmkl8zzpqhglzgpk7lmsmrsa-boost-1.81.0/lib/libboost_log.so.1.81.0
 store_tests: /nix/store/62sh2bwllmkl8zzpqhglzgpk7lmsmrsa-boost-1.81.0/lib/libboost_chrono.so.1.81.0
@@ -101,6 +100,7 @@ store_tests: /nix/store/62sh2bwllmkl8zzpqhglzgpk7lmsmrsa-boost-1.81.0/lib/libboo
 store_tests: /nix/store/62sh2bwllmkl8zzpqhglzgpk7lmsmrsa-boost-1.81.0/lib/libboost_atomic.so.1.81.0
 store_tests: /nix/store/62sh2bwllmkl8zzpqhglzgpk7lmsmrsa-boost-1.81.0/lib/libboost_regex.so.1.81.0
 store_tests: /nix/store/62sh2bwllmkl8zzpqhglzgpk7lmsmrsa-boost-1.81.0/lib/libboost_thread.so.1.81.0
+store_tests: /nix/store/gp504m4dvw5k2pdx6pccf1km79fkcwgf-openssl-3.0.13/lib/libcrypto.so
 store_tests: /nix/store/62sh2bwllmkl8zzpqhglzgpk7lmsmrsa-boost-1.81.0/lib/libboost_system.so.1.81.0
 store_tests: /nix/store/g1xqvy5p9xgl33iywjy8192xpsfw33b1-gtest-1.14.0/lib/libgtest_main.so.1.14.0
 store_tests: /nix/store/g1xqvy5p9xgl33iywjy8192xpsfw33b1-gtest-1.14.0/lib/libgtest.so.1.14.0
