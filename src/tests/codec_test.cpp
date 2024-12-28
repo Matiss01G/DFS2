@@ -21,7 +21,7 @@ protected:
         // Initialize Boost.Log only once
         if (!logging_initialized) {
             boost::log::register_simple_formatter_factory<boost::log::trivial::severity_level, char>("Severity");
-            boost::log::core::get()->remove_all_sinks(); // Remove any existing sinks
+            boost::log::core::get()->remove_all_sinks(); 
             boost::log::add_console_log(
                 std::cout,
                 boost::log::keywords::format = "[%TimeStamp%] [%ThreadID%] [%Severity%] %Message%"
