@@ -1,5 +1,10 @@
 #include <gtest/gtest.h>
 #include <sstream>
+#include <boost/log/core.hpp>
+#include <boost/log/trivial.hpp>
+#include <boost/log/expressions.hpp>
+#include <boost/log/utility/setup/console.hpp>
+#include <boost/log/utility/setup/common_attributes.hpp>
 #include "network/codec.hpp"
 #include "network/channel.hpp"
 #include "network/message_frame.hpp"
@@ -10,6 +15,19 @@ class CodecTest : public ::testing::Test {
 protected:
     Codec codec;
     Channel channel;
+
+    void SetUp() override {
+        // Initialize Boost.Log
+        boost::log::register_simple_formatter_factory<boost::log::trivial::severity_level, char>("Severity");
+        boost::log::add_console_log(
+            std::cout,
+            boost::log::keywords::format = "[%TimeStamp%] [%ThreadID%] [%Severity%] %Message%"
+        );
+        boost::log::core::get()->set_filter(
+            boost::log::trivial::severity >= boost::log::trivial::debug
+        );
+        boost::log::add_common_attributes();
+    }
 };
 
 /**
