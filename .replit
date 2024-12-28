@@ -32,3 +32,4 @@ args = "cd build && cmake -DCMAKE_BUILD_TYPE=Debug .. && make && ./network_tests
 [[ports]]
 localPort = 12345
 externalPort = 80
+exposeLocalhost = true
