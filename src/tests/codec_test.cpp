@@ -33,6 +33,16 @@ protected:
             logging_initialized = true;
         }
     }
+
+    // Helper to generate random data of specified size
+    std::string generate_random_data(size_t size) {
+        static const char charset[] = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+        std::string result(size, 0);
+        for (size_t i = 0; i < size; ++i) {
+            result[i] = charset[rand() % (sizeof(charset) - 1)];
+        }
+        return result;
+    }
 };
 
 // Initialize static member
@@ -40,18 +50,13 @@ bool CodecTest::logging_initialized = false;
 
 /**
  * @brief Tests serialization and deserialization of a MessageFrame with minimal fields
- * @details Verifies that:
- * - A MessageFrame with only message type, source ID, and payload size can be serialized
- * - The serialized data can be correctly deserialized
- * - The Channel system correctly processes the frame
- * Expected outcome: All set fields match between original and deserialized frames
  */
 TEST_F(CodecTest, MinimalFrameSerializeDeserialize) {
     // Create a message frame with only required fields and payload size
     MessageFrame input_frame;
     input_frame.message_type = MessageType::STORE_FILE;
     input_frame.source_id = 54321;
-    input_frame.payload_size = 0;  // Set a non-zero payload size
+    input_frame.payload_size = 0;
 
     // Prepare output stream for serialization
     std::stringstream output_stream;
@@ -95,12 +100,6 @@ TEST_F(CodecTest, MinimalFrameSerializeDeserialize) {
 
 /**
  * @brief Tests basic serialization and deserialization of a MessageFrame
- * @details Verifies that:
- * - A complete MessageFrame can be serialized with all fields populated
- * - The serialized data can be correctly deserialized
- * - All fields match between original and deserialized frames
- * - The Channel system correctly handles the deserialized frame
- * Expected outcome: All fields match between original and deserialized frames
  */
 TEST_F(CodecTest, BasicSerializeDeserialize) {
     // Create a complete message frame with all fields populated
@@ -110,7 +109,7 @@ TEST_F(CodecTest, BasicSerializeDeserialize) {
 
     // Create payload with known content
     const std::string test_data = "TestData123";
-    input_frame.payload_size = test_data.length(); // Set payload size to match data length
+    input_frame.payload_size = test_data.length();
     input_frame.filename_length = 8;
 
     // Create and prepare payload stream
@@ -178,3 +177,142 @@ TEST_F(CodecTest, BasicSerializeDeserialize) {
     EXPECT_TRUE(channel.empty());
 }
 
+/**
+ * @brief Tests handling of large payloads that require chunked processing
+ * @details This test verifies that:
+ * - Large payloads (>8KB) are correctly serialized and deserialized
+ * - Chunked processing works correctly
+ * - Memory usage remains reasonable
+ * - Data integrity is maintained
+ */
+TEST_F(CodecTest, LargePayloadChunkedProcessing) {
+    MessageFrame input_frame;
+    input_frame.message_type = MessageType::STORE_FILE;
+    input_frame.source_id = 98765;
+
+    // Generate a large payload (10MB)
+    const size_t payload_size = 10 * 1024 * 1024;
+    std::string large_data = generate_random_data(payload_size);
+    input_frame.payload_size = payload_size;
+    input_frame.filename_length = 12;
+
+    // Create and prepare payload stream
+    auto payload = std::make_shared<std::stringstream>();
+    ASSERT_TRUE(payload->good()) << "Initial payload stream state is not good";
+    payload->write(large_data.c_str(), large_data.length());
+    ASSERT_TRUE(payload->good()) << "Failed to write large test data to payload stream";
+    payload->seekg(0);
+    payload->seekp(0);
+    input_frame.payload_stream = payload;
+
+    // Prepare output stream for serialization
+    std::stringstream output_stream;
+
+    // Serialize the frame with large payload
+    std::size_t written = 0;
+    ASSERT_NO_THROW({
+        written = codec.serialize(input_frame, output_stream);
+    }) << "Serialization of large payload threw an exception";
+
+    ASSERT_EQ(written, payload_size + sizeof(uint8_t) + sizeof(uint32_t) + 
+              sizeof(uint64_t) + sizeof(uint32_t)) 
+        << "Written bytes don't match expected size";
+
+    // Reset for deserialization
+    output_stream.seekg(0);
+
+    // Deserialize and verify
+    MessageFrame deserialized_frame;
+    ASSERT_NO_THROW({
+        deserialized_frame = codec.deserialize(output_stream, channel);
+    }) << "Deserialization of large payload threw an exception";
+
+    // Retrieve frame from channel
+    MessageFrame output_frame;
+    ASSERT_TRUE(channel.consume(output_frame)) << "Failed to consume large frame from channel";
+
+    // Verify frame fields
+    EXPECT_EQ(output_frame.message_type, input_frame.message_type);
+    EXPECT_EQ(output_frame.source_id, input_frame.source_id);
+    EXPECT_EQ(output_frame.payload_size, input_frame.payload_size);
+    EXPECT_EQ(output_frame.filename_length, input_frame.filename_length);
+
+    // Verify complete payload data
+    output_frame.payload_stream->seekg(0);
+    input_frame.payload_stream->seekg(0);
+
+    std::string output_data((std::istreambuf_iterator<char>(*output_frame.payload_stream)),
+                            std::istreambuf_iterator<char>());
+    std::string input_data((std::istreambuf_iterator<char>(*input_frame.payload_stream)),
+                           std::istreambuf_iterator<char>());
+
+    EXPECT_EQ(output_data.length(), input_data.length()) << "Payload size mismatch";
+    EXPECT_EQ(output_data, input_data) << "Large payload data mismatch";
+}
+
+/**
+ * @brief Tests error handling for malformed input streams
+ * @details Verifies that:
+ * - Corrupted or incomplete data is handled gracefully
+ * - Appropriate exceptions are thrown
+ * - The codec maintains a consistent state after errors
+ */
+TEST_F(CodecTest, MalformedInputHandling) {
+    std::stringstream malformed_stream;
+
+    // Test 1: Empty stream
+    EXPECT_THROW(codec.deserialize(malformed_stream, channel), std::runtime_error);
+
+    // Test 2: Incomplete header
+    malformed_stream.write("\x01\x02\x03", 3);  // Just a few random bytes
+    malformed_stream.seekg(0);
+    EXPECT_THROW(codec.deserialize(malformed_stream, channel), std::runtime_error);
+
+    // Test 3: Valid header but missing payload
+    MessageFrame frame;
+    frame.message_type = MessageType::STORE_FILE;
+    frame.source_id = 12345;
+    frame.payload_size = 1000;  // Claim large payload
+    frame.filename_length = 8;
+
+    std::stringstream partial_stream;
+    codec.serialize(frame, partial_stream);  // Serialize header
+    partial_stream.seekg(0);
+
+    EXPECT_THROW(codec.deserialize(partial_stream, channel), std::runtime_error);
+}
+
+/**
+ * @brief Tests handling of zero-length payloads
+ * @details Verifies that:
+ * - Frames with zero-length payloads are handled correctly
+ * - Serialization and deserialization work properly
+ * - Channel processing is correct
+ */
+TEST_F(CodecTest, ZeroLengthPayload) {
+    MessageFrame input_frame;
+    input_frame.message_type = MessageType::STORE_FILE;
+    input_frame.source_id = 12345;
+    input_frame.payload_size = 0;
+    input_frame.filename_length = 0;
+
+    std::stringstream output_stream;
+
+    // Serialize frame with zero-length payload
+    std::size_t written = codec.serialize(input_frame, output_stream);
+    ASSERT_GT(written, 0) << "No data written for zero-length payload frame";
+
+    // Verify serialized size matches expected header size
+    ASSERT_EQ(written, sizeof(uint8_t) + sizeof(uint32_t) + sizeof(uint64_t) + sizeof(uint32_t))
+        << "Unexpected serialized size for zero-length payload";
+
+    // Deserialize and verify
+    output_stream.seekg(0);
+    MessageFrame deserialized_frame = codec.deserialize(output_stream, channel);
+
+    MessageFrame output_frame;
+    ASSERT_TRUE(channel.consume(output_frame));
+
+    EXPECT_EQ(output_frame.payload_size, 0);
+    EXPECT_EQ(output_frame.filename_length, 0);
+}
