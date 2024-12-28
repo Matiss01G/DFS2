@@ -28,7 +28,7 @@ protected:
 
     // Helper to create a test message frame
     MessageFrame createTestFrame(const std::string& payload = "test payload", 
-                               MessageType type = MessageType::STORE_FILE) {
+                              MessageType type = MessageType::STORE_FILE) {
         MessageFrame frame;
         frame.message_type = type;
         frame.source_id = 1;
@@ -37,11 +37,13 @@ protected:
 
         // Generate test IV using std::fill instead of std::generate
         std::fill(frame.initialization_vector.begin(), 
-                 frame.initialization_vector.end(), 
-                 0x24);  // Test IV filled with 0x24
+                frame.initialization_vector.end(), 
+                0x24);  // Test IV filled with 0x24
 
         // Set up payload stream
-        frame.payload_stream = std::make_shared<std::stringstream>(payload);
+        frame.payload_stream = std::make_shared<std::stringstream>();
+        frame.payload_stream->write(payload.c_str(), payload.size());
+        frame.payload_stream->seekg(0);  // Reset stream position for reading
         return frame;
     }
 
@@ -55,6 +57,10 @@ protected:
 
         if (original.payload_stream && deserialized.payload_stream) {
             std::string original_payload, deserialized_payload;
+
+            // Reset stream positions
+            original.payload_stream->clear();
+            deserialized.payload_stream->clear();
             original.payload_stream->seekg(0);
             deserialized.payload_stream->seekg(0);
 
@@ -69,49 +75,38 @@ protected:
             EXPECT_EQ(original.payload_stream == nullptr, deserialized.payload_stream == nullptr);
         }
     }
+
+    // Helper to verify buffer state
+    void resetBufferState(std::stringstream& buffer) {
+        buffer.clear();
+        buffer.seekg(0);
+        buffer.seekp(0);
+    }
 };
 
-// Test basic message serialization/deserialization
-TEST_F(CodecTest, BasicSerializationDeserialization) {
-    // Create a simple test frame
+// SERIALIZATION TESTS
+
+TEST_F(CodecTest, BasicSerialization) {
     MessageFrame original = createTestFrame("Hello, World!");
     std::stringstream buffer;
 
-    // Serialize
     std::size_t bytes_written = codec_->serialize(original, buffer);
     ASSERT_GT(bytes_written, 0);
-
-    // Deserialize
-    MessageFrame deserialized = codec_->deserialize(buffer, *channel_);
-    ASSERT_GT(deserialized.payload_size, 0);
-
-    // Verify
-    verifyFramesEqual(original, deserialized);
+    ASSERT_GT(buffer.str().length(), original.payload_size);
 }
 
-// Test encryption functionality
-TEST_F(CodecTest, EncryptionVerification) {
+TEST_F(CodecTest, SerializationEncryption) {
     MessageFrame original = createTestFrame("Sensitive Data");
     std::stringstream buffer;
 
-    // Serialize (which encrypts)
     codec_->serialize(original, buffer);
     std::string serialized = buffer.str();
 
     // Verify the sensitive data is not visible in plain text
     EXPECT_EQ(serialized.find("Sensitive Data"), std::string::npos);
-
-    // Deserialize and verify we can recover the original data
-    MessageFrame deserialized = codec_->deserialize(buffer, *channel_);
-
-    std::string recovered_payload;
-    recovered_payload.resize(deserialized.payload_size);
-    deserialized.payload_stream->read(&recovered_payload[0], deserialized.payload_size);
-    EXPECT_EQ(recovered_payload, "Sensitive Data");
 }
 
-// Test large message handling
-TEST_F(CodecTest, LargeMessageHandling) {
+TEST_F(CodecTest, LargeMessageSerialization) {
     // Create a large payload (1MB)
     std::string large_payload;
     large_payload.reserve(1024 * 1024);  // 1MB
@@ -122,25 +117,74 @@ TEST_F(CodecTest, LargeMessageHandling) {
     MessageFrame original = createTestFrame(large_payload);
     std::stringstream buffer;
 
-    // Serialize
     std::size_t bytes_written = codec_->serialize(original, buffer);
     ASSERT_GT(bytes_written, large_payload.size());
+}
 
-    // Deserialize
+// DESERIALIZATION TESTS
+
+TEST_F(CodecTest, BasicDeserialization) {
+    MessageFrame original = createTestFrame("Test Message");
+    std::stringstream buffer;
+
+    codec_->serialize(original, buffer);
+    resetBufferState(buffer);  // Reset buffer state before deserialization
+
     MessageFrame deserialized = codec_->deserialize(buffer, *channel_);
     ASSERT_GT(deserialized.payload_size, 0);
-
-    // Verify
     verifyFramesEqual(original, deserialized);
 }
 
-// Test channel integration
+TEST_F(CodecTest, EncryptedDataDeserialization) {
+    const std::string test_content = "Encrypted Content";
+    MessageFrame original = createTestFrame(test_content);
+    std::stringstream buffer;
+
+    codec_->serialize(original, buffer);
+    resetBufferState(buffer);  // Reset buffer state before deserialization
+
+    MessageFrame deserialized = codec_->deserialize(buffer, *channel_);
+
+    // Reset stream position for reading
+    deserialized.payload_stream->clear();
+    deserialized.payload_stream->seekg(0);
+
+    std::string recovered_payload(deserialized.payload_size, '\0');
+    deserialized.payload_stream->read(&recovered_payload[0], deserialized.payload_size);
+
+    EXPECT_EQ(recovered_payload, test_content);
+}
+
+TEST_F(CodecTest, LargeMessageDeserialization) {
+    // Create a consistent test pattern for the large message
+    std::string large_payload(1024 * 1024, 'X');  // 1MB of 'X' characters
+    MessageFrame original = createTestFrame(large_payload);
+    std::stringstream buffer;
+
+    codec_->serialize(original, buffer);
+    resetBufferState(buffer);  // Reset buffer state before deserialization
+
+    MessageFrame deserialized = codec_->deserialize(buffer, *channel_);
+    ASSERT_GT(deserialized.payload_size, 0);
+
+    // Reset stream positions before comparison
+    original.payload_stream->clear();
+    original.payload_stream->seekg(0);
+    deserialized.payload_stream->clear();
+    deserialized.payload_stream->seekg(0);
+
+    verifyFramesEqual(original, deserialized);
+}
+
+// CHANNEL INTEGRATION TESTS
+
 TEST_F(CodecTest, ChannelIntegration) {
     MessageFrame original = createTestFrame("Channel Test Data");
     std::stringstream buffer;
 
     // Serialize and deserialize through channel
     codec_->serialize(original, buffer);
+    resetBufferState(buffer);  // Reset buffer state before deserialization
     MessageFrame deserialized = codec_->deserialize(buffer, *channel_);
 
     // Verify channel received the message
@@ -154,22 +198,24 @@ TEST_F(CodecTest, ChannelIntegration) {
     verifyFramesEqual(original, received);
 }
 
-// Test error handling
-TEST_F(CodecTest, ErrorHandling) {
-    // Test invalid key size
-    EXPECT_THROW({
-        std::vector<uint8_t> invalid_key(16, 0x42);  // Wrong key size
-        Codec invalid_codec(invalid_key);
-    }, std::invalid_argument);
+// ERROR HANDLING TESTS
 
-    // Test invalid input stream
+TEST_F(CodecTest, SerializationErrorHandling) {
     MessageFrame frame = createTestFrame();
     std::stringstream invalid_stream;
     invalid_stream.setstate(std::ios::badbit);
     EXPECT_THROW(codec_->serialize(frame, invalid_stream), std::runtime_error);
+}
 
-    // Test invalid output stream
+TEST_F(CodecTest, DeserializationErrorHandling) {
     std::stringstream invalid_output;
     invalid_output.setstate(std::ios::badbit);
     EXPECT_THROW(codec_->deserialize(invalid_output, *channel_), std::runtime_error);
+}
+
+TEST_F(CodecTest, InvalidKeySize) {
+    EXPECT_THROW({
+        std::vector<uint8_t> invalid_key(16, 0x42);  // Wrong key size
+        Codec invalid_codec(invalid_key);
+    }, std::invalid_argument);
 }
