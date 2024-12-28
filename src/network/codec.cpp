@@ -104,22 +104,33 @@ MessageFrame Codec::deserialize(std::istream& input, Channel& channel) {
         frame.filename_length = from_network_order(network_filename_length);
         BOOST_LOG_TRIVIAL(debug) << "Read filename length: " << frame.filename_length;
         total_bytes += sizeof(network_filename_length);
-        
+
         frame.payload_stream = std::make_shared<std::stringstream>();
 
         channel.produce(frame);
 
         // Handle payload if present
         if (frame.payload_size > 0) {
-            BOOST_LOG_TRIVIAL(debug) << "Reading payload of size: " << frame.payload_size;
-            std::vector<char> buffer(frame.payload_size);
-            read_bytes(input, buffer.data(), frame.payload_size);
-            frame.payload_stream->write(buffer.data(), frame.payload_size);
-            frame.payload_stream->seekg(0);
+            BOOST_LOG_TRIVIAL(debug) << "Setting up payload stream for size: " << frame.payload_size;
+            // Create a stringstream for storing metadata only
+            frame.payload_stream = std::make_shared<std::stringstream>();
+
+            // Store current position as the start of payload data
+            std::streampos payload_start = input.tellg();
+
+            // Skip the payload data without reading it
+            input.seekg(frame.payload_size, std::ios::cur);
+
+            // Verify we can seek and the stream is still good
+            if (!input.good()) {
+                BOOST_LOG_TRIVIAL(error) << "Failed to seek past payload data";
+                throw std::runtime_error("Failed to seek in input stream");
+            }
+
             total_bytes += frame.payload_size;
         }
 
-        BOOST_LOG_TRIVIAL(info) << "Message frame deserialization complete. Total bytes read: " << total_bytes;
+        BOOST_LOG_TRIVIAL(info) << "Message frame deserialization complete. Total bytes processed: " << total_bytes;
         return frame;
     }
     catch (const std::exception& e) {
