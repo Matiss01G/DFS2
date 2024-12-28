@@ -1,0 +1,1074 @@
+[----------] 5 tests from CodecTest
+[ RUN      ] CodecTest.BasicSerializationDeserialization
+[2024-12-28 00:57:07.960849] [0x00007ff7a9fb4fc0] [info] Setting up CodecTest fixture
+[2024-12-28 00:57:07.960898] [0x00007ff7a9fb4fc0] [info] Initializing Codec with key size: 32
+[2024-12-28 00:57:07.960903] [0x00007ff7a9fb4fc0] [debug] Test fixture initialized with key size: 32
+[2024-12-28 00:57:07.960907] [0x00007ff7a9fb4fc0] [info] Starting BasicSerializationDeserialization test
+[2024-12-28 00:57:07.960910] [0x00007ff7a9fb4fc0] [debug] Creating test frame with payload size: 13
+[2024-12-28 00:57:07.960918] [0x00007ff7a9fb4fc0] [debug] Test frame created with type: 0
+[2024-12-28 00:57:07.960983] [0x00007ff7a9fb4fc0] [info] Starting message frame serialization
+[2024-12-28 00:57:07.961002] [0x00007ff7a9fb4fc0] [debug] Writing header fields
+[2024-12-28 00:57:07.961011] [0x00007ff7a9fb4fc0] [debug] Writing 16 bytes to output stream
+[2024-12-28 00:57:07.961017] [0x00007ff7a9fb4fc0] [debug] Wrote IV field: 16 bytes, total=16
+[2024-12-28 00:57:07.961021] [0x00007ff7a9fb4fc0] [debug] Writing 1 bytes to output stream
+[2024-12-28 00:57:07.961029] [0x00007ff7a9fb4fc0] [debug] Wrote message type field: 1 bytes, type=0, total=17
+[2024-12-28 00:57:07.961034] [0x00007ff7a9fb4fc0] [debug] Writing 4 bytes to output stream
+[2024-12-28 00:57:07.961041] [0x00007ff7a9fb4fc0] [debug] Wrote source ID field: 4 bytes, ID=1, total=21
+[2024-12-28 00:57:07.961045] [0x00007ff7a9fb4fc0] [debug] Writing 8 bytes to output stream
+[2024-12-28 00:57:07.961053] [0x00007ff7a9fb4fc0] [debug] Wrote payload size field: 8 bytes, size=13, total=29
+[2024-12-28 00:57:07.961057] [0x00007ff7a9fb4fc0] [info] Initializing CryptoStream
+[2024-12-28 00:57:07.961287] [0x00007ff7a9fb4fc0] [debug] CryptoStream initialization complete
+[2024-12-28 00:57:07.961301] [0x00007ff7a9fb4fc0] [debug] Converting IV array to vector
+[2024-12-28 00:57:07.961308] [0x00007ff7a9fb4fc0] [info] Initializing crypto parameters
+[2024-12-28 00:57:07.961320] [0x00007ff7a9fb4fc0] [debug] Crypto parameters initialized successfully
+[2024-12-28 00:57:07.961326] [0x00007ff7a9fb4fc0] [debug] Initialized CryptoStream for filename length encryption
+[2024-12-28 00:57:07.961336] [0x00007ff7a9fb4fc0] [debug] Preparing filename length: 8 (4 bytes)
+[2024-12-28 00:57:07.961347] [0x00007ff7a9fb4fc0] [info] Starting stream encryption
+[2024-12-28 00:57:07.961356] [0x00007ff7a9fb4fc0] [debug] Initializing cipher for encryption
+[2024-12-28 00:57:07.962865] [0x00007ff7a9fb4fc0] [debug] Cipher initialization complete
+[2024-12-28 00:57:07.962888] [0x00007ff7a9fb4fc0] [debug] Padding calculation: input_size=16, block_size=16, padded_size=16
+[2024-12-28 00:57:07.962900] [0x00007ff7a9fb4fc0] [debug] Filename length encryption: original=16 bytes, padded=16 bytes
+[2024-12-28 00:57:07.962903] [0x00007ff7a9fb4fc0] [debug] Writing 16 bytes to output stream
+[2024-12-28 00:57:07.962906] [0x00007ff7a9fb4fc0] [debug] Wrote encrypted filename length field: 16 bytes, total=45
+[2024-12-28 00:57:07.962914] [0x00007ff7a9fb4fc0] [info] Initializing CryptoStream
+[2024-12-28 00:57:07.962920] [0x00007ff7a9fb4fc0] [debug] CryptoStream initialization complete
+[2024-12-28 00:57:07.962943] [0x00007ff7a9fb4fc0] [debug] Converting IV array to vector
+[2024-12-28 00:57:07.962946] [0x00007ff7a9fb4fc0] [info] Initializing crypto parameters
+[2024-12-28 00:57:07.962953] [0x00007ff7a9fb4fc0] [debug] Crypto parameters initialized successfully
+[2024-12-28 00:57:07.962962] [0x00007ff7a9fb4fc0] [debug] Initialized CryptoStream for payload encryption
+[2024-12-28 00:57:07.962966] [0x00007ff7a9fb4fc0] [debug] Processing payload of size: 13 bytes
+[2024-12-28 00:57:07.962976] [0x00007ff7a9fb4fc0] [info] Starting stream encryption
+[2024-12-28 00:57:07.962995] [0x00007ff7a9fb4fc0] [debug] Initializing cipher for encryption
+[2024-12-28 00:57:07.963006] [0x00007ff7a9fb4fc0] [debug] Cipher initialization complete
+[2024-12-28 00:57:07.963016] [0x00007ff7a9fb4fc0] [debug] Payload encrypted successfully
+[2024-12-28 00:57:07.963021] [0x00007ff7a9fb4fc0] [debug] Padding calculation: input_size=16, block_size=16, padded_size=16
+[2024-12-28 00:57:07.963028] [0x00007ff7a9fb4fc0] [debug] Payload encryption: original=16 bytes, padded=16 bytes
+[2024-12-28 00:57:07.963036] [0x00007ff7a9fb4fc0] [debug] Writing 16 bytes to output stream
+[2024-12-28 00:57:07.963044] [0x00007ff7a9fb4fc0] [debug] Wrote encrypted payload: 16 bytes, total=61
+[2024-12-28 00:57:07.963053] [0x00007ff7a9fb4fc0] [info] Message frame serialization completed: total bytes written=61
+[2024-12-28 00:57:07.963059] [0x00007ff7a9fb4fc0] [debug] Cleaning up CryptoStream resources
+[2024-12-28 00:57:07.963066] [0x00007ff7a9fb4fc0] [debug] Cleaning up CryptoStream resources
+[2024-12-28 00:57:07.963072] [0x00007ff7a9fb4fc0] [info] Serialized message frame, bytes written: 61
+[2024-12-28 00:57:07.963075] [0x00007ff7a9fb4fc0] [info] Starting message frame deserialization
+[2024-12-28 00:57:07.963078] [0x00007ff7a9fb4fc0] [debug] Reading header fields
+[2024-12-28 00:57:07.963084] [0x00007ff7a9fb4fc0] [debug] Reading 16 bytes from input stream
+[2024-12-28 00:57:07.963092] [0x00007ff7a9fb4fc0] [debug] Read IV field: 16 bytes, total=16
+[2024-12-28 00:57:07.963100] [0x00007ff7a9fb4fc0] [debug] Reading 1 bytes from input stream
+[2024-12-28 00:57:07.963107] [0x00007ff7a9fb4fc0] [debug] Read message type field: 1 bytes, type=0, total=17
+[2024-12-28 00:57:07.963110] [0x00007ff7a9fb4fc0] [debug] Reading 4 bytes from input stream
+[2024-12-28 00:57:07.963117] [0x00007ff7a9fb4fc0] [debug] Read source ID field: 4 bytes, ID=1, total=21
+[2024-12-28 00:57:07.963124] [0x00007ff7a9fb4fc0] [debug] Reading 8 bytes from input stream
+[2024-12-28 00:57:07.963127] [0x00007ff7a9fb4fc0] [debug] Read payload size field: 8 bytes, size=13, total=29
+[2024-12-28 00:57:07.963129] [0x00007ff7a9fb4fc0] [info] Initializing CryptoStream
+[2024-12-28 00:57:07.963132] [0x00007ff7a9fb4fc0] [debug] CryptoStream initialization complete
+[2024-12-28 00:57:07.963136] [0x00007ff7a9fb4fc0] [debug] Converting IV array to vector
+[2024-12-28 00:57:07.963142] [0x00007ff7a9fb4fc0] [info] Initializing crypto parameters
+[2024-12-28 00:57:07.963150] [0x00007ff7a9fb4fc0] [debug] Crypto parameters initialized successfully
+[2024-12-28 00:57:07.963158] [0x00007ff7a9fb4fc0] [debug] Initialized CryptoStream for filename length decryption
+[2024-12-28 00:57:07.963164] [0x00007ff7a9fb4fc0] [debug] Reading 16 bytes from input stream
+[2024-12-28 00:57:07.963171] [0x00007ff7a9fb4fc0] [debug] Read encrypted filename length block: 16 bytes, total=45
+[2024-12-28 00:57:07.963178] [0x00007ff7a9fb4fc0] [info] Starting stream decryption
+[2024-12-28 00:57:07.963184] [0x00007ff7a9fb4fc0] [debug] Initializing cipher for decryption
+[2024-12-28 00:57:07.963194] [0x00007ff7a9fb4fc0] [debug] Cipher initialization complete
+[2024-12-28 00:57:07.963247] [0x00007ff7a9fb4fc0] [debug] Filename length decrypted
+[2024-12-28 00:57:07.963258] [0x00007ff7a9fb4fc0] [debug] Decoded filename length: 8
+[2024-12-28 00:57:07.963267] [0x00007ff7a9fb4fc0] [info] Initializing CryptoStream
+[2024-12-28 00:57:07.963276] [0x00007ff7a9fb4fc0] [debug] CryptoStream initialization complete
+[2024-12-28 00:57:07.963287] [0x00007ff7a9fb4fc0] [debug] Converting IV array to vector
+[2024-12-28 00:57:07.963294] [0x00007ff7a9fb4fc0] [info] Initializing crypto parameters
+[2024-12-28 00:57:07.963301] [0x00007ff7a9fb4fc0] [debug] Crypto parameters initialized successfully
+[2024-12-28 00:57:07.963304] [0x00007ff7a9fb4fc0] [debug] Initialized CryptoStream for payload decryption
+[2024-12-28 00:57:07.963308] [0x00007ff7a9fb4fc0] [debug] Processing payload of size: 13 bytes
+[2024-12-28 00:57:07.963312] [0x00007ff7a9fb4fc0] [debug] Padding calculation: input_size=13, block_size=16, padded_size=16
+[2024-12-28 00:57:07.963315] [0x00007ff7a9fb4fc0] [debug] Reading 16 bytes from input stream
+[2024-12-28 00:57:07.963317] [0x00007ff7a9fb4fc0] [debug] Read encrypted payload block: 16 bytes, total=61
+[2024-12-28 00:57:07.963323] [0x00007ff7a9fb4fc0] [info] Starting stream decryption
+[2024-12-28 00:57:07.963326] [0x00007ff7a9fb4fc0] [debug] Initializing cipher for decryption
+[2024-12-28 00:57:07.963335] [0x00007ff7a9fb4fc0] [debug] Cipher initialization complete
+[2024-12-28 00:57:07.963343] [0x00007ff7a9fb4fc0] [debug] Payload decrypted successfully
+[2024-12-28 00:57:07.963350] [0x00007ff7a9fb4fc0] [debug] Decrypted payload written to stream: 13 bytes
+[2024-12-28 00:57:07.963357] [0x00007ff7a9fb4fc0] [info] Producing message frame to channel, total bytes read=61
+[2024-12-28 00:57:07.963368] [0x00007ff7a9fb4fc0] [debug] Added message frame to channel. Channel size: 1
+[2024-12-28 00:57:07.963374] [0x00007ff7a9fb4fc0] [info] Message frame deserialization completed successfully
+[2024-12-28 00:57:07.963377] [0x00007ff7a9fb4fc0] [debug] Cleaning up CryptoStream resources
+[2024-12-28 00:57:07.963380] [0x00007ff7a9fb4fc0] [debug] Cleaning up CryptoStream resources
+[2024-12-28 00:57:07.963384] [0x00007ff7a9fb4fc0] [info] Deserialized message frame, payload size: 13
+[2024-12-28 00:57:07.963387] [0x00007ff7a9fb4fc0] [debug] Verifying frame equality
+[2024-12-28 00:57:07.963391] [0x00007ff7a9fb4fc0] [debug] Payload comparison completed
+[2024-12-28 00:57:07.963395] [0x00007ff7a9fb4fc0] [debug] Frame verification completed
+[2024-12-28 00:57:07.963398] [0x00007ff7a9fb4fc0] [info] BasicSerializationDeserialization test completed successfully
+[2024-12-28 00:57:07.963403] [0x00007ff7a9fb4fc0] [debug] Tearing down CodecTest fixture
+[       OK ] CodecTest.BasicSerializationDeserialization (3 ms)
+[ RUN      ] CodecTest.EncryptionVerification
+[2024-12-28 00:57:07.963419] [0x00007ff7a9fb4fc0] [info] Setting up CodecTest fixture
+[2024-12-28 00:57:07.963419] [0x00007ff7a9fb4fc0] [info] Setting up CodecTest fixture
+[2024-12-28 00:57:07.963437] [0x00007ff7a9fb4fc0] [info] Initializing Codec with key size: 32
+[2024-12-28 00:57:07.963437] [0x00007ff7a9fb4fc0] [info] Initializing Codec with key size: 32
+[2024-12-28 00:57:07.963447] [0x00007ff7a9fb4fc0] [debug] Test fixture initialized with key size: 32
+[2024-12-28 00:57:07.963447] [0x00007ff7a9fb4fc0] [debug] Test fixture initialized with key size: 32
+[2024-12-28 00:57:07.963461] [0x00007ff7a9fb4fc0] [info] Starting EncryptionVerification test
+[2024-12-28 00:57:07.963461] [0x00007ff7a9fb4fc0] [info] Starting EncryptionVerification test
+[2024-12-28 00:57:07.963468] [0x00007ff7a9fb4fc0] [debug] Creating test frame with payload size: 14
+[2024-12-28 00:57:07.963468] [0x00007ff7a9fb4fc0] [debug] Creating test frame with payload size: 14
+[2024-12-28 00:57:07.963475] [0x00007ff7a9fb4fc0] [debug] Test frame created with type: 0
+[2024-12-28 00:57:07.963475] [0x00007ff7a9fb4fc0] [debug] Test frame created with type: 0
+[2024-12-28 00:57:07.963481] [0x00007ff7a9fb4fc0] [info] Starting message frame serialization
+[2024-12-28 00:57:07.963481] [0x00007ff7a9fb4fc0] [info] Starting message frame serialization
+[2024-12-28 00:57:07.963487] [0x00007ff7a9fb4fc0] [debug] Writing header fields
+[2024-12-28 00:57:07.963487] [0x00007ff7a9fb4fc0] [debug] Writing header fields
+[2024-12-28 00:57:07.963493] [0x00007ff7a9fb4fc0] [debug] Writing 16 bytes to output stream
+[2024-12-28 00:57:07.963493] [0x00007ff7a9fb4fc0] [debug] Writing 16 bytes to output stream
+[2024-12-28 00:57:07.963499] [0x00007ff7a9fb4fc0] [debug] Wrote IV field: 16 bytes, total=16
+[2024-12-28 00:57:07.963499] [0x00007ff7a9fb4fc0] [debug] Wrote IV field: 16 bytes, total=16
+[2024-12-28 00:57:07.963505] [0x00007ff7a9fb4fc0] [debug] Writing 1 bytes to output stream
+[2024-12-28 00:57:07.963505] [0x00007ff7a9fb4fc0] [debug] Writing 1 bytes to output stream
+[2024-12-28 00:57:07.963512] [0x00007ff7a9fb4fc0] [debug] Wrote message type field: 1 bytes, type=0, total=17
+[2024-12-28 00:57:07.963512] [0x00007ff7a9fb4fc0] [debug] Wrote message type field: 1 bytes, type=0, total=17
+[2024-12-28 00:57:07.963520] [0x00007ff7a9fb4fc0] [debug] Writing 4 bytes to output stream
+[2024-12-28 00:57:07.963520] [0x00007ff7a9fb4fc0] [debug] Writing 4 bytes to output stream
+[2024-12-28 00:57:07.963529] [0x00007ff7a9fb4fc0] [debug] Wrote source ID field: 4 bytes, ID=1, total=21
+[2024-12-28 00:57:07.963529] [0x00007ff7a9fb4fc0] [debug] Wrote source ID field: 4 bytes, ID=1, total=21
+[2024-12-28 00:57:07.963538] [0x00007ff7a9fb4fc0] [debug] Writing 8 bytes to output stream
+[2024-12-28 00:57:07.963538] [0x00007ff7a9fb4fc0] [debug] Writing 8 bytes to output stream
+[2024-12-28 00:57:07.963547] [0x00007ff7a9fb4fc0] [debug] Wrote payload size field: 8 bytes, size=14, total=29
+[2024-12-28 00:57:07.963547] [0x00007ff7a9fb4fc0] [debug] Wrote payload size field: 8 bytes, size=14, total=29
+[2024-12-28 00:57:07.963555] [0x00007ff7a9fb4fc0] [info] Initializing CryptoStream
+[2024-12-28 00:57:07.963555] [0x00007ff7a9fb4fc0] [info] Initializing CryptoStream
+[2024-12-28 00:57:07.963564] [0x00007ff7a9fb4fc0] [debug] CryptoStream initialization complete
+[2024-12-28 00:57:07.963564] [0x00007ff7a9fb4fc0] [debug] CryptoStream initialization complete
+[2024-12-28 00:57:07.963570] [0x00007ff7a9fb4fc0] [debug] Converting IV array to vector
+[2024-12-28 00:57:07.963570] [0x00007ff7a9fb4fc0] [debug] Converting IV array to vector
+[2024-12-28 00:57:07.963576] [0x00007ff7a9fb4fc0] [info] Initializing crypto parameters
+[2024-12-28 00:57:07.963576] [0x00007ff7a9fb4fc0] [info] Initializing crypto parameters
+[2024-12-28 00:57:07.963582] [0x00007ff7a9fb4fc0] [debug] Crypto parameters initialized successfully
+[2024-12-28 00:57:07.963582] [0x00007ff7a9fb4fc0] [debug] Crypto parameters initialized successfully
+[2024-12-28 00:57:07.963589] [0x00007ff7a9fb4fc0] [debug] Initialized CryptoStream for filename length encryption
+[2024-12-28 00:57:07.963589] [0x00007ff7a9fb4fc0] [debug] Initialized CryptoStream for filename length encryption
+[2024-12-28 00:57:07.963596] [0x00007ff7a9fb4fc0] [debug] Preparing filename length: 8 (4 bytes)
+[2024-12-28 00:57:07.963596] [0x00007ff7a9fb4fc0] [debug] Preparing filename length: 8 (4 bytes)
+[2024-12-28 00:57:07.963603] [0x00007ff7a9fb4fc0] [info] Starting stream encryption
+[2024-12-28 00:57:07.963603] [0x00007ff7a9fb4fc0] [info] Starting stream encryption
+[2024-12-28 00:57:07.963609] [0x00007ff7a9fb4fc0] [debug] Initializing cipher for encryption
+[2024-12-28 00:57:07.963609] [0x00007ff7a9fb4fc0] [debug] Initializing cipher for encryption
+[2024-12-28 00:57:07.963618] [0x00007ff7a9fb4fc0] [debug] Cipher initialization complete
+[2024-12-28 00:57:07.963618] [0x00007ff7a9fb4fc0] [debug] Cipher initialization complete
+[2024-12-28 00:57:07.963624] [0x00007ff7a9fb4fc0] [debug] Padding calculation: input_size=16, block_size=16, padded_size=16
+[2024-12-28 00:57:07.963624] [0x00007ff7a9fb4fc0] [debug] Padding calculation: input_size=16, block_size=16, padded_size=16
+[2024-12-28 00:57:07.963631] [0x00007ff7a9fb4fc0] [debug] Filename length encryption: original=16 bytes, padded=16 bytes
+[2024-12-28 00:57:07.963631] [0x00007ff7a9fb4fc0] [debug] Filename length encryption: original=16 bytes, padded=16 bytes
+[2024-12-28 00:57:07.963637] [0x00007ff7a9fb4fc0] [debug] Writing 16 bytes to output stream
+[2024-12-28 00:57:07.963637] [0x00007ff7a9fb4fc0] [debug] Writing 16 bytes to output stream
+[2024-12-28 00:57:07.963643] [0x00007ff7a9fb4fc0] [debug] Wrote encrypted filename length field: 16 bytes, total=45
+[2024-12-28 00:57:07.963643] [0x00007ff7a9fb4fc0] [debug] Wrote encrypted filename length field: 16 bytes, total=45
+[2024-12-28 00:57:07.963647] [0x00007ff7a9fb4fc0] [info] Initializing CryptoStream
+[2024-12-28 00:57:07.963647] [0x00007ff7a9fb4fc0] [info] Initializing CryptoStream
+[2024-12-28 00:57:07.963653] [0x00007ff7a9fb4fc0] [debug] CryptoStream initialization complete
+[2024-12-28 00:57:07.963653] [0x00007ff7a9fb4fc0] [debug] CryptoStream initialization complete
+[2024-12-28 00:57:07.963659] [0x00007ff7a9fb4fc0] [debug] Converting IV array to vector
+[2024-12-28 00:57:07.963659] [0x00007ff7a9fb4fc0] [debug] Converting IV array to vector
+[2024-12-28 00:57:07.963667] [0x00007ff7a9fb4fc0] [info] Initializing crypto parameters
+[2024-12-28 00:57:07.963667] [0x00007ff7a9fb4fc0] [info] Initializing crypto parameters
+[2024-12-28 00:57:07.963671] [0x00007ff7a9fb4fc0] [debug] Crypto parameters initialized successfully
+[2024-12-28 00:57:07.963671] [0x00007ff7a9fb4fc0] [debug] Crypto parameters initialized successfully
+[2024-12-28 00:57:07.963683] [0x00007ff7a9fb4fc0] [debug] Initialized CryptoStream for payload encryption
+[2024-12-28 00:57:07.963683] [0x00007ff7a9fb4fc0] [debug] Initialized CryptoStream for payload encryption
+[2024-12-28 00:57:07.963692] [0x00007ff7a9fb4fc0] [debug] Processing payload of size: 14 bytes
+[2024-12-28 00:57:07.963692] [0x00007ff7a9fb4fc0] [debug] Processing payload of size: 14 bytes
+[2024-12-28 00:57:07.963699] [0x00007ff7a9fb4fc0] [info] Starting stream encryption
+[2024-12-28 00:57:07.963699] [0x00007ff7a9fb4fc0] [info] Starting stream encryption
+[2024-12-28 00:57:07.963704] [0x00007ff7a9fb4fc0] [debug] Initializing cipher for encryption
+[2024-12-28 00:57:07.963704] [0x00007ff7a9fb4fc0] [debug] Initializing cipher for encryption
+[2024-12-28 00:57:07.963711] [0x00007ff7a9fb4fc0] [debug] Cipher initialization complete
+[2024-12-28 00:57:07.963711] [0x00007ff7a9fb4fc0] [debug] Cipher initialization complete
+[2024-12-28 00:57:07.963725] [0x00007ff7a9fb4fc0] [debug] Payload encrypted successfully
+[2024-12-28 00:57:07.963725] [0x00007ff7a9fb4fc0] [debug] Payload encrypted successfully
+[2024-12-28 00:57:07.963735] [0x00007ff7a9fb4fc0] [debug] Padding calculation: input_size=16, block_size=16, padded_size=16
+[2024-12-28 00:57:07.963735] [0x00007ff7a9fb4fc0] [debug] Padding calculation: input_size=16, block_size=16, padded_size=16
+[2024-12-28 00:57:07.963743] [0x00007ff7a9fb4fc0] [debug] Payload encryption: original=16 bytes, padded=16 bytes
+[2024-12-28 00:57:07.963743] [0x00007ff7a9fb4fc0] [debug] Payload encryption: original=16 bytes, padded=16 bytes
+[2024-12-28 00:57:07.963749] [0x00007ff7a9fb4fc0] [debug] Writing 16 bytes to output stream
+[2024-12-28 00:57:07.963749] [0x00007ff7a9fb4fc0] [debug] Writing 16 bytes to output stream
+[2024-12-28 00:57:07.963755] [0x00007ff7a9fb4fc0] [debug] Wrote encrypted payload: 16 bytes, total=61
+[2024-12-28 00:57:07.963755] [0x00007ff7a9fb4fc0] [debug] Wrote encrypted payload: 16 bytes, total=61
+[2024-12-28 00:57:07.963761] [0x00007ff7a9fb4fc0] [info] Message frame serialization completed: total bytes written=61
+[2024-12-28 00:57:07.963761] [0x00007ff7a9fb4fc0] [info] Message frame serialization completed: total bytes written=61
+[2024-12-28 00:57:07.963767] [0x00007ff7a9fb4fc0] [debug] Cleaning up CryptoStream resources
+[2024-12-28 00:57:07.963767] [0x00007ff7a9fb4fc0] [debug] Cleaning up CryptoStream resources
+[2024-12-28 00:57:07.963771] [0x00007ff7a9fb4fc0] [debug] Cleaning up CryptoStream resources
+[2024-12-28 00:57:07.963771] [0x00007ff7a9fb4fc0] [debug] Cleaning up CryptoStream resources
+[2024-12-28 00:57:07.963782] [0x00007ff7a9fb4fc0] [debug] Serialized data size: 61
+[2024-12-28 00:57:07.963782] [0x00007ff7a9fb4fc0] [debug] Serialized data size: 61
+[2024-12-28 00:57:07.963789] [0x00007ff7a9fb4fc0] [debug] Verified sensitive data is not in plain text
+[2024-12-28 00:57:07.963789] [0x00007ff7a9fb4fc0] [debug] Verified sensitive data is not in plain text
+[2024-12-28 00:57:07.963794] [0x00007ff7a9fb4fc0] [info] Starting message frame deserialization
+[2024-12-28 00:57:07.963794] [0x00007ff7a9fb4fc0] [info] Starting message frame deserialization
+[2024-12-28 00:57:07.963801] [0x00007ff7a9fb4fc0] [debug] Reading header fields
+[2024-12-28 00:57:07.963801] [0x00007ff7a9fb4fc0] [debug] Reading header fields
+[2024-12-28 00:57:07.963809] [0x00007ff7a9fb4fc0] [debug] Reading 16 bytes from input stream
+[2024-12-28 00:57:07.963809] [0x00007ff7a9fb4fc0] [debug] Reading 16 bytes from input stream
+[2024-12-28 00:57:07.963824] [0x00007ff7a9fb4fc0] [debug] Read IV field: 16 bytes, total=16
+[2024-12-28 00:57:07.963824] [0x00007ff7a9fb4fc0] [debug] Read IV field: 16 bytes, total=16
+[2024-12-28 00:57:07.963836] [0x00007ff7a9fb4fc0] [debug] Reading 1 bytes from input stream
+[2024-12-28 00:57:07.963836] [0x00007ff7a9fb4fc0] [debug] Reading 1 bytes from input stream
+[2024-12-28 00:57:07.963844] [0x00007ff7a9fb4fc0] [debug] Read message type field: 1 bytes, type=0, total=17
+[2024-12-28 00:57:07.963844] [0x00007ff7a9fb4fc0] [debug] Read message type field: 1 bytes, type=0, total=17
+[2024-12-28 00:57:07.963851] [0x00007ff7a9fb4fc0] [debug] Reading 4 bytes from input stream
+[2024-12-28 00:57:07.963851] [0x00007ff7a9fb4fc0] [debug] Reading 4 bytes from input stream
+[2024-12-28 00:57:07.963856] [0x00007ff7a9fb4fc0] [debug] Read source ID field: 4 bytes, ID=1, total=21
+[2024-12-28 00:57:07.963856] [0x00007ff7a9fb4fc0] [debug] Read source ID field: 4 bytes, ID=1, total=21
+[2024-12-28 00:57:07.963862] [0x00007ff7a9fb4fc0] [debug] Reading 8 bytes from input stream
+[2024-12-28 00:57:07.963862] [0x00007ff7a9fb4fc0] [debug] Reading 8 bytes from input stream
+[2024-12-28 00:57:07.963866] [0x00007ff7a9fb4fc0] [debug] Read payload size field: 8 bytes, size=14, total=29
+[2024-12-28 00:57:07.963866] [0x00007ff7a9fb4fc0] [debug] Read payload size field: 8 bytes, size=14, total=29
+[2024-12-28 00:57:07.963872] [0x00007ff7a9fb4fc0] [info] Initializing CryptoStream
+[2024-12-28 00:57:07.963872] [0x00007ff7a9fb4fc0] [info] Initializing CryptoStream
+[2024-12-28 00:57:07.963877] [0x00007ff7a9fb4fc0] [debug] CryptoStream initialization complete
+[2024-12-28 00:57:07.963877] [0x00007ff7a9fb4fc0] [debug] CryptoStream initialization complete
+[2024-12-28 00:57:07.963883] [0x00007ff7a9fb4fc0] [debug] Converting IV array to vector
+[2024-12-28 00:57:07.963883] [0x00007ff7a9fb4fc0] [debug] Converting IV array to vector
+[2024-12-28 00:57:07.963888] [0x00007ff7a9fb4fc0] [info] Initializing crypto parameters
+[2024-12-28 00:57:07.963888] [0x00007ff7a9fb4fc0] [info] Initializing crypto parameters
+[2024-12-28 00:57:07.963894] [0x00007ff7a9fb4fc0] [debug] Crypto parameters initialized successfully
+[2024-12-28 00:57:07.963894] [0x00007ff7a9fb4fc0] [debug] Crypto parameters initialized successfully
+[2024-12-28 00:57:07.963898] [0x00007ff7a9fb4fc0] [debug] Initialized CryptoStream for filename length decryption
+[2024-12-28 00:57:07.963898] [0x00007ff7a9fb4fc0] [debug] Initialized CryptoStream for filename length decryption
+[2024-12-28 00:57:07.963911] [0x00007ff7a9fb4fc0] [debug] Reading 16 bytes from input stream
+[2024-12-28 00:57:07.963911] [0x00007ff7a9fb4fc0] [debug] Reading 16 bytes from input stream
+[2024-12-28 00:57:07.963919] [0x00007ff7a9fb4fc0] [debug] Read encrypted filename length block: 16 bytes, total=45
+[2024-12-28 00:57:07.963919] [0x00007ff7a9fb4fc0] [debug] Read encrypted filename length block: 16 bytes, total=45
+[2024-12-28 00:57:07.963926] [0x00007ff7a9fb4fc0] [info] Starting stream decryption
+[2024-12-28 00:57:07.963926] [0x00007ff7a9fb4fc0] [info] Starting stream decryption
+[2024-12-28 00:57:07.963932] [0x00007ff7a9fb4fc0] [debug] Initializing cipher for decryption
+[2024-12-28 00:57:07.963932] [0x00007ff7a9fb4fc0] [debug] Initializing cipher for decryption
+[2024-12-28 00:57:07.963940] [0x00007ff7a9fb4fc0] [debug] Cipher initialization complete
+[2024-12-28 00:57:07.963940] [0x00007ff7a9fb4fc0] [debug] Cipher initialization complete
+[2024-12-28 00:57:07.963946] [0x00007ff7a9fb4fc0] [debug] Filename length decrypted
+[2024-12-28 00:57:07.963946] [0x00007ff7a9fb4fc0] [debug] Filename length decrypted
+[2024-12-28 00:57:07.963952] [0x00007ff7a9fb4fc0] [debug] Decoded filename length: 8
+[2024-12-28 00:57:07.963952] [0x00007ff7a9fb4fc0] [debug] Decoded filename length: 8
+[2024-12-28 00:57:07.963958] [0x00007ff7a9fb4fc0] [info] Initializing CryptoStream
+[2024-12-28 00:57:07.963958] [0x00007ff7a9fb4fc0] [info] Initializing CryptoStream
+[2024-12-28 00:57:07.963964] [0x00007ff7a9fb4fc0] [debug] CryptoStream initialization complete
+[2024-12-28 00:57:07.963964] [0x00007ff7a9fb4fc0] [debug] CryptoStream initialization complete
+[2024-12-28 00:57:07.963970] [0x00007ff7a9fb4fc0] [debug] Converting IV array to vector
+[2024-12-28 00:57:07.963970] [0x00007ff7a9fb4fc0] [debug] Converting IV array to vector
+[2024-12-28 00:57:07.963974] [0x00007ff7a9fb4fc0] [info] Initializing crypto parameters
+[2024-12-28 00:57:07.963974] [0x00007ff7a9fb4fc0] [info] Initializing crypto parameters
+[2024-12-28 00:57:07.963980] [0x00007ff7a9fb4fc0] [debug] Crypto parameters initialized successfully
+[2024-12-28 00:57:07.963980] [0x00007ff7a9fb4fc0] [debug] Crypto parameters initialized successfully
+[2024-12-28 00:57:07.963987] [0x00007ff7a9fb4fc0] [debug] Initialized CryptoStream for payload decryption
+[2024-12-28 00:57:07.963987] [0x00007ff7a9fb4fc0] [debug] Initialized CryptoStream for payload decryption
+[2024-12-28 00:57:07.963994] [0x00007ff7a9fb4fc0] [debug] Processing payload of size: 14 bytes
+[2024-12-28 00:57:07.963994] [0x00007ff7a9fb4fc0] [debug] Processing payload of size: 14 bytes
+[2024-12-28 00:57:07.964000] [0x00007ff7a9fb4fc0] [debug] Padding calculation: input_size=14, block_size=16, padded_size=16
+[2024-12-28 00:57:07.964000] [0x00007ff7a9fb4fc0] [debug] Padding calculation: input_size=14, block_size=16, padded_size=16
+[2024-12-28 00:57:07.964004] [0x00007ff7a9fb4fc0] [debug] Reading 16 bytes from input stream
+[2024-12-28 00:57:07.964004] [0x00007ff7a9fb4fc0] [debug] Reading 16 bytes from input stream
+[2024-12-28 00:57:07.964008] [0x00007ff7a9fb4fc0] [debug] Read encrypted payload block: 16 bytes, total=61
+[2024-12-28 00:57:07.964008] [0x00007ff7a9fb4fc0] [debug] Read encrypted payload block: 16 bytes, total=61
+[2024-12-28 00:57:07.964012] [0x00007ff7a9fb4fc0] [info] Starting stream decryption
+[2024-12-28 00:57:07.964012] [0x00007ff7a9fb4fc0] [info] Starting stream decryption
+[2024-12-28 00:57:07.964016] [0x00007ff7a9fb4fc0] [debug] Initializing cipher for decryption
+[2024-12-28 00:57:07.964016] [0x00007ff7a9fb4fc0] [debug] Initializing cipher for decryption
+[2024-12-28 00:57:07.964027] [0x00007ff7a9fb4fc0] [debug] Cipher initialization complete
+[2024-12-28 00:57:07.964027] [0x00007ff7a9fb4fc0] [debug] Cipher initialization complete
+[2024-12-28 00:57:07.964036] [0x00007ff7a9fb4fc0] [debug] Payload decrypted successfully
+[2024-12-28 00:57:07.964036] [0x00007ff7a9fb4fc0] [debug] Payload decrypted successfully
+[2024-12-28 00:57:07.964043] [0x00007ff7a9fb4fc0] [debug] Decrypted payload written to stream: 14 bytes
+[2024-12-28 00:57:07.964043] [0x00007ff7a9fb4fc0] [debug] Decrypted payload written to stream: 14 bytes
+[2024-12-28 00:57:07.964049] [0x00007ff7a9fb4fc0] [info] Producing message frame to channel, total bytes read=61
+[2024-12-28 00:57:07.964049] [0x00007ff7a9fb4fc0] [info] Producing message frame to channel, total bytes read=61
+[2024-12-28 00:57:07.964055] [0x00007ff7a9fb4fc0] [debug] Added message frame to channel. Channel size: 1
+[2024-12-28 00:57:07.964055] [0x00007ff7a9fb4fc0] [debug] Added message frame to channel. Channel size: 1
+[2024-12-28 00:57:07.964061] [0x00007ff7a9fb4fc0] [info] Message frame deserialization completed successfully
+[2024-12-28 00:57:07.964061] [0x00007ff7a9fb4fc0] [info] Message frame deserialization completed successfully
+[2024-12-28 00:57:07.964066] [0x00007ff7a9fb4fc0] [debug] Cleaning up CryptoStream resources
+[2024-12-28 00:57:07.964066] [0x00007ff7a9fb4fc0] [debug] Cleaning up CryptoStream resources
+[2024-12-28 00:57:07.964072] [0x00007ff7a9fb4fc0] [debug] Cleaning up CryptoStream resources
+[2024-12-28 00:57:07.964072] [0x00007ff7a9fb4fc0] [debug] Cleaning up CryptoStream resources
+[2024-12-28 00:57:07.964076] [0x00007ff7a9fb4fc0] [debug] Recovered payload size: 14
+[2024-12-28 00:57:07.964076] [0x00007ff7a9fb4fc0] [debug] Recovered payload size: 14
+/home/runner/StreamCryptoDFS/src/tests/codec_test.cpp:153: Failure
+Expected equality of these values:
+  recovered_payload
+    Which is: "\0\0\0\0\0\0\0\0\0\0\0\0\0\0"
+  "Sensitive Data"
+
+[2024-12-28 00:57:07.964107] [0x00007ff7a9fb4fc0] [info] EncryptionVerification test completed successfully
+[2024-12-28 00:57:07.964107] [0x00007ff7a9fb4fc0] [info] EncryptionVerification test completed successfully
+[2024-12-28 00:57:07.964124] [0x00007ff7a9fb4fc0] [debug] Tearing down CodecTest fixture
+[2024-12-28 00:57:07.964124] [0x00007ff7a9fb4fc0] [debug] Tearing down CodecTest fixture
+[  FAILED  ] CodecTest.EncryptionVerification (0 ms)
+[ RUN      ] CodecTest.LargeMessageHandling
+[2024-12-28 00:57:07.964145] [0x00007ff7a9fb4fc0] [info] Setting up CodecTest fixture
+[2024-12-28 00:57:07.964145] [0x00007ff7a9fb4fc0] [info] Setting up CodecTest fixture
+[2024-12-28 00:57:07.964145] [0x00007ff7a9fb4fc0] [info] Setting up CodecTest fixture
+[2024-12-28 00:57:07.964160] [0x00007ff7a9fb4fc0] [info] Initializing Codec with key size: 32
+[2024-12-28 00:57:07.964160] [0x00007ff7a9fb4fc0] [info] Initializing Codec with key size: 32
+[2024-12-28 00:57:07.964160] [0x00007ff7a9fb4fc0] [info] Initializing Codec with key size: 32
+[2024-12-28 00:57:07.964175] [0x00007ff7a9fb4fc0] [debug] Test fixture initialized with key size: 32
+[2024-12-28 00:57:07.964175] [0x00007ff7a9fb4fc0] [debug] Test fixture initialized with key size: 32
+[2024-12-28 00:57:07.964175] [0x00007ff7a9fb4fc0] [debug] Test fixture initialized with key size: 32
+[2024-12-28 00:57:07.964189] [0x00007ff7a9fb4fc0] [info] Starting LargeMessageHandling test
+[2024-12-28 00:57:07.964189] [0x00007ff7a9fb4fc0] [info] Starting LargeMessageHandling test
+[2024-12-28 00:57:07.964189] [0x00007ff7a9fb4fc0] [info] Starting LargeMessageHandling test
+[2024-12-28 00:57:07.966481] [0x00007ff7a9fb4fc0] [debug] Created large payload of size: 1048576
+[2024-12-28 00:57:07.966481] [0x00007ff7a9fb4fc0] [debug] Created large payload of size: 1048576
+[2024-12-28 00:57:07.966481] [0x00007ff7a9fb4fc0] [debug] Created large payload of size: 1048576
+[2024-12-28 00:57:07.966509] [0x00007ff7a9fb4fc0] [debug] Creating test frame with payload size: 1048576
+[2024-12-28 00:57:07.966509] [0x00007ff7a9fb4fc0] [debug] Creating test frame with payload size: 1048576
+[2024-12-28 00:57:07.966509] [0x00007ff7a9fb4fc0] [debug] Creating test frame with payload size: 1048576
+[2024-12-28 00:57:07.966981] [0x00007ff7a9fb4fc0] [debug] Test frame created with type: 0
+[2024-12-28 00:57:07.966981] [0x00007ff7a9fb4fc0] [debug] Test frame created with type: 0
+[2024-12-28 00:57:07.966981] [0x00007ff7a9fb4fc0] [debug] Test frame created with type: 0
+[2024-12-28 00:57:07.967003] [0x00007ff7a9fb4fc0] [info] Starting message frame serialization
+[2024-12-28 00:57:07.967003] [0x00007ff7a9fb4fc0] [info] Starting message frame serialization
+[2024-12-28 00:57:07.967003] [0x00007ff7a9fb4fc0] [info] Starting message frame serialization
+[2024-12-28 00:57:07.967017] [0x00007ff7a9fb4fc0] [debug] Writing header fields
+[2024-12-28 00:57:07.967017] [0x00007ff7a9fb4fc0] [debug] Writing header fields
+[2024-12-28 00:57:07.967017] [0x00007ff7a9fb4fc0] [debug] Writing header fields
+[2024-12-28 00:57:07.967030] [0x00007ff7a9fb4fc0] [debug] Writing 16 bytes to output stream
+[2024-12-28 00:57:07.967030] [0x00007ff7a9fb4fc0] [debug] Writing 16 bytes to output stream
+[2024-12-28 00:57:07.967030] [0x00007ff7a9fb4fc0] [debug] Writing 16 bytes to output stream
+[2024-12-28 00:57:07.967044] [0x00007ff7a9fb4fc0] [debug] Wrote IV field: 16 bytes, total=16
+[2024-12-28 00:57:07.967044] [0x00007ff7a9fb4fc0] [debug] Wrote IV field: 16 bytes, total=16
+[2024-12-28 00:57:07.967044] [0x00007ff7a9fb4fc0] [debug] Wrote IV field: 16 bytes, total=16
+[2024-12-28 00:57:07.967061] [0x00007ff7a9fb4fc0] [debug] Writing 1 bytes to output stream
+[2024-12-28 00:57:07.967061] [0x00007ff7a9fb4fc0] [debug] Writing 1 bytes to output stream
+[2024-12-28 00:57:07.967061] [0x00007ff7a9fb4fc0] [debug] Writing 1 bytes to output stream
+[2024-12-28 00:57:07.967073] [0x00007ff7a9fb4fc0] [debug] Wrote message type field: 1 bytes, type=0, total=17
+[2024-12-28 00:57:07.967073] [0x00007ff7a9fb4fc0] [debug] Wrote message type field: 1 bytes, type=0, total=17
+[2024-12-28 00:57:07.967073] [0x00007ff7a9fb4fc0] [debug] Wrote message type field: 1 bytes, type=0, total=17
+[2024-12-28 00:57:07.967087] [0x00007ff7a9fb4fc0] [debug] Writing 4 bytes to output stream
+[2024-12-28 00:57:07.967087] [0x00007ff7a9fb4fc0] [debug] Writing 4 bytes to output stream
+[2024-12-28 00:57:07.967087] [0x00007ff7a9fb4fc0] [debug] Writing 4 bytes to output stream
+[2024-12-28 00:57:07.967099] [0x00007ff7a9fb4fc0] [debug] Wrote source ID field: 4 bytes, ID=1, total=21
+[2024-12-28 00:57:07.967099] [0x00007ff7a9fb4fc0] [debug] Wrote source ID field: 4 bytes, ID=1, total=21
+[2024-12-28 00:57:07.967099] [0x00007ff7a9fb4fc0] [debug] Wrote source ID field: 4 bytes, ID=1, total=21
+[2024-12-28 00:57:07.967112] [0x00007ff7a9fb4fc0] [debug] Writing 8 bytes to output stream
+[2024-12-28 00:57:07.967112] [0x00007ff7a9fb4fc0] [debug] Writing 8 bytes to output stream
+[2024-12-28 00:57:07.967112] [0x00007ff7a9fb4fc0] [debug] Writing 8 bytes to output stream
+[2024-12-28 00:57:07.967127] [0x00007ff7a9fb4fc0] [debug] Wrote payload size field: 8 bytes, size=1048576, total=29
+[2024-12-28 00:57:07.967127] [0x00007ff7a9fb4fc0] [debug] Wrote payload size field: 8 bytes, size=1048576, total=29
+[2024-12-28 00:57:07.967127] [0x00007ff7a9fb4fc0] [debug] Wrote payload size field: 8 bytes, size=1048576, total=29
+[2024-12-28 00:57:07.967141] [0x00007ff7a9fb4fc0] [info] Initializing CryptoStream
+[2024-12-28 00:57:07.967141] [0x00007ff7a9fb4fc0] [info] Initializing CryptoStream
+[2024-12-28 00:57:07.967141] [0x00007ff7a9fb4fc0] [info] Initializing CryptoStream
+[2024-12-28 00:57:07.967154] [0x00007ff7a9fb4fc0] [debug] CryptoStream initialization complete
+[2024-12-28 00:57:07.967154] [0x00007ff7a9fb4fc0] [debug] CryptoStream initialization complete
+[2024-12-28 00:57:07.967154] [0x00007ff7a9fb4fc0] [debug] CryptoStream initialization complete
+[2024-12-28 00:57:07.967168] [0x00007ff7a9fb4fc0] [debug] Converting IV array to vector
+[2024-12-28 00:57:07.967168] [0x00007ff7a9fb4fc0] [debug] Converting IV array to vector
+[2024-12-28 00:57:07.967168] [0x00007ff7a9fb4fc0] [debug] Converting IV array to vector
+[2024-12-28 00:57:07.967181] [0x00007ff7a9fb4fc0] [info] Initializing crypto parameters
+[2024-12-28 00:57:07.967181] [0x00007ff7a9fb4fc0] [info] Initializing crypto parameters
+[2024-12-28 00:57:07.967181] [0x00007ff7a9fb4fc0] [info] Initializing crypto parameters
+[2024-12-28 00:57:07.967283] [0x00007ff7a9fb4fc0] [debug] Crypto parameters initialized successfully
+[2024-12-28 00:57:07.967283] [0x00007ff7a9fb4fc0] [debug] Crypto parameters initialized successfully
+[2024-12-28 00:57:07.967283] [0x00007ff7a9fb4fc0] [debug] Crypto parameters initialized successfully
+[2024-12-28 00:57:07.967306] [0x00007ff7a9fb4fc0] [debug] Initialized CryptoStream for filename length encryption
+[2024-12-28 00:57:07.967306] [0x00007ff7a9fb4fc0] [debug] Initialized CryptoStream for filename length encryption
+[2024-12-28 00:57:07.967306] [0x00007ff7a9fb4fc0] [debug] Initialized CryptoStream for filename length encryption
+[2024-12-28 00:57:07.967324] [0x00007ff7a9fb4fc0] [debug] Preparing filename length: 8 (4 bytes)
+[2024-12-28 00:57:07.967324] [0x00007ff7a9fb4fc0] [debug] Preparing filename length: 8 (4 bytes)
+[2024-12-28 00:57:07.967324] [0x00007ff7a9fb4fc0] [debug] Preparing filename length: 8 (4 bytes)
+[2024-12-28 00:57:07.967342] [0x00007ff7a9fb4fc0] [info] Starting stream encryption
+[2024-12-28 00:57:07.967342] [0x00007ff7a9fb4fc0] [info] Starting stream encryption
+[2024-12-28 00:57:07.967342] [0x00007ff7a9fb4fc0] [info] Starting stream encryption
+[2024-12-28 00:57:07.967362] [0x00007ff7a9fb4fc0] [debug] Initializing cipher for encryption
+[2024-12-28 00:57:07.967362] [0x00007ff7a9fb4fc0] [debug] Initializing cipher for encryption
+[2024-12-28 00:57:07.967362] [0x00007ff7a9fb4fc0] [debug] Initializing cipher for encryption
+[2024-12-28 00:57:07.967388] [0x00007ff7a9fb4fc0] [debug] Cipher initialization complete
+[2024-12-28 00:57:07.967388] [0x00007ff7a9fb4fc0] [debug] Cipher initialization complete
+[2024-12-28 00:57:07.967388] [0x00007ff7a9fb4fc0] [debug] Cipher initialization complete
+[2024-12-28 00:57:07.967406] [0x00007ff7a9fb4fc0] [debug] Padding calculation: input_size=16, block_size=16, padded_size=16
+[2024-12-28 00:57:07.967406] [0x00007ff7a9fb4fc0] [debug] Padding calculation: input_size=16, block_size=16, padded_size=16
+[2024-12-28 00:57:07.967406] [0x00007ff7a9fb4fc0] [debug] Padding calculation: input_size=16, block_size=16, padded_size=16
+[2024-12-28 00:57:07.967422] [0x00007ff7a9fb4fc0] [debug] Filename length encryption: original=16 bytes, padded=16 bytes
+[2024-12-28 00:57:07.967422] [0x00007ff7a9fb4fc0] [debug] Filename length encryption: original=16 bytes, padded=16 bytes
+[2024-12-28 00:57:07.967422] [0x00007ff7a9fb4fc0] [debug] Filename length encryption: original=16 bytes, padded=16 bytes
+[2024-12-28 00:57:07.967439] [0x00007ff7a9fb4fc0] [debug] Writing 16 bytes to output stream
+[2024-12-28 00:57:07.967439] [0x00007ff7a9fb4fc0] [debug] Writing 16 bytes to output stream
+[2024-12-28 00:57:07.967439] [0x00007ff7a9fb4fc0] [debug] Writing 16 bytes to output stream
+[2024-12-28 00:57:07.967458] [0x00007ff7a9fb4fc0] [debug] Wrote encrypted filename length field: 16 bytes, total=45
+[2024-12-28 00:57:07.967458] [0x00007ff7a9fb4fc0] [debug] Wrote encrypted filename length field: 16 bytes, total=45
+[2024-12-28 00:57:07.967458] [0x00007ff7a9fb4fc0] [debug] Wrote encrypted filename length field: 16 bytes, total=45
+[2024-12-28 00:57:07.967474] [0x00007ff7a9fb4fc0] [info] Initializing CryptoStream
+[2024-12-28 00:57:07.967474] [0x00007ff7a9fb4fc0] [info] Initializing CryptoStream
+[2024-12-28 00:57:07.967474] [0x00007ff7a9fb4fc0] [info] Initializing CryptoStream
+[2024-12-28 00:57:07.967483] [0x00007ff7a9fb4fc0] [debug] CryptoStream initialization complete
+[2024-12-28 00:57:07.967483] [0x00007ff7a9fb4fc0] [debug] CryptoStream initialization complete
+[2024-12-28 00:57:07.967483] [0x00007ff7a9fb4fc0] [debug] CryptoStream initialization complete
+[2024-12-28 00:57:07.967491] [0x00007ff7a9fb4fc0] [debug] Converting IV array to vector
+[2024-12-28 00:57:07.967491] [0x00007ff7a9fb4fc0] [debug] Converting IV array to vector
+[2024-12-28 00:57:07.967491] [0x00007ff7a9fb4fc0] [debug] Converting IV array to vector
+[2024-12-28 00:57:07.967500] [0x00007ff7a9fb4fc0] [info] Initializing crypto parameters
+[2024-12-28 00:57:07.967500] [0x00007ff7a9fb4fc0] [info] Initializing crypto parameters
+[2024-12-28 00:57:07.967500] [0x00007ff7a9fb4fc0] [info] Initializing crypto parameters
+[2024-12-28 00:57:07.967509] [0x00007ff7a9fb4fc0] [debug] Crypto parameters initialized successfully
+[2024-12-28 00:57:07.967509] [0x00007ff7a9fb4fc0] [debug] Crypto parameters initialized successfully
+[2024-12-28 00:57:07.967509] [0x00007ff7a9fb4fc0] [debug] Crypto parameters initialized successfully
+[2024-12-28 00:57:07.967517] [0x00007ff7a9fb4fc0] [debug] Initialized CryptoStream for payload encryption
+[2024-12-28 00:57:07.967517] [0x00007ff7a9fb4fc0] [debug] Initialized CryptoStream for payload encryption
+[2024-12-28 00:57:07.967517] [0x00007ff7a9fb4fc0] [debug] Initialized CryptoStream for payload encryption
+[2024-12-28 00:57:07.967534] [0x00007ff7a9fb4fc0] [debug] Processing payload of size: 1048576 bytes
+[2024-12-28 00:57:07.967534] [0x00007ff7a9fb4fc0] [debug] Processing payload of size: 1048576 bytes
+[2024-12-28 00:57:07.967534] [0x00007ff7a9fb4fc0] [debug] Processing payload of size: 1048576 bytes
+[2024-12-28 00:57:07.968418] [0x00007ff7a9fb4fc0] [info] Starting stream encryption
+[2024-12-28 00:57:07.968418] [0x00007ff7a9fb4fc0] [info] Starting stream encryption
+[2024-12-28 00:57:07.968418] [0x00007ff7a9fb4fc0] [info] Starting stream encryption
+[2024-12-28 00:57:07.968436] [0x00007ff7a9fb4fc0] [debug] Initializing cipher for encryption
+[2024-12-28 00:57:07.968436] [0x00007ff7a9fb4fc0] [debug] Initializing cipher for encryption
+[2024-12-28 00:57:07.968436] [0x00007ff7a9fb4fc0] [debug] Initializing cipher for encryption
+[2024-12-28 00:57:07.968445] [0x00007ff7a9fb4fc0] [debug] Cipher initialization complete
+[2024-12-28 00:57:07.968445] [0x00007ff7a9fb4fc0] [debug] Cipher initialization complete
+[2024-12-28 00:57:07.968445] [0x00007ff7a9fb4fc0] [debug] Cipher initialization complete
+[2024-12-28 00:57:07.970981] [0x00007ff7a9fb4fc0] [debug] Payload encrypted successfully
+[2024-12-28 00:57:07.970981] [0x00007ff7a9fb4fc0] [debug] Payload encrypted successfully
+[2024-12-28 00:57:07.970981] [0x00007ff7a9fb4fc0] [debug] Payload encrypted successfully
+[2024-12-28 00:57:07.971323] [0x00007ff7a9fb4fc0] [debug] Padding calculation: input_size=1048592, block_size=16, padded_size=1048592
+[2024-12-28 00:57:07.971323] [0x00007ff7a9fb4fc0] [debug] Padding calculation: input_size=1048592, block_size=16, padded_size=1048592
+[2024-12-28 00:57:07.971323] [0x00007ff7a9fb4fc0] [debug] Padding calculation: input_size=1048592, block_size=16, padded_size=1048592
+[2024-12-28 00:57:07.971344] [0x00007ff7a9fb4fc0] [debug] Payload encryption: original=1048592 bytes, padded=1048592 bytes
+[2024-12-28 00:57:07.971344] [0x00007ff7a9fb4fc0] [debug] Payload encryption: original=1048592 bytes, padded=1048592 bytes
+[2024-12-28 00:57:07.971344] [0x00007ff7a9fb4fc0] [debug] Payload encryption: original=1048592 bytes, padded=1048592 bytes
+[2024-12-28 00:57:07.971358] [0x00007ff7a9fb4fc0] [debug] Writing 1048592 bytes to output stream
+[2024-12-28 00:57:07.971358] [0x00007ff7a9fb4fc0] [debug] Writing 1048592 bytes to output stream
+[2024-12-28 00:57:07.971358] [0x00007ff7a9fb4fc0] [debug] Writing 1048592 bytes to output stream
+[2024-12-28 00:57:07.972730] [0x00007ff7a9fb4fc0] [debug] Wrote encrypted payload: 1048592 bytes, total=1048637
+[2024-12-28 00:57:07.972730] [0x00007ff7a9fb4fc0] [debug] Wrote encrypted payload: 1048592 bytes, total=1048637
+[2024-12-28 00:57:07.972730] [0x00007ff7a9fb4fc0] [debug] Wrote encrypted payload: 1048592 bytes, total=1048637
+[2024-12-28 00:57:07.972952] [0x00007ff7a9fb4fc0] [info] Message frame serialization completed: total bytes written=1048637
+[2024-12-28 00:57:07.972952] [0x00007ff7a9fb4fc0] [info] Message frame serialization completed: total bytes written=1048637
+[2024-12-28 00:57:07.972952] [0x00007ff7a9fb4fc0] [info] Message frame serialization completed: total bytes written=1048637
+[2024-12-28 00:57:07.972971] [0x00007ff7a9fb4fc0] [debug] Cleaning up CryptoStream resources
+[2024-12-28 00:57:07.972971] [0x00007ff7a9fb4fc0] [debug] Cleaning up CryptoStream resources
+[2024-12-28 00:57:07.972971] [0x00007ff7a9fb4fc0] [debug] Cleaning up CryptoStream resources
+[2024-12-28 00:57:07.972982] [0x00007ff7a9fb4fc0] [debug] Cleaning up CryptoStream resources
+[2024-12-28 00:57:07.972982] [0x00007ff7a9fb4fc0] [debug] Cleaning up CryptoStream resources
+[2024-12-28 00:57:07.972982] [0x00007ff7a9fb4fc0] [debug] Cleaning up CryptoStream resources
+[2024-12-28 00:57:07.972996] [0x00007ff7a9fb4fc0] [info] Serialized large message frame, bytes written: 1048637
+[2024-12-28 00:57:07.972996] [0x00007ff7a9fb4fc0] [info] Serialized large message frame, bytes written: 1048637
+[2024-12-28 00:57:07.972996] [0x00007ff7a9fb4fc0] [info] Serialized large message frame, bytes written: 1048637
+[2024-12-28 00:57:07.973010] [0x00007ff7a9fb4fc0] [info] Starting message frame deserialization
+[2024-12-28 00:57:07.973010] [0x00007ff7a9fb4fc0] [info] Starting message frame deserialization
+[2024-12-28 00:57:07.973010] [0x00007ff7a9fb4fc0] [info] Starting message frame deserialization
+[2024-12-28 00:57:07.973022] [0x00007ff7a9fb4fc0] [debug] Reading header fields
+[2024-12-28 00:57:07.973022] [0x00007ff7a9fb4fc0] [debug] Reading header fields
+[2024-12-28 00:57:07.973022] [0x00007ff7a9fb4fc0] [debug] Reading header fields
+[2024-12-28 00:57:07.973035] [0x00007ff7a9fb4fc0] [debug] Reading 16 bytes from input stream
+[2024-12-28 00:57:07.973035] [0x00007ff7a9fb4fc0] [debug] Reading 16 bytes from input stream
+[2024-12-28 00:57:07.973035] [0x00007ff7a9fb4fc0] [debug] Reading 16 bytes from input stream
+[2024-12-28 00:57:07.973048] [0x00007ff7a9fb4fc0] [debug] Read IV field: 16 bytes, total=16
+[2024-12-28 00:57:07.973048] [0x00007ff7a9fb4fc0] [debug] Read IV field: 16 bytes, total=16
+[2024-12-28 00:57:07.973048] [0x00007ff7a9fb4fc0] [debug] Read IV field: 16 bytes, total=16
+[2024-12-28 00:57:07.973101] [0x00007ff7a9fb4fc0] [debug] Reading 1 bytes from input stream
+[2024-12-28 00:57:07.973101] [0x00007ff7a9fb4fc0] [debug] Reading 1 bytes from input stream
+[2024-12-28 00:57:07.973101] [0x00007ff7a9fb4fc0] [debug] Reading 1 bytes from input stream
+[2024-12-28 00:57:07.973120] [0x00007ff7a9fb4fc0] [debug] Read message type field: 1 bytes, type=0, total=17
+[2024-12-28 00:57:07.973120] [0x00007ff7a9fb4fc0] [debug] Read message type field: 1 bytes, type=0, total=17
+[2024-12-28 00:57:07.973120] [0x00007ff7a9fb4fc0] [debug] Read message type field: 1 bytes, type=0, total=17
+[2024-12-28 00:57:07.973134] [0x00007ff7a9fb4fc0] [debug] Reading 4 bytes from input stream
+[2024-12-28 00:57:07.973134] [0x00007ff7a9fb4fc0] [debug] Reading 4 bytes from input stream
+[2024-12-28 00:57:07.973134] [0x00007ff7a9fb4fc0] [debug] Reading 4 bytes from input stream
+[2024-12-28 00:57:07.973147] [0x00007ff7a9fb4fc0] [debug] Read source ID field: 4 bytes, ID=1, total=21
+[2024-12-28 00:57:07.973147] [0x00007ff7a9fb4fc0] [debug] Read source ID field: 4 bytes, ID=1, total=21
+[2024-12-28 00:57:07.973147] [0x00007ff7a9fb4fc0] [debug] Read source ID field: 4 bytes, ID=1, total=21
+[2024-12-28 00:57:07.973159] [0x00007ff7a9fb4fc0] [debug] Reading 8 bytes from input stream
+[2024-12-28 00:57:07.973159] [0x00007ff7a9fb4fc0] [debug] Reading 8 bytes from input stream
+[2024-12-28 00:57:07.973159] [0x00007ff7a9fb4fc0] [debug] Reading 8 bytes from input stream
+[2024-12-28 00:57:07.973172] [0x00007ff7a9fb4fc0] [debug] Read payload size field: 8 bytes, size=1048576, total=29
+[2024-12-28 00:57:07.973172] [0x00007ff7a9fb4fc0] [debug] Read payload size field: 8 bytes, size=1048576, total=29
+[2024-12-28 00:57:07.973172] [0x00007ff7a9fb4fc0] [debug] Read payload size field: 8 bytes, size=1048576, total=29
+[2024-12-28 00:57:07.973184] [0x00007ff7a9fb4fc0] [info] Initializing CryptoStream
+[2024-12-28 00:57:07.973184] [0x00007ff7a9fb4fc0] [info] Initializing CryptoStream
+[2024-12-28 00:57:07.973184] [0x00007ff7a9fb4fc0] [info] Initializing CryptoStream
+[2024-12-28 00:57:07.973214] [0x00007ff7a9fb4fc0] [debug] CryptoStream initialization complete
+[2024-12-28 00:57:07.973214] [0x00007ff7a9fb4fc0] [debug] CryptoStream initialization complete
+[2024-12-28 00:57:07.973214] [0x00007ff7a9fb4fc0] [debug] CryptoStream initialization complete
+[2024-12-28 00:57:07.973231] [0x00007ff7a9fb4fc0] [debug] Converting IV array to vector
+[2024-12-28 00:57:07.973231] [0x00007ff7a9fb4fc0] [debug] Converting IV array to vector
+[2024-12-28 00:57:07.973231] [0x00007ff7a9fb4fc0] [debug] Converting IV array to vector
+[2024-12-28 00:57:07.973241] [0x00007ff7a9fb4fc0] [info] Initializing crypto parameters
+[2024-12-28 00:57:07.973241] [0x00007ff7a9fb4fc0] [info] Initializing crypto parameters
+[2024-12-28 00:57:07.973241] [0x00007ff7a9fb4fc0] [info] Initializing crypto parameters
+[2024-12-28 00:57:07.973260] [0x00007ff7a9fb4fc0] [debug] Crypto parameters initialized successfully
+[2024-12-28 00:57:07.973260] [0x00007ff7a9fb4fc0] [debug] Crypto parameters initialized successfully
+[2024-12-28 00:57:07.973260] [0x00007ff7a9fb4fc0] [debug] Crypto parameters initialized successfully
+[2024-12-28 00:57:07.973276] [0x00007ff7a9fb4fc0] [debug] Initialized CryptoStream for filename length decryption
+[2024-12-28 00:57:07.973276] [0x00007ff7a9fb4fc0] [debug] Initialized CryptoStream for filename length decryption
+[2024-12-28 00:57:07.973276] [0x00007ff7a9fb4fc0] [debug] Initialized CryptoStream for filename length decryption
+[2024-12-28 00:57:07.973334] [0x00007ff7a9fb4fc0] [debug] Reading 16 bytes from input stream
+[2024-12-28 00:57:07.973334] [0x00007ff7a9fb4fc0] [debug] Reading 16 bytes from input stream
+[2024-12-28 00:57:07.973334] [0x00007ff7a9fb4fc0] [debug] Reading 16 bytes from input stream
+[2024-12-28 00:57:07.973352] [0x00007ff7a9fb4fc0] [debug] Read encrypted filename length block: 16 bytes, total=45
+[2024-12-28 00:57:07.973352] [0x00007ff7a9fb4fc0] [debug] Read encrypted filename length block: 16 bytes, total=45
+[2024-12-28 00:57:07.973352] [0x00007ff7a9fb4fc0] [debug] Read encrypted filename length block: 16 bytes, total=45
+[2024-12-28 00:57:07.973380] [0x00007ff7a9fb4fc0] [info] Starting stream decryption
+[2024-12-28 00:57:07.973380] [0x00007ff7a9fb4fc0] [info] Starting stream decryption
+[2024-12-28 00:57:07.973380] [0x00007ff7a9fb4fc0] [info] Starting stream decryption
+[2024-12-28 00:57:07.973400] [0x00007ff7a9fb4fc0] [debug] Initializing cipher for decryption
+[2024-12-28 00:57:07.973400] [0x00007ff7a9fb4fc0] [debug] Initializing cipher for decryption
+[2024-12-28 00:57:07.973400] [0x00007ff7a9fb4fc0] [debug] Initializing cipher for decryption
+[2024-12-28 00:57:07.973425] [0x00007ff7a9fb4fc0] [debug] Cipher initialization complete
+[2024-12-28 00:57:07.973425] [0x00007ff7a9fb4fc0] [debug] Cipher initialization complete
+[2024-12-28 00:57:07.973425] [0x00007ff7a9fb4fc0] [debug] Cipher initialization complete
+[2024-12-28 00:57:07.973444] [0x00007ff7a9fb4fc0] [debug] Filename length decrypted
+[2024-12-28 00:57:07.973444] [0x00007ff7a9fb4fc0] [debug] Filename length decrypted
+[2024-12-28 00:57:07.973444] [0x00007ff7a9fb4fc0] [debug] Filename length decrypted
+[2024-12-28 00:57:07.973458] [0x00007ff7a9fb4fc0] [debug] Decoded filename length: 8
+[2024-12-28 00:57:07.973458] [0x00007ff7a9fb4fc0] [debug] Decoded filename length: 8
+[2024-12-28 00:57:07.973458] [0x00007ff7a9fb4fc0] [debug] Decoded filename length: 8
+[2024-12-28 00:57:07.973472] [0x00007ff7a9fb4fc0] [info] Initializing CryptoStream
+[2024-12-28 00:57:07.973472] [0x00007ff7a9fb4fc0] [info] Initializing CryptoStream
+[2024-12-28 00:57:07.973472] [0x00007ff7a9fb4fc0] [info] Initializing CryptoStream
+[2024-12-28 00:57:07.973490] [0x00007ff7a9fb4fc0] [debug] CryptoStream initialization complete
+[2024-12-28 00:57:07.973490] [0x00007ff7a9fb4fc0] [debug] CryptoStream initialization complete
+[2024-12-28 00:57:07.973490] [0x00007ff7a9fb4fc0] [debug] CryptoStream initialization complete
+[2024-12-28 00:57:07.973507] [0x00007ff7a9fb4fc0] [debug] Converting IV array to vector
+[2024-12-28 00:57:07.973507] [0x00007ff7a9fb4fc0] [debug] Converting IV array to vector
+[2024-12-28 00:57:07.973507] [0x00007ff7a9fb4fc0] [debug] Converting IV array to vector
+[2024-12-28 00:57:07.973519] [0x00007ff7a9fb4fc0] [info] Initializing crypto parameters
+[2024-12-28 00:57:07.973519] [0x00007ff7a9fb4fc0] [info] Initializing crypto parameters
+[2024-12-28 00:57:07.973519] [0x00007ff7a9fb4fc0] [info] Initializing crypto parameters
+[2024-12-28 00:57:07.973532] [0x00007ff7a9fb4fc0] [debug] Crypto parameters initialized successfully
+[2024-12-28 00:57:07.973532] [0x00007ff7a9fb4fc0] [debug] Crypto parameters initialized successfully
+[2024-12-28 00:57:07.973532] [0x00007ff7a9fb4fc0] [debug] Crypto parameters initialized successfully
+[2024-12-28 00:57:07.973544] [0x00007ff7a9fb4fc0] [debug] Initialized CryptoStream for payload decryption
+[2024-12-28 00:57:07.973544] [0x00007ff7a9fb4fc0] [debug] Initialized CryptoStream for payload decryption
+[2024-12-28 00:57:07.973544] [0x00007ff7a9fb4fc0] [debug] Initialized CryptoStream for payload decryption
+[2024-12-28 00:57:07.973558] [0x00007ff7a9fb4fc0] [debug] Processing payload of size: 1048576 bytes
+[2024-12-28 00:57:07.973558] [0x00007ff7a9fb4fc0] [debug] Processing payload of size: 1048576 bytes
+[2024-12-28 00:57:07.973558] [0x00007ff7a9fb4fc0] [debug] Processing payload of size: 1048576 bytes
+[2024-12-28 00:57:07.973571] [0x00007ff7a9fb4fc0] [debug] Padding calculation: input_size=1048576, block_size=16, padded_size=1048576
+[2024-12-28 00:57:07.973571] [0x00007ff7a9fb4fc0] [debug] Padding calculation: input_size=1048576, block_size=16, padded_size=1048576
+[2024-12-28 00:57:07.973571] [0x00007ff7a9fb4fc0] [debug] Padding calculation: input_size=1048576, block_size=16, padded_size=1048576
+[2024-12-28 00:57:07.973615] [0x00007ff7a9fb4fc0] [debug] Reading 1048576 bytes from input stream
+[2024-12-28 00:57:07.973615] [0x00007ff7a9fb4fc0] [debug] Reading 1048576 bytes from input stream
+[2024-12-28 00:57:07.973615] [0x00007ff7a9fb4fc0] [debug] Reading 1048576 bytes from input stream
+[2024-12-28 00:57:07.973676] [0x00007ff7a9fb4fc0] [debug] Read encrypted payload block: 1048576 bytes, total=1048621
+[2024-12-28 00:57:07.973676] [0x00007ff7a9fb4fc0] [debug] Read encrypted payload block: 1048576 bytes, total=1048621
+[2024-12-28 00:57:07.973676] [0x00007ff7a9fb4fc0] [debug] Read encrypted payload block: 1048576 bytes, total=1048621
+[2024-12-28 00:57:07.974385] [0x00007ff7a9fb4fc0] [info] Starting stream decryption
+[2024-12-28 00:57:07.974385] [0x00007ff7a9fb4fc0] [info] Starting stream decryption
+[2024-12-28 00:57:07.974385] [0x00007ff7a9fb4fc0] [info] Starting stream decryption
+[2024-12-28 00:57:07.974406] [0x00007ff7a9fb4fc0] [debug] Initializing cipher for decryption
+[2024-12-28 00:57:07.974406] [0x00007ff7a9fb4fc0] [debug] Initializing cipher for decryption
+[2024-12-28 00:57:07.974406] [0x00007ff7a9fb4fc0] [debug] Initializing cipher for decryption
+[2024-12-28 00:57:07.974427] [0x00007ff7a9fb4fc0] [debug] Cipher initialization complete
+[2024-12-28 00:57:07.974427] [0x00007ff7a9fb4fc0] [debug] Cipher initialization complete
+[2024-12-28 00:57:07.974427] [0x00007ff7a9fb4fc0] [debug] Cipher initialization complete
+[2024-12-28 00:57:07.975277] [0x00007ff7a9fb4fc0] [debug] Cleaning up CryptoStream resources
+[2024-12-28 00:57:07.975277] [0x00007ff7a9fb4fc0] [debug] Cleaning up CryptoStream resources
+[2024-12-28 00:57:07.975277] [0x00007ff7a9fb4fc0] [debug] Cleaning up CryptoStream resources
+[2024-12-28 00:57:07.975301] [0x00007ff7a9fb4fc0] [debug] Cleaning up CryptoStream resources
+[2024-12-28 00:57:07.975301] [0x00007ff7a9fb4fc0] [debug] Cleaning up CryptoStream resources
+[2024-12-28 00:57:07.975301] [0x00007ff7a9fb4fc0] [debug] Cleaning up CryptoStream resources
+[2024-12-28 00:57:07.975315] [0x00007ff7a9fb4fc0] [error] Deserialization failed at 1048621 bytes: Decryption error: Failed to finalize decryption
+[2024-12-28 00:57:07.975315] [0x00007ff7a9fb4fc0] [error] Deserialization failed at 1048621 bytes: Decryption error: Failed to finalize decryption
+[2024-12-28 00:57:07.975315] [0x00007ff7a9fb4fc0] [error] Deserialization failed at 1048621 bytes: Decryption error: Failed to finalize decryption
+unknown file: Failure
+C++ exception with description "Deserialization failed: Decryption error: Failed to finalize decryption" thrown in the test body.
+
+[2024-12-28 00:57:07.975585] [0x00007ff7a9fb4fc0] [debug] Tearing down CodecTest fixture
+[2024-12-28 00:57:07.975585] [0x00007ff7a9fb4fc0] [debug] Tearing down CodecTest fixture
+[2024-12-28 00:57:07.975585] [0x00007ff7a9fb4fc0] [debug] Tearing down CodecTest fixture
+[  FAILED  ] CodecTest.LargeMessageHandling (11 ms)
+[ RUN      ] CodecTest.ChannelIntegration
+[2024-12-28 00:57:07.975633] [0x00007ff7a9fb4fc0] [info] Setting up CodecTest fixture
+[2024-12-28 00:57:07.975633] [0x00007ff7a9fb4fc0] [info] Setting up CodecTest fixture
+[2024-12-28 00:57:07.975633] [0x00007ff7a9fb4fc0] [info] Setting up CodecTest fixture
+[2024-12-28 00:57:07.975633] [0x00007ff7a9fb4fc0] [info] Setting up CodecTest fixture
+[2024-12-28 00:57:07.975655] [0x00007ff7a9fb4fc0] [info] Initializing Codec with key size: 32
+[2024-12-28 00:57:07.975655] [0x00007ff7a9fb4fc0] [info] Initializing Codec with key size: 32
+[2024-12-28 00:57:07.975655] [0x00007ff7a9fb4fc0] [info] Initializing Codec with key size: 32
+[2024-12-28 00:57:07.975655] [0x00007ff7a9fb4fc0] [info] Initializing Codec with key size: 32
+[2024-12-28 00:57:07.975673] [0x00007ff7a9fb4fc0] [debug] Test fixture initialized with key size: 32
+[2024-12-28 00:57:07.975673] [0x00007ff7a9fb4fc0] [debug] Test fixture initialized with key size: 32
+[2024-12-28 00:57:07.975673] [0x00007ff7a9fb4fc0] [debug] Test fixture initialized with key size: 32
+[2024-12-28 00:57:07.975673] [0x00007ff7a9fb4fc0] [debug] Test fixture initialized with key size: 32
+[2024-12-28 00:57:07.975688] [0x00007ff7a9fb4fc0] [info] Starting ChannelIntegration test
+[2024-12-28 00:57:07.975688] [0x00007ff7a9fb4fc0] [info] Starting ChannelIntegration test
+[2024-12-28 00:57:07.975688] [0x00007ff7a9fb4fc0] [info] Starting ChannelIntegration test
+[2024-12-28 00:57:07.975688] [0x00007ff7a9fb4fc0] [info] Starting ChannelIntegration test
+[2024-12-28 00:57:07.985032] [0x00007ff7a9fb4fc0] [debug] Creating test frame with payload size: 17
+[2024-12-28 00:57:07.985032] [0x00007ff7a9fb4fc0] [debug] Creating test frame with payload size: 17
+[2024-12-28 00:57:07.985032] [0x00007ff7a9fb4fc0] [debug] Creating test frame with payload size: 17
+[2024-12-28 00:57:07.985032] [0x00007ff7a9fb4fc0] [debug] Creating test frame with payload size: 17
+[2024-12-28 00:57:07.985089] [0x00007ff7a9fb4fc0] [debug] Test frame created with type: 0
+[2024-12-28 00:57:07.985089] [0x00007ff7a9fb4fc0] [debug] Test frame created with type: 0
+[2024-12-28 00:57:07.985089] [0x00007ff7a9fb4fc0] [debug] Test frame created with type: 0
+[2024-12-28 00:57:07.985089] [0x00007ff7a9fb4fc0] [debug] Test frame created with type: 0
+[2024-12-28 00:57:07.985110] [0x00007ff7a9fb4fc0] [info] Starting message frame serialization
+[2024-12-28 00:57:07.985110] [0x00007ff7a9fb4fc0] [info] Starting message frame serialization
+[2024-12-28 00:57:07.985110] [0x00007ff7a9fb4fc0] [info] Starting message frame serialization
+[2024-12-28 00:57:07.985110] [0x00007ff7a9fb4fc0] [info] Starting message frame serialization
+[2024-12-28 00:57:07.985139] [0x00007ff7a9fb4fc0] [debug] Writing header fields
+[2024-12-28 00:57:07.985139] [0x00007ff7a9fb4fc0] [debug] Writing header fields
+[2024-12-28 00:57:07.985139] [0x00007ff7a9fb4fc0] [debug] Writing header fields
+[2024-12-28 00:57:07.985139] [0x00007ff7a9fb4fc0] [debug] Writing header fields
+[2024-12-28 00:57:07.985158] [0x00007ff7a9fb4fc0] [debug] Writing 16 bytes to output stream
+[2024-12-28 00:57:07.985158] [0x00007ff7a9fb4fc0] [debug] Writing 16 bytes to output stream
+[2024-12-28 00:57:07.985158] [0x00007ff7a9fb4fc0] [debug] Writing 16 bytes to output stream
+[2024-12-28 00:57:07.985158] [0x00007ff7a9fb4fc0] [debug] Writing 16 bytes to output stream
+[2024-12-28 00:57:07.985179] [0x00007ff7a9fb4fc0] [debug] Wrote IV field: 16 bytes, total=16
+[2024-12-28 00:57:07.985179] [0x00007ff7a9fb4fc0] [debug] Wrote IV field: 16 bytes, total=16
+[2024-12-28 00:57:07.985179] [0x00007ff7a9fb4fc0] [debug] Wrote IV field: 16 bytes, total=16
+[2024-12-28 00:57:07.985179] [0x00007ff7a9fb4fc0] [debug] Wrote IV field: 16 bytes, total=16
+[2024-12-28 00:57:07.985271] [0x00007ff7a9fb4fc0] [debug] Writing 1 bytes to output stream
+[2024-12-28 00:57:07.985271] [0x00007ff7a9fb4fc0] [debug] Writing 1 bytes to output stream
+[2024-12-28 00:57:07.985271] [0x00007ff7a9fb4fc0] [debug] Writing 1 bytes to output stream
+[2024-12-28 00:57:07.985271] [0x00007ff7a9fb4fc0] [debug] Writing 1 bytes to output stream
+[2024-12-28 00:57:07.985290] [0x00007ff7a9fb4fc0] [debug] Wrote message type field: 1 bytes, type=0, total=17
+[2024-12-28 00:57:07.985290] [0x00007ff7a9fb4fc0] [debug] Wrote message type field: 1 bytes, type=0, total=17
+[2024-12-28 00:57:07.985290] [0x00007ff7a9fb4fc0] [debug] Wrote message type field: 1 bytes, type=0, total=17
+[2024-12-28 00:57:07.985290] [0x00007ff7a9fb4fc0] [debug] Wrote message type field: 1 bytes, type=0, total=17
+[2024-12-28 00:57:07.985310] [0x00007ff7a9fb4fc0] [debug] Writing 4 bytes to output stream
+[2024-12-28 00:57:07.985310] [0x00007ff7a9fb4fc0] [debug] Writing 4 bytes to output stream
+[2024-12-28 00:57:07.985310] [0x00007ff7a9fb4fc0] [debug] Writing 4 bytes to output stream
+[2024-12-28 00:57:07.985310] [0x00007ff7a9fb4fc0] [debug] Writing 4 bytes to output stream
+[2024-12-28 00:57:07.985329] [0x00007ff7a9fb4fc0] [debug] Wrote source ID field: 4 bytes, ID=1, total=21
+[2024-12-28 00:57:07.985329] [0x00007ff7a9fb4fc0] [debug] Wrote source ID field: 4 bytes, ID=1, total=21
+[2024-12-28 00:57:07.985329] [0x00007ff7a9fb4fc0] [debug] Wrote source ID field: 4 bytes, ID=1, total=21
+[2024-12-28 00:57:07.985329] [0x00007ff7a9fb4fc0] [debug] Wrote source ID field: 4 bytes, ID=1, total=21
+[2024-12-28 00:57:07.985347] [0x00007ff7a9fb4fc0] [debug] Writing 8 bytes to output stream
+[2024-12-28 00:57:07.985347] [0x00007ff7a9fb4fc0] [debug] Writing 8 bytes to output stream
+[2024-12-28 00:57:07.985347] [0x00007ff7a9fb4fc0] [debug] Writing 8 bytes to output stream
+[2024-12-28 00:57:07.985347] [0x00007ff7a9fb4fc0] [debug] Writing 8 bytes to output stream
+[2024-12-28 00:57:07.987610] [0x00007ff7a9fb4fc0] [debug] Wrote payload size field: 8 bytes, size=17, total=29
+[2024-12-28 00:57:07.987610] [0x00007ff7a9fb4fc0] [debug] Wrote payload size field: 8 bytes, size=17, total=29
+[2024-12-28 00:57:07.987610] [0x00007ff7a9fb4fc0] [debug] Wrote payload size field: 8 bytes, size=17, total=29
+[2024-12-28 00:57:07.987610] [0x00007ff7a9fb4fc0] [debug] Wrote payload size field: 8 bytes, size=17, total=29
+[2024-12-28 00:57:07.987672] [0x00007ff7a9fb4fc0] [info] Initializing CryptoStream
+[2024-12-28 00:57:07.987672] [0x00007ff7a9fb4fc0] [info] Initializing CryptoStream
+[2024-12-28 00:57:07.987672] [0x00007ff7a9fb4fc0] [info] Initializing CryptoStream
+[2024-12-28 00:57:07.987672] [0x00007ff7a9fb4fc0] [info] Initializing CryptoStream
+[2024-12-28 00:57:07.987691] [0x00007ff7a9fb4fc0] [debug] CryptoStream initialization complete
+[2024-12-28 00:57:07.987691] [0x00007ff7a9fb4fc0] [debug] CryptoStream initialization complete
+[2024-12-28 00:57:07.987691] [0x00007ff7a9fb4fc0] [debug] CryptoStream initialization complete
+[2024-12-28 00:57:07.987691] [0x00007ff7a9fb4fc0] [debug] CryptoStream initialization complete
+[2024-12-28 00:57:07.987709] [0x00007ff7a9fb4fc0] [debug] Converting IV array to vector
+[2024-12-28 00:57:07.987709] [0x00007ff7a9fb4fc0] [debug] Converting IV array to vector
+[2024-12-28 00:57:07.987709] [0x00007ff7a9fb4fc0] [debug] Converting IV array to vector
+[2024-12-28 00:57:07.987709] [0x00007ff7a9fb4fc0] [debug] Converting IV array to vector
+[2024-12-28 00:57:07.987740] [0x00007ff7a9fb4fc0] [info] Initializing crypto parameters
+[2024-12-28 00:57:07.987740] [0x00007ff7a9fb4fc0] [info] Initializing crypto parameters
+[2024-12-28 00:57:07.987740] [0x00007ff7a9fb4fc0] [info] Initializing crypto parameters
+[2024-12-28 00:57:07.987740] [0x00007ff7a9fb4fc0] [info] Initializing crypto parameters
+[2024-12-28 00:57:07.987769] [0x00007ff7a9fb4fc0] [debug] Crypto parameters initialized successfully
+[2024-12-28 00:57:07.987769] [0x00007ff7a9fb4fc0] [debug] Crypto parameters initialized successfully
+[2024-12-28 00:57:07.987769] [0x00007ff7a9fb4fc0] [debug] Crypto parameters initialized successfully
+[2024-12-28 00:57:07.987769] [0x00007ff7a9fb4fc0] [debug] Crypto parameters initialized successfully
+[2024-12-28 00:57:07.987793] [0x00007ff7a9fb4fc0] [debug] Initialized CryptoStream for filename length encryption
+[2024-12-28 00:57:07.987793] [0x00007ff7a9fb4fc0] [debug] Initialized CryptoStream for filename length encryption
+[2024-12-28 00:57:07.987793] [0x00007ff7a9fb4fc0] [debug] Initialized CryptoStream for filename length encryption
+[2024-12-28 00:57:07.987793] [0x00007ff7a9fb4fc0] [debug] Initialized CryptoStream for filename length encryption
+[2024-12-28 00:57:07.987817] [0x00007ff7a9fb4fc0] [debug] Preparing filename length: 8 (4 bytes)
+[2024-12-28 00:57:07.987817] [0x00007ff7a9fb4fc0] [debug] Preparing filename length: 8 (4 bytes)
+[2024-12-28 00:57:07.987817] [0x00007ff7a9fb4fc0] [debug] Preparing filename length: 8 (4 bytes)
+[2024-12-28 00:57:07.987817] [0x00007ff7a9fb4fc0] [debug] Preparing filename length: 8 (4 bytes)
+[2024-12-28 00:57:07.987838] [0x00007ff7a9fb4fc0] [info] Starting stream encryption
+[2024-12-28 00:57:07.987838] [0x00007ff7a9fb4fc0] [info] Starting stream encryption
+[2024-12-28 00:57:07.987838] [0x00007ff7a9fb4fc0] [info] Starting stream encryption
+[2024-12-28 00:57:07.987838] [0x00007ff7a9fb4fc0] [info] Starting stream encryption
+[2024-12-28 00:57:07.987854] [0x00007ff7a9fb4fc0] [debug] Initializing cipher for encryption
+[2024-12-28 00:57:07.987854] [0x00007ff7a9fb4fc0] [debug] Initializing cipher for encryption
+[2024-12-28 00:57:07.987854] [0x00007ff7a9fb4fc0] [debug] Initializing cipher for encryption
+[2024-12-28 00:57:07.987854] [0x00007ff7a9fb4fc0] [debug] Initializing cipher for encryption
+[2024-12-28 00:57:07.987902] [0x00007ff7a9fb4fc0] [debug] Cipher initialization complete
+[2024-12-28 00:57:07.987902] [0x00007ff7a9fb4fc0] [debug] Cipher initialization complete
+[2024-12-28 00:57:07.987902] [0x00007ff7a9fb4fc0] [debug] Cipher initialization complete
+[2024-12-28 00:57:07.987902] [0x00007ff7a9fb4fc0] [debug] Cipher initialization complete
+[2024-12-28 00:57:07.987965] [0x00007ff7a9fb4fc0] [debug] Padding calculation: input_size=16, block_size=16, padded_size=16
+[2024-12-28 00:57:07.987965] [0x00007ff7a9fb4fc0] [debug] Padding calculation: input_size=16, block_size=16, padded_size=16
+[2024-12-28 00:57:07.987965] [0x00007ff7a9fb4fc0] [debug] Padding calculation: input_size=16, block_size=16, padded_size=16
+[2024-12-28 00:57:07.987965] [0x00007ff7a9fb4fc0] [debug] Padding calculation: input_size=16, block_size=16, padded_size=16
+[2024-12-28 00:57:07.987985] [0x00007ff7a9fb4fc0] [debug] Filename length encryption: original=16 bytes, padded=16 bytes
+[2024-12-28 00:57:07.987985] [0x00007ff7a9fb4fc0] [debug] Filename length encryption: original=16 bytes, padded=16 bytes
+[2024-12-28 00:57:07.987985] [0x00007ff7a9fb4fc0] [debug] Filename length encryption: original=16 bytes, padded=16 bytes
+[2024-12-28 00:57:07.987985] [0x00007ff7a9fb4fc0] [debug] Filename length encryption: original=16 bytes, padded=16 bytes
+[2024-12-28 00:57:07.987998] [0x00007ff7a9fb4fc0] [debug] Writing 16 bytes to output stream
+[2024-12-28 00:57:07.987998] [0x00007ff7a9fb4fc0] [debug] Writing 16 bytes to output stream
+[2024-12-28 00:57:07.987998] [0x00007ff7a9fb4fc0] [debug] Writing 16 bytes to output stream
+[2024-12-28 00:57:07.987998] [0x00007ff7a9fb4fc0] [debug] Writing 16 bytes to output stream
+[2024-12-28 00:57:07.988011] [0x00007ff7a9fb4fc0] [debug] Wrote encrypted filename length field: 16 bytes, total=45
+[2024-12-28 00:57:07.988011] [0x00007ff7a9fb4fc0] [debug] Wrote encrypted filename length field: 16 bytes, total=45
+[2024-12-28 00:57:07.988011] [0x00007ff7a9fb4fc0] [debug] Wrote encrypted filename length field: 16 bytes, total=45
+[2024-12-28 00:57:07.988011] [0x00007ff7a9fb4fc0] [debug] Wrote encrypted filename length field: 16 bytes, total=45
+[2024-12-28 00:57:07.988029] [0x00007ff7a9fb4fc0] [info] Initializing CryptoStream
+[2024-12-28 00:57:07.988029] [0x00007ff7a9fb4fc0] [info] Initializing CryptoStream
+[2024-12-28 00:57:07.988029] [0x00007ff7a9fb4fc0] [info] Initializing CryptoStream
+[2024-12-28 00:57:07.988029] [0x00007ff7a9fb4fc0] [info] Initializing CryptoStream
+[2024-12-28 00:57:07.988051] [0x00007ff7a9fb4fc0] [debug] CryptoStream initialization complete
+[2024-12-28 00:57:07.988051] [0x00007ff7a9fb4fc0] [debug] CryptoStream initialization complete
+[2024-12-28 00:57:07.988051] [0x00007ff7a9fb4fc0] [debug] CryptoStream initialization complete
+[2024-12-28 00:57:07.988051] [0x00007ff7a9fb4fc0] [debug] CryptoStream initialization complete
+[2024-12-28 00:57:07.988074] [0x00007ff7a9fb4fc0] [debug] Converting IV array to vector
+[2024-12-28 00:57:07.988074] [0x00007ff7a9fb4fc0] [debug] Converting IV array to vector
+[2024-12-28 00:57:07.988074] [0x00007ff7a9fb4fc0] [debug] Converting IV array to vector
+[2024-12-28 00:57:07.988074] [0x00007ff7a9fb4fc0] [debug] Converting IV array to vector
+[2024-12-28 00:57:07.988091] [0x00007ff7a9fb4fc0] [info] Initializing crypto parameters
+[2024-12-28 00:57:07.988091] [0x00007ff7a9fb4fc0] [info] Initializing crypto parameters
+[2024-12-28 00:57:07.988091] [0x00007ff7a9fb4fc0] [info] Initializing crypto parameters
+[2024-12-28 00:57:07.988091] [0x00007ff7a9fb4fc0] [info] Initializing crypto parameters
+[2024-12-28 00:57:07.988107] [0x00007ff7a9fb4fc0] [debug] Crypto parameters initialized successfully
+[2024-12-28 00:57:07.988107] [0x00007ff7a9fb4fc0] [debug] Crypto parameters initialized successfully
+[2024-12-28 00:57:07.988107] [0x00007ff7a9fb4fc0] [debug] Crypto parameters initialized successfully
+[2024-12-28 00:57:07.988107] [0x00007ff7a9fb4fc0] [debug] Crypto parameters initialized successfully
+[2024-12-28 00:57:07.988129] [0x00007ff7a9fb4fc0] [debug] Initialized CryptoStream for payload encryption
+[2024-12-28 00:57:07.988129] [0x00007ff7a9fb4fc0] [debug] Initialized CryptoStream for payload encryption
+[2024-12-28 00:57:07.988129] [0x00007ff7a9fb4fc0] [debug] Initialized CryptoStream for payload encryption
+[2024-12-28 00:57:07.988129] [0x00007ff7a9fb4fc0] [debug] Initialized CryptoStream for payload encryption
+[2024-12-28 00:57:07.988146] [0x00007ff7a9fb4fc0] [debug] Processing payload of size: 17 bytes
+[2024-12-28 00:57:07.988146] [0x00007ff7a9fb4fc0] [debug] Processing payload of size: 17 bytes
+[2024-12-28 00:57:07.988146] [0x00007ff7a9fb4fc0] [debug] Processing payload of size: 17 bytes
+[2024-12-28 00:57:07.988146] [0x00007ff7a9fb4fc0] [debug] Processing payload of size: 17 bytes
+[2024-12-28 00:57:07.988169] [0x00007ff7a9fb4fc0] [info] Starting stream encryption
+[2024-12-28 00:57:07.988169] [0x00007ff7a9fb4fc0] [info] Starting stream encryption
+[2024-12-28 00:57:07.988169] [0x00007ff7a9fb4fc0] [info] Starting stream encryption
+[2024-12-28 00:57:07.988169] [0x00007ff7a9fb4fc0] [info] Starting stream encryption
+[2024-12-28 00:57:07.988244] [0x00007ff7a9fb4fc0] [debug] Initializing cipher for encryption
+[2024-12-28 00:57:07.988244] [0x00007ff7a9fb4fc0] [debug] Initializing cipher for encryption
+[2024-12-28 00:57:07.988244] [0x00007ff7a9fb4fc0] [debug] Initializing cipher for encryption
+[2024-12-28 00:57:07.988244] [0x00007ff7a9fb4fc0] [debug] Initializing cipher for encryption
+[2024-12-28 00:57:07.988290] [0x00007ff7a9fb4fc0] [debug] Cipher initialization complete
+[2024-12-28 00:57:07.988290] [0x00007ff7a9fb4fc0] [debug] Cipher initialization complete
+[2024-12-28 00:57:07.988290] [0x00007ff7a9fb4fc0] [debug] Cipher initialization complete
+[2024-12-28 00:57:07.988290] [0x00007ff7a9fb4fc0] [debug] Cipher initialization complete
+[2024-12-28 00:57:07.988309] [0x00007ff7a9fb4fc0] [debug] Payload encrypted successfully
+[2024-12-28 00:57:07.988309] [0x00007ff7a9fb4fc0] [debug] Payload encrypted successfully
+[2024-12-28 00:57:07.988309] [0x00007ff7a9fb4fc0] [debug] Payload encrypted successfully
+[2024-12-28 00:57:07.988309] [0x00007ff7a9fb4fc0] [debug] Payload encrypted successfully
+[2024-12-28 00:57:07.988344] [0x00007ff7a9fb4fc0] [debug] Padding calculation: input_size=32, block_size=16, padded_size=32
+[2024-12-28 00:57:07.988344] [0x00007ff7a9fb4fc0] [debug] Padding calculation: input_size=32, block_size=16, padded_size=32
+[2024-12-28 00:57:07.988344] [0x00007ff7a9fb4fc0] [debug] Padding calculation: input_size=32, block_size=16, padded_size=32
+[2024-12-28 00:57:07.988344] [0x00007ff7a9fb4fc0] [debug] Padding calculation: input_size=32, block_size=16, padded_size=32
+[2024-12-28 00:57:07.988376] [0x00007ff7a9fb4fc0] [debug] Payload encryption: original=32 bytes, padded=32 bytes
+[2024-12-28 00:57:07.988376] [0x00007ff7a9fb4fc0] [debug] Payload encryption: original=32 bytes, padded=32 bytes
+[2024-12-28 00:57:07.988376] [0x00007ff7a9fb4fc0] [debug] Payload encryption: original=32 bytes, padded=32 bytes
+[2024-12-28 00:57:07.988376] [0x00007ff7a9fb4fc0] [debug] Payload encryption: original=32 bytes, padded=32 bytes
+[2024-12-28 00:57:07.988406] [0x00007ff7a9fb4fc0] [debug] Writing 32 bytes to output stream
+[2024-12-28 00:57:07.988406] [0x00007ff7a9fb4fc0] [debug] Writing 32 bytes to output stream
+[2024-12-28 00:57:07.988406] [0x00007ff7a9fb4fc0] [debug] Writing 32 bytes to output stream
+[2024-12-28 00:57:07.988406] [0x00007ff7a9fb4fc0] [debug] Writing 32 bytes to output stream
+[2024-12-28 00:57:07.988426] [0x00007ff7a9fb4fc0] [debug] Wrote encrypted payload: 32 bytes, total=77
+[2024-12-28 00:57:07.988426] [0x00007ff7a9fb4fc0] [debug] Wrote encrypted payload: 32 bytes, total=77
+[2024-12-28 00:57:07.988426] [0x00007ff7a9fb4fc0] [debug] Wrote encrypted payload: 32 bytes, total=77
+[2024-12-28 00:57:07.988426] [0x00007ff7a9fb4fc0] [debug] Wrote encrypted payload: 32 bytes, total=77
+[2024-12-28 00:57:07.988453] [0x00007ff7a9fb4fc0] [info] Message frame serialization completed: total bytes written=77
+[2024-12-28 00:57:07.988453] [0x00007ff7a9fb4fc0] [info] Message frame serialization completed: total bytes written=77
+[2024-12-28 00:57:07.988453] [0x00007ff7a9fb4fc0] [info] Message frame serialization completed: total bytes written=77
+[2024-12-28 00:57:07.988453] [0x00007ff7a9fb4fc0] [info] Message frame serialization completed: total bytes written=77
+[2024-12-28 00:57:07.988472] [0x00007ff7a9fb4fc0] [debug] Cleaning up CryptoStream resources
+[2024-12-28 00:57:07.988472] [0x00007ff7a9fb4fc0] [debug] Cleaning up CryptoStream resources
+[2024-12-28 00:57:07.988472] [0x00007ff7a9fb4fc0] [debug] Cleaning up CryptoStream resources
+[2024-12-28 00:57:07.988472] [0x00007ff7a9fb4fc0] [debug] Cleaning up CryptoStream resources
+[2024-12-28 00:57:07.988493] [0x00007ff7a9fb4fc0] [debug] Cleaning up CryptoStream resources
+[2024-12-28 00:57:07.988493] [0x00007ff7a9fb4fc0] [debug] Cleaning up CryptoStream resources
+[2024-12-28 00:57:07.988493] [0x00007ff7a9fb4fc0] [debug] Cleaning up CryptoStream resources
+[2024-12-28 00:57:07.988493] [0x00007ff7a9fb4fc0] [debug] Cleaning up CryptoStream resources
+[2024-12-28 00:57:07.988512] [0x00007ff7a9fb4fc0] [info] Starting message frame deserialization
+[2024-12-28 00:57:07.988512] [0x00007ff7a9fb4fc0] [info] Starting message frame deserialization
+[2024-12-28 00:57:07.988512] [0x00007ff7a9fb4fc0] [info] Starting message frame deserialization
+[2024-12-28 00:57:07.988512] [0x00007ff7a9fb4fc0] [info] Starting message frame deserialization
+[2024-12-28 00:57:07.988535] [0x00007ff7a9fb4fc0] [debug] Reading header fields
+[2024-12-28 00:57:07.988535] [0x00007ff7a9fb4fc0] [debug] Reading header fields
+[2024-12-28 00:57:07.988535] [0x00007ff7a9fb4fc0] [debug] Reading header fields
+[2024-12-28 00:57:07.988535] [0x00007ff7a9fb4fc0] [debug] Reading header fields
+[2024-12-28 00:57:07.988562] [0x00007ff7a9fb4fc0] [debug] Reading 16 bytes from input stream
+[2024-12-28 00:57:07.988562] [0x00007ff7a9fb4fc0] [debug] Reading 16 bytes from input stream
+[2024-12-28 00:57:07.988562] [0x00007ff7a9fb4fc0] [debug] Reading 16 bytes from input stream
+[2024-12-28 00:57:07.988562] [0x00007ff7a9fb4fc0] [debug] Reading 16 bytes from input stream
+[2024-12-28 00:57:07.988581] [0x00007ff7a9fb4fc0] [debug] Read IV field: 16 bytes, total=16
+[2024-12-28 00:57:07.988581] [0x00007ff7a9fb4fc0] [debug] Read IV field: 16 bytes, total=16
+[2024-12-28 00:57:07.988581] [0x00007ff7a9fb4fc0] [debug] Read IV field: 16 bytes, total=16
+[2024-12-28 00:57:07.988581] [0x00007ff7a9fb4fc0] [debug] Read IV field: 16 bytes, total=16
+[2024-12-28 00:57:07.988600] [0x00007ff7a9fb4fc0] [debug] Reading 1 bytes from input stream
+[2024-12-28 00:57:07.988600] [0x00007ff7a9fb4fc0] [debug] Reading 1 bytes from input stream
+[2024-12-28 00:57:07.988600] [0x00007ff7a9fb4fc0] [debug] Reading 1 bytes from input stream
+[2024-12-28 00:57:07.988600] [0x00007ff7a9fb4fc0] [debug] Reading 1 bytes from input stream
+[2024-12-28 00:57:07.988618] [0x00007ff7a9fb4fc0] [debug] Read message type field: 1 bytes, type=0, total=17
+[2024-12-28 00:57:07.988618] [0x00007ff7a9fb4fc0] [debug] Read message type field: 1 bytes, type=0, total=17
+[2024-12-28 00:57:07.988618] [0x00007ff7a9fb4fc0] [debug] Read message type field: 1 bytes, type=0, total=17
+[2024-12-28 00:57:07.988618] [0x00007ff7a9fb4fc0] [debug] Read message type field: 1 bytes, type=0, total=17
+[2024-12-28 00:57:07.988641] [0x00007ff7a9fb4fc0] [debug] Reading 4 bytes from input stream
+[2024-12-28 00:57:07.988641] [0x00007ff7a9fb4fc0] [debug] Reading 4 bytes from input stream
+[2024-12-28 00:57:07.988641] [0x00007ff7a9fb4fc0] [debug] Reading 4 bytes from input stream
+[2024-12-28 00:57:07.988641] [0x00007ff7a9fb4fc0] [debug] Reading 4 bytes from input stream
+[2024-12-28 00:57:07.988661] [0x00007ff7a9fb4fc0] [debug] Read source ID field: 4 bytes, ID=1, total=21
+[2024-12-28 00:57:07.988661] [0x00007ff7a9fb4fc0] [debug] Read source ID field: 4 bytes, ID=1, total=21
+[2024-12-28 00:57:07.988661] [0x00007ff7a9fb4fc0] [debug] Read source ID field: 4 bytes, ID=1, total=21
+[2024-12-28 00:57:07.988661] [0x00007ff7a9fb4fc0] [debug] Read source ID field: 4 bytes, ID=1, total=21
+[2024-12-28 00:57:07.988681] [0x00007ff7a9fb4fc0] [debug] Reading 8 bytes from input stream
+[2024-12-28 00:57:07.988681] [0x00007ff7a9fb4fc0] [debug] Reading 8 bytes from input stream
+[2024-12-28 00:57:07.988681] [0x00007ff7a9fb4fc0] [debug] Reading 8 bytes from input stream
+[2024-12-28 00:57:07.988681] [0x00007ff7a9fb4fc0] [debug] Reading 8 bytes from input stream
+[2024-12-28 00:57:07.988702] [0x00007ff7a9fb4fc0] [debug] Read payload size field: 8 bytes, size=17, total=29
+[2024-12-28 00:57:07.988702] [0x00007ff7a9fb4fc0] [debug] Read payload size field: 8 bytes, size=17, total=29
+[2024-12-28 00:57:07.988702] [0x00007ff7a9fb4fc0] [debug] Read payload size field: 8 bytes, size=17, total=29
+[2024-12-28 00:57:07.988702] [0x00007ff7a9fb4fc0] [debug] Read payload size field: 8 bytes, size=17, total=29
+[2024-12-28 00:57:07.988716] [0x00007ff7a9fb4fc0] [info] Initializing CryptoStream
+[2024-12-28 00:57:07.988716] [0x00007ff7a9fb4fc0] [info] Initializing CryptoStream
+[2024-12-28 00:57:07.988716] [0x00007ff7a9fb4fc0] [info] Initializing CryptoStream
+[2024-12-28 00:57:07.988716] [0x00007ff7a9fb4fc0] [info] Initializing CryptoStream
+[2024-12-28 00:57:07.988733] [0x00007ff7a9fb4fc0] [debug] CryptoStream initialization complete
+[2024-12-28 00:57:07.988733] [0x00007ff7a9fb4fc0] [debug] CryptoStream initialization complete
+[2024-12-28 00:57:07.988733] [0x00007ff7a9fb4fc0] [debug] CryptoStream initialization complete
+[2024-12-28 00:57:07.988733] [0x00007ff7a9fb4fc0] [debug] CryptoStream initialization complete
+[2024-12-28 00:57:07.988754] [0x00007ff7a9fb4fc0] [debug] Converting IV array to vector
+[2024-12-28 00:57:07.988754] [0x00007ff7a9fb4fc0] [debug] Converting IV array to vector
+[2024-12-28 00:57:07.988754] [0x00007ff7a9fb4fc0] [debug] Converting IV array to vector
+[2024-12-28 00:57:07.988754] [0x00007ff7a9fb4fc0] [debug] Converting IV array to vector
+[2024-12-28 00:57:07.988772] [0x00007ff7a9fb4fc0] [info] Initializing crypto parameters
+[2024-12-28 00:57:07.988772] [0x00007ff7a9fb4fc0] [info] Initializing crypto parameters
+[2024-12-28 00:57:07.988772] [0x00007ff7a9fb4fc0] [info] Initializing crypto parameters
+[2024-12-28 00:57:07.988772] [0x00007ff7a9fb4fc0] [info] Initializing crypto parameters
+[2024-12-28 00:57:07.988790] [0x00007ff7a9fb4fc0] [debug] Crypto parameters initialized successfully
+[2024-12-28 00:57:07.988790] [0x00007ff7a9fb4fc0] [debug] Crypto parameters initialized successfully
+[2024-12-28 00:57:07.988790] [0x00007ff7a9fb4fc0] [debug] Crypto parameters initialized successfully
+[2024-12-28 00:57:07.988790] [0x00007ff7a9fb4fc0] [debug] Crypto parameters initialized successfully
+[2024-12-28 00:57:07.988808] [0x00007ff7a9fb4fc0] [debug] Initialized CryptoStream for filename length decryption
+[2024-12-28 00:57:07.988808] [0x00007ff7a9fb4fc0] [debug] Initialized CryptoStream for filename length decryption
+[2024-12-28 00:57:07.988808] [0x00007ff7a9fb4fc0] [debug] Initialized CryptoStream for filename length decryption
+[2024-12-28 00:57:07.988808] [0x00007ff7a9fb4fc0] [debug] Initialized CryptoStream for filename length decryption
+[2024-12-28 00:57:07.988826] [0x00007ff7a9fb4fc0] [debug] Reading 16 bytes from input stream
+[2024-12-28 00:57:07.988826] [0x00007ff7a9fb4fc0] [debug] Reading 16 bytes from input stream
+[2024-12-28 00:57:07.988826] [0x00007ff7a9fb4fc0] [debug] Reading 16 bytes from input stream
+[2024-12-28 00:57:07.988826] [0x00007ff7a9fb4fc0] [debug] Reading 16 bytes from input stream
+[2024-12-28 00:57:07.988843] [0x00007ff7a9fb4fc0] [debug] Read encrypted filename length block: 16 bytes, total=45
+[2024-12-28 00:57:07.988843] [0x00007ff7a9fb4fc0] [debug] Read encrypted filename length block: 16 bytes, total=45
+[2024-12-28 00:57:07.988843] [0x00007ff7a9fb4fc0] [debug] Read encrypted filename length block: 16 bytes, total=45
+[2024-12-28 00:57:07.988843] [0x00007ff7a9fb4fc0] [debug] Read encrypted filename length block: 16 bytes, total=45
+[2024-12-28 00:57:07.988863] [0x00007ff7a9fb4fc0] [info] Starting stream decryption
+[2024-12-28 00:57:07.988863] [0x00007ff7a9fb4fc0] [info] Starting stream decryption
+[2024-12-28 00:57:07.988863] [0x00007ff7a9fb4fc0] [info] Starting stream decryption
+[2024-12-28 00:57:07.988863] [0x00007ff7a9fb4fc0] [info] Starting stream decryption
+[2024-12-28 00:57:07.988880] [0x00007ff7a9fb4fc0] [debug] Initializing cipher for decryption
+[2024-12-28 00:57:07.988880] [0x00007ff7a9fb4fc0] [debug] Initializing cipher for decryption
+[2024-12-28 00:57:07.988880] [0x00007ff7a9fb4fc0] [debug] Initializing cipher for decryption
+[2024-12-28 00:57:07.988880] [0x00007ff7a9fb4fc0] [debug] Initializing cipher for decryption
+[2024-12-28 00:57:07.988900] [0x00007ff7a9fb4fc0] [debug] Cipher initialization complete
+[2024-12-28 00:57:07.988900] [0x00007ff7a9fb4fc0] [debug] Cipher initialization complete
+[2024-12-28 00:57:07.988900] [0x00007ff7a9fb4fc0] [debug] Cipher initialization complete
+[2024-12-28 00:57:07.988900] [0x00007ff7a9fb4fc0] [debug] Cipher initialization complete
+[2024-12-28 00:57:07.988920] [0x00007ff7a9fb4fc0] [debug] Filename length decrypted
+[2024-12-28 00:57:07.988920] [0x00007ff7a9fb4fc0] [debug] Filename length decrypted
+[2024-12-28 00:57:07.988920] [0x00007ff7a9fb4fc0] [debug] Filename length decrypted
+[2024-12-28 00:57:07.988920] [0x00007ff7a9fb4fc0] [debug] Filename length decrypted
+[2024-12-28 00:57:07.988938] [0x00007ff7a9fb4fc0] [debug] Decoded filename length: 8
+[2024-12-28 00:57:07.988938] [0x00007ff7a9fb4fc0] [debug] Decoded filename length: 8
+[2024-12-28 00:57:07.988938] [0x00007ff7a9fb4fc0] [debug] Decoded filename length: 8
+[2024-12-28 00:57:07.988938] [0x00007ff7a9fb4fc0] [debug] Decoded filename length: 8
+[2024-12-28 00:57:07.988956] [0x00007ff7a9fb4fc0] [info] Initializing CryptoStream
+[2024-12-28 00:57:07.988956] [0x00007ff7a9fb4fc0] [info] Initializing CryptoStream
+[2024-12-28 00:57:07.988956] [0x00007ff7a9fb4fc0] [info] Initializing CryptoStream
+[2024-12-28 00:57:07.988956] [0x00007ff7a9fb4fc0] [info] Initializing CryptoStream
+[2024-12-28 00:57:07.988973] [0x00007ff7a9fb4fc0] [debug] CryptoStream initialization complete
+[2024-12-28 00:57:07.988973] [0x00007ff7a9fb4fc0] [debug] CryptoStream initialization complete
+[2024-12-28 00:57:07.988973] [0x00007ff7a9fb4fc0] [debug] CryptoStream initialization complete
+[2024-12-28 00:57:07.988973] [0x00007ff7a9fb4fc0] [debug] CryptoStream initialization complete
+[2024-12-28 00:57:07.988992] [0x00007ff7a9fb4fc0] [debug] Converting IV array to vector
+[2024-12-28 00:57:07.988992] [0x00007ff7a9fb4fc0] [debug] Converting IV array to vector
+[2024-12-28 00:57:07.988992] [0x00007ff7a9fb4fc0] [debug] Converting IV array to vector
+[2024-12-28 00:57:07.988992] [0x00007ff7a9fb4fc0] [debug] Converting IV array to vector
+[2024-12-28 00:57:07.989016] [0x00007ff7a9fb4fc0] [info] Initializing crypto parameters
+[2024-12-28 00:57:07.989016] [0x00007ff7a9fb4fc0] [info] Initializing crypto parameters
+[2024-12-28 00:57:07.989016] [0x00007ff7a9fb4fc0] [info] Initializing crypto parameters
+[2024-12-28 00:57:07.989016] [0x00007ff7a9fb4fc0] [info] Initializing crypto parameters
+[2024-12-28 00:57:07.989034] [0x00007ff7a9fb4fc0] [debug] Crypto parameters initialized successfully
+[2024-12-28 00:57:07.989034] [0x00007ff7a9fb4fc0] [debug] Crypto parameters initialized successfully
+[2024-12-28 00:57:07.989034] [0x00007ff7a9fb4fc0] [debug] Crypto parameters initialized successfully
+[2024-12-28 00:57:07.989034] [0x00007ff7a9fb4fc0] [debug] Crypto parameters initialized successfully
+[2024-12-28 00:57:07.989051] [0x00007ff7a9fb4fc0] [debug] Initialized CryptoStream for payload decryption
+[2024-12-28 00:57:07.989051] [0x00007ff7a9fb4fc0] [debug] Initialized CryptoStream for payload decryption
+[2024-12-28 00:57:07.989051] [0x00007ff7a9fb4fc0] [debug] Initialized CryptoStream for payload decryption
+[2024-12-28 00:57:07.989051] [0x00007ff7a9fb4fc0] [debug] Initialized CryptoStream for payload decryption
+[2024-12-28 00:57:07.989069] [0x00007ff7a9fb4fc0] [debug] Processing payload of size: 17 bytes
+[2024-12-28 00:57:07.989069] [0x00007ff7a9fb4fc0] [debug] Processing payload of size: 17 bytes
+[2024-12-28 00:57:07.989069] [0x00007ff7a9fb4fc0] [debug] Processing payload of size: 17 bytes
+[2024-12-28 00:57:07.989069] [0x00007ff7a9fb4fc0] [debug] Processing payload of size: 17 bytes
+[2024-12-28 00:57:07.989094] [0x00007ff7a9fb4fc0] [debug] Padding calculation: input_size=17, block_size=16, padded_size=32
+[2024-12-28 00:57:07.989094] [0x00007ff7a9fb4fc0] [debug] Padding calculation: input_size=17, block_size=16, padded_size=32
+[2024-12-28 00:57:07.989094] [0x00007ff7a9fb4fc0] [debug] Padding calculation: input_size=17, block_size=16, padded_size=32
+[2024-12-28 00:57:07.989094] [0x00007ff7a9fb4fc0] [debug] Padding calculation: input_size=17, block_size=16, padded_size=32
+[2024-12-28 00:57:07.989112] [0x00007ff7a9fb4fc0] [debug] Reading 32 bytes from input stream
+[2024-12-28 00:57:07.989112] [0x00007ff7a9fb4fc0] [debug] Reading 32 bytes from input stream
+[2024-12-28 00:57:07.989112] [0x00007ff7a9fb4fc0] [debug] Reading 32 bytes from input stream
+[2024-12-28 00:57:07.989112] [0x00007ff7a9fb4fc0] [debug] Reading 32 bytes from input stream
+[2024-12-28 00:57:07.989131] [0x00007ff7a9fb4fc0] [debug] Read encrypted payload block: 32 bytes, total=77
+[2024-12-28 00:57:07.989131] [0x00007ff7a9fb4fc0] [debug] Read encrypted payload block: 32 bytes, total=77
+[2024-12-28 00:57:07.989131] [0x00007ff7a9fb4fc0] [debug] Read encrypted payload block: 32 bytes, total=77
+[2024-12-28 00:57:07.989131] [0x00007ff7a9fb4fc0] [debug] Read encrypted payload block: 32 bytes, total=77
+[2024-12-28 00:57:07.989151] [0x00007ff7a9fb4fc0] [info] Starting stream decryption
+[2024-12-28 00:57:07.989151] [0x00007ff7a9fb4fc0] [info] Starting stream decryption
+[2024-12-28 00:57:07.989151] [0x00007ff7a9fb4fc0] [info] Starting stream decryption
+[2024-12-28 00:57:07.989151] [0x00007ff7a9fb4fc0] [info] Starting stream decryption
+[2024-12-28 00:57:07.989168] [0x00007ff7a9fb4fc0] [debug] Initializing cipher for decryption
+[2024-12-28 00:57:07.989168] [0x00007ff7a9fb4fc0] [debug] Initializing cipher for decryption
+[2024-12-28 00:57:07.989168] [0x00007ff7a9fb4fc0] [debug] Initializing cipher for decryption
+[2024-12-28 00:57:07.989168] [0x00007ff7a9fb4fc0] [debug] Initializing cipher for decryption
+[2024-12-28 00:57:07.989188] [0x00007ff7a9fb4fc0] [debug] Cipher initialization complete
+[2024-12-28 00:57:07.989188] [0x00007ff7a9fb4fc0] [debug] Cipher initialization complete
+[2024-12-28 00:57:07.989188] [0x00007ff7a9fb4fc0] [debug] Cipher initialization complete
+[2024-12-28 00:57:07.989188] [0x00007ff7a9fb4fc0] [debug] Cipher initialization complete
+[2024-12-28 00:57:07.989232] [0x00007ff7a9fb4fc0] [debug] Payload decrypted successfully
+[2024-12-28 00:57:07.989232] [0x00007ff7a9fb4fc0] [debug] Payload decrypted successfully
+[2024-12-28 00:57:07.989232] [0x00007ff7a9fb4fc0] [debug] Payload decrypted successfully
+[2024-12-28 00:57:07.989232] [0x00007ff7a9fb4fc0] [debug] Payload decrypted successfully
+[2024-12-28 00:57:07.989254] [0x00007ff7a9fb4fc0] [debug] Decrypted payload written to stream: 17 bytes
+[2024-12-28 00:57:07.989254] [0x00007ff7a9fb4fc0] [debug] Decrypted payload written to stream: 17 bytes
+[2024-12-28 00:57:07.989254] [0x00007ff7a9fb4fc0] [debug] Decrypted payload written to stream: 17 bytes
+[2024-12-28 00:57:07.989254] [0x00007ff7a9fb4fc0] [debug] Decrypted payload written to stream: 17 bytes
+[2024-12-28 00:57:07.989281] [0x00007ff7a9fb4fc0] [info] Producing message frame to channel, total bytes read=77
+[2024-12-28 00:57:07.989281] [0x00007ff7a9fb4fc0] [info] Producing message frame to channel, total bytes read=77
+[2024-12-28 00:57:07.989281] [0x00007ff7a9fb4fc0] [info] Producing message frame to channel, total bytes read=77
+[2024-12-28 00:57:07.989281] [0x00007ff7a9fb4fc0] [info] Producing message frame to channel, total bytes read=77
+[2024-12-28 00:57:07.989304] [0x00007ff7a9fb4fc0] [debug] Added message frame to channel. Channel size: 1
+[2024-12-28 00:57:07.989304] [0x00007ff7a9fb4fc0] [debug] Added message frame to channel. Channel size: 1
+[2024-12-28 00:57:07.989304] [0x00007ff7a9fb4fc0] [debug] Added message frame to channel. Channel size: 1
+[2024-12-28 00:57:07.989304] [0x00007ff7a9fb4fc0] [debug] Added message frame to channel. Channel size: 1
+[2024-12-28 00:57:07.989322] [0x00007ff7a9fb4fc0] [info] Message frame deserialization completed successfully
+[2024-12-28 00:57:07.989322] [0x00007ff7a9fb4fc0] [info] Message frame deserialization completed successfully
+[2024-12-28 00:57:07.989322] [0x00007ff7a9fb4fc0] [info] Message frame deserialization completed successfully
+[2024-12-28 00:57:07.989322] [0x00007ff7a9fb4fc0] [info] Message frame deserialization completed successfully
+[2024-12-28 00:57:07.989348] [0x00007ff7a9fb4fc0] [debug] Cleaning up CryptoStream resources
+[2024-12-28 00:57:07.989348] [0x00007ff7a9fb4fc0] [debug] Cleaning up CryptoStream resources
+[2024-12-28 00:57:07.989348] [0x00007ff7a9fb4fc0] [debug] Cleaning up CryptoStream resources
+[2024-12-28 00:57:07.989348] [0x00007ff7a9fb4fc0] [debug] Cleaning up CryptoStream resources
+[2024-12-28 00:57:07.989375] [0x00007ff7a9fb4fc0] [debug] Cleaning up CryptoStream resources
+[2024-12-28 00:57:07.989375] [0x00007ff7a9fb4fc0] [debug] Cleaning up CryptoStream resources
+[2024-12-28 00:57:07.989375] [0x00007ff7a9fb4fc0] [debug] Cleaning up CryptoStream resources
+[2024-12-28 00:57:07.989375] [0x00007ff7a9fb4fc0] [debug] Cleaning up CryptoStream resources
+[2024-12-28 00:57:07.989394] [0x00007ff7a9fb4fc0] [debug] Checking channel message count
+[2024-12-28 00:57:07.989394] [0x00007ff7a9fb4fc0] [debug] Checking channel message count
+[2024-12-28 00:57:07.989394] [0x00007ff7a9fb4fc0] [debug] Checking channel message count
+[2024-12-28 00:57:07.989394] [0x00007ff7a9fb4fc0] [debug] Checking channel message count
+[2024-12-28 00:57:07.989415] [0x00007ff7a9fb4fc0] [debug] Retrieved message frame from channel. Channel size: 0
+[2024-12-28 00:57:07.989415] [0x00007ff7a9fb4fc0] [debug] Retrieved message frame from channel. Channel size: 0
+[2024-12-28 00:57:07.989415] [0x00007ff7a9fb4fc0] [debug] Retrieved message frame from channel. Channel size: 0
+[2024-12-28 00:57:07.989415] [0x00007ff7a9fb4fc0] [debug] Retrieved message frame from channel. Channel size: 0
+[2024-12-28 00:57:07.989436] [0x00007ff7a9fb4fc0] [debug] Successfully consumed message from channel
+[2024-12-28 00:57:07.989436] [0x00007ff7a9fb4fc0] [debug] Successfully consumed message from channel
+[2024-12-28 00:57:07.989436] [0x00007ff7a9fb4fc0] [debug] Successfully consumed message from channel
+[2024-12-28 00:57:07.989436] [0x00007ff7a9fb4fc0] [debug] Successfully consumed message from channel
+[2024-12-28 00:57:07.989456] [0x00007ff7a9fb4fc0] [debug] Verifying frame equality
+[2024-12-28 00:57:07.989456] [0x00007ff7a9fb4fc0] [debug] Verifying frame equality
+[2024-12-28 00:57:07.989456] [0x00007ff7a9fb4fc0] [debug] Verifying frame equality
+[2024-12-28 00:57:07.989456] [0x00007ff7a9fb4fc0] [debug] Verifying frame equality
+[2024-12-28 00:57:07.989480] [0x00007ff7a9fb4fc0] [debug] Payload comparison completed
+[2024-12-28 00:57:07.989480] [0x00007ff7a9fb4fc0] [debug] Payload comparison completed
+[2024-12-28 00:57:07.989480] [0x00007ff7a9fb4fc0] [debug] Payload comparison completed
+[2024-12-28 00:57:07.989480] [0x00007ff7a9fb4fc0] [debug] Payload comparison completed
+[2024-12-28 00:57:07.989499] [0x00007ff7a9fb4fc0] [debug] Frame verification completed
+[2024-12-28 00:57:07.989499] [0x00007ff7a9fb4fc0] [debug] Frame verification completed
+[2024-12-28 00:57:07.989499] [0x00007ff7a9fb4fc0] [debug] Frame verification completed
+[2024-12-28 00:57:07.989499] [0x00007ff7a9fb4fc0] [debug] Frame verification completed
+[2024-12-28 00:57:07.989516] [0x00007ff7a9fb4fc0] [info] ChannelIntegration test completed successfully
+[2024-12-28 00:57:07.989516] [0x00007ff7a9fb4fc0] [info] ChannelIntegration test completed successfully
+[2024-12-28 00:57:07.989516] [0x00007ff7a9fb4fc0] [info] ChannelIntegration test completed successfully
+[2024-12-28 00:57:07.989516] [0x00007ff7a9fb4fc0] [info] ChannelIntegration test completed successfully
+[2024-12-28 00:57:07.989539] [0x00007ff7a9fb4fc0] [debug] Tearing down CodecTest fixture
+[2024-12-28 00:57:07.989539] [0x00007ff7a9fb4fc0] [debug] Tearing down CodecTest fixture
+[2024-12-28 00:57:07.989539] [0x00007ff7a9fb4fc0] [debug] Tearing down CodecTest fixture
+[2024-12-28 00:57:07.989539] [0x00007ff7a9fb4fc0] [debug] Tearing down CodecTest fixture
+[       OK ] CodecTest.ChannelIntegration (13 ms)
+[ RUN      ] CodecTest.ErrorHandling
+[2024-12-28 00:57:07.989602] [0x00007ff7a9fb4fc0] [info] Setting up CodecTest fixture
+[2024-12-28 00:57:07.989602] [0x00007ff7a9fb4fc0] [info] Setting up CodecTest fixture
+[2024-12-28 00:57:07.989602] [0x00007ff7a9fb4fc0] [info] Setting up CodecTest fixture
+[2024-12-28 00:57:07.989602] [0x00007ff7a9fb4fc0] [info] Setting up CodecTest fixture
+[2024-12-28 00:57:07.989602] [0x00007ff7a9fb4fc0] [info] Setting up CodecTest fixture
+[2024-12-28 00:57:07.989631] [0x00007ff7a9fb4fc0] [info] Initializing Codec with key size: 32
+[2024-12-28 00:57:07.989631] [0x00007ff7a9fb4fc0] [info] Initializing Codec with key size: 32
+[2024-12-28 00:57:07.989631] [0x00007ff7a9fb4fc0] [info] Initializing Codec with key size: 32
+[2024-12-28 00:57:07.989631] [0x00007ff7a9fb4fc0] [info] Initializing Codec with key size: 32
+[2024-12-28 00:57:07.989631] [0x00007ff7a9fb4fc0] [info] Initializing Codec with key size: 32
+[2024-12-28 00:57:07.989654] [0x00007ff7a9fb4fc0] [debug] Test fixture initialized with key size: 32
+[2024-12-28 00:57:07.989654] [0x00007ff7a9fb4fc0] [debug] Test fixture initialized with key size: 32
+[2024-12-28 00:57:07.989654] [0x00007ff7a9fb4fc0] [debug] Test fixture initialized with key size: 32
+[2024-12-28 00:57:07.989654] [0x00007ff7a9fb4fc0] [debug] Test fixture initialized with key size: 32
+[2024-12-28 00:57:07.989654] [0x00007ff7a9fb4fc0] [debug] Test fixture initialized with key size: 32
+[2024-12-28 00:57:07.989678] [0x00007ff7a9fb4fc0] [info] Starting ErrorHandling test
+[2024-12-28 00:57:07.989678] [0x00007ff7a9fb4fc0] [info] Starting ErrorHandling test
+[2024-12-28 00:57:07.989678] [0x00007ff7a9fb4fc0] [info] Starting ErrorHandling test
+[2024-12-28 00:57:07.989678] [0x00007ff7a9fb4fc0] [info] Starting ErrorHandling test
+[2024-12-28 00:57:07.989678] [0x00007ff7a9fb4fc0] [info] Starting ErrorHandling test
+[2024-12-28 00:57:07.989700] [0x00007ff7a9fb4fc0] [debug] Testing invalid key size
+[2024-12-28 00:57:07.989700] [0x00007ff7a9fb4fc0] [debug] Testing invalid key size
+[2024-12-28 00:57:07.989700] [0x00007ff7a9fb4fc0] [debug] Testing invalid key size
+[2024-12-28 00:57:07.989700] [0x00007ff7a9fb4fc0] [debug] Testing invalid key size
+[2024-12-28 00:57:07.989700] [0x00007ff7a9fb4fc0] [debug] Testing invalid key size
+[2024-12-28 00:57:07.989720] [0x00007ff7a9fb4fc0] [info] Initializing Codec with key size: 16
+[2024-12-28 00:57:07.989720] [0x00007ff7a9fb4fc0] [info] Initializing Codec with key size: 16
+[2024-12-28 00:57:07.989720] [0x00007ff7a9fb4fc0] [info] Initializing Codec with key size: 16
+[2024-12-28 00:57:07.989720] [0x00007ff7a9fb4fc0] [info] Initializing Codec with key size: 16
+[2024-12-28 00:57:07.989720] [0x00007ff7a9fb4fc0] [info] Initializing Codec with key size: 16
+[2024-12-28 00:57:07.989752] [0x00007ff7a9fb4fc0] [error] Invalid key size: 16 bytes. Expected 32 bytes
+[2024-12-28 00:57:07.989752] [0x00007ff7a9fb4fc0] [error] Invalid key size: 16 bytes. Expected 32 bytes
+[2024-12-28 00:57:07.989752] [0x00007ff7a9fb4fc0] [error] Invalid key size: 16 bytes. Expected 32 bytes
+[2024-12-28 00:57:07.989752] [0x00007ff7a9fb4fc0] [error] Invalid key size: 16 bytes. Expected 32 bytes
+[2024-12-28 00:57:07.989752] [0x00007ff7a9fb4fc0] [error] Invalid key size: 16 bytes. Expected 32 bytes
+[2024-12-28 00:57:07.989798] [0x00007ff7a9fb4fc0] [debug] Testing invalid input stream
+[2024-12-28 00:57:07.989798] [0x00007ff7a9fb4fc0] [debug] Testing invalid input stream
+[2024-12-28 00:57:07.989798] [0x00007ff7a9fb4fc0] [debug] Testing invalid input stream
+[2024-12-28 00:57:07.989798] [0x00007ff7a9fb4fc0] [debug] Testing invalid input stream
+[2024-12-28 00:57:07.989798] [0x00007ff7a9fb4fc0] [debug] Testing invalid input stream
+[2024-12-28 00:57:07.989825] [0x00007ff7a9fb4fc0] [debug] Creating test frame with payload size: 12
+[2024-12-28 00:57:07.989825] [0x00007ff7a9fb4fc0] [debug] Creating test frame with payload size: 12
+[2024-12-28 00:57:07.989825] [0x00007ff7a9fb4fc0] [debug] Creating test frame with payload size: 12
+[2024-12-28 00:57:07.989825] [0x00007ff7a9fb4fc0] [debug] Creating test frame with payload size: 12
+[2024-12-28 00:57:07.989825] [0x00007ff7a9fb4fc0] [debug] Creating test frame with payload size: 12
+[2024-12-28 00:57:07.989866] [0x00007ff7a9fb4fc0] [debug] Test frame created with type: 0
+[2024-12-28 00:57:07.989866] [0x00007ff7a9fb4fc0] [debug] Test frame created with type: 0
+[2024-12-28 00:57:07.989866] [0x00007ff7a9fb4fc0] [debug] Test frame created with type: 0
+[2024-12-28 00:57:07.989866] [0x00007ff7a9fb4fc0] [debug] Test frame created with type: 0
+[2024-12-28 00:57:07.989866] [0x00007ff7a9fb4fc0] [debug] Test frame created with type: 0
+[2024-12-28 00:57:07.989893] [0x00007ff7a9fb4fc0] [info] Starting message frame serialization
+[2024-12-28 00:57:07.989893] [0x00007ff7a9fb4fc0] [info] Starting message frame serialization
+[2024-12-28 00:57:07.989893] [0x00007ff7a9fb4fc0] [info] Starting message frame serialization
+[2024-12-28 00:57:07.989893] [0x00007ff7a9fb4fc0] [info] Starting message frame serialization
+[2024-12-28 00:57:07.989893] [0x00007ff7a9fb4fc0] [info] Starting message frame serialization
+[2024-12-28 00:57:07.989915] [0x00007ff7a9fb4fc0] [error] Invalid output stream state
+[2024-12-28 00:57:07.989915] [0x00007ff7a9fb4fc0] [error] Invalid output stream state
+[2024-12-28 00:57:07.989915] [0x00007ff7a9fb4fc0] [error] Invalid output stream state
+[2024-12-28 00:57:07.989915] [0x00007ff7a9fb4fc0] [error] Invalid output stream state
+[2024-12-28 00:57:07.989915] [0x00007ff7a9fb4fc0] [error] Invalid output stream state
+[2024-12-28 00:57:07.989947] [0x00007ff7a9fb4fc0] [debug] Testing invalid output stream
+[2024-12-28 00:57:07.989947] [0x00007ff7a9fb4fc0] [debug] Testing invalid output stream
+[2024-12-28 00:57:07.989947] [0x00007ff7a9fb4fc0] [debug] Testing invalid output stream
+[2024-12-28 00:57:07.989947] [0x00007ff7a9fb4fc0] [debug] Testing invalid output stream
+[2024-12-28 00:57:07.989947] [0x00007ff7a9fb4fc0] [debug] Testing invalid output stream
+[2024-12-28 00:57:07.990007] [0x00007ff7a9fb4fc0] [info] Starting message frame deserialization
+[2024-12-28 00:57:07.990007] [0x00007ff7a9fb4fc0] [info] Starting message frame deserialization
+[2024-12-28 00:57:07.990007] [0x00007ff7a9fb4fc0] [info] Starting message frame deserialization
+[2024-12-28 00:57:07.990007] [0x00007ff7a9fb4fc0] [info] Starting message frame deserialization
+[2024-12-28 00:57:07.990007] [0x00007ff7a9fb4fc0] [info] Starting message frame deserialization
+[2024-12-28 00:57:07.990090] [0x00007ff7a9fb4fc0] [error] Invalid input stream state
+[2024-12-28 00:57:07.990090] [0x00007ff7a9fb4fc0] [error] Invalid input stream state
+[2024-12-28 00:57:07.990090] [0x00007ff7a9fb4fc0] [error] Invalid input stream state
+[2024-12-28 00:57:07.990090] [0x00007ff7a9fb4fc0] [error] Invalid input stream state
+[2024-12-28 00:57:07.990090] [0x00007ff7a9fb4fc0] [error] Invalid input stream state
+[2024-12-28 00:57:07.990128] [0x00007ff7a9fb4fc0] [info] ErrorHandling test completed successfully
+[2024-12-28 00:57:07.990128] [0x00007ff7a9fb4fc0] [info] ErrorHandling test completed successfully
+[2024-12-28 00:57:07.990128] [0x00007ff7a9fb4fc0] [info] ErrorHandling test completed successfully
+[2024-12-28 00:57:07.990128] [0x00007ff7a9fb4fc0] [info] ErrorHandling test completed successfully
+[2024-12-28 00:57:07.990128] [0x00007ff7a9fb4fc0] [info] ErrorHandling test completed successfully
+[2024-12-28 00:57:07.990159] [0x00007ff7a9fb4fc0] [debug] Tearing down CodecTest fixture
+[2024-12-28 00:57:07.990159] [0x00007ff7a9fb4fc0] [debug] Tearing down CodecTest fixture
+[2024-12-28 00:57:07.990159] [0x00007ff7a9fb4fc0] [debug] Tearing down CodecTest fixture
+[2024-12-28 00:57:07.990159] [0x00007ff7a9fb4fc0] [debug] Tearing down CodecTest fixture
+[2024-12-28 00:57:07.990159] [0x00007ff7a9fb4fc0] [debug] Tearing down CodecTest fixture
+[       OK ] CodecTest.ErrorHandling (0 ms)
+[----------] 5 tests from CodecTest (30 ms total)
+
+[----------] Global test environment tear-down
+[==========] 22 tests from 3 test suites ran. (74 ms total)
+[  PASSED  ] 20 tests.
+[  FAILED  ] 2 tests, listed below:
+[  FAILED  ] CodecTest.EncryptionVerification
+[  FAILED  ] CodecTest.LargeMessageHandling
+
+ 2 FAILED TESTS
+make[2]: *** [CMakeFiles/run_tests.dir/build.make:75: CMakeFiles/run_tests] Error 1
+make[1]: *** [CMakeFiles/Makefile2:284: CMakeFiles/run_tests.dir/all] Error 2
+make: *** [Makefile:146: all] Error 2
