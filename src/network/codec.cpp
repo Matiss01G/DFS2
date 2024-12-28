@@ -111,14 +111,29 @@ MessageFrame Codec::deserialize(std::istream& input, Channel& channel) {
 
         // Handle payload if present
         if (frame.payload_size > 0) {
-            BOOST_LOG_TRIVIAL(debug) << "Reading payload of size: " << frame.payload_size;
-            std::vector<char> buffer(frame.payload_size);
-            read_bytes(input, buffer.data(), frame.payload_size);
-            frame.payload_stream->write(buffer.data(), frame.payload_size);
-            frame.payload_stream->seekg(0);
-            total_bytes += frame.payload_size;
-        }
+            BOOST_LOG_TRIVIAL(debug) << "Streaming payload of size: " << frame.payload_size;
 
+            constexpr std::size_t chunk_size = 8192; // 8KB chunks
+            std::vector<char> buffer(chunk_size);
+            std::size_t remaining = frame.payload_size;
+
+            while (remaining > 0 && input.good()) {
+                std::size_t to_read = std::min(chunk_size, remaining);
+                read_bytes(input, buffer.data(), to_read);
+
+                frame.payload_stream->write(buffer.data(), to_read);
+                total_bytes += to_read;
+                remaining -= to_read;
+            }
+
+            if (remaining > 0) {
+                BOOST_LOG_TRIVIAL(error) << "Incomplete payload read. Missing " << remaining << " bytes";
+                throw std::runtime_error("Incomplete payload read");
+            }
+
+            frame.payload_stream->seekg(0);
+        }
+        
         BOOST_LOG_TRIVIAL(info) << "Message frame deserialization complete. Total bytes read: " << total_bytes;
         return frame;
     }
