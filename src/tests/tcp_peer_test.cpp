@@ -1,7 +1,6 @@
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
 #include "network/tcp_peer.hpp"
-#include "test_utils.hpp"
 #include <boost/asio.hpp>
 #include <boost/log/core.hpp>
 #include <boost/log/trivial.hpp>
@@ -18,7 +17,10 @@ using ::testing::_;
 class TCPPeerTest : public ::testing::Test {
 protected:
     void SetUp() override {
-        init_logging(); // Initialize logging with reduced verbosity
+        // Initialize logging with reduced verbosity
+        boost::log::core::get()->set_filter(
+            boost::log::trivial::severity >= boost::log::trivial::error
+        );
         test_peer = std::make_unique<TCP_Peer>("test_peer");
         server_endpoint.address(boost::asio::ip::make_address("127.0.0.1"));
         server_endpoint.port(12345);

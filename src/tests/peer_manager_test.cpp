@@ -2,7 +2,6 @@
 #include <gmock/gmock.h>
 #include "network/tcp_peer.hpp"
 #include "network/peer_manager.hpp"
-#include "test_utils.hpp"
 #include <boost/log/core.hpp>
 #include <boost/log/trivial.hpp>
 #include <boost/log/expressions.hpp>
@@ -18,7 +17,10 @@ using ::testing::_;
 class PeerManagerTest : public ::testing::Test {
 protected:
     void SetUp() override {
-        init_logging(); 
+        // Initialize logging with reduced verbosity
+        boost::log::core::get()->set_filter(
+            boost::log::trivial::severity >= boost::log::trivial::error
+        );
         manager = std::make_unique<PeerManager>();
     }
 

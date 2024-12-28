@@ -23,6 +23,10 @@ args = "Build"
 task = "workflow.run"
 args = "Build and Test Clean"
 
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "Build Tests"
+
 [[workflows.workflow]]
 name = "Build and Test"
 author = "agent"
@@ -64,6 +68,20 @@ task = "packager.installForAll"
 [[workflows.workflow.tasks]]
 task = "shell.exec"
 args = "cd build && rm -rf * && BOOST_LOG_DYN_LINK=1 BOOST_LOG_CONSOLE=1 cmake -DCMAKE_BUILD_TYPE=Debug .. && make -j4 && ./network_tests"
+
+[[workflows.workflow]]
+name = "Build Tests"
+author = "agent"
+
+[workflows.workflow.metadata]
+agentRequireRestartOnSave = false
+
+[[workflows.workflow.tasks]]
+task = "packager.installForAll"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "cd build && cmake -DCMAKE_BUILD_TYPE=Debug .. && make"
 
 [deployment]
 run = ["sh", "-c", "cd build && cmake -DCMAKE_BUILD_TYPE=Debug .. && make && ./network_tests"]
