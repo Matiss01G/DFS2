@@ -4,7 +4,6 @@
 #include <cstdint>
 #include <iostream>
 #include <mutex>
-#include <vector>
 #include "network/message_frame.hpp"
 #include "network/channel.hpp"
 
@@ -13,8 +12,8 @@ namespace network {
 
 class Codec {
 public:
-    // Constructor with cryptographic key
-    Codec(const std::vector<uint8_t>& key);
+    // Default constructor
+    Codec();
 
     // Serializes a message frame to an output stream
     std::size_t serialize(const MessageFrame& frame, std::ostream& output);
@@ -23,9 +22,6 @@ public:
     MessageFrame deserialize(std::istream& input, Channel& channel);
 
 private:
-    // Cryptographic key for encryption/decryption
-    std::vector<uint8_t> key_;
-
     // Writes bytes to an output stream
     void write_bytes(std::ostream& output, const void* data, std::size_t size);
 
