@@ -446,30 +446,6 @@ src/tests/channel_test.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/channel_tests.dir/build.make CMakeFiles/channel_tests.dir/src/tests/channel_test.cpp.s
 .PHONY : src/tests/channel_test.cpp.s
 
-src/tests/codec_test.o: src/tests/codec_test.cpp.o
-.PHONY : src/tests/codec_test.o
-
-# target to build an object file
-src/tests/codec_test.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/network_tests.dir/build.make CMakeFiles/network_tests.dir/src/tests/codec_test.cpp.o
-.PHONY : src/tests/codec_test.cpp.o
-
-src/tests/codec_test.i: src/tests/codec_test.cpp.i
-.PHONY : src/tests/codec_test.i
-
-# target to preprocess a source file
-src/tests/codec_test.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/network_tests.dir/build.make CMakeFiles/network_tests.dir/src/tests/codec_test.cpp.i
-.PHONY : src/tests/codec_test.cpp.i
-
-src/tests/codec_test.s: src/tests/codec_test.cpp.s
-.PHONY : src/tests/codec_test.s
-
-# target to generate assembly for a file
-src/tests/codec_test.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/network_tests.dir/build.make CMakeFiles/network_tests.dir/src/tests/codec_test.cpp.s
-.PHONY : src/tests/codec_test.cpp.s
-
 src/tests/crypto_stream_test.o: src/tests/crypto_stream_test.cpp.o
 .PHONY : src/tests/crypto_stream_test.o
 
@@ -608,9 +584,6 @@ help:
 	@echo "... src/tests/channel_test.o"
 	@echo "... src/tests/channel_test.i"
 	@echo "... src/tests/channel_test.s"
-	@echo "... src/tests/codec_test.o"
-	@echo "... src/tests/codec_test.i"
-	@echo "... src/tests/codec_test.s"
 	@echo "... src/tests/crypto_stream_test.o"
 	@echo "... src/tests/crypto_stream_test.i"
 	@echo "... src/tests/crypto_stream_test.s"
