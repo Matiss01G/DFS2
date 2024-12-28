@@ -10,6 +10,9 @@
 #include <boost/log/expressions.hpp>
 #include <boost/log/utility/setup/console.hpp>
 #include <boost/log/utility/setup/common_attributes.hpp>
+#include <boost/log/sinks/sync_frontend.hpp>
+#include <boost/log/sinks/text_ostream_backend.hpp>
+#include <boost/core/null_deleter.hpp>
 
 using namespace dfs::network;
 
@@ -20,22 +23,33 @@ protected:
     Channel* channel_;
 
     void SetUp() override {
-        // Initialize Boost.Log
-        boost::log::register_simple_formatter_factory<boost::log::trivial::severity_level, char>("Severity");
+        // Reset Boost.Log core
+        boost::log::core::get()->remove_all_sinks();
 
-        // Add console output
-        boost::log::add_console_log(
-            std::cout,
-            boost::log::keywords::format = "[%TimeStamp%] [%ThreadID%] [%Severity%] %Message%",
-            boost::log::keywords::auto_flush = true
+        // Create and configure a new console sink
+        typedef boost::log::sinks::synchronous_sink<boost::log::sinks::text_ostream_backend> text_sink;
+        boost::shared_ptr<text_sink> sink = boost::make_shared<text_sink>();
+
+        // Add console as a destination
+        boost::shared_ptr<std::ostream> stream(&std::cout, boost::null_deleter());
+        sink->locked_backend()->add_stream(stream);
+
+        // Set the formatter
+        sink->set_formatter(
+            boost::log::expressions::stream
+                << "[" << boost::log::expressions::format_date_time<boost::posix_time::ptime>("TimeStamp", "%Y-%m-%d %H:%M:%S.%f")
+                << "] [" << boost::log::expressions::attr<boost::log::attributes::current_thread_id::value_type>("ThreadID")
+                << "] [" << boost::log::trivial::severity
+                << "] " << boost::log::expressions::smessage
         );
 
-        // Set logging level to debug to see all messages
-        boost::log::core::get()->set_filter(
-            boost::log::trivial::severity >= boost::log::trivial::debug
-        );
+        // Set the filter to debug level
+        sink->set_filter(boost::log::trivial::severity >= boost::log::trivial::debug);
 
-        // Add commonly used attributes
+        // Add the sink to the core
+        boost::log::core::get()->add_sink(sink);
+
+        // Add common attributes once
         boost::log::add_common_attributes();
 
         BOOST_LOG_TRIVIAL(info) << "Setting up CodecTest fixture";
@@ -52,6 +66,9 @@ protected:
         BOOST_LOG_TRIVIAL(debug) << "Tearing down CodecTest fixture";
         delete codec_;
         delete channel_;
+
+        // Clean up logging
+        boost::log::core::get()->remove_all_sinks();
     }
 
     // Helper to create a test message frame
@@ -104,29 +121,6 @@ protected:
         BOOST_LOG_TRIVIAL(debug) << "Frame verification completed";
     }
 };
-
-// // Test basic message serialization/deserialization
-// TEST_F(CodecTest, BasicSerializationDeserialization) {
-//     BOOST_LOG_TRIVIAL(info) << "Starting BasicSerializationDeserialization test";
-
-//     // Create a simple test frame
-//     MessageFrame original = createTestFrame("Hello, World!");
-//     std::stringstream buffer;
-
-//     // Serialize
-//     std::size_t bytes_written = codec_->serialize(original, buffer);
-//     BOOST_LOG_TRIVIAL(info) << "Serialized message frame, bytes written: " << bytes_written;
-//     ASSERT_GT(bytes_written, 0);
-
-//     // Deserialize
-//     MessageFrame deserialized = codec_->deserialize(buffer, *channel_);
-//     BOOST_LOG_TRIVIAL(info) << "Deserialized message frame, payload size: " << deserialized.payload_size;
-//     ASSERT_GT(deserialized.payload_size, 0);
-
-//     // Verify
-//     verifyFramesEqual(original, deserialized);
-//     BOOST_LOG_TRIVIAL(info) << "BasicSerializationDeserialization test completed successfully";
-// }
 
 // Test encryption functionality
 TEST_F(CodecTest, EncryptionVerification) {
@@ -182,54 +176,3 @@ TEST_F(CodecTest, LargeMessageHandling) {
     verifyFramesEqual(original, deserialized);
     BOOST_LOG_TRIVIAL(info) << "LargeMessageHandling test completed successfully";
 }
-
-// // Test channel integration
-// TEST_F(CodecTest, ChannelIntegration) {
-//     BOOST_LOG_TRIVIAL(info) << "Starting ChannelIntegration test";
-//     MessageFrame original = createTestFrame("Channel Test Data");
-//     std::stringstream buffer;
-
-//     // Serialize and deserialize through channel
-//     codec_->serialize(original, buffer);
-//     MessageFrame deserialized = codec_->deserialize(buffer, *channel_);
-
-//     // Verify channel received the message
-//     BOOST_LOG_TRIVIAL(debug) << "Checking channel message count";
-//     ASSERT_EQ(channel_->size(), 1);
-
-//     // Consume from channel
-//     MessageFrame received;
-//     ASSERT_TRUE(channel_->consume(received));
-//     BOOST_LOG_TRIVIAL(debug) << "Successfully consumed message from channel";
-
-//     // Verify frame from channel matches original
-//     verifyFramesEqual(original, received);
-//     BOOST_LOG_TRIVIAL(info) << "ChannelIntegration test completed successfully";
-// }
-
-// // Test error handling
-// TEST_F(CodecTest, ErrorHandling) {
-//     BOOST_LOG_TRIVIAL(info) << "Starting ErrorHandling test";
-
-//     // Test invalid key size
-//     BOOST_LOG_TRIVIAL(debug) << "Testing invalid key size";
-//     EXPECT_THROW({
-//         std::vector<uint8_t> invalid_key(16, 0x42);  // Wrong key size
-//         Codec invalid_codec(invalid_key);
-//     }, std::invalid_argument);
-
-//     // Test invalid input stream
-//     BOOST_LOG_TRIVIAL(debug) << "Testing invalid input stream";
-//     MessageFrame frame = createTestFrame();
-//     std::stringstream invalid_stream;
-//     invalid_stream.setstate(std::ios::badbit);
-//     EXPECT_THROW(codec_->serialize(frame, invalid_stream), std::runtime_error);
-
-//     // Test invalid output stream
-//     BOOST_LOG_TRIVIAL(debug) << "Testing invalid output stream";
-//     std::stringstream invalid_output;
-//     invalid_output.setstate(std::ios::badbit);
-//     EXPECT_THROW(codec_->deserialize(invalid_output, *channel_), std::runtime_error);
-
-//     BOOST_LOG_TRIVIAL(info) << "ErrorHandling test completed successfully";
-// }
