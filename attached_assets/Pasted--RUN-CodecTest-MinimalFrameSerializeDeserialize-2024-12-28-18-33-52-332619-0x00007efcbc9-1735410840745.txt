@@ -1,0 +1,32 @@
+[ RUN      ] CodecTest.MinimalFrameSerializeDeserialize
+[2024-12-28 18:33:52.332619] [0x00007efcbc999d80] [info] Initializing Codec
+[2024-12-28 18:33:52.332699] [0x00007efcbc999d80] [info] Starting message frame serialization
+[2024-12-28 18:33:52.332699] [0x00007efcbc999d80] [info] Starting message frame serialization
+[2024-12-28 18:33:52.332721] [0x00007efcbc999d80] [debug] Writing message type: 0
+[2024-12-28 18:33:52.332721] [0x00007efcbc999d80] [debug] Writing message type: 0
+[2024-12-28 18:33:52.332747] [0x00007efcbc999d80] [debug] Writing source ID: 54321
+[2024-12-28 18:33:52.332747] [0x00007efcbc999d80] [debug] Writing source ID: 54321
+[2024-12-28 18:33:52.332757] [0x00007efcbc999d80] [debug] Writing payload size: 0
+[2024-12-28 18:33:52.332757] [0x00007efcbc999d80] [debug] Writing payload size: 0
+[2024-12-28 18:33:52.332776] [0x00007efcbc999d80] [debug] Writing filename length: 1379702208
+[2024-12-28 18:33:52.332776] [0x00007efcbc999d80] [debug] Writing filename length: 1379702208
+[2024-12-28 18:33:52.332789] [0x00007efcbc999d80] [info] Message frame serialization complete. Total bytes written: 17
+[2024-12-28 18:33:52.332789] [0x00007efcbc999d80] [info] Message frame serialization complete. Total bytes written: 17
+[2024-12-28 18:33:52.332800] [0x00007efcbc999d80] [info] Starting message frame deserialization
+[2024-12-28 18:33:52.332800] [0x00007efcbc999d80] [info] Starting message frame deserialization
+[2024-12-28 18:33:52.332811] [0x00007efcbc999d80] [debug] Read message type: 0
+[2024-12-28 18:33:52.332811] [0x00007efcbc999d80] [debug] Read message type: 0
+[2024-12-28 18:33:52.332822] [0x00007efcbc999d80] [debug] Read source ID: 54321
+[2024-12-28 18:33:52.332822] [0x00007efcbc999d80] [debug] Read source ID: 54321
+[2024-12-28 18:33:52.332833] [0x00007efcbc999d80] [debug] Read payload size: 0
+[2024-12-28 18:33:52.332833] [0x00007efcbc999d80] [debug] Read payload size: 0
+[2024-12-28 18:33:52.332843] [0x00007efcbc999d80] [debug] Read filename length: 1379702208
+[2024-12-28 18:33:52.332843] [0x00007efcbc999d80] [debug] Read filename length: 1379702208
+[2024-12-28 18:33:52.332855] [0x00007efcbc999d80] [debug] Added message frame to channel. Channel size: 1
+[2024-12-28 18:33:52.332855] [0x00007efcbc999d80] [debug] Added message frame to channel. Channel size: 1
+[2024-12-28 18:33:52.332931] [0x00007efcbc999d80] [info] Message frame deserialization complete. Total bytes read: 17
+[2024-12-28 18:33:52.332931] [0x00007efcbc999d80] [info] Message frame deserialization complete. Total bytes read: 17
+[2024-12-28 18:33:52.332948] [0x00007efcbc999d80] [debug] Retrieved message frame from channel. Channel size: 0
+[2024-12-28 18:33:52.332948] [0x00007efcbc999d80] [debug] Retrieved message frame from channel. Channel size: 0
+[       OK ] CodecTest.MinimalFrameSerializeDeserialize (0 ms)
+[----------] 2 tests from CodecTest (0 ms total)

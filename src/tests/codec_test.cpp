@@ -15,20 +15,28 @@ class CodecTest : public ::testing::Test {
 protected:
     Codec codec;
     Channel channel;
+    static bool logging_initialized;
 
     void SetUp() override {
-        // Initialize Boost.Log
-        boost::log::register_simple_formatter_factory<boost::log::trivial::severity_level, char>("Severity");
-        boost::log::add_console_log(
-            std::cout,
-            boost::log::keywords::format = "[%TimeStamp%] [%ThreadID%] [%Severity%] %Message%"
-        );
-        boost::log::core::get()->set_filter(
-            boost::log::trivial::severity >= boost::log::trivial::debug
-        );
-        boost::log::add_common_attributes();
+        // Initialize Boost.Log only once
+        if (!logging_initialized) {
+            boost::log::register_simple_formatter_factory<boost::log::trivial::severity_level, char>("Severity");
+            boost::log::core::get()->remove_all_sinks(); // Remove any existing sinks
+            boost::log::add_console_log(
+                std::cout,
+                boost::log::keywords::format = "[%TimeStamp%] [%ThreadID%] [%Severity%] %Message%"
+            );
+            boost::log::core::get()->set_filter(
+                boost::log::trivial::severity >= boost::log::trivial::debug
+            );
+            boost::log::add_common_attributes();
+            logging_initialized = true;
+        }
     }
 };
+
+// Initialize static member
+bool CodecTest::logging_initialized = false;
 
 /**
  * @brief Tests basic serialization and deserialization of a MessageFrame
