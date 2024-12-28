@@ -33,8 +33,21 @@ std::size_t Codec::serialize(const MessageFrame& frame, std::ostream& output) {
         total_bytes += sizeof(network_source_id);
 
         // Write payload size in network byte order
-        uint64_t network_payload_size = to_network_order(frame.payload_size);
-        BOOST_LOG_TRIVIAL(debug) << "Writing payload size: " << frame.payload_size;
+        uint64_t actual_payload_size = 0;
+        if (frame.payload_stream) {
+            // Store current position
+            std::streampos current_pos = frame.payload_stream->tellg();
+
+            // Seek to end to get size
+            frame.payload_stream->seekg(0, std::ios::end);
+            actual_payload_size = frame.payload_stream->tellg();
+
+            // Restore position
+            frame.payload_stream->seekg(current_pos);
+
+            BOOST_LOG_TRIVIAL(debug) << "Writing payload size: " << actual_payload_size;
+        }
+        uint64_t network_payload_size = to_network_order(actual_payload_size);
         write_bytes(output, &network_payload_size, sizeof(network_payload_size));
         total_bytes += sizeof(network_payload_size);
 
@@ -45,15 +58,18 @@ std::size_t Codec::serialize(const MessageFrame& frame, std::ostream& output) {
         total_bytes += sizeof(network_filename_length);
 
         // Write payload if present
-        if (frame.payload_size > 0 && frame.payload_stream) {
-            BOOST_LOG_TRIVIAL(debug) << "Writing payload of size: " << frame.payload_size;
-            frame.payload_stream->seekg(0);
-            std::vector<char> buffer(frame.payload_size);
-            if (!frame.payload_stream->read(buffer.data(), frame.payload_size)) {
+        if (frame.payload_stream && actual_payload_size > 0) {
+            std::vector<char> buffer(actual_payload_size);
+            frame.payload_stream->read(buffer.data(), actual_payload_size);
+            if (!frame.payload_stream->fail()) {
+                write_bytes(output, buffer.data(), actual_payload_size);
+                total_bytes += actual_payload_size;
+                // Reset stream position after reading
+                frame.payload_stream->seekg(0);
+            } else {
+                BOOST_LOG_TRIVIAL(error) << "Failed to read payload data";
                 throw std::runtime_error("Failed to read payload data");
             }
-            write_bytes(output, buffer.data(), frame.payload_size);
-            total_bytes += frame.payload_size;
         }
 
         output.flush();
@@ -104,7 +120,7 @@ MessageFrame Codec::deserialize(std::istream& input, Channel& channel) {
         frame.filename_length = from_network_order(network_filename_length);
         BOOST_LOG_TRIVIAL(debug) << "Read filename length: " << frame.filename_length;
         total_bytes += sizeof(network_filename_length);
-        
+
         frame.payload_stream = std::make_shared<std::stringstream>();
 
         channel.produce(frame);
@@ -133,7 +149,7 @@ MessageFrame Codec::deserialize(std::istream& input, Channel& channel) {
 
             frame.payload_stream->seekg(0);
         }
-        
+
         BOOST_LOG_TRIVIAL(info) << "Message frame deserialization complete. Total bytes read: " << total_bytes;
         return frame;
     }
