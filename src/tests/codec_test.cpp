@@ -5,6 +5,7 @@
 #include <random>
 #include <boost/log/trivial.hpp>
 #include <boost/log/core.hpp>
+#include <boost/log/expressions.hpp>
 
 using namespace dfs::network;
 
@@ -14,7 +15,7 @@ protected:
     void SetUp() override {
         // Configure logging to reduce verbosity during tests
         boost::log::core::get()->set_filter(
-            boost::log::trivial::severity >= boost::log::trivial::warning
+            boost::log::expressions::attr<boost::log::trivial::severity_level>("Severity") >= boost::log::trivial::warning
         );
     }
 };
