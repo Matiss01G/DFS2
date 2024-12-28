@@ -4,8 +4,6 @@
 #include <cstdint>
 #include <iostream>
 #include <mutex>
-#include <vector> // Added include for std::vector
-#include <boost/endian/conversion.hpp>
 #include "network/message_frame.hpp"
 #include "network/channel.hpp"
 
@@ -14,20 +12,16 @@ namespace network {
 
 class Codec {
 public:
-    // Constructor that takes encryption key
-    explicit Codec(const std::vector<uint8_t>& encryption_key);
+    // Default constructor
+    Codec();
 
     // Serializes a message frame to an output stream
     std::size_t serialize(const MessageFrame& frame, std::ostream& output);
 
-    // Deserializes a message frame from an input stream, creates and pushes it to the channel
-    // Returns the deserialized MessageFrame
+    // Deserializes a message frame from an input stream and pushes it to the channel
     MessageFrame deserialize(std::istream& input, Channel& channel);
 
 private:
-    // Encryption key
-    std::vector<uint8_t> key_;
-
     // Writes bytes to an output stream
     void write_bytes(std::ostream& output, const void* data, std::size_t size);
 
@@ -51,8 +45,6 @@ private:
     static uint64_t from_network_order(uint64_t network_value) {
         return boost::endian::big_to_native(network_value);
     }
-
-    std::mutex mutex_;  // Mutex for thread-safe channel operations
 };
 
 } // namespace network

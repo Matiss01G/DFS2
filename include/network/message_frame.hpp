@@ -2,11 +2,8 @@
 #define DFS_NETWORK_MESSAGE_FRAME_HPP
 
 #include <cstdint>
-#include <array>
-#include <istream>
-#include <ostream>
 #include <memory>
-#include <stdexcept>
+#include <sstream>
 #include <boost/endian/conversion.hpp>
 
 namespace dfs {
@@ -18,7 +15,6 @@ enum class MessageType : uint8_t {
 };
 
 struct MessageFrame {
-    std::array<uint8_t, 16> initialization_vector;
     MessageType message_type;
     uint32_t source_id;
     uint64_t payload_size;
