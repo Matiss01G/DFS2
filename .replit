@@ -1,52 +1,15 @@
+
 modules = ["cpp"]
 
 [nix]
 channel = "stable-24_05"
 
 [workflows]
-runButton = "Project"
-
-[[workflows.workflow]]
-name = "Project"
-mode = "parallel"
-author = "agent"
-
-[[workflows.workflow.tasks]]
-task = "workflow.run"
-args = "Build and Test"
-
-[[workflows.workflow.tasks]]
-task = "workflow.run"
-args = "Build"
-
-[[workflows.workflow.tasks]]
-task = "workflow.run"
-args = "Build and Test Clean"
-
-[[workflows.workflow.tasks]]
-task = "workflow.run"
-args = "Build Tests"
-
-[[workflows.workflow]]
-name = "Build and Test"
-author = "agent"
-
-[workflows.workflow.metadata]
-agentRequireRestartOnSave = false
-
-[[workflows.workflow.tasks]]
-task = "packager.installForAll"
-
-[[workflows.workflow.tasks]]
-task = "shell.exec"
-args = "cd build && cmake -DCMAKE_BUILD_TYPE=Debug .. && make && ./network_tests"
+runButton = "Build"
 
 [[workflows.workflow]]
 name = "Build"
-author = "agent"
-
-[workflows.workflow.metadata]
-agentRequireRestartOnSave = false
+mode = "sequential"
 
 [[workflows.workflow.tasks]]
 task = "packager.installForAll"
@@ -56,61 +19,16 @@ task = "shell.exec"
 args = "cd build && cmake .. && make"
 
 [[workflows.workflow]]
-name = "Build and Test Clean"
-author = "agent"
-
-[workflows.workflow.metadata]
-agentRequireRestartOnSave = false
+name = "Build and Test"
+mode = "sequential"
 
 [[workflows.workflow.tasks]]
 task = "packager.installForAll"
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "cd build && rm -rf * && BOOST_LOG_DYN_LINK=1 BOOST_LOG_CONSOLE=1 cmake -DCMAKE_BUILD_TYPE=Debug .. && make -j4 && ./network_tests"
-
-[[workflows.workflow]]
-name = "Build Tests"
-author = "agent"
-
-[workflows.workflow.metadata]
-agentRequireRestartOnSave = false
-
-[[workflows.workflow.tasks]]
-task = "packager.installForAll"
-
-[[workflows.workflow.tasks]]
-task = "shell.exec"
-args = "cd build && cmake -DCMAKE_BUILD_TYPE=Debug .. && make"
-
-[deployment]
-run = ["sh", "-c", "cd build && cmake -DCMAKE_BUILD_TYPE=Debug .. && make && ./network_tests"]
+args = "cd build && cmake -DCMAKE_BUILD_TYPE=Debug .. && make && ./network_tests"
 
 [[ports]]
 localPort = 12345
 externalPort = 80
-exposeLocalhost = true
-
-[[ports]]
-localPort = 12346
-externalPort = 3000
-
-[[ports]]
-localPort = 12348
-externalPort = 3001
-
-[[ports]]
-localPort = 12349
-externalPort = 4200
-
-[[ports]]
-localPort = 12350
-externalPort = 5000
-
-[[ports]]
-localPort = 35001
-externalPort = 3003
-
-[[ports]]
-localPort = 39665
-externalPort = 3002
