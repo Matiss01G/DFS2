@@ -5,8 +5,11 @@
 #include "network/codec.hpp"
 #include "network/channel.hpp"
 #include "crypto/crypto_stream.hpp"
-#include "test_utils.hpp"
+#include <boost/log/core.hpp>
 #include <boost/log/trivial.hpp>
+#include <boost/log/expressions.hpp>
+#include <boost/log/utility/setup/console.hpp>
+#include <boost/log/utility/setup/common_attributes.hpp>
 
 using namespace dfs::network;
 
@@ -17,8 +20,23 @@ protected:
     Channel* channel_;
 
     void SetUp() override {
-        // Initialize logging using the centralized configuration
-        init_logging();
+        // Initialize Boost.Log
+        boost::log::register_simple_formatter_factory<boost::log::trivial::severity_level, char>("Severity");
+
+        // Add console output
+        boost::log::add_console_log(
+            std::cout,
+            boost::log::keywords::format = "[%TimeStamp%] [%ThreadID%] [%Severity%] %Message%",
+            boost::log::keywords::auto_flush = true
+        );
+
+        // Set logging level to debug to see all messages
+        boost::log::core::get()->set_filter(
+            boost::log::trivial::severity >= boost::log::trivial::debug
+        );
+
+        // Add commonly used attributes
+        boost::log::add_common_attributes();
 
         BOOST_LOG_TRIVIAL(info) << "Setting up CodecTest fixture";
 
@@ -87,6 +105,29 @@ protected:
     }
 };
 
+// // Test basic message serialization/deserialization
+// TEST_F(CodecTest, BasicSerializationDeserialization) {
+//     BOOST_LOG_TRIVIAL(info) << "Starting BasicSerializationDeserialization test";
+
+//     // Create a simple test frame
+//     MessageFrame original = createTestFrame("Hello, World!");
+//     std::stringstream buffer;
+
+//     // Serialize
+//     std::size_t bytes_written = codec_->serialize(original, buffer);
+//     BOOST_LOG_TRIVIAL(info) << "Serialized message frame, bytes written: " << bytes_written;
+//     ASSERT_GT(bytes_written, 0);
+
+//     // Deserialize
+//     MessageFrame deserialized = codec_->deserialize(buffer, *channel_);
+//     BOOST_LOG_TRIVIAL(info) << "Deserialized message frame, payload size: " << deserialized.payload_size;
+//     ASSERT_GT(deserialized.payload_size, 0);
+
+//     // Verify
+//     verifyFramesEqual(original, deserialized);
+//     BOOST_LOG_TRIVIAL(info) << "BasicSerializationDeserialization test completed successfully";
+// }
+
 // Test encryption functionality
 TEST_F(CodecTest, EncryptionVerification) {
     BOOST_LOG_TRIVIAL(info) << "Starting EncryptionVerification test";
@@ -142,77 +183,53 @@ TEST_F(CodecTest, LargeMessageHandling) {
     BOOST_LOG_TRIVIAL(info) << "LargeMessageHandling test completed successfully";
 }
 
-// Test basic message serialization/deserialization
-// TEST_F(CodecTest, BasicSerializationDeserialization) {
-//     BOOST_LOG_TRIVIAL(info) << "Starting BasicSerializationDeserialization test";
-// 
-//     // Create a simple test frame
-//     MessageFrame original = createTestFrame("Hello, World!");
-//     std::stringstream buffer;
-// 
-//     // Serialize
-//     std::size_t bytes_written = codec_->serialize(original, buffer);
-//     BOOST_LOG_TRIVIAL(info) << "Serialized message frame, bytes written: " << bytes_written;
-//     ASSERT_GT(bytes_written, 0);
-// 
-//     // Deserialize
-//     MessageFrame deserialized = codec_->deserialize(buffer, *channel_);
-//     BOOST_LOG_TRIVIAL(info) << "Deserialized message frame, payload size: " << deserialized.payload_size;
-//     ASSERT_GT(deserialized.payload_size, 0);
-// 
-//     // Verify
-//     verifyFramesEqual(original, deserialized);
-//     BOOST_LOG_TRIVIAL(info) << "BasicSerializationDeserialization test completed successfully";
-// }
-
-
-// Test channel integration
+// // Test channel integration
 // TEST_F(CodecTest, ChannelIntegration) {
 //     BOOST_LOG_TRIVIAL(info) << "Starting ChannelIntegration test";
 //     MessageFrame original = createTestFrame("Channel Test Data");
 //     std::stringstream buffer;
-// 
+
 //     // Serialize and deserialize through channel
 //     codec_->serialize(original, buffer);
 //     MessageFrame deserialized = codec_->deserialize(buffer, *channel_);
-// 
+
 //     // Verify channel received the message
 //     BOOST_LOG_TRIVIAL(debug) << "Checking channel message count";
 //     ASSERT_EQ(channel_->size(), 1);
-// 
+
 //     // Consume from channel
 //     MessageFrame received;
 //     ASSERT_TRUE(channel_->consume(received));
 //     BOOST_LOG_TRIVIAL(debug) << "Successfully consumed message from channel";
-// 
+
 //     // Verify frame from channel matches original
 //     verifyFramesEqual(original, received);
 //     BOOST_LOG_TRIVIAL(info) << "ChannelIntegration test completed successfully";
 // }
 
-// Test error handling
+// // Test error handling
 // TEST_F(CodecTest, ErrorHandling) {
 //     BOOST_LOG_TRIVIAL(info) << "Starting ErrorHandling test";
-// 
+
 //     // Test invalid key size
 //     BOOST_LOG_TRIVIAL(debug) << "Testing invalid key size";
 //     EXPECT_THROW({
 //         std::vector<uint8_t> invalid_key(16, 0x42);  // Wrong key size
 //         Codec invalid_codec(invalid_key);
 //     }, std::invalid_argument);
-// 
+
 //     // Test invalid input stream
 //     BOOST_LOG_TRIVIAL(debug) << "Testing invalid input stream";
 //     MessageFrame frame = createTestFrame();
 //     std::stringstream invalid_stream;
 //     invalid_stream.setstate(std::ios::badbit);
 //     EXPECT_THROW(codec_->serialize(frame, invalid_stream), std::runtime_error);
-// 
+
 //     // Test invalid output stream
 //     BOOST_LOG_TRIVIAL(debug) << "Testing invalid output stream";
 //     std::stringstream invalid_output;
 //     invalid_output.setstate(std::ios::badbit);
 //     EXPECT_THROW(codec_->deserialize(invalid_output, *channel_), std::runtime_error);
-// 
+
 //     BOOST_LOG_TRIVIAL(info) << "ErrorHandling test completed successfully";
 // }

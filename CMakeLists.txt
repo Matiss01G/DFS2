@@ -10,9 +10,6 @@ find_package(OpenSSL REQUIRED)
 find_package(Boost REQUIRED COMPONENTS log log_setup system thread)
 find_package(GTest REQUIRED)
 
-# Add compile definitions for Boost.Log
-add_definitions(-DBOOST_LOG_DYN_LINK)
-
 # Create crypto library
 add_library(dfs_crypto
     src/crypto/crypto_stream.cpp
@@ -72,8 +69,6 @@ target_link_libraries(crypto_tests
     dfs_crypto
     GTest::GTest
     GTest::Main
-    Boost::log
-    Boost::log_setup
 )
 
 # Store tests
@@ -85,8 +80,6 @@ target_link_libraries(store_tests
     dfs_store
     GTest::GTest
     GTest::Main
-    Boost::log
-    Boost::log_setup
 )
 
 # Network tests
@@ -107,8 +100,6 @@ target_link_libraries(network_tests
     dfs_crypto
     GTest::GTest
     GTest::Main
-    Boost::log
-    Boost::log_setup
 )
 
 # Channel tests
@@ -125,8 +116,6 @@ target_link_libraries(channel_tests
     dfs_network
     GTest::GTest
     GTest::Main
-    Boost::log
-    Boost::log_setup
 )
 
 include(GoogleTest)
