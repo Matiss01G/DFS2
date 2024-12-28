@@ -5,31 +5,35 @@ modules = ["cpp"]
 channel = "stable-24_05"
 
 [workflows]
-runButton = "Build"
+runButton = "Project"
 
 [[workflows.workflow]]
-name = "Build"
-mode = "sequential"
+name = "Project"
+mode = "parallel"
+author = "agent"
 
 [[workflows.workflow.tasks]]
-task = "packager.installForAll"
-
-[[workflows.workflow.tasks]]
-task = "shell.exec"
-args = "cd build && cmake .. && make"
+task = "workflow.run"
+args = "Build and Test"
 
 [[workflows.workflow]]
 name = "Build and Test"
-mode = "sequential"
+author = "agent"
+
+[workflows.workflow.metadata]
+agentRequireRestartOnSave = false
 
 [[workflows.workflow.tasks]]
 task = "packager.installForAll"
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "cd build && cmake -DCMAKE_BUILD_TYPE=Debug .. && make && ./network_tests"
+args = "cd /home/runner/StreamCryptoDFS && mkdir -p build && cd build && cmake -DCMAKE_BUILD_TYPE=Debug .. && make && ./network_tests"
 
 [[ports]]
 localPort = 12345
 externalPort = 80
 exposeLocalhost = true
+
+[deployment]
+run = ["sh", "-c", "cd /home/runner/StreamCryptoDFS && mkdir -p build && cd build && cmake -DCMAKE_BUILD_TYPE=Debug .. && make && ./network_tests"]
