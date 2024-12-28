@@ -66,76 +66,46 @@ std::size_t Codec::serialize(const MessageFrame& frame, std::ostream& output) {
     }
 }
 
-MessageFrame Codec::deserialize(std::istream& input, Channel& channel) {
+std::pair<MessageFrame, std::istream&> 
+Codec::deserialize(std::istream& input) {
     if (!input.good()) {
-        BOOST_LOG_TRIVIAL(error) << "Invalid input stream state";
+        BOOST_LOG_TRIVIAL(error) << "Invalid input stream";
         throw std::runtime_error("Invalid input stream");
     }
 
     MessageFrame frame;
-    std::size_t total_bytes = 0;
-    BOOST_LOG_TRIVIAL(info) << "Starting message frame deserialization";
-
     try {
         // Read message type
-        uint8_t msg_type;
-        read_bytes(input, &msg_type, sizeof(msg_type));
-        frame.message_type = static_cast<MessageType>(msg_type);
-        BOOST_LOG_TRIVIAL(debug) << "Read message type: " << static_cast<int>(msg_type);
-        total_bytes += sizeof(msg_type);
+        read_bytes(input, &frame.message_type, sizeof(MessageType));
+        BOOST_LOG_TRIVIAL(debug) << "Read message type: " << static_cast<int>(frame.message_type);
 
-        // Read source ID
+        // Read and convert source_id from network byte order
         uint32_t network_source_id;
-        read_bytes(input, &network_source_id, sizeof(network_source_id));
+        read_bytes(input, &network_source_id, sizeof(uint32_t));
         frame.source_id = from_network_order(network_source_id);
         BOOST_LOG_TRIVIAL(debug) << "Read source ID: " << frame.source_id;
-        total_bytes += sizeof(network_source_id);
 
-        // Read payload size
+        // Read and convert payload_size from network byte order
         uint64_t network_payload_size;
-        read_bytes(input, &network_payload_size, sizeof(network_payload_size));
+        read_bytes(input, &network_payload_size, sizeof(uint64_t));
         frame.payload_size = from_network_order(network_payload_size);
         BOOST_LOG_TRIVIAL(debug) << "Read payload size: " << frame.payload_size;
-        total_bytes += sizeof(network_payload_size);
 
-        // Read filename length
+        // Read and convert filename length from network byte order
         uint32_t network_filename_length;
-        read_bytes(input, &network_filename_length, sizeof(network_filename_length));
+        read_bytes(input, &network_filename_length, sizeof(uint32_t));
         frame.filename_length = from_network_order(network_filename_length);
         BOOST_LOG_TRIVIAL(debug) << "Read filename length: " << frame.filename_length;
-        total_bytes += sizeof(network_filename_length);
 
-        frame.payload_stream = std::make_shared<std::stringstream>();
+        // Input stream is now positioned at start of payload
+        BOOST_LOG_TRIVIAL(debug) << "Input stream positioned at payload start";
 
-        channel.produce(frame);
-
-        // Handle payload if present
-        if (frame.payload_size > 0) {
-            BOOST_LOG_TRIVIAL(debug) << "Setting up payload stream for size: " << frame.payload_size;
-            // Create a stringstream for storing metadata only
-            frame.payload_stream = std::make_shared<std::stringstream>();
-
-            // Store current position as the start of payload data
-            std::streampos payload_start = input.tellg();
-
-            // Skip the payload data without reading it
-            input.seekg(frame.payload_size, std::ios::cur);
-
-            // Verify we can seek and the stream is still good
-            if (!input.good()) {
-                BOOST_LOG_TRIVIAL(error) << "Failed to seek past payload data";
-                throw std::runtime_error("Failed to seek in input stream");
-            }
-
-            total_bytes += frame.payload_size;
-        }
-
-        BOOST_LOG_TRIVIAL(info) << "Message frame deserialization complete. Total bytes processed: " << total_bytes;
-        return frame;
+        // Return the frame and input stream positioned at payload start
+        return std::make_pair(frame, input);
     }
     catch (const std::exception& e) {
-        BOOST_LOG_TRIVIAL(error) << "Error during deserialization: " << e.what();
-        throw;
+        BOOST_LOG_TRIVIAL(error) << "Deserialization error: " << e.what();
+        throw MessageError(std::string("Deserialization error: ") + e.what());
     }
 }
 
