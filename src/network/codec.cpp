@@ -6,8 +6,11 @@
 namespace dfs {
 namespace network {
 
-Codec::Codec() {
+Codec::Codec(const std::vector<uint8_t>& key) : key_(key) {
     BOOST_LOG_TRIVIAL(info) << "Initializing Codec";
+    if (key_.empty()) {
+        throw std::runtime_error("Cryptographic key cannot be empty");
+    }
 }
 
 std::size_t Codec::serialize(const MessageFrame& frame, std::ostream& output) {
@@ -104,7 +107,7 @@ MessageFrame Codec::deserialize(std::istream& input, Channel& channel) {
         frame.filename_length = from_network_order(network_filename_length);
         BOOST_LOG_TRIVIAL(debug) << "Read filename length: " << frame.filename_length;
         total_bytes += sizeof(network_filename_length);
-        
+
         frame.payload_stream = std::make_shared<std::stringstream>();
 
         channel.produce(frame);
@@ -133,7 +136,7 @@ MessageFrame Codec::deserialize(std::istream& input, Channel& channel) {
 
             frame.payload_stream->seekg(0);
         }
-        
+
         BOOST_LOG_TRIVIAL(info) << "Message frame deserialization complete. Total bytes read: " << total_bytes;
         return frame;
     }
