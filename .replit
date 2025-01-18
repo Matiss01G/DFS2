@@ -28,7 +28,7 @@ task = "packager.installForAll"
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "mkdir -p build && cd build && cmake .. && make"
+args = "cd /home/runner/${REPL_SLUG}/build && cmake .. && make && ./dfs_tests"
 
 [[ports]]
 localPort = 12345
@@ -36,4 +36,4 @@ externalPort = 80
 exposeLocalhost = true
 
 [deployment]
-run = ["sh", "-c", "mkdir -p build && cd build && cmake .. && make"]
+run = ["sh", "-c", "cd /home/runner/${REPL_SLUG}/build && cmake .. && make && ./dfs_tests"]

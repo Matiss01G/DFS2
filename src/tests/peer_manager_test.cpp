@@ -196,3 +196,23 @@ TEST_F(PeerManagerTest, BroadcastMixedResultsTest) {
     // Clean up
     manager->shutdown();
 }
+
+// Test send_to_peer functionality
+TEST_F(PeerManagerTest, SendToPeerTest) {
+    // Create test peer
+    auto peer = std::make_shared<TCP_Peer>(std::to_string(1));
+    manager->add_peer(peer);
+
+    // Test sending to non-existent peer
+    std::istringstream non_existent_stream("Test message\n");
+    EXPECT_FALSE(manager->send_to_peer(999, non_existent_stream));
+
+    // Test sending with invalid stream
+    std::istringstream invalid_stream("");
+    invalid_stream.setstate(std::ios::failbit);
+    EXPECT_FALSE(manager->send_to_peer(1, invalid_stream));
+
+    // Test sending to existing but disconnected peer
+    std::istringstream disconnected_stream("Test message\n");
+    EXPECT_FALSE(manager->send_to_peer(1, disconnected_stream));
+}
