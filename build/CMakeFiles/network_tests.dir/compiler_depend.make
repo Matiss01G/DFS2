@@ -804,6 +804,8 @@ CMakeFiles/network_tests.dir/src/network/channel.cpp.o: /home/runner/StreamCrypt
   /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/version.hpp
 
 CMakeFiles/network_tests.dir/src/network/codec.cpp.o: /home/runner/StreamCryptoDFS/src/network/codec.cpp \
+  /home/runner/StreamCryptoDFS/include/crypto/crypto_error.hpp \
+  /home/runner/StreamCryptoDFS/include/crypto/crypto_stream.hpp \
   /home/runner/StreamCryptoDFS/include/network/channel.hpp \
   /home/runner/StreamCryptoDFS/include/network/codec.hpp \
   /home/runner/StreamCryptoDFS/include/network/message_frame.hpp \
@@ -1608,6 +1610,8 @@ CMakeFiles/network_tests.dir/src/network/codec.cpp.o: /home/runner/StreamCryptoD
   /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/version.hpp
 
 CMakeFiles/network_tests.dir/src/tests/codec_test.cpp.o: /home/runner/StreamCryptoDFS/src/tests/codec_test.cpp \
+  /home/runner/StreamCryptoDFS/include/crypto/crypto_error.hpp \
+  /home/runner/StreamCryptoDFS/include/crypto/crypto_stream.hpp \
   /home/runner/StreamCryptoDFS/include/network/channel.hpp \
   /home/runner/StreamCryptoDFS/include/network/codec.hpp \
   /home/runner/StreamCryptoDFS/include/network/message_frame.hpp \
@@ -8677,7 +8681,7 @@ CMakeFiles/network_tests.dir/src/tests/tcp_peer_test.cpp.o: /home/runner/StreamC
 
 /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/asio/execution/outstanding_work.hpp:
 
-/nix/store/fwh4fxd747m0py3ib3s5abamia9nrf90-glibc-2.39-52-dev/include/linux/falloc.h:
+/nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/asio/execution/occupancy.hpp:
 
 /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/fusion/adapted/mpl/detail/begin_impl.hpp:
 
@@ -8811,8 +8815,6 @@ CMakeFiles/network_tests.dir/src/tests/tcp_peer_test.cpp.o: /home/runner/StreamC
 
 /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/atomic/detail/float_sizes.hpp:
 
-/nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/fusion/adapted/struct/detail/adapt_base.hpp:
-
 /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/atomic/detail/extra_ops_generic.hpp:
 
 /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/atomic/detail/extra_fp_ops_emulated.hpp:
@@ -8898,6 +8900,8 @@ CMakeFiles/network_tests.dir/src/tests/tcp_peer_test.cpp.o: /home/runner/StreamC
 /nix/store/fwh4fxd747m0py3ib3s5abamia9nrf90-glibc-2.39-52-dev/include/bits/sigaction.h:
 
 /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/mpl/index_if.hpp:
+
+/home/runner/StreamCryptoDFS/include/crypto/crypto_error.hpp:
 
 /nix/store/fwh4fxd747m0py3ib3s5abamia9nrf90-glibc-2.39-52-dev/include/bits/fp-logb.h:
 
@@ -9017,6 +9021,8 @@ CMakeFiles/network_tests.dir/src/tests/tcp_peer_test.cpp.o: /home/runner/StreamC
 
 /nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/iostream:
 
+/nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/coroutine:
+
 /nix/store/ikmzrr3a8gd4jx31lkdhx7bk045j16fi-gtest-1.14.0-dev/include/gtest/internal/custom/gtest-printers.h:
 
 /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/mpl/aux_/lambda_spec.hpp:
@@ -9090,6 +9096,10 @@ CMakeFiles/network_tests.dir/src/tests/tcp_peer_test.cpp.o: /home/runner/StreamC
 /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/asio/windows/object_handle.hpp:
 
 /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/move/traits.hpp:
+
+/nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/asio/execution/operation_state.hpp:
+
+/nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/type_traits/is_array.hpp:
 
 /nix/store/fwh4fxd747m0py3ib3s5abamia9nrf90-glibc-2.39-52-dev/include/asm/unistd_64.h:
 
@@ -11523,6 +11533,10 @@ CMakeFiles/network_tests.dir/src/tests/tcp_peer_test.cpp.o: /home/runner/StreamC
 
 /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/range/detail/has_member_size.hpp:
 
+/nix/store/fwh4fxd747m0py3ib3s5abamia9nrf90-glibc-2.39-52-dev/include/linux/falloc.h:
+
+/nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/fusion/adapted/struct/detail/adapt_base.hpp:
+
 /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/fusion/adapted/struct/detail/at_impl.hpp:
 
 /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/function_types/config/cc_names.hpp:
@@ -12651,6 +12665,8 @@ CMakeFiles/network_tests.dir/src/tests/tcp_peer_test.cpp.o: /home/runner/StreamC
 
 /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/predef/compiler/iar.h:
 
+/home/runner/StreamCryptoDFS/include/crypto/crypto_stream.hpp:
+
 /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/predef/compiler/kai.h:
 
 /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/range/config.hpp:
@@ -13195,8 +13211,6 @@ CMakeFiles/network_tests.dir/src/tests/tcp_peer_test.cpp.o: /home/runner/StreamC
 
 /nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/chrono:
 
-/nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/coroutine:
-
 /nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/csignal:
 
 /nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/format:
@@ -13568,9 +13582,3 @@ CMakeFiles/network_tests.dir/src/tests/tcp_peer_test.cpp.o: /home/runner/StreamC
 /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/function_types/detail/components_as_mpl_sequence.hpp:
 
 /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/asio/execution/invocable_archetype.hpp:
-
-/nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/asio/execution/occupancy.hpp:
-
-/nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/type_traits/is_array.hpp:
-
-/nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/asio/execution/operation_state.hpp:

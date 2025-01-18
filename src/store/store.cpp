@@ -61,25 +61,20 @@ void Store::store(const std::string& key, std::istream& data) {
     BOOST_LOG_TRIVIAL(info) << "Successfully stored " << bytes_written << " bytes with key: " << key;
 }
 
-std::unique_ptr<std::stringstream> Store::get(const std::string& key) {
+void Store::get(const std::string& key, std::stringstream& output) {
     BOOST_LOG_TRIVIAL(info) << "Retrieving data for key: " << key;
-
     // Generate file path and verify existence
     std::string hash = hash_key(key);
     std::filesystem::path file_path = get_path_for_hash(hash);
-
     if (!std::filesystem::exists(file_path)) {
         BOOST_LOG_TRIVIAL(error) << "File not found: " << file_path.string();
         throw StoreError("File not found");
     }
 
-    // Create a new stringstream for the result
-    auto result = std::make_unique<std::stringstream>(std::ios::in | std::ios::out | std::ios::binary);
-
     // Handle empty file case
     if (std::filesystem::file_size(file_path) == 0) {
         BOOST_LOG_TRIVIAL(debug) << "Retrieved empty content for key: " << key;
-        return result;
+        return;
     }
 
     // Open file in binary mode and stream content
@@ -88,17 +83,18 @@ std::unique_ptr<std::stringstream> Store::get(const std::string& key) {
         throw StoreError("Failed to open file: " + file_path.string());
     }
 
-    // Copy file contents to stringstream
-    *result << file.rdbuf();
+    // Clear the output stream and copy file contents to it
+    output.clear();
+    output.str("");
+    output << file.rdbuf();
 
     // Verify stream state and reset position
-    if (!result->good()) {
+    if (!output.good()) {
         throw StoreError("Failed to read file contents");
     }
+    output.seekg(0);  // Reset read position to beginning
 
-    result->seekg(0);  // Reset read position to beginning
     BOOST_LOG_TRIVIAL(debug) << "Successfully retrieved data for key: " << key;
-    return result;
 }
 
 bool Store::has(const std::string& key) const {

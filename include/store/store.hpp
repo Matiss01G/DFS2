@@ -23,8 +23,8 @@ public:
     void store(const std::string& key, std::istream& data);
 
     // Retrieves data stream using given key
-    std::unique_ptr<std::stringstream> get(const std::string& key);
-
+    void get(const std::string& key, std::stringstream& output);
+    
     // Checks if data exists using given key
     bool has(const std::string& key) const;
 

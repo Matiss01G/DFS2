@@ -4,6 +4,7 @@
 #include <cstdint>
 #include <memory>
 #include <sstream>
+#include <vector>
 #include <boost/endian/conversion.hpp>
 
 namespace dfs {
@@ -15,6 +16,7 @@ enum class MessageType : uint8_t {
 };
 
 struct MessageFrame {
+    std::vector<uint8_t> iv_;
     MessageType message_type;
     uint32_t source_id;
     uint64_t payload_size;
