@@ -61,8 +61,9 @@ void Store::store(const std::string& key, std::istream& data) {
     BOOST_LOG_TRIVIAL(info) << "Successfully stored " << bytes_written << " bytes with key: " << key;
 }
 
-void Store::get(const std::string& key, std::stringstream& output) {
+std::shared_ptr<std::stringstream> Store::get(const std::string& key) {
     BOOST_LOG_TRIVIAL(info) << "Retrieving data for key: " << key;
+
     // Generate file path and verify existence
     std::string hash = hash_key(key);
     std::filesystem::path file_path = get_path_for_hash(hash);
@@ -71,10 +72,12 @@ void Store::get(const std::string& key, std::stringstream& output) {
         throw StoreError("File not found");
     }
 
+    auto output = std::make_shared<std::stringstream>();
+
     // Handle empty file case
     if (std::filesystem::file_size(file_path) == 0) {
         BOOST_LOG_TRIVIAL(debug) << "Retrieved empty content for key: " << key;
-        return;
+        return output;
     }
 
     // Open file in binary mode and stream content
@@ -83,29 +86,26 @@ void Store::get(const std::string& key, std::stringstream& output) {
         throw StoreError("Failed to open file: " + file_path.string());
     }
 
-    // Clear the output stream and copy file contents to it
-    output.clear();
-    output.str("");
-    output << file.rdbuf();
+    // Copy file contents to output stream
+    *output << file.rdbuf();
 
     // Verify stream state and reset position
-    if (!output.good()) {
+    if (!output->good()) {
         throw StoreError("Failed to read file contents");
     }
-    output.seekg(0);  // Reset read position to beginning
+    output->seekg(0);  // Reset read position to beginning
 
     BOOST_LOG_TRIVIAL(debug) << "Successfully retrieved data for key: " << key;
+    return output;
 }
 
 bool Store::has(const std::string& key) const {
-    BOOST_LOG_TRIVIAL(debug) << "Generating hash for key: " << key;
-    // Check if file exists at calculated path
+    BOOST_LOG_TRIVIAL(debug) << "Checking existence of key: " << key;
     std::string hash = hash_key(key);
     std::filesystem::path file_path = get_path_for_hash(hash);
     bool exists = std::filesystem::exists(file_path);
-    BOOST_LOG_TRIVIAL(debug) << "Checking existence of key: " << key 
-                            << " at path: " << file_path.string()
-                            << " - " << (exists ? "exists" : "not found");
+    BOOST_LOG_TRIVIAL(debug) << "Key " << key << (exists ? " exists" : " not found") 
+                            << " at path: " << file_path.string();
     return exists;
 }
 
@@ -128,7 +128,6 @@ std::uintmax_t Store::get_file_size(const std::string& key) const {
 void Store::remove(const std::string& key) {
     BOOST_LOG_TRIVIAL(info) << "Removing file with key: " << key;
 
-    // Calculate path and attempt deletion
     std::string hash = hash_key(key);
     std::filesystem::path file_path = get_path_for_hash(hash);
 
@@ -142,9 +141,7 @@ void Store::remove(const std::string& key) {
 
 void Store::clear() {
     BOOST_LOG_TRIVIAL(info) << "Clearing entire store at: " << base_path_;
-    // Remove all files and directories under base path
     std::filesystem::remove_all(base_path_);
-    // Recreate empty base directory
     ensure_directory_exists(base_path_);
     BOOST_LOG_TRIVIAL(info) << "Store cleared successfully";
 }
@@ -152,42 +149,35 @@ void Store::clear() {
 std::string Store::hash_key(const std::string& key) const {
     BOOST_LOG_TRIVIAL(debug) << "Generating hash for key: " << key;
 
-    // Allocate buffer for hash output - EVP_MAX_MD_SIZE ensures enough space for any hash
     unsigned char hash[EVP_MAX_MD_SIZE];
     unsigned int hash_len;
 
-    // Create OpenSSL EVP message digest context for secure hashing
     EVP_MD_CTX* ctx = EVP_MD_CTX_new();
     if (!ctx) {
         throw StoreError("Failed to create hash context");
     }
 
-    // Set up SHA-256 algorithm - modern, secure, and suitable for file addressing
     if (!EVP_DigestInit_ex(ctx, EVP_sha256(), nullptr)) {
         EVP_MD_CTX_free(ctx);
         throw StoreError("Failed to initialize hash context");
     }
 
-    // Process the input key - converts string to secure hash
     if (!EVP_DigestUpdate(ctx, key.c_str(), key.length())) {
         EVP_MD_CTX_free(ctx);
         throw StoreError("Failed to update hash");
     }
 
-    // Get the final hash value and cleanup
     if (!EVP_DigestFinal_ex(ctx, hash, &hash_len)) {
         EVP_MD_CTX_free(ctx);
         throw StoreError("Failed to finalize hash");
     }
 
-    EVP_MD_CTX_free(ctx);  // Always free context to prevent memory leaks
+    EVP_MD_CTX_free(ctx);
 
-    // Convert raw hash bytes to human-readable hex string
-    // Each byte becomes two hex characters, with leading zeros preserved
     std::stringstream ss;
     for (unsigned int i = 0; i < hash_len; i++) {
         ss << std::hex << std::setw(2) << std::setfill('0') 
-           << static_cast<int>(hash[i]);  // Zero-padded hex format
+           << static_cast<int>(hash[i]);
     }
 
     std::string result = ss.str();
@@ -196,23 +186,16 @@ std::string Store::hash_key(const std::string& key) const {
 }
 
 std::filesystem::path Store::get_path_for_hash(const std::string& hash) const {
-
     std::filesystem::path path = base_path_;
-
-    // Create three directory levels with 2 chars each (16-bit spread per level)
     for (size_t i = 0; i < 6; i += 2) {
-        path /= hash.substr(i, 2);  // Extract 2-char segments for each level
+        path /= hash.substr(i, 2);
     }
-
-    // Use remaining hash characters as filename
     path /= hash.substr(6);
-
-    BOOST_LOG_TRIVIAL(debug) << "Calculated hierarchical path: " << path.string();
+    BOOST_LOG_TRIVIAL(debug) << "Calculated path: " << path.string();
     return path;
 }
 
 void Store::ensure_directory_exists(const std::filesystem::path& path) const {
-    // Create directory and all parent directories if they don't exist
     if (!std::filesystem::exists(path)) {
         std::filesystem::create_directories(path);
     }

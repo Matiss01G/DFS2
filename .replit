@@ -16,10 +16,6 @@ author = "agent"
 task = "workflow.run"
 args = "Build and Test"
 
-[[workflows.workflow.tasks]]
-task = "workflow.run"
-args = "Build Only"
-
 [[workflows.workflow]]
 name = "Build and Test"
 author = "agent"
@@ -32,21 +28,7 @@ task = "packager.installForAll"
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "cd /home/runner/StreamCryptoDFS && mkdir -p build && cd build && cmake -DCMAKE_BUILD_TYPE=Debug .. && make && ./network_tests"
-
-[[workflows.workflow]]
-name = "Build Only"
-author = "agent"
-
-[workflows.workflow.metadata]
-agentRequireRestartOnSave = false
-
-[[workflows.workflow.tasks]]
-task = "packager.installForAll"
-
-[[workflows.workflow.tasks]]
-task = "shell.exec"
-args = "mkdir -p /home/runner/StreamCryptoDFS && cd /home/runner/StreamCryptoDFS && mkdir -p build && cd build && cmake -DCMAKE_BUILD_TYPE=Debug .. && make"
+args = "mkdir -p build && cd build && cmake .. && make"
 
 [[ports]]
 localPort = 12345
@@ -54,4 +36,4 @@ externalPort = 80
 exposeLocalhost = true
 
 [deployment]
-run = ["sh", "-c", "cd /home/runner/StreamCryptoDFS && mkdir -p build && cd build && cmake -DCMAKE_BUILD_TYPE=Debug .. && make && ./network_tests"]
+run = ["sh", "-c", "mkdir -p build && cd build && cmake .. && make"]
