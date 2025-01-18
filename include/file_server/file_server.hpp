@@ -29,6 +29,9 @@ public:
     // Prepare and send file to peers
     bool prepare_and_send(const std::string& filename, std::optional<uint32_t> peer_id = std::nullopt);
 
+    // Store file locally and broadcast to peers
+    bool store_file(const std::string& filename, std::stringstream& input);
+
 private:
     uint32_t server_id_;
     std::vector<uint8_t> key_;

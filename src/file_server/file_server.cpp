@@ -139,5 +139,38 @@ bool FileServer::prepare_and_send(const std::string& filename, std::optional<uin
     }
 }
 
+bool FileServer::store_file(const std::string& filename, std::stringstream& input) {
+    try {
+        BOOST_LOG_TRIVIAL(info) << "Storing file with filename: " << filename;
+
+        // Validate input stream
+        if (!input.good()) {
+            BOOST_LOG_TRIVIAL(error) << "Invalid input stream for file: " << filename;
+            return false;
+        }
+
+        // Store file locally
+        try {
+            store_->store(filename, input);
+        } catch (const std::exception& e) {
+            BOOST_LOG_TRIVIAL(error) << "Failed to store file locally: " << e.what();
+            return false;
+        }
+
+        // Prepare and send file to peers
+        if (!prepare_and_send(filename)) {
+            BOOST_LOG_TRIVIAL(error) << "Failed to prepare and send file: " << filename;
+            return false;
+        }
+
+        BOOST_LOG_TRIVIAL(info) << "Successfully stored and broadcast file: " << filename;
+        return true;
+    }
+    catch (const std::exception& e) {
+        BOOST_LOG_TRIVIAL(error) << "Error in store_file: " << e.what();
+        return false;
+    }
+}
+
 } // namespace network
 } // namespace dfs
