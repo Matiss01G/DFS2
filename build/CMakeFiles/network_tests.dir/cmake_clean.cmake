@@ -7,8 +7,6 @@ file(REMOVE_RECURSE
   "CMakeFiles/network_tests.dir/src/network/file_server.cpp.o.d"
   "CMakeFiles/network_tests.dir/src/tests/codec_test.cpp.o"
   "CMakeFiles/network_tests.dir/src/tests/codec_test.cpp.o.d"
-  "CMakeFiles/network_tests.dir/src/tests/file_server_test.cpp.o"
-  "CMakeFiles/network_tests.dir/src/tests/file_server_test.cpp.o.d"
   "CMakeFiles/network_tests.dir/src/tests/peer_manager_test.cpp.o"
   "CMakeFiles/network_tests.dir/src/tests/peer_manager_test.cpp.o.d"
   "CMakeFiles/network_tests.dir/src/tests/tcp_peer_test.cpp.o"

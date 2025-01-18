@@ -28,7 +28,7 @@ task = "packager.installForAll"
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "cd /home/runner/${REPL_SLUG}/build && cmake .. && make && ./network_tests --gtest_filter=FileServerTest.*"
+args = "cd /home/runner/${REPL_SLUG}/build && cmake .. && make && ./network_tests"
 
 [[ports]]
 localPort = 12345
@@ -36,4 +36,4 @@ externalPort = 80
 exposeLocalhost = true
 
 [deployment]
-run = ["sh", "-c", "cd /home/runner/${REPL_SLUG}/build && cmake .. && make && ./network_tests --gtest_filter=FileServerTest.*"]
+run = ["sh", "-c", "cd /home/runner/${REPL_SLUG}/build && cmake .. && make && ./network_tests"]

@@ -518,30 +518,6 @@ src/tests/crypto_stream_test.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/crypto_tests.dir/build.make CMakeFiles/crypto_tests.dir/src/tests/crypto_stream_test.cpp.s
 .PHONY : src/tests/crypto_stream_test.cpp.s
 
-src/tests/file_server_test.o: src/tests/file_server_test.cpp.o
-.PHONY : src/tests/file_server_test.o
-
-# target to build an object file
-src/tests/file_server_test.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/network_tests.dir/build.make CMakeFiles/network_tests.dir/src/tests/file_server_test.cpp.o
-.PHONY : src/tests/file_server_test.cpp.o
-
-src/tests/file_server_test.i: src/tests/file_server_test.cpp.i
-.PHONY : src/tests/file_server_test.i
-
-# target to preprocess a source file
-src/tests/file_server_test.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/network_tests.dir/build.make CMakeFiles/network_tests.dir/src/tests/file_server_test.cpp.i
-.PHONY : src/tests/file_server_test.cpp.i
-
-src/tests/file_server_test.s: src/tests/file_server_test.cpp.s
-.PHONY : src/tests/file_server_test.s
-
-# target to generate assembly for a file
-src/tests/file_server_test.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/network_tests.dir/build.make CMakeFiles/network_tests.dir/src/tests/file_server_test.cpp.s
-.PHONY : src/tests/file_server_test.cpp.s
-
 src/tests/peer_manager_test.o: src/tests/peer_manager_test.cpp.o
 .PHONY : src/tests/peer_manager_test.o
 
@@ -665,9 +641,6 @@ help:
 	@echo "... src/tests/crypto_stream_test.o"
 	@echo "... src/tests/crypto_stream_test.i"
 	@echo "... src/tests/crypto_stream_test.s"
-	@echo "... src/tests/file_server_test.o"
-	@echo "... src/tests/file_server_test.i"
-	@echo "... src/tests/file_server_test.s"
 	@echo "... src/tests/peer_manager_test.o"
 	@echo "... src/tests/peer_manager_test.i"
 	@echo "... src/tests/peer_manager_test.s"
