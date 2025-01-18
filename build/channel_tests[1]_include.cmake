@@ -1,0 +1,5 @@
+if(EXISTS "/home/runner/StreamCryptoDFS/build/channel_tests[1]_tests.cmake")
+  include("/home/runner/StreamCryptoDFS/build/channel_tests[1]_tests.cmake")
+else()
+  add_test(channel_tests_NOT_BUILT channel_tests_NOT_BUILT)
+endif()
