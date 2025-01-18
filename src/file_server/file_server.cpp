@@ -172,5 +172,59 @@ bool FileServer::store_file(const std::string& filename, std::stringstream& inpu
     }
 }
 
+std::optional<std::stringstream> FileServer::get_file(const std::string& filename) {
+    try {
+        BOOST_LOG_TRIVIAL(info) << "Attempting to get file: " << filename;
+
+        // First check local store
+        std::stringstream local_result;
+        try {
+            store_->get(filename, local_result);
+            if (local_result.good()) {
+                BOOST_LOG_TRIVIAL(info) << "File found in local store: " << filename;
+                return local_result;
+            }
+        } catch (const dfs::store::StoreError& e) {
+            BOOST_LOG_TRIVIAL(debug) << "File not found in local store: " << e.what();
+        }
+
+        // Create message frame for network query
+        MessageFrame frame;
+        frame.source_id = server_id_;
+        frame.message_type = MessageType::GET_FILE;  // Set message type to GET_FILE
+        frame.filename_length = filename.length();
+
+        // Generate and set IV for encryption
+        crypto::CryptoStream crypto_stream;
+        auto iv = crypto_stream.generate_IV();
+        frame.iv_.assign(iv.begin(), iv.end());
+
+        // Create serialization stream
+        std::stringstream serialized_stream;
+
+        // Serialize frame
+        if (!codec_->serialize(frame, serialized_stream)) {
+            BOOST_LOG_TRIVIAL(error) << "Failed to serialize message frame for file query";
+            return std::nullopt;
+        }
+
+        // Broadcast query to network
+        if (!peer_manager_->broadcast_stream(serialized_stream)) {
+            BOOST_LOG_TRIVIAL(error) << "Failed to broadcast file query to network";
+            return std::nullopt;
+        }
+
+        BOOST_LOG_TRIVIAL(info) << "Successfully broadcasted query for file: " << filename;
+
+        // Return empty optional since file wasn't found locally 
+        // and network query was sent
+        return std::nullopt;
+    }
+    catch (const std::exception& e) {
+        BOOST_LOG_TRIVIAL(error) << "Error in get_file: " << e.what();
+        return std::nullopt;
+    }
+}
+
 } // namespace network
 } // namespace dfs

@@ -32,6 +32,9 @@ public:
     // Store file locally and broadcast to peers
     bool store_file(const std::string& filename, std::stringstream& input);
 
+    // Get file either from local store or network
+    std::optional<std::stringstream> get_file(const std::string& filename);
+
 private:
     uint32_t server_id_;
     std::vector<uint8_t> key_;
