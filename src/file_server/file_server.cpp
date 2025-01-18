@@ -86,6 +86,7 @@ bool FileServer::prepare_and_send(const std::string& filename, std::optional<uin
         // Create message frame with empty payload stream
         MessageFrame frame;
         frame.source_id = server_id_;
+        frame.message_type = MessageType::STORE_FILE;  // Set message type to STORE_FILE
         frame.payload_stream = std::make_shared<std::stringstream>();
         frame.filename_length = filename.length();
 
@@ -192,7 +193,8 @@ std::optional<std::stringstream> FileServer::get_file(const std::string& filenam
         MessageFrame frame;
         frame.source_id = server_id_;
         frame.message_type = MessageType::GET_FILE;  // Set message type to GET_FILE
-        frame.filename_length = filename.length();
+        frame.payload_size = 0;  // Explicitly set payload size to 0
+        frame.payload_stream = std::make_shared<std::stringstream>();  // Empty payload stream
 
         // Generate and set IV for encryption
         crypto::CryptoStream crypto_stream;
