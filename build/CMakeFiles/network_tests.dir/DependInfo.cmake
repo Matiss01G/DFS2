@@ -10,7 +10,9 @@ set(CMAKE_DEPENDS_LANGUAGES
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "/home/runner/workspace/src/network/channel.cpp" "CMakeFiles/network_tests.dir/src/network/channel.cpp.o" "gcc" "CMakeFiles/network_tests.dir/src/network/channel.cpp.o.d"
   "/home/runner/workspace/src/network/codec.cpp" "CMakeFiles/network_tests.dir/src/network/codec.cpp.o" "gcc" "CMakeFiles/network_tests.dir/src/network/codec.cpp.o.d"
+  "/home/runner/workspace/src/network/file_server.cpp" "CMakeFiles/network_tests.dir/src/network/file_server.cpp.o" "gcc" "CMakeFiles/network_tests.dir/src/network/file_server.cpp.o.d"
   "/home/runner/workspace/src/tests/codec_test.cpp" "CMakeFiles/network_tests.dir/src/tests/codec_test.cpp.o" "gcc" "CMakeFiles/network_tests.dir/src/tests/codec_test.cpp.o.d"
+  "/home/runner/workspace/src/tests/file_server_test.cpp" "CMakeFiles/network_tests.dir/src/tests/file_server_test.cpp.o" "gcc" "CMakeFiles/network_tests.dir/src/tests/file_server_test.cpp.o.d"
   "/home/runner/workspace/src/tests/peer_manager_test.cpp" "CMakeFiles/network_tests.dir/src/tests/peer_manager_test.cpp.o" "gcc" "CMakeFiles/network_tests.dir/src/tests/peer_manager_test.cpp.o.d"
   "/home/runner/workspace/src/tests/tcp_peer_test.cpp" "CMakeFiles/network_tests.dir/src/tests/tcp_peer_test.cpp.o" "gcc" "CMakeFiles/network_tests.dir/src/tests/tcp_peer_test.cpp.o.d"
   )

@@ -111,10 +111,24 @@ CMakeFiles/network_tests.dir/src/tests/codec_test.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/network_tests.dir/src/tests/codec_test.cpp.s"
 	/nix/store/9bv7dcvmfcjnmg5mnqwqlq2wxfn8d7yi-gcc-wrapper-13.2.0/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/runner/workspace/src/tests/codec_test.cpp -o CMakeFiles/network_tests.dir/src/tests/codec_test.cpp.s
 
+CMakeFiles/network_tests.dir/src/tests/file_server_test.cpp.o: CMakeFiles/network_tests.dir/flags.make
+CMakeFiles/network_tests.dir/src/tests/file_server_test.cpp.o: /home/runner/workspace/src/tests/file_server_test.cpp
+CMakeFiles/network_tests.dir/src/tests/file_server_test.cpp.o: CMakeFiles/network_tests.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/workspace/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/network_tests.dir/src/tests/file_server_test.cpp.o"
+	/nix/store/9bv7dcvmfcjnmg5mnqwqlq2wxfn8d7yi-gcc-wrapper-13.2.0/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/network_tests.dir/src/tests/file_server_test.cpp.o -MF CMakeFiles/network_tests.dir/src/tests/file_server_test.cpp.o.d -o CMakeFiles/network_tests.dir/src/tests/file_server_test.cpp.o -c /home/runner/workspace/src/tests/file_server_test.cpp
+
+CMakeFiles/network_tests.dir/src/tests/file_server_test.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/network_tests.dir/src/tests/file_server_test.cpp.i"
+	/nix/store/9bv7dcvmfcjnmg5mnqwqlq2wxfn8d7yi-gcc-wrapper-13.2.0/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/runner/workspace/src/tests/file_server_test.cpp > CMakeFiles/network_tests.dir/src/tests/file_server_test.cpp.i
+
+CMakeFiles/network_tests.dir/src/tests/file_server_test.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/network_tests.dir/src/tests/file_server_test.cpp.s"
+	/nix/store/9bv7dcvmfcjnmg5mnqwqlq2wxfn8d7yi-gcc-wrapper-13.2.0/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/runner/workspace/src/tests/file_server_test.cpp -o CMakeFiles/network_tests.dir/src/tests/file_server_test.cpp.s
+
 CMakeFiles/network_tests.dir/src/network/codec.cpp.o: CMakeFiles/network_tests.dir/flags.make
 CMakeFiles/network_tests.dir/src/network/codec.cpp.o: /home/runner/workspace/src/network/codec.cpp
 CMakeFiles/network_tests.dir/src/network/codec.cpp.o: CMakeFiles/network_tests.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/workspace/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/network_tests.dir/src/network/codec.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/workspace/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/network_tests.dir/src/network/codec.cpp.o"
 	/nix/store/9bv7dcvmfcjnmg5mnqwqlq2wxfn8d7yi-gcc-wrapper-13.2.0/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/network_tests.dir/src/network/codec.cpp.o -MF CMakeFiles/network_tests.dir/src/network/codec.cpp.o.d -o CMakeFiles/network_tests.dir/src/network/codec.cpp.o -c /home/runner/workspace/src/network/codec.cpp
 
 CMakeFiles/network_tests.dir/src/network/codec.cpp.i: cmake_force
@@ -128,7 +142,7 @@ CMakeFiles/network_tests.dir/src/network/codec.cpp.s: cmake_force
 CMakeFiles/network_tests.dir/src/network/channel.cpp.o: CMakeFiles/network_tests.dir/flags.make
 CMakeFiles/network_tests.dir/src/network/channel.cpp.o: /home/runner/workspace/src/network/channel.cpp
 CMakeFiles/network_tests.dir/src/network/channel.cpp.o: CMakeFiles/network_tests.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/workspace/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/network_tests.dir/src/network/channel.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/workspace/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/network_tests.dir/src/network/channel.cpp.o"
 	/nix/store/9bv7dcvmfcjnmg5mnqwqlq2wxfn8d7yi-gcc-wrapper-13.2.0/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/network_tests.dir/src/network/channel.cpp.o -MF CMakeFiles/network_tests.dir/src/network/channel.cpp.o.d -o CMakeFiles/network_tests.dir/src/network/channel.cpp.o -c /home/runner/workspace/src/network/channel.cpp
 
 CMakeFiles/network_tests.dir/src/network/channel.cpp.i: cmake_force
@@ -139,13 +153,29 @@ CMakeFiles/network_tests.dir/src/network/channel.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/network_tests.dir/src/network/channel.cpp.s"
 	/nix/store/9bv7dcvmfcjnmg5mnqwqlq2wxfn8d7yi-gcc-wrapper-13.2.0/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/runner/workspace/src/network/channel.cpp -o CMakeFiles/network_tests.dir/src/network/channel.cpp.s
 
+CMakeFiles/network_tests.dir/src/network/file_server.cpp.o: CMakeFiles/network_tests.dir/flags.make
+CMakeFiles/network_tests.dir/src/network/file_server.cpp.o: /home/runner/workspace/src/network/file_server.cpp
+CMakeFiles/network_tests.dir/src/network/file_server.cpp.o: CMakeFiles/network_tests.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/workspace/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/network_tests.dir/src/network/file_server.cpp.o"
+	/nix/store/9bv7dcvmfcjnmg5mnqwqlq2wxfn8d7yi-gcc-wrapper-13.2.0/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/network_tests.dir/src/network/file_server.cpp.o -MF CMakeFiles/network_tests.dir/src/network/file_server.cpp.o.d -o CMakeFiles/network_tests.dir/src/network/file_server.cpp.o -c /home/runner/workspace/src/network/file_server.cpp
+
+CMakeFiles/network_tests.dir/src/network/file_server.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/network_tests.dir/src/network/file_server.cpp.i"
+	/nix/store/9bv7dcvmfcjnmg5mnqwqlq2wxfn8d7yi-gcc-wrapper-13.2.0/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/runner/workspace/src/network/file_server.cpp > CMakeFiles/network_tests.dir/src/network/file_server.cpp.i
+
+CMakeFiles/network_tests.dir/src/network/file_server.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/network_tests.dir/src/network/file_server.cpp.s"
+	/nix/store/9bv7dcvmfcjnmg5mnqwqlq2wxfn8d7yi-gcc-wrapper-13.2.0/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/runner/workspace/src/network/file_server.cpp -o CMakeFiles/network_tests.dir/src/network/file_server.cpp.s
+
 # Object files for target network_tests
 network_tests_OBJECTS = \
 "CMakeFiles/network_tests.dir/src/tests/tcp_peer_test.cpp.o" \
 "CMakeFiles/network_tests.dir/src/tests/peer_manager_test.cpp.o" \
 "CMakeFiles/network_tests.dir/src/tests/codec_test.cpp.o" \
+"CMakeFiles/network_tests.dir/src/tests/file_server_test.cpp.o" \
 "CMakeFiles/network_tests.dir/src/network/codec.cpp.o" \
-"CMakeFiles/network_tests.dir/src/network/channel.cpp.o"
+"CMakeFiles/network_tests.dir/src/network/channel.cpp.o" \
+"CMakeFiles/network_tests.dir/src/network/file_server.cpp.o"
 
 # External object files for target network_tests
 network_tests_EXTERNAL_OBJECTS =
@@ -153,14 +183,17 @@ network_tests_EXTERNAL_OBJECTS =
 network_tests: CMakeFiles/network_tests.dir/src/tests/tcp_peer_test.cpp.o
 network_tests: CMakeFiles/network_tests.dir/src/tests/peer_manager_test.cpp.o
 network_tests: CMakeFiles/network_tests.dir/src/tests/codec_test.cpp.o
+network_tests: CMakeFiles/network_tests.dir/src/tests/file_server_test.cpp.o
 network_tests: CMakeFiles/network_tests.dir/src/network/codec.cpp.o
 network_tests: CMakeFiles/network_tests.dir/src/network/channel.cpp.o
+network_tests: CMakeFiles/network_tests.dir/src/network/file_server.cpp.o
 network_tests: CMakeFiles/network_tests.dir/build.make
 network_tests: libdfs_network.a
 network_tests: libdfs_crypto.a
+network_tests: libdfs_store.a
+network_tests: /nix/store/62sh2bwllmkl8zzpqhglzgpk7lmsmrsa-boost-1.81.0/lib/libboost_system.so.1.81.0
 network_tests: /nix/store/gp504m4dvw5k2pdx6pccf1km79fkcwgf-openssl-3.0.13/lib/libcrypto.so
 network_tests: /nix/store/62sh2bwllmkl8zzpqhglzgpk7lmsmrsa-boost-1.81.0/lib/libboost_log_setup.so.1.81.0
-network_tests: /nix/store/62sh2bwllmkl8zzpqhglzgpk7lmsmrsa-boost-1.81.0/lib/libboost_system.so.1.81.0
 network_tests: /nix/store/62sh2bwllmkl8zzpqhglzgpk7lmsmrsa-boost-1.81.0/lib/libboost_log.so.1.81.0
 network_tests: /nix/store/62sh2bwllmkl8zzpqhglzgpk7lmsmrsa-boost-1.81.0/lib/libboost_thread.so.1.81.0
 network_tests: /nix/store/62sh2bwllmkl8zzpqhglzgpk7lmsmrsa-boost-1.81.0/lib/libboost_chrono.so.1.81.0
@@ -170,7 +203,7 @@ network_tests: /nix/store/62sh2bwllmkl8zzpqhglzgpk7lmsmrsa-boost-1.81.0/lib/libb
 network_tests: /nix/store/g1xqvy5p9xgl33iywjy8192xpsfw33b1-gtest-1.14.0/lib/libgtest_main.so.1.14.0
 network_tests: /nix/store/g1xqvy5p9xgl33iywjy8192xpsfw33b1-gtest-1.14.0/lib/libgtest.so.1.14.0
 network_tests: CMakeFiles/network_tests.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/runner/workspace/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Linking CXX executable network_tests"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/runner/workspace/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Linking CXX executable network_tests"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/network_tests.dir/link.txt --verbose=$(VERBOSE)
 	/nix/store/q1nssraba326p2kp6627hldd2bhg254c-cmake-3.29.2/bin/cmake -D TEST_TARGET=network_tests -D TEST_EXECUTABLE=/home/runner/workspace/build/network_tests -D TEST_EXECUTOR= -D TEST_WORKING_DIR=/home/runner/workspace/build -D TEST_EXTRA_ARGS= -D TEST_PROPERTIES= -D TEST_PREFIX= -D TEST_SUFFIX= -D TEST_FILTER= -D NO_PRETTY_TYPES=FALSE -D NO_PRETTY_VALUES=FALSE -D TEST_LIST=network_tests_TESTS -D CTEST_FILE=/home/runner/workspace/build/network_tests[1]_tests.cmake -D TEST_DISCOVERY_TIMEOUT=5 -D TEST_XML_OUTPUT_DIR= -P /nix/store/q1nssraba326p2kp6627hldd2bhg254c-cmake-3.29.2/share/cmake-3.29/Modules/GoogleTestAddTests.cmake
 

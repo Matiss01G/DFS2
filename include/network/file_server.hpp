@@ -15,14 +15,6 @@ public:
     // Constructor takes server ID and encryption key
     FileServer(uint32_t server_id, const std::vector<uint8_t>& key);
 
-    // Deleted copy constructor and assignment operator due to unique resources
-    FileServer(const FileServer&) = delete;
-    FileServer& operator=(const FileServer&) = delete;
-
-    // Allow move operations
-    FileServer(FileServer&&) = default;
-    FileServer& operator=(FileServer&&) = default;
-
     // Virtual destructor for proper cleanup
     virtual ~FileServer() = default;
 

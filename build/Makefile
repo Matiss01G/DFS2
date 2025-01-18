@@ -350,6 +350,30 @@ src/network/codec.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/network_tests.dir/build.make CMakeFiles/network_tests.dir/src/network/codec.cpp.s
 .PHONY : src/network/codec.cpp.s
 
+src/network/file_server.o: src/network/file_server.cpp.o
+.PHONY : src/network/file_server.o
+
+# target to build an object file
+src/network/file_server.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/network_tests.dir/build.make CMakeFiles/network_tests.dir/src/network/file_server.cpp.o
+.PHONY : src/network/file_server.cpp.o
+
+src/network/file_server.i: src/network/file_server.cpp.i
+.PHONY : src/network/file_server.i
+
+# target to preprocess a source file
+src/network/file_server.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/network_tests.dir/build.make CMakeFiles/network_tests.dir/src/network/file_server.cpp.i
+.PHONY : src/network/file_server.cpp.i
+
+src/network/file_server.s: src/network/file_server.cpp.s
+.PHONY : src/network/file_server.s
+
+# target to generate assembly for a file
+src/network/file_server.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/network_tests.dir/build.make CMakeFiles/network_tests.dir/src/network/file_server.cpp.s
+.PHONY : src/network/file_server.cpp.s
+
 src/network/peer_manager.o: src/network/peer_manager.cpp.o
 .PHONY : src/network/peer_manager.o
 
@@ -494,6 +518,30 @@ src/tests/crypto_stream_test.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/crypto_tests.dir/build.make CMakeFiles/crypto_tests.dir/src/tests/crypto_stream_test.cpp.s
 .PHONY : src/tests/crypto_stream_test.cpp.s
 
+src/tests/file_server_test.o: src/tests/file_server_test.cpp.o
+.PHONY : src/tests/file_server_test.o
+
+# target to build an object file
+src/tests/file_server_test.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/network_tests.dir/build.make CMakeFiles/network_tests.dir/src/tests/file_server_test.cpp.o
+.PHONY : src/tests/file_server_test.cpp.o
+
+src/tests/file_server_test.i: src/tests/file_server_test.cpp.i
+.PHONY : src/tests/file_server_test.i
+
+# target to preprocess a source file
+src/tests/file_server_test.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/network_tests.dir/build.make CMakeFiles/network_tests.dir/src/tests/file_server_test.cpp.i
+.PHONY : src/tests/file_server_test.cpp.i
+
+src/tests/file_server_test.s: src/tests/file_server_test.cpp.s
+.PHONY : src/tests/file_server_test.s
+
+# target to generate assembly for a file
+src/tests/file_server_test.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/network_tests.dir/build.make CMakeFiles/network_tests.dir/src/tests/file_server_test.cpp.s
+.PHONY : src/tests/file_server_test.cpp.s
+
 src/tests/peer_manager_test.o: src/tests/peer_manager_test.cpp.o
 .PHONY : src/tests/peer_manager_test.o
 
@@ -596,6 +644,9 @@ help:
 	@echo "... src/network/codec.o"
 	@echo "... src/network/codec.i"
 	@echo "... src/network/codec.s"
+	@echo "... src/network/file_server.o"
+	@echo "... src/network/file_server.i"
+	@echo "... src/network/file_server.s"
 	@echo "... src/network/peer_manager.o"
 	@echo "... src/network/peer_manager.i"
 	@echo "... src/network/peer_manager.s"
@@ -614,6 +665,9 @@ help:
 	@echo "... src/tests/crypto_stream_test.o"
 	@echo "... src/tests/crypto_stream_test.i"
 	@echo "... src/tests/crypto_stream_test.s"
+	@echo "... src/tests/file_server_test.o"
+	@echo "... src/tests/file_server_test.i"
+	@echo "... src/tests/file_server_test.s"
 	@echo "... src/tests/peer_manager_test.o"
 	@echo "... src/tests/peer_manager_test.i"
 	@echo "... src/tests/peer_manager_test.s"
