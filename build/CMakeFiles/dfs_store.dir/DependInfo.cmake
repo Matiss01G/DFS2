@@ -8,7 +8,7 @@ set(CMAKE_DEPENDS_LANGUAGES
 
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
-  "/home/runner/StreamCryptoDFS/src/store/store.cpp" "CMakeFiles/dfs_store.dir/src/store/store.cpp.o" "gcc" "CMakeFiles/dfs_store.dir/src/store/store.cpp.o.d"
+  "/home/runner/workspace/src/store/store.cpp" "CMakeFiles/dfs_store.dir/src/store/store.cpp.o" "gcc" "CMakeFiles/dfs_store.dir/src/store/store.cpp.o.d"
   )
 
 # Targets to which this target links which contain Fortran sources.

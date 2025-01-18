@@ -53,10 +53,10 @@ RM = /nix/store/q1nssraba326p2kp6627hldd2bhg254c-cmake-3.29.2/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/runner/StreamCryptoDFS
+CMAKE_SOURCE_DIR = /home/runner/workspace
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/runner/StreamCryptoDFS/build
+CMAKE_BINARY_DIR = /home/runner/workspace/build
 
 # Include any dependencies generated for this target.
 include CMakeFiles/dfs_crypto.dir/depend.make
@@ -70,18 +70,18 @@ include CMakeFiles/dfs_crypto.dir/progress.make
 include CMakeFiles/dfs_crypto.dir/flags.make
 
 CMakeFiles/dfs_crypto.dir/src/crypto/crypto_stream.cpp.o: CMakeFiles/dfs_crypto.dir/flags.make
-CMakeFiles/dfs_crypto.dir/src/crypto/crypto_stream.cpp.o: /home/runner/StreamCryptoDFS/src/crypto/crypto_stream.cpp
+CMakeFiles/dfs_crypto.dir/src/crypto/crypto_stream.cpp.o: /home/runner/workspace/src/crypto/crypto_stream.cpp
 CMakeFiles/dfs_crypto.dir/src/crypto/crypto_stream.cpp.o: CMakeFiles/dfs_crypto.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/StreamCryptoDFS/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/dfs_crypto.dir/src/crypto/crypto_stream.cpp.o"
-	/nix/store/9bv7dcvmfcjnmg5mnqwqlq2wxfn8d7yi-gcc-wrapper-13.2.0/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/dfs_crypto.dir/src/crypto/crypto_stream.cpp.o -MF CMakeFiles/dfs_crypto.dir/src/crypto/crypto_stream.cpp.o.d -o CMakeFiles/dfs_crypto.dir/src/crypto/crypto_stream.cpp.o -c /home/runner/StreamCryptoDFS/src/crypto/crypto_stream.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/workspace/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/dfs_crypto.dir/src/crypto/crypto_stream.cpp.o"
+	/nix/store/9bv7dcvmfcjnmg5mnqwqlq2wxfn8d7yi-gcc-wrapper-13.2.0/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/dfs_crypto.dir/src/crypto/crypto_stream.cpp.o -MF CMakeFiles/dfs_crypto.dir/src/crypto/crypto_stream.cpp.o.d -o CMakeFiles/dfs_crypto.dir/src/crypto/crypto_stream.cpp.o -c /home/runner/workspace/src/crypto/crypto_stream.cpp
 
 CMakeFiles/dfs_crypto.dir/src/crypto/crypto_stream.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/dfs_crypto.dir/src/crypto/crypto_stream.cpp.i"
-	/nix/store/9bv7dcvmfcjnmg5mnqwqlq2wxfn8d7yi-gcc-wrapper-13.2.0/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/runner/StreamCryptoDFS/src/crypto/crypto_stream.cpp > CMakeFiles/dfs_crypto.dir/src/crypto/crypto_stream.cpp.i
+	/nix/store/9bv7dcvmfcjnmg5mnqwqlq2wxfn8d7yi-gcc-wrapper-13.2.0/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/runner/workspace/src/crypto/crypto_stream.cpp > CMakeFiles/dfs_crypto.dir/src/crypto/crypto_stream.cpp.i
 
 CMakeFiles/dfs_crypto.dir/src/crypto/crypto_stream.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/dfs_crypto.dir/src/crypto/crypto_stream.cpp.s"
-	/nix/store/9bv7dcvmfcjnmg5mnqwqlq2wxfn8d7yi-gcc-wrapper-13.2.0/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/runner/StreamCryptoDFS/src/crypto/crypto_stream.cpp -o CMakeFiles/dfs_crypto.dir/src/crypto/crypto_stream.cpp.s
+	/nix/store/9bv7dcvmfcjnmg5mnqwqlq2wxfn8d7yi-gcc-wrapper-13.2.0/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/runner/workspace/src/crypto/crypto_stream.cpp -o CMakeFiles/dfs_crypto.dir/src/crypto/crypto_stream.cpp.s
 
 # Object files for target dfs_crypto
 dfs_crypto_OBJECTS = \
@@ -93,7 +93,7 @@ dfs_crypto_EXTERNAL_OBJECTS =
 libdfs_crypto.a: CMakeFiles/dfs_crypto.dir/src/crypto/crypto_stream.cpp.o
 libdfs_crypto.a: CMakeFiles/dfs_crypto.dir/build.make
 libdfs_crypto.a: CMakeFiles/dfs_crypto.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/runner/StreamCryptoDFS/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking CXX static library libdfs_crypto.a"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/runner/workspace/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking CXX static library libdfs_crypto.a"
 	$(CMAKE_COMMAND) -P CMakeFiles/dfs_crypto.dir/cmake_clean_target.cmake
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/dfs_crypto.dir/link.txt --verbose=$(VERBOSE)
 
@@ -106,6 +106,6 @@ CMakeFiles/dfs_crypto.dir/clean:
 .PHONY : CMakeFiles/dfs_crypto.dir/clean
 
 CMakeFiles/dfs_crypto.dir/depend:
-	cd /home/runner/StreamCryptoDFS/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/runner/StreamCryptoDFS /home/runner/StreamCryptoDFS /home/runner/StreamCryptoDFS/build /home/runner/StreamCryptoDFS/build /home/runner/StreamCryptoDFS/build/CMakeFiles/dfs_crypto.dir/DependInfo.cmake "--color=$(COLOR)"
+	cd /home/runner/workspace/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/runner/workspace /home/runner/workspace /home/runner/workspace/build /home/runner/workspace/build /home/runner/workspace/build/CMakeFiles/dfs_crypto.dir/DependInfo.cmake "--color=$(COLOR)"
 .PHONY : CMakeFiles/dfs_crypto.dir/depend
 

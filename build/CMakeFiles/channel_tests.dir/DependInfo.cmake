@@ -8,8 +8,8 @@ set(CMAKE_DEPENDS_LANGUAGES
 
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
-  "/home/runner/StreamCryptoDFS/src/network/channel.cpp" "CMakeFiles/channel_tests.dir/src/network/channel.cpp.o" "gcc" "CMakeFiles/channel_tests.dir/src/network/channel.cpp.o.d"
-  "/home/runner/StreamCryptoDFS/src/tests/channel_test.cpp" "CMakeFiles/channel_tests.dir/src/tests/channel_test.cpp.o" "gcc" "CMakeFiles/channel_tests.dir/src/tests/channel_test.cpp.o.d"
+  "/home/runner/workspace/src/network/channel.cpp" "CMakeFiles/channel_tests.dir/src/network/channel.cpp.o" "gcc" "CMakeFiles/channel_tests.dir/src/network/channel.cpp.o.d"
+  "/home/runner/workspace/src/tests/channel_test.cpp" "CMakeFiles/channel_tests.dir/src/tests/channel_test.cpp.o" "gcc" "CMakeFiles/channel_tests.dir/src/tests/channel_test.cpp.o.d"
   )
 
 # Targets to which this target links which contain Fortran sources.

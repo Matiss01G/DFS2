@@ -53,10 +53,10 @@ RM = /nix/store/q1nssraba326p2kp6627hldd2bhg254c-cmake-3.29.2/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/runner/StreamCryptoDFS
+CMAKE_SOURCE_DIR = /home/runner/workspace
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/runner/StreamCryptoDFS/build
+CMAKE_BINARY_DIR = /home/runner/workspace/build
 
 # Utility rule file for run_tests.
 
@@ -70,10 +70,10 @@ CMakeFiles/run_tests: crypto_tests
 CMakeFiles/run_tests: store_tests
 CMakeFiles/run_tests: network_tests
 CMakeFiles/run_tests: channel_tests
-	/home/runner/StreamCryptoDFS/build/crypto_tests
-	/home/runner/StreamCryptoDFS/build/store_tests
-	/home/runner/StreamCryptoDFS/build/network_tests
-	/home/runner/StreamCryptoDFS/build/channel_tests
+	/home/runner/workspace/build/crypto_tests
+	/home/runner/workspace/build/store_tests
+	/home/runner/workspace/build/network_tests
+	/home/runner/workspace/build/channel_tests
 
 run_tests: CMakeFiles/run_tests
 run_tests: CMakeFiles/run_tests.dir/build.make
@@ -88,6 +88,6 @@ CMakeFiles/run_tests.dir/clean:
 .PHONY : CMakeFiles/run_tests.dir/clean
 
 CMakeFiles/run_tests.dir/depend:
-	cd /home/runner/StreamCryptoDFS/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/runner/StreamCryptoDFS /home/runner/StreamCryptoDFS /home/runner/StreamCryptoDFS/build /home/runner/StreamCryptoDFS/build /home/runner/StreamCryptoDFS/build/CMakeFiles/run_tests.dir/DependInfo.cmake "--color=$(COLOR)"
+	cd /home/runner/workspace/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/runner/workspace /home/runner/workspace /home/runner/workspace/build /home/runner/workspace/build /home/runner/workspace/build/CMakeFiles/run_tests.dir/DependInfo.cmake "--color=$(COLOR)"
 .PHONY : CMakeFiles/run_tests.dir/depend
 

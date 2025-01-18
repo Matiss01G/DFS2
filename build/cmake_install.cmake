@@ -1,4 +1,4 @@
-# Install script for directory: /home/runner/StreamCryptoDFS
+# Install script for directory: /home/runner/workspace
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -12,7 +12,7 @@ if(NOT DEFINED CMAKE_INSTALL_CONFIG_NAME)
     string(REGEX REPLACE "^[^A-Za-z0-9_]+" ""
            CMAKE_INSTALL_CONFIG_NAME "${BUILD_TYPE}")
   else()
-    set(CMAKE_INSTALL_CONFIG_NAME "Debug")
+    set(CMAKE_INSTALL_CONFIG_NAME "")
   endif()
   message(STATUS "Install configuration: \"${CMAKE_INSTALL_CONFIG_NAME}\"")
 endif()
@@ -43,26 +43,26 @@ if(NOT DEFINED CMAKE_OBJDUMP)
 endif()
 
 if(CMAKE_INSTALL_COMPONENT STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib" TYPE STATIC_LIBRARY FILES "/home/runner/StreamCryptoDFS/build/libdfs_crypto.a")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib" TYPE STATIC_LIBRARY FILES "/home/runner/workspace/build/libdfs_crypto.a")
 endif()
 
 if(CMAKE_INSTALL_COMPONENT STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib" TYPE STATIC_LIBRARY FILES "/home/runner/StreamCryptoDFS/build/libdfs_store.a")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib" TYPE STATIC_LIBRARY FILES "/home/runner/workspace/build/libdfs_store.a")
 endif()
 
 if(CMAKE_INSTALL_COMPONENT STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib" TYPE STATIC_LIBRARY FILES "/home/runner/StreamCryptoDFS/build/libdfs_network.a")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib" TYPE STATIC_LIBRARY FILES "/home/runner/workspace/build/libdfs_network.a")
 endif()
 
 if(CMAKE_INSTALL_COMPONENT STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include" TYPE DIRECTORY FILES "/home/runner/StreamCryptoDFS/include/" FILES_MATCHING REGEX "/[^/]*\\.hpp$")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include" TYPE DIRECTORY FILES "/home/runner/workspace/include/" FILES_MATCHING REGEX "/[^/]*\\.hpp$")
 endif()
 
 if(CMAKE_INSTALL_COMPONENT STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
   if(EXISTS "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/cmake/dfs/dfs-targets.cmake")
     file(DIFFERENT _cmake_export_file_changed FILES
          "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/cmake/dfs/dfs-targets.cmake"
-         "/home/runner/StreamCryptoDFS/build/CMakeFiles/Export/154ba5006bc2596f461835a8d8f0a250/dfs-targets.cmake")
+         "/home/runner/workspace/build/CMakeFiles/Export/154ba5006bc2596f461835a8d8f0a250/dfs-targets.cmake")
     if(_cmake_export_file_changed)
       file(GLOB _cmake_old_config_files "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/cmake/dfs/dfs-targets-*.cmake")
       if(_cmake_old_config_files)
@@ -75,9 +75,9 @@ if(CMAKE_INSTALL_COMPONENT STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT
     endif()
     unset(_cmake_export_file_changed)
   endif()
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/cmake/dfs" TYPE FILE FILES "/home/runner/StreamCryptoDFS/build/CMakeFiles/Export/154ba5006bc2596f461835a8d8f0a250/dfs-targets.cmake")
-  if(CMAKE_INSTALL_CONFIG_NAME MATCHES "^([Dd][Ee][Bb][Uu][Gg])$")
-    file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/cmake/dfs" TYPE FILE FILES "/home/runner/StreamCryptoDFS/build/CMakeFiles/Export/154ba5006bc2596f461835a8d8f0a250/dfs-targets-debug.cmake")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/cmake/dfs" TYPE FILE FILES "/home/runner/workspace/build/CMakeFiles/Export/154ba5006bc2596f461835a8d8f0a250/dfs-targets.cmake")
+  if(CMAKE_INSTALL_CONFIG_NAME MATCHES "^()$")
+    file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/cmake/dfs" TYPE FILE FILES "/home/runner/workspace/build/CMakeFiles/Export/154ba5006bc2596f461835a8d8f0a250/dfs-targets-noconfig.cmake")
   endif()
 endif()
 
@@ -89,5 +89,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/home/runner/StreamCryptoDFS/build/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/home/runner/workspace/build/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

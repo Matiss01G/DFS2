@@ -57,10 +57,10 @@ RM = /nix/store/q1nssraba326p2kp6627hldd2bhg254c-cmake-3.29.2/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/runner/StreamCryptoDFS
+CMAKE_SOURCE_DIR = /home/runner/workspace
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/runner/StreamCryptoDFS/build
+CMAKE_BINARY_DIR = /home/runner/workspace/build
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -142,9 +142,9 @@ install/strip/fast: preinstall/fast
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/StreamCryptoDFS/build/CMakeFiles /home/runner/StreamCryptoDFS/build//CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/workspace/build/CMakeFiles /home/runner/workspace/build//CMakeFiles/progress.marks
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/StreamCryptoDFS/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/workspace/build/CMakeFiles 0
 .PHONY : all
 
 # The main clean target

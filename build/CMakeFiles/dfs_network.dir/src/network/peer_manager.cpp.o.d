@@ -1,7 +1,7 @@
 CMakeFiles/dfs_network.dir/src/network/peer_manager.cpp.o: \
- /home/runner/StreamCryptoDFS/src/network/peer_manager.cpp \
+ /home/runner/workspace/src/network/peer_manager.cpp \
  /nix/store/fwh4fxd747m0py3ib3s5abamia9nrf90-glibc-2.39-52-dev/include/stdc-predef.h \
- /home/runner/StreamCryptoDFS/include/network/peer_manager.hpp \
+ /home/runner/workspace/include/network/peer_manager.hpp \
  /nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/map \
  /nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/bits/requires_hosted.h \
  /nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/x86_64-unknown-linux-gnu/bits/c++config.h \
@@ -266,7 +266,7 @@ CMakeFiles/dfs_network.dir/src/network/peer_manager.cpp.o: \
  /nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/bits/unique_lock.h \
  /nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/istream \
  /nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/bits/istream.tcc \
- /home/runner/StreamCryptoDFS/include/network/peer.hpp \
+ /home/runner/workspace/include/network/peer.hpp \
  /nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/functional \
  /nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/bits/std_function.h \
  /nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/unordered_map \
@@ -284,7 +284,7 @@ CMakeFiles/dfs_network.dir/src/network/peer_manager.cpp.o: \
  /nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/bits/stl_heap.h \
  /nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/bits/uniform_int_dist.h \
  /nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/iostream \
- /home/runner/StreamCryptoDFS/include/network/message_frame.hpp \
+ /home/runner/workspace/include/network/message_frame.hpp \
  /nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/sstream \
  /nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/bits/sstream.tcc \
  /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/endian/conversion.hpp \
@@ -365,7 +365,7 @@ CMakeFiles/dfs_network.dir/src/network/peer_manager.cpp.o: \
  /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/type_traits/is_signed.hpp \
  /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/type_traits/remove_cv.hpp \
  /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/endian/detail/endian_store.hpp \
- /home/runner/StreamCryptoDFS/include/network/tcp_peer.hpp \
+ /home/runner/workspace/include/network/tcp_peer.hpp \
  /nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/thread \
  /nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/stop_token \
  /nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/atomic \
