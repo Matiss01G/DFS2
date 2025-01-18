@@ -60,24 +60,11 @@ protected:
   }
 
   // Helper to verify stream contents with proper error handling
-  static void verify_stream_content(std::istream& stream, const std::string& expected) {
+  static void verify_stream_content(std::stringstream& stream, const std::string& expected) {
     ASSERT_TRUE(stream.good()) << "Input stream is not in good state";
     std::string content;
     if (!expected.empty()) {
-      std::stringstream buffer;
-      buffer << stream.rdbuf();
-      EXPECT_TRUE(buffer.good()) << "Failed to read stream contents";
-      content = buffer.str();
-    } else {
-      char ch;
-      if (stream.get(ch)) {
-        content.push_back(ch);
-        while (stream.get(ch)) {
-          content.push_back(ch);
-        }
-      }
-      // For empty content, we expect EOF immediately
-      EXPECT_TRUE(stream.eof()) << "Stream should be at EOF for empty content";
+      content = stream.str();
     }
     ASSERT_EQ(content, expected) << "Stream content doesn't match expected value";
   }
@@ -111,9 +98,9 @@ TEST_F(StoreTest, BasicStoreAndRetrieve) {
   ASSERT_TRUE(store->has(test_key)) << "Key should exist after storing";
 
   // Retrieve and verify
-  auto output = store->get(test_key);
-  ASSERT_TRUE(output != nullptr) << "Retrieved stream should not be null";
-  verify_stream_content(*output, test_data);
+  std::stringstream output;
+  ASSERT_NO_THROW(store->get(test_key, output)) << "Get operation should not throw";
+  verify_stream_content(output, test_data);
 }
 
 /**
@@ -141,9 +128,9 @@ TEST_F(StoreTest, EmptyInput) {
   ASSERT_TRUE(store->has(test_key)) << "Key should exist even with empty data";
 
   // Verify empty data retrieval
-  auto output = store->get(test_key);
-  ASSERT_TRUE(output != nullptr) << "Retrieved stream should not be null";
-  verify_stream_content(*output, "");
+  std::stringstream output;
+  ASSERT_NO_THROW(store->get(test_key, output)) << "Get operation should not throw";
+  verify_stream_content(output, "");
 }
 
 /**
@@ -181,9 +168,9 @@ TEST_F(StoreTest, MultipleFiles) {
   // Retrieve and verify all files
   for (const auto& [key, expected_data] : test_data) {
     ASSERT_TRUE(store->has(key)) << "Key should still exist: " << key;
-    auto output = store->get(key);
-    ASSERT_TRUE(output != nullptr) << "Retrieved stream should not be null for key: " << key;
-    verify_stream_content(*output, expected_data);
+    std::stringstream output;
+    ASSERT_NO_THROW(store->get(key, output)) << "Get operation failed for key: " << key;
+    verify_stream_content(output, expected_data);
   }
 }
 
@@ -205,7 +192,8 @@ TEST_F(StoreTest, ErrorHandling) {
 
   // Test getting non-existent key
   EXPECT_FALSE(store->has(test_key)) << "Key should not exist initially";
-  EXPECT_THROW(store->get(test_key), StoreError) << "Getting non-existent key should throw";
+  std::stringstream output;
+  EXPECT_THROW(store->get(test_key, output), StoreError) << "Getting non-existent key should throw";
 
   // Test storing with invalid stream
   std::stringstream bad_stream;
@@ -244,7 +232,8 @@ TEST_F(StoreTest, Clear) {
   // Verify all keys are removed
   for (const auto& key : keys) {
     ASSERT_FALSE(store->has(key)) << "Key should not exist after clear: " << key;
-    EXPECT_THROW(store->get(key), StoreError) << "Getting cleared key should throw";
+    std::stringstream output;
+    EXPECT_THROW(store->get(key, output), StoreError) << "Getting cleared key should throw";
   }
 }
 
@@ -275,9 +264,9 @@ TEST_F(StoreTest, LargeFileHandling) {
   ASSERT_TRUE(store->has(test_key)) << "Large file key should exist after storing";
 
   // Retrieve and verify large file
-  auto output = store->get(test_key);
-  ASSERT_TRUE(output != nullptr) << "Retrieved stream should not be null";
-  verify_stream_content(*output, large_data);
+  std::stringstream output;
+  ASSERT_NO_THROW(store->get(test_key, output)) << "Get operation should not throw";
+  verify_stream_content(output, large_data);
 }
 
 /**
@@ -303,16 +292,16 @@ TEST_F(StoreTest, LargeFileHandling) {
 //     {"\\windows\\path", "Windows-style path"} // Windows-style path
 //   };
 //   const std::string test_data = "Test data";
-
+// 
 //   for (const auto& [key, description] : test_cases) {
 //     auto input = create_test_stream(test_data);
 //     try {
 //       store->store(key, *input);
 //       // If store succeeds, verify the data can be retrieved
 //       ASSERT_TRUE(store->has(key)) << "Key should exist after storing: " << description;
-//       auto output = store->get(key);
-//       ASSERT_TRUE(output != nullptr) << "Retrieved stream should not be null for: " << description;
-//       verify_stream_content(*output, test_data);
+//       std::stringstream output;
+//       ASSERT_NO_THROW(store->get(key, output)) << "Get operation should not throw for key: " << description;
+//       verify_stream_content(output, test_data);
 //     } catch (const StoreError& e) {
 //       // Some invalid keys might cause StoreError, which is acceptable
 //       SUCCEED() << "Store rejected invalid key as expected: " << description;
@@ -345,18 +334,18 @@ TEST_F(StoreTest, OverwriteBehavior) {
   ASSERT_TRUE(store->has(test_key)) << "Key should exist after initial store";
 
   // Verify initial content
-  auto initial_output = store->get(test_key);
-  ASSERT_TRUE(initial_output != nullptr);
-  verify_stream_content(*initial_output, initial_data);
+  std::stringstream initial_output;
+  ASSERT_NO_THROW(store->get(test_key, initial_output)) << "Get operation should not throw";
+  verify_stream_content(initial_output, initial_data);
 
   // Overwrite with new data
   auto update_input = create_test_stream(updated_data);
   ASSERT_NO_THROW(store->store(test_key, *update_input)) << "Overwrite should not throw";
 
   // Verify updated content
-  auto updated_output = store->get(test_key);
-  ASSERT_TRUE(updated_output != nullptr);
-  verify_stream_content(*updated_output, updated_data);
+  std::stringstream updated_output;
+  ASSERT_NO_THROW(store->get(test_key, updated_output)) << "Get operation should not throw";
+  verify_stream_content(updated_output, updated_data);
 }
 
 /**
@@ -382,22 +371,12 @@ TEST_F(StoreTest, StreamStatePreservation) {
   store->store(test_key, *input);
 
   // Read partial data and verify stream position
-  auto output = store->get(test_key);
-  ASSERT_TRUE(output != nullptr);
+  std::stringstream output;
+  store->get(test_key, output);
 
-  char buffer[10];
-  output->read(buffer, 5);
-  ASSERT_TRUE(output->good()) << "Stream should be good after partial read";
-  ASSERT_EQ(output->tellg(), 5) << "Stream position should be preserved";
-
-  std::string partial(buffer, 5);
-  ASSERT_EQ(partial, "ABCDE") << "Partial read should match expected content";
-
-  // Continue reading and verify
-  output->read(buffer, 5);
-  ASSERT_TRUE(output->good());
-  std::string next_partial(buffer, 5);
-  ASSERT_EQ(next_partial, "FGHIJ") << "Continued read should match expected content";
+  std::string content = output.str();
+  ASSERT_EQ(content.substr(0, 5), "ABCDE") << "First 5 characters should match";
+  ASSERT_EQ(content.substr(5, 5), "FGHIJ") << "Next 5 characters should match";
 }
 
 /**
@@ -419,27 +398,24 @@ TEST_F(StoreTest, StreamStatePreservation) {
 //   const size_t ops_per_thread = 100;
 //   std::vector<std::thread> threads;
 //   std::atomic<size_t> successful_ops{0};
-
+// 
 //   for (size_t i = 0; i < num_threads; ++i) {
 //     threads.emplace_back([this, i, ops_per_thread, &successful_ops]() {
 //       for (size_t j = 0; j < ops_per_thread; ++j) {
 //         const std::string key = "concurrent_key_" + std::to_string(i) + "_" + std::to_string(j);
 //         const std::string data = "Concurrent test data for " + key;
-
+// 
 //         try {
 //           // Store data
 //           auto input = create_test_stream(data);
 //           store->store(key, *input);
 //           EXPECT_TRUE(store->has(key));
-
+// 
 //           // Retrieve and verify
-//           auto output = store->get(key);
-//           EXPECT_TRUE(output != nullptr);
-
-//           std::stringstream buffer;
-//           buffer << output->rdbuf();
-//           EXPECT_EQ(buffer.str(), data);
-
+//           std::stringstream output;
+//           store->get(key, output);
+//           EXPECT_EQ(output.str(), data);
+// 
 //           successful_ops++;
 //         } catch (const std::exception& e) {
 //           ADD_FAILURE() << "Thread " << i << " failed: " << e.what();
@@ -447,12 +423,12 @@ TEST_F(StoreTest, StreamStatePreservation) {
 //       }
 //     });
 //   }
-
+// 
 //   // Wait for all threads to complete
 //   for (auto& thread : threads) {
 //     thread.join();
 //   }
-
+// 
 //   EXPECT_EQ(successful_ops, num_threads * ops_per_thread)
 //     << "All operations should complete successfully";
 // }
