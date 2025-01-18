@@ -1,5 +1,0 @@
-if(EXISTS "/home/runner/StreamCryptoDFS/build/network_tests[1]_tests.cmake")
-  include("/home/runner/StreamCryptoDFS/build/network_tests[1]_tests.cmake")
-else()
-  add_test(network_tests_NOT_BUILT network_tests_NOT_BUILT)
-endif()

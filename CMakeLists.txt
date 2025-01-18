@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.14)
-project(dfs_crypto CXX)
+project(workspace CXX)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -45,6 +45,8 @@ target_link_libraries(dfs_store PUBLIC
 add_library(dfs_network
     src/network/tcp_peer.cpp
     src/network/peer_manager.cpp
+    src/network/codec.cpp
+    src/network/channel.cpp
 )
 target_include_directories(dfs_network PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
@@ -87,7 +89,7 @@ add_executable(network_tests
     src/tests/tcp_peer_test.cpp
     src/tests/peer_manager_test.cpp
     src/tests/codec_test.cpp
-    src/network/codec.cpp
+    src/tests/channel_test.cpp
     src/network/channel.cpp)
 
 target_include_directories(network_tests PRIVATE
@@ -136,7 +138,7 @@ add_custom_target(run_tests ALL
 
 # Install rules
 install(TARGETS dfs_crypto dfs_store dfs_network
-    EXPORT dfs-targets
+    EXPORT workspace-targets
     ARCHIVE DESTINATION lib
     LIBRARY DESTINATION lib
     RUNTIME DESTINATION bin
@@ -147,7 +149,7 @@ install(DIRECTORY include/
     FILES_MATCHING PATTERN "*.hpp"
 )
 
-install(EXPORT dfs-targets
-    FILE dfs-targets.cmake
-    NAMESPACE dfs::
-    DESTINATION lib/cmake/dfs)
+install(EXPORT workspace-targets
+    FILE workspace-targets.cmake
+    NAMESPACE workspace::
+    DESTINATION lib/cmake/workspace)
