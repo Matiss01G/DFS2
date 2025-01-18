@@ -27,8 +27,6 @@ public:
     std::shared_ptr<TCP_Peer> get_peer(const std::string& peer_id);
 
     // Broadcast data from input stream to all connected peers
-    // @param input_stream The input stream containing data to broadcast
-    // @return true if all connected peers received the data successfully, false otherwise
     bool broadcast_stream(std::istream& input_stream);
 
     // Shutdown all peer connections and clear the peers map

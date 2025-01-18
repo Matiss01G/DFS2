@@ -96,7 +96,7 @@ void Store::get(const std::string& key, std::stringstream& output) {
     }
     output.seekg(0);  // Reset read position to beginning
 
-    BOOST << "Successfully retrieved data for key: " << key;
+    BOOST_LOG_TRIVIAL(info) << "Successfully retrieved data for key: " << key;
 }
 
 bool Store::has(const std::string& key) const {
