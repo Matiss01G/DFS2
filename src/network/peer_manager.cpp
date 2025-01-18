@@ -141,6 +141,40 @@ bool PeerManager::send_to_peer(uint32_t peer_id, std::istream& stream) {
     }
 }
 
+bool PeerManager::send_stream(const std::string& peer_id, std::istream& stream) {
+    if (!stream.good()) {
+        BOOST_LOG_TRIVIAL(error) << "Invalid input stream provided for peer_id: " << peer_id;
+        return false;
+    }
+
+    std::lock_guard<std::mutex> lock(mutex_);
+
+    auto it = peers_.find(peer_id);
+    if (it == peers_.end()) {
+        BOOST_LOG_TRIVIAL(warning) << "Peer not found with ID: " << peer_id;
+        return false;
+    }
+
+    if (!it->second->is_connected()) {
+        BOOST_LOG_TRIVIAL(warning) << "Peer is not connected: " << peer_id;
+        return false;
+    }
+
+    try {
+        bool success = it->second->send_stream(stream);
+        if (success) {
+            BOOST_LOG_TRIVIAL(debug) << "Successfully sent stream to peer: " << peer_id;
+        } else {
+            BOOST_LOG_TRIVIAL(error) << "Failed to send stream to peer: " << peer_id;
+        }
+        return success;
+    } catch (const std::exception& e) {
+        BOOST_LOG_TRIVIAL(error) << "Exception while sending to peer " << peer_id 
+                               << ": " << e.what();
+        return false;
+    }
+}
+
 void PeerManager::shutdown() {
     std::lock_guard<std::mutex> lock(mutex_);
 

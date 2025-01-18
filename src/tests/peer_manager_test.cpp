@@ -216,3 +216,23 @@ TEST_F(PeerManagerTest, SendToPeerTest) {
     std::istringstream disconnected_stream("Test message\n");
     EXPECT_FALSE(manager->send_to_peer(1, disconnected_stream));
 }
+
+// Test send_stream functionality with string-based peer ID
+TEST_F(PeerManagerTest, SendStreamTest) {
+    // Create test peer
+    auto peer = std::make_shared<TCP_Peer>("test_peer_1");
+    manager->add_peer(peer);
+
+    // Test sending to non-existent peer
+    std::istringstream non_existent_stream("Test message\n");
+    EXPECT_FALSE(manager->send_stream("non_existent_peer", non_existent_stream));
+
+    // Test sending with invalid stream
+    std::istringstream invalid_stream("");
+    invalid_stream.setstate(std::ios::failbit);
+    EXPECT_FALSE(manager->send_stream("test_peer_1", invalid_stream));
+
+    // Test sending to existing but disconnected peer
+    std::istringstream disconnected_stream("Test message\n");
+    EXPECT_FALSE(manager->send_stream("test_peer_1", disconnected_stream));
+}

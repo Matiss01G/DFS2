@@ -26,8 +26,14 @@ public:
     // Get a peer by its ID
     std::shared_ptr<TCP_Peer> get_peer(const std::string& peer_id);
 
+    // Send stream to a specific peer using its ID string
+    bool send_stream(const std::string& peer_id, std::istream& stream);
+
     // Broadcast data from input stream to all connected peers
     bool broadcast_stream(std::istream& input_stream);
+
+    // Send data to a specific peer by ID
+    bool send_to_peer(uint32_t peer_id, std::istream& stream);
 
     // Shutdown all peer connections and clear the peers map
     void shutdown();
