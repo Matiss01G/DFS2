@@ -1,0 +1,86 @@
+-- Configuring done (0.1s)
+CMake Error at CMakeLists.txt:30 (add_library):
+  Cannot find source file:
+
+    src/store/store.cpp
+
+  Tried extensions .c .C .c++ .cc .cpp .cxx .cu .mpp .m .M .mm .ixx .cppm
+  .ccm .cxxm .c++m .h .hh .h++ .hm .hpp .hxx .in .txx .f .F .for .f77 .f90
+  .f95 .f03 .hip .ispc
+
+
+CMake Error at CMakeLists.txt:45 (add_library):
+  Cannot find source file:
+
+    src/network/tcp_peer.cpp
+
+  Tried extensions .c .C .c++ .cc .cpp .cxx .cu .mpp .m .M .mm .ixx .cppm
+  .ccm .cxxm .c++m .h .hh .h++ .hm .hpp .hxx .in .txx .f .F .for .f77 .f90
+  .f95 .f03 .hip .ispc
+
+
+CMake Error at CMakeLists.txt:64 (add_executable):
+  Cannot find source file:
+
+    src/tests/crypto_stream_test.cpp
+
+  Tried extensions .c .C .c++ .cc .cpp .cxx .cu .mpp .m .M .mm .ixx .cppm
+  .ccm .cxxm .c++m .h .hh .h++ .hm .hpp .hxx .in .txx .f .F .for .f77 .f90
+  .f95 .f03 .hip .ispc
+
+
+CMake Error at CMakeLists.txt:75 (add_executable):
+  Cannot find source file:
+
+    src/tests/store_test.cpp
+
+  Tried extensions .c .C .c++ .cc .cpp .cxx .cu .mpp .m .M .mm .ixx .cppm
+  .ccm .cxxm .c++m .h .hh .h++ .hm .hpp .hxx .in .txx .f .F .for .f77 .f90
+  .f95 .f03 .hip .ispc
+
+
+CMake Error at CMakeLists.txt:86 (add_executable):
+  Cannot find source file:
+
+    src/tests/tcp_peer_test.cpp
+
+  Tried extensions .c .C .c++ .cc .cpp .cxx .cu .mpp .m .M .mm .ixx .cppm
+  .ccm .cxxm .c++m .h .hh .h++ .hm .hpp .hxx .in .txx .f .F .for .f77 .f90
+  .f95 .f03 .hip .ispc
+
+
+CMake Error at CMakeLists.txt:106 (add_executable):
+  Cannot find source file:
+
+    src/tests/channel_test.cpp
+
+  Tried extensions .c .C .c++ .cc .cpp .cxx .cu .mpp .m .M .mm .ixx .cppm
+  .ccm .cxxm .c++m .h .hh .h++ .hm .hpp .hxx .in .txx .f .F .for .f77 .f90
+  .f95 .f03 .hip .ispc
+
+
+CMake Error at CMakeLists.txt:30 (add_library):
+  No SOURCES given to target: dfs_store
+
+
+CMake Error at CMakeLists.txt:45 (add_library):
+  No SOURCES given to target: dfs_network
+
+
+CMake Error at CMakeLists.txt:64 (add_executable):
+  No SOURCES given to target: crypto_tests
+
+
+CMake Error at CMakeLists.txt:75 (add_executable):
+  No SOURCES given to target: store_tests
+
+
+CMake Error at CMakeLists.txt:86 (add_executable):
+  No SOURCES given to target: network_tests
+
+
+CMake Error at CMakeLists.txt:106 (add_executable):
+  No SOURCES given to target: channel_tests
+
+
+CMake Generate step failed.  Build files cannot be regenerated correctly.
