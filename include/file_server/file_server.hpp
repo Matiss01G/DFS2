@@ -23,9 +23,6 @@ public:
     // Virtual destructor for proper cleanup
     virtual ~FileServer() = default;
 
-    // Handle incoming store message frame
-    bool handle_store(const MessageFrame& frame);
-
     // Extract filename from message frame's payload stream
     std::string extract_filename(const MessageFrame& frame);
 

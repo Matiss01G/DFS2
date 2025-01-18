@@ -228,44 +228,5 @@ std::optional<std::stringstream> FileServer::get_file(const std::string& filenam
     }
 }
 
-bool FileServer::handle_store(const MessageFrame& frame) {
-    try {
-        BOOST_LOG_TRIVIAL(info) << "Handling store message from source ID: " << frame.source_id;
-
-        // Extract filename from the message frame
-        std::string filename;
-        try {
-            filename = extract_filename(frame);
-            BOOST_LOG_TRIVIAL(debug) << "Extracted filename: " << filename;
-        } catch (const std::exception& e) {
-            BOOST_LOG_TRIVIAL(error) << "Failed to extract filename: " << e.what();
-            return false;
-        }
-
-        // Verify payload stream exists and is valid
-        if (!frame.payload_stream || !frame.payload_stream->good()) {
-            BOOST_LOG_TRIVIAL(error) << "Invalid payload stream in message frame";
-            return false;
-        }
-
-        // Create a stringstream for storing
-        std::stringstream input_stream;
-        input_stream << frame.payload_stream->rdbuf();
-
-        // Store the file using the extracted filename and payload
-        if (!store_file(filename, input_stream)) {
-            BOOST_LOG_TRIVIAL(error) << "Failed to store file: " << filename;
-            return false;
-        }
-
-        BOOST_LOG_TRIVIAL(info) << "Successfully handled store message for file: " << filename;
-        return true;
-    }
-    catch (const std::exception& e) {
-        BOOST_LOG_TRIVIAL(error) << "Error in handle_store: " << e.what();
-        return false;
-    }
-}
-
 } // namespace network
 } // namespace dfs
