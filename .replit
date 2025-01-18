@@ -5,7 +5,7 @@ modules = ["cpp"]
 channel = "stable-24_05"
 
 [workflows]
-runButton = "Build and Test"
+runButton = "Project"
 
 [[workflows.workflow]]
 name = "Project"
@@ -46,7 +46,7 @@ task = "packager.installForAll"
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "cd /home/runner/StreamCryptoDFS && mkdir -p build && cd build && cmake -DCMAKE_BUILD_TYPE=Debug .. && make"
+args = "mkdir -p /home/runner/StreamCryptoDFS && cd /home/runner/StreamCryptoDFS && mkdir -p build && cd build && cmake -DCMAKE_BUILD_TYPE=Debug .. && make"
 
 [[ports]]
 localPort = 12345
