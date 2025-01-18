@@ -5,9 +5,12 @@
 #include <vector>
 #include <memory>
 #include <string>
+#include <sstream>
 #include "store/store.hpp"
 #include "network/codec.hpp"
 #include "network/message_frame.hpp"
+#include "network/peer_manager.hpp"
+#include "crypto/crypto_stream.hpp"
 
 namespace dfs {
 namespace network {
@@ -23,11 +26,15 @@ public:
     // Extract filename from message frame's payload stream
     std::string extract_filename(const MessageFrame& frame);
 
+    // Prepare and send file to peers
+    bool prepare_and_send(const std::string& filename, std::optional<uint32_t> peer_id = std::nullopt);
+
 private:
     uint32_t server_id_;
     std::vector<uint8_t> key_;
     std::unique_ptr<dfs::store::Store> store_;
     std::unique_ptr<Codec> codec_;
+    std::shared_ptr<PeerManager> peer_manager_;
 };
 
 } // namespace network

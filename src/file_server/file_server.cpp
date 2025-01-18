@@ -1,6 +1,7 @@
 #include "file_server/file_server.hpp"
 #include <boost/log/trivial.hpp>
 #include <filesystem>
+#include <optional>
 
 namespace dfs {
 namespace network {
@@ -17,15 +18,18 @@ FileServer::FileServer(uint32_t server_id, const std::vector<uint8_t>& key)
 
     BOOST_LOG_TRIVIAL(info) << "Initializing FileServer with ID: " << server_id_;
 
-    // Create store directory based on server ID
-    std::string store_path = "fileserver_" + std::to_string(server_id_);
-
     try {
+        // Create store directory based on server ID
+        std::string store_path = "fileserver_" + std::to_string(server_id_);
+
         // Initialize store with the server-specific directory
         store_ = std::make_unique<dfs::store::Store>(store_path);
 
         // Initialize codec with the provided cryptographic key
         codec_ = std::make_unique<Codec>(key_);
+
+        // Initialize peer manager
+        peer_manager_ = std::make_shared<PeerManager>();
 
         BOOST_LOG_TRIVIAL(info) << "FileServer initialization complete";
     }
@@ -72,6 +76,66 @@ std::string FileServer::extract_filename(const MessageFrame& frame) {
     catch (const std::exception& e) {
         BOOST_LOG_TRIVIAL(error) << "Error extracting filename: " << e.what();
         throw;
+    }
+}
+
+bool FileServer::prepare_and_send(const std::string& filename, std::optional<uint32_t> peer_id) {
+    try {
+        BOOST_LOG_TRIVIAL(info) << "Preparing to send file: " << filename;
+
+        // Create message frame with empty payload stream
+        MessageFrame frame;
+        frame.source_id = server_id_;
+        frame.payload_stream = std::make_shared<std::stringstream>();
+        frame.filename_length = filename.length();
+
+        // Generate and set IV
+        crypto::CryptoStream crypto_stream;
+        auto iv = crypto_stream.generate_IV();
+        frame.iv_.assign(iv.begin(), iv.end());
+
+        // Get file data from store into payload stream
+        try {
+            store_->get(filename, *frame.payload_stream);
+            if (!frame.payload_stream->good()) {
+                BOOST_LOG_TRIVIAL(error) << "Failed to get file from store: " << filename;
+                return false;
+            }
+        } catch (const std::exception& e) {
+            BOOST_LOG_TRIVIAL(error) << "Error getting file from store: " << e.what();
+            return false;
+        }
+
+        // Create stream for serialized data
+        std::stringstream serialized_stream;
+
+        // Serialize the frame
+        if (!codec_->serialize(frame, serialized_stream)) {
+            BOOST_LOG_TRIVIAL(error) << "Failed to serialize message frame";
+            return false;
+        }
+
+        // Send to specific peer or broadcast
+        bool success;
+        if (peer_id) {
+            BOOST_LOG_TRIVIAL(info) << "Sending file to peer: " << *peer_id;
+            success = peer_manager_->send_to_peer(*peer_id, serialized_stream);
+        } else {
+            BOOST_LOG_TRIVIAL(info) << "Broadcasting file to all peers";
+            success = peer_manager_->broadcast_stream(serialized_stream);
+        }
+
+        if (!success) {
+            BOOST_LOG_TRIVIAL(error) << "Failed to send file";
+            return false;
+        }
+
+        BOOST_LOG_TRIVIAL(info) << "Successfully sent file: " << filename;
+        return true;
+    }
+    catch (const std::exception& e) {
+        BOOST_LOG_TRIVIAL(error) << "Error in prepare_and_send: " << e.what();
+        return false;
     }
 }
 
