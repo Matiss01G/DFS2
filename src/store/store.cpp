@@ -61,7 +61,7 @@ void Store::store(const std::string& key, std::istream& data) {
     BOOST_LOG_TRIVIAL(info) << "Successfully stored " << bytes_written << " bytes with key: " << key;
 }
 
-std::shared_ptr<std::stringstream> Store::get(const std::string& key) {
+void Store::get(const std::string& key, std::stringstream& output) {
     BOOST_LOG_TRIVIAL(info) << "Retrieving data for key: " << key;
 
     // Generate file path and verify existence
@@ -72,12 +72,11 @@ std::shared_ptr<std::stringstream> Store::get(const std::string& key) {
         throw StoreError("File not found");
     }
 
-    auto output = std::make_shared<std::stringstream>();
-
     // Handle empty file case
     if (std::filesystem::file_size(file_path) == 0) {
         BOOST_LOG_TRIVIAL(debug) << "Retrieved empty content for key: " << key;
-        return output;
+        output.str("");
+        return;
     }
 
     // Open file in binary mode and stream content
@@ -86,17 +85,18 @@ std::shared_ptr<std::stringstream> Store::get(const std::string& key) {
         throw StoreError("Failed to open file: " + file_path.string());
     }
 
-    // Copy file contents to output stream
-    *output << file.rdbuf();
+    // Clear the output stream and copy file contents to it
+    output.clear();
+    output.str("");
+    output << file.rdbuf();
 
     // Verify stream state and reset position
-    if (!output->good()) {
+    if (!output.good()) {
         throw StoreError("Failed to read file contents");
     }
-    output->seekg(0);  // Reset read position to beginning
+    output.seekg(0);  // Reset read position to beginning
 
     BOOST_LOG_TRIVIAL(debug) << "Successfully retrieved data for key: " << key;
-    return output;
 }
 
 bool Store::has(const std::string& key) const {
