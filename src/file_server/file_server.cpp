@@ -1,4 +1,4 @@
-#include "network/file_server.hpp"
+#include "file_server/file_server.hpp"
 #include <boost/log/trivial.hpp>
 #include <filesystem>
 
@@ -31,6 +31,46 @@ FileServer::FileServer(uint32_t server_id, const std::vector<uint8_t>& key)
     }
     catch (const std::exception& e) {
         BOOST_LOG_TRIVIAL(error) << "Failed to initialize FileServer: " << e.what();
+        throw;
+    }
+}
+
+std::string FileServer::extract_filename(const MessageFrame& frame) {
+    if (!frame.payload_stream) {
+        BOOST_LOG_TRIVIAL(error) << "Invalid payload stream in message frame";
+        throw std::runtime_error("Invalid payload stream");
+    }
+
+    if (frame.filename_length == 0) {
+        BOOST_LOG_TRIVIAL(error) << "Invalid filename length: 0";
+        throw std::runtime_error("Invalid filename length");
+    }
+
+    try {
+        // Create a buffer to hold the filename
+        std::vector<char> filename_buffer(frame.filename_length);
+
+        // Save current position
+        std::streampos original_pos = frame.payload_stream->tellg();
+
+        // Read the filename from the start of payload
+        frame.payload_stream->seekg(0);
+        if (!frame.payload_stream->read(filename_buffer.data(), frame.filename_length)) {
+            BOOST_LOG_TRIVIAL(error) << "Failed to read filename from payload stream";
+            throw std::runtime_error("Failed to read filename");
+        }
+
+        // Restore original position
+        frame.payload_stream->seekg(original_pos);
+
+        // Convert to string
+        std::string filename(filename_buffer.begin(), filename_buffer.end());
+
+        BOOST_LOG_TRIVIAL(debug) << "Successfully extracted filename: " << filename;
+        return filename;
+    }
+    catch (const std::exception& e) {
+        BOOST_LOG_TRIVIAL(error) << "Error extracting filename: " << e.what();
         throw;
     }
 }
