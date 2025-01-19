@@ -17,28 +17,23 @@ public:
     PeerManager();
     ~PeerManager();
 
-    // Add a new peer to the manager
+    // Connection Management
+    bool connect(const std::string& peer_id, const std::string& address, uint16_t port);
+    bool disconnect(const std::string& peer_id);
+    bool is_connected(const std::string& peer_id);
+
+    // Peer Management
     void add_peer(std::shared_ptr<TCP_Peer> peer);
-
-    // Remove a peer by its ID
     void remove_peer(const std::string& peer_id);
-
-    // Get a peer by its ID
     std::shared_ptr<TCP_Peer> get_peer(const std::string& peer_id);
 
-    // Send stream to a specific peer using its ID string
+    // Stream Operations
     bool send_stream(const std::string& peer_id, std::istream& stream);
-
-    // Broadcast data from input stream to all connected peers
     bool broadcast_stream(std::istream& input_stream);
-
-    // Send data to a specific peer by ID
     bool send_to_peer(uint32_t peer_id, std::istream& stream);
 
-    // Get the current number of managed peers
+    // Utility Methods
     std::size_t size() const;
-
-    // Shutdown all peer connections and clear the peers map
     void shutdown();
 
     // Delete copy constructor and assignment operator

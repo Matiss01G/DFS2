@@ -8193,6 +8193,7 @@ CMakeFiles/network_tests.dir/src/tests/peer_manager_test.cpp.o: /home/runner/wor
 CMakeFiles/network_tests.dir/src/tests/tcp_peer_test.cpp.o: /home/runner/workspace/src/tests/tcp_peer_test.cpp \
   /home/runner/workspace/include/network/message_frame.hpp \
   /home/runner/workspace/include/network/peer.hpp \
+  /home/runner/workspace/include/network/peer_manager.hpp \
   /home/runner/workspace/include/network/tcp_peer.hpp \
   /nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/algorithm \
   /nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/any \

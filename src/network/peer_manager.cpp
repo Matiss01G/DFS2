@@ -36,12 +36,92 @@ void PeerManager::remove_peer(const std::string& peer_id) {
 
     auto it = peers_.find(peer_id);
     if (it != peers_.end()) {
-        it->second->disconnect();
+        disconnect(peer_id);
         peers_.erase(it);
         BOOST_LOG_TRIVIAL(info) << "Removed peer with ID: " << peer_id;
     } else {
         BOOST_LOG_TRIVIAL(warning) << "Attempted to remove non-existent peer: " << peer_id;
     }
+}
+
+bool PeerManager::connect(const std::string& peer_id, const std::string& address, uint16_t port) {
+    std::lock_guard<std::mutex> lock(mutex_);
+
+    auto it = peers_.find(peer_id);
+    if (it == peers_.end()) {
+        BOOST_LOG_TRIVIAL(error) << "Cannot connect - peer not found: " << peer_id;
+        return false;
+    }
+
+    try {
+        auto& peer_socket = it->second->get_socket();
+        if (peer_socket.is_open()) {
+            BOOST_LOG_TRIVIAL(error) << "Cannot connect - socket already connected for peer: " << peer_id;
+            return false;
+        }
+
+        boost::asio::ip::tcp::resolver resolver(peer_socket.get_executor());
+        boost::system::error_code resolve_ec;
+        auto endpoints = resolver.resolve(address, std::to_string(port), resolve_ec);
+
+        if (resolve_ec) {
+            BOOST_LOG_TRIVIAL(error) << "DNS resolution failed for peer " << peer_id 
+                                   << ": " << resolve_ec.message();
+            return false;
+        }
+
+        boost::system::error_code connect_ec;
+        peer_socket.connect(*endpoints.begin(), connect_ec);
+
+        if (connect_ec) {
+            BOOST_LOG_TRIVIAL(error) << "Connection failed for peer " << peer_id 
+                                   << ": " << connect_ec.message();
+            return false;
+        }
+
+        BOOST_LOG_TRIVIAL(info) << "Successfully connected peer " << peer_id 
+                               << " to " << address << ":" << port;
+        return true;
+    }
+    catch (const std::exception& e) {
+        BOOST_LOG_TRIVIAL(error) << "Connection error for peer " << peer_id 
+                               << ": " << e.what();
+        return false;
+    }
+}
+
+bool PeerManager::disconnect(const std::string& peer_id) {
+    std::lock_guard<std::mutex> lock(mutex_);
+
+    auto it = peers_.find(peer_id);
+    if (it == peers_.end()) {
+        BOOST_LOG_TRIVIAL(warning) << "Cannot disconnect - peer not found: " << peer_id;
+        return false;
+    }
+
+    try {
+        auto& peer = it->second;
+        peer->stop_stream_processing();
+        peer->cleanup_connection();
+        BOOST_LOG_TRIVIAL(info) << "Successfully disconnected peer: " << peer_id;
+        return true;
+    }
+    catch (const std::exception& e) {
+        BOOST_LOG_TRIVIAL(error) << "Disconnect error for peer " << peer_id 
+                               << ": " << e.what();
+        return false;
+    }
+}
+
+bool PeerManager::is_connected(const std::string& peer_id) {
+    std::lock_guard<std::mutex> lock(mutex_);
+
+    auto it = peers_.find(peer_id);
+    if (it == peers_.end()) {
+        return false;
+    }
+
+    return it->second->get_socket().is_open();
 }
 
 std::shared_ptr<TCP_Peer> PeerManager::get_peer(const std::string& peer_id) {
@@ -70,16 +150,13 @@ bool PeerManager::broadcast_stream(std::istream& input_stream) {
 
     bool all_success = true;
     size_t success_count = 0;
-
-    // Store the current position in the stream
     std::streampos initial_pos = input_stream.tellg();
 
     for (auto& peer_pair : peers_) {
         try {
-            // Reset stream position for each peer
             input_stream.seekg(initial_pos);
 
-            if (!peer_pair.second->is_connected()) {
+            if (!is_connected(peer_pair.first)) {
                 BOOST_LOG_TRIVIAL(warning) << "Skipping disconnected peer: " << peer_pair.first;
                 all_success = false;
                 continue;
@@ -121,7 +198,7 @@ bool PeerManager::send_to_peer(uint32_t peer_id, std::istream& stream) {
         return false;
     }
 
-    if (!it->second->is_connected()) {
+    if (!is_connected(peer_id_str)) {
         BOOST_LOG_TRIVIAL(warning) << "Peer is not connected: " << peer_id;
         return false;
     }
@@ -155,7 +232,7 @@ bool PeerManager::send_stream(const std::string& peer_id, std::istream& stream) 
         return false;
     }
 
-    if (!it->second->is_connected()) {
+    if (!is_connected(peer_id)) {
         BOOST_LOG_TRIVIAL(warning) << "Peer is not connected: " << peer_id;
         return false;
     }
@@ -182,7 +259,7 @@ void PeerManager::shutdown() {
 
     for (auto& peer_pair : peers_) {
         try {
-            peer_pair.second->disconnect();
+            disconnect(peer_pair.first);
             BOOST_LOG_TRIVIAL(debug) << "Disconnected peer: " << peer_pair.first;
         } catch (const std::exception& e) {
             BOOST_LOG_TRIVIAL(error) << "Error disconnecting peer " << peer_pair.first 

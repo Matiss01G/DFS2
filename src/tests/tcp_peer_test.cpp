@@ -1,6 +1,7 @@
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
 #include "network/tcp_peer.hpp"
+#include "network/peer_manager.hpp"
 #include <boost/asio.hpp>
 #include <boost/log/core.hpp>
 #include <boost/log/trivial.hpp>
@@ -21,7 +22,10 @@ protected:
         boost::log::core::get()->set_filter(
             boost::log::trivial::severity >= boost::log::trivial::error
         );
-        test_peer = std::make_unique<TCP_Peer>("test_peer");
+        peer_manager = std::make_unique<PeerManager>();
+        test_peer = std::make_shared<TCP_Peer>("test_peer");
+        peer_manager->add_peer(test_peer);
+
         server_endpoint.address(boost::asio::ip::make_address("127.0.0.1"));
         server_endpoint.port(12345);
 
@@ -33,8 +37,8 @@ protected:
     }
 
     void TearDown() override {
-        if (test_peer && test_peer->is_connected()) {
-            test_peer->disconnect();
+        if (test_peer && peer_manager->is_connected("test_peer")) {
+            peer_manager->disconnect("test_peer");
         }
         if (server_socket && server_socket->is_open()) {
             server_socket->close();
@@ -55,7 +59,8 @@ protected:
         });
     }
 
-    std::unique_ptr<TCP_Peer> test_peer;
+    std::unique_ptr<PeerManager> peer_manager;
+    std::shared_ptr<TCP_Peer> test_peer;
     boost::asio::io_context io_context;
     boost::asio::ip::tcp::endpoint server_endpoint;
     std::unique_ptr<boost::asio::ip::tcp::acceptor> acceptor;
@@ -68,8 +73,8 @@ TEST_F(TCPPeerTest, ConnectionTest) {
     start_server_thread();
 
     // Test connection
-    EXPECT_TRUE(test_peer->connect("127.0.0.1", 12345));
-    EXPECT_TRUE(test_peer->is_connected());
+    EXPECT_TRUE(peer_manager->connect("test_peer", "127.0.0.1", 12345));
+    EXPECT_TRUE(peer_manager->is_connected("test_peer"));
 
     if (server_thread.joinable()) {
         server_thread.join();
@@ -80,9 +85,9 @@ TEST_F(TCPPeerTest, ConnectionTest) {
 TEST_F(TCPPeerTest, DisconnectionTest) {
     start_server_thread();
 
-    ASSERT_TRUE(test_peer->connect("127.0.0.1", 12345));
-    EXPECT_TRUE(test_peer->disconnect());
-    EXPECT_FALSE(test_peer->is_connected());
+    ASSERT_TRUE(peer_manager->connect("test_peer", "127.0.0.1", 12345));
+    EXPECT_TRUE(peer_manager->disconnect("test_peer"));
+    EXPECT_FALSE(peer_manager->is_connected("test_peer"));
 
     if (server_thread.joinable()) {
         server_thread.join();
@@ -93,7 +98,7 @@ TEST_F(TCPPeerTest, DisconnectionTest) {
 TEST_F(TCPPeerTest, SendStreamTest) {
     start_server_thread();
 
-    ASSERT_TRUE(test_peer->connect("127.0.0.1", 12345));
+    ASSERT_TRUE(peer_manager->connect("test_peer", "127.0.0.1", 12345));
 
     // Wait for server to accept connection
     if (server_thread.joinable()) {
@@ -125,7 +130,7 @@ TEST_F(TCPPeerTest, SendStreamTest) {
 TEST_F(TCPPeerTest, ReceiveStreamTest) {
     start_server_thread();
 
-    ASSERT_TRUE(test_peer->connect("127.0.0.1", 12345));
+    ASSERT_TRUE(peer_manager->connect("test_peer", "127.0.0.1", 12345));
 
     // Wait for server to accept connection
     if (server_thread.joinable()) {
@@ -185,7 +190,7 @@ TEST_F(TCPPeerTest, ReceiveStreamTest) {
 TEST_F(TCPPeerTest, MultipleMessagesTest) {
     start_server_thread();
 
-    ASSERT_TRUE(test_peer->connect("127.0.0.1", 12345));
+    ASSERT_TRUE(peer_manager->connect("test_peer", "127.0.0.1", 12345));
 
     // Wait for server to accept connection
     if (server_thread.joinable()) {
@@ -259,11 +264,11 @@ TEST_F(TCPPeerTest, MultipleMessagesTest) {
 // Test edge cases and error conditions
 TEST_F(TCPPeerTest, EdgeCasesTest) {
     // Test connecting to non-existent server
-    EXPECT_FALSE(test_peer->connect("127.0.0.1", 54321));
-    EXPECT_FALSE(test_peer->is_connected());
+    EXPECT_FALSE(peer_manager->connect("test_peer", "127.0.0.1", 54321));
+    EXPECT_FALSE(peer_manager->is_connected("test_peer"));
 
     // Test disconnecting when not connected
-    EXPECT_FALSE(test_peer->disconnect());
+    EXPECT_FALSE(peer_manager->disconnect("test_peer"));
 
     // Test sending when not connected
     std::istringstream input_stream("Test message\n");

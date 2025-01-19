@@ -1687,6 +1687,8 @@ CMakeFiles/network_tests.dir/src/tests/tcp_peer_test.cpp.o: \
  /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/type_traits/has_trivial_destructor.hpp \
  /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/type_traits/is_signed.hpp \
  /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/endian/detail/endian_store.hpp \
+ /home/runner/workspace/include/network/peer_manager.hpp \
+ /home/runner/workspace/include/network/tcp_peer.hpp \
  /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/log/core.hpp \
  /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/log/expressions.hpp \
  /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/log/expressions/attr.hpp \

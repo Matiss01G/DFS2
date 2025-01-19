@@ -18,13 +18,6 @@ namespace network {
  * This class provides TCP/IP-based network communication with stream support.
  * It implements an asynchronous event-driven approach for handling network I/O,
  * utilizing boost::asio for efficient, non-blocking operations.
- * 
- * Key features:
- * - Asynchronous I/O operations for improved performance
- * - Automatic message framing with newline delimiters
- * - Thread-safe stream processing
- * - Comprehensive error handling and logging
- * - Support for custom stream processors
  */
 class TCP_Peer : public Peer,
                  public std::enable_shared_from_this<TCP_Peer> {
@@ -35,11 +28,6 @@ public:
     // Delete copy operations to prevent socket duplication
     TCP_Peer(const TCP_Peer&) = delete;
     TCP_Peer& operator=(const TCP_Peer&) = delete;
-
-    // Connection management
-    bool connect(const std::string& address, uint16_t port) override;
-    bool disconnect() override;
-    bool is_connected() const override;
 
     // Stream operations
     std::istream* get_input_stream() override;
@@ -55,11 +43,11 @@ public:
     bool send_stream(std::istream& input_stream, std::size_t buffer_size = 8192);
     void async_read_next();
 
-    // Getter
-    const std::string& get_peer_id() const { return peer_id_; }
+    // Getters
+    const std::string& get_peer_id() const;
+    boost::asio::ip::tcp::socket& get_socket();
 
 private:
-    // Core attributes
     std::string peer_id_;
     StreamProcessor stream_processor_;
 
@@ -67,8 +55,8 @@ private:
     boost::asio::io_context io_context_;
     std::unique_ptr<boost::asio::ip::tcp::socket> socket_;
     std::unique_ptr<boost::asio::ip::tcp::endpoint> endpoint_;
-    std::mutex io_mutex_;  // Mutex for synchronizing I/O operations
-    
+    std::mutex io_mutex_;
+
     // Processing thread
     std::unique_ptr<std::thread> processing_thread_;
     std::atomic<bool> processing_active_{false};
@@ -81,6 +69,8 @@ private:
     void initialize_streams();
     void cleanup_connection();
     void process_stream();
+
+    friend class PeerManager;
 };
 
 } // namespace network
