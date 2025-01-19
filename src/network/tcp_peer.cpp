@@ -132,7 +132,11 @@ void TCP_Peer::async_read_next() {
                         std::string framed_data = data + '\n';
                         std::istringstream iss(framed_data);
                         try {
-                            stream_processor_(iss);
+                            boost::asio::ip::tcp::endpoint remote_endpoint = socket_->remote_endpoint();
+                            std::string source_id = remote_endpoint.address().to_string() + ":" + 
+                                                  std::to_string(remote_endpoint.port());
+                            BOOST_LOG_TRIVIAL(debug) << "[" << peer_id_ << "] Processing data from " << source_id;
+                            stream_processor_(iss, source_id);
                         } catch (const std::exception& e) {
                             BOOST_LOG_TRIVIAL(error) << "[" << peer_id_ << "] Stream processor error: " << e.what();
                         }

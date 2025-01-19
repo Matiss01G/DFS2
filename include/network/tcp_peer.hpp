@@ -22,6 +22,9 @@ namespace network {
 class TCP_Peer : public Peer,
                  public std::enable_shared_from_this<TCP_Peer> {
 public:
+    // Update the StreamProcessor type to include the source identifier
+    using StreamProcessor = std::function<void(std::istream&, const std::string&)>;
+
     explicit TCP_Peer(const std::string& peer_id);
     ~TCP_Peer() override;
 
