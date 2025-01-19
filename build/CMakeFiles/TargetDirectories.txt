@@ -1,13 +1,6 @@
 /home/runner/workspace/build/CMakeFiles/dfs_crypto.dir
 /home/runner/workspace/build/CMakeFiles/dfs_store.dir
 /home/runner/workspace/build/CMakeFiles/dfs_network.dir
-/home/runner/workspace/build/CMakeFiles/tcp_peer_test.dir
-/home/runner/workspace/build/CMakeFiles/channel_test.dir
-/home/runner/workspace/build/CMakeFiles/codec_test.dir
-/home/runner/workspace/build/CMakeFiles/crypto_stream_test.dir
-/home/runner/workspace/build/CMakeFiles/peer_manager_test.dir
-/home/runner/workspace/build/CMakeFiles/store_test.dir
-/home/runner/workspace/build/CMakeFiles/test.dir
 /home/runner/workspace/build/CMakeFiles/edit_cache.dir
 /home/runner/workspace/build/CMakeFiles/rebuild_cache.dir
 /home/runner/workspace/build/CMakeFiles/list_install_components.dir

@@ -65,16 +65,6 @@ CMAKE_BINARY_DIR = /home/runner/workspace/build
 #=============================================================================
 # Targets provided globally by CMake.
 
-# Special rule for the target test
-test:
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --cyan "Running tests..."
-	/nix/store/q1nssraba326p2kp6627hldd2bhg254c-cmake-3.29.2/bin/ctest --force-new-ctest-process $(ARGS)
-.PHONY : test
-
-# Special rule for the target test
-test/fast: test
-.PHONY : test/fast
-
 # Special rule for the target edit_cache
 edit_cache:
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --cyan "No interactive CMake dialog available..."
@@ -210,84 +200,6 @@ dfs_network/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/dfs_network.dir/build.make CMakeFiles/dfs_network.dir/build
 .PHONY : dfs_network/fast
 
-#=============================================================================
-# Target rules for targets named tcp_peer_test
-
-# Build rule for target.
-tcp_peer_test: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 tcp_peer_test
-.PHONY : tcp_peer_test
-
-# fast build rule for target.
-tcp_peer_test/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/tcp_peer_test.dir/build.make CMakeFiles/tcp_peer_test.dir/build
-.PHONY : tcp_peer_test/fast
-
-#=============================================================================
-# Target rules for targets named channel_test
-
-# Build rule for target.
-channel_test: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 channel_test
-.PHONY : channel_test
-
-# fast build rule for target.
-channel_test/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/channel_test.dir/build.make CMakeFiles/channel_test.dir/build
-.PHONY : channel_test/fast
-
-#=============================================================================
-# Target rules for targets named codec_test
-
-# Build rule for target.
-codec_test: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 codec_test
-.PHONY : codec_test
-
-# fast build rule for target.
-codec_test/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/codec_test.dir/build.make CMakeFiles/codec_test.dir/build
-.PHONY : codec_test/fast
-
-#=============================================================================
-# Target rules for targets named crypto_stream_test
-
-# Build rule for target.
-crypto_stream_test: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 crypto_stream_test
-.PHONY : crypto_stream_test
-
-# fast build rule for target.
-crypto_stream_test/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/crypto_stream_test.dir/build.make CMakeFiles/crypto_stream_test.dir/build
-.PHONY : crypto_stream_test/fast
-
-#=============================================================================
-# Target rules for targets named peer_manager_test
-
-# Build rule for target.
-peer_manager_test: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 peer_manager_test
-.PHONY : peer_manager_test
-
-# fast build rule for target.
-peer_manager_test/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/peer_manager_test.dir/build.make CMakeFiles/peer_manager_test.dir/build
-.PHONY : peer_manager_test/fast
-
-#=============================================================================
-# Target rules for targets named store_test
-
-# Build rule for target.
-store_test: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 store_test
-.PHONY : store_test
-
-# fast build rule for target.
-store_test/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/store_test.dir/build.make CMakeFiles/store_test.dir/build
-.PHONY : store_test/fast
-
 src/crypto/crypto_stream.o: src/crypto/crypto_stream.cpp.o
 .PHONY : src/crypto/crypto_stream.o
 
@@ -384,150 +296,6 @@ src/store/store.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/dfs_store.dir/build.make CMakeFiles/dfs_store.dir/src/store/store.cpp.s
 .PHONY : src/store/store.cpp.s
 
-src/tests/channel_test.o: src/tests/channel_test.cpp.o
-.PHONY : src/tests/channel_test.o
-
-# target to build an object file
-src/tests/channel_test.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/channel_test.dir/build.make CMakeFiles/channel_test.dir/src/tests/channel_test.cpp.o
-.PHONY : src/tests/channel_test.cpp.o
-
-src/tests/channel_test.i: src/tests/channel_test.cpp.i
-.PHONY : src/tests/channel_test.i
-
-# target to preprocess a source file
-src/tests/channel_test.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/channel_test.dir/build.make CMakeFiles/channel_test.dir/src/tests/channel_test.cpp.i
-.PHONY : src/tests/channel_test.cpp.i
-
-src/tests/channel_test.s: src/tests/channel_test.cpp.s
-.PHONY : src/tests/channel_test.s
-
-# target to generate assembly for a file
-src/tests/channel_test.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/channel_test.dir/build.make CMakeFiles/channel_test.dir/src/tests/channel_test.cpp.s
-.PHONY : src/tests/channel_test.cpp.s
-
-src/tests/codec_test.o: src/tests/codec_test.cpp.o
-.PHONY : src/tests/codec_test.o
-
-# target to build an object file
-src/tests/codec_test.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/codec_test.dir/build.make CMakeFiles/codec_test.dir/src/tests/codec_test.cpp.o
-.PHONY : src/tests/codec_test.cpp.o
-
-src/tests/codec_test.i: src/tests/codec_test.cpp.i
-.PHONY : src/tests/codec_test.i
-
-# target to preprocess a source file
-src/tests/codec_test.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/codec_test.dir/build.make CMakeFiles/codec_test.dir/src/tests/codec_test.cpp.i
-.PHONY : src/tests/codec_test.cpp.i
-
-src/tests/codec_test.s: src/tests/codec_test.cpp.s
-.PHONY : src/tests/codec_test.s
-
-# target to generate assembly for a file
-src/tests/codec_test.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/codec_test.dir/build.make CMakeFiles/codec_test.dir/src/tests/codec_test.cpp.s
-.PHONY : src/tests/codec_test.cpp.s
-
-src/tests/crypto_stream_test.o: src/tests/crypto_stream_test.cpp.o
-.PHONY : src/tests/crypto_stream_test.o
-
-# target to build an object file
-src/tests/crypto_stream_test.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/crypto_stream_test.dir/build.make CMakeFiles/crypto_stream_test.dir/src/tests/crypto_stream_test.cpp.o
-.PHONY : src/tests/crypto_stream_test.cpp.o
-
-src/tests/crypto_stream_test.i: src/tests/crypto_stream_test.cpp.i
-.PHONY : src/tests/crypto_stream_test.i
-
-# target to preprocess a source file
-src/tests/crypto_stream_test.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/crypto_stream_test.dir/build.make CMakeFiles/crypto_stream_test.dir/src/tests/crypto_stream_test.cpp.i
-.PHONY : src/tests/crypto_stream_test.cpp.i
-
-src/tests/crypto_stream_test.s: src/tests/crypto_stream_test.cpp.s
-.PHONY : src/tests/crypto_stream_test.s
-
-# target to generate assembly for a file
-src/tests/crypto_stream_test.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/crypto_stream_test.dir/build.make CMakeFiles/crypto_stream_test.dir/src/tests/crypto_stream_test.cpp.s
-.PHONY : src/tests/crypto_stream_test.cpp.s
-
-src/tests/peer_manager_test.o: src/tests/peer_manager_test.cpp.o
-.PHONY : src/tests/peer_manager_test.o
-
-# target to build an object file
-src/tests/peer_manager_test.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/peer_manager_test.dir/build.make CMakeFiles/peer_manager_test.dir/src/tests/peer_manager_test.cpp.o
-.PHONY : src/tests/peer_manager_test.cpp.o
-
-src/tests/peer_manager_test.i: src/tests/peer_manager_test.cpp.i
-.PHONY : src/tests/peer_manager_test.i
-
-# target to preprocess a source file
-src/tests/peer_manager_test.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/peer_manager_test.dir/build.make CMakeFiles/peer_manager_test.dir/src/tests/peer_manager_test.cpp.i
-.PHONY : src/tests/peer_manager_test.cpp.i
-
-src/tests/peer_manager_test.s: src/tests/peer_manager_test.cpp.s
-.PHONY : src/tests/peer_manager_test.s
-
-# target to generate assembly for a file
-src/tests/peer_manager_test.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/peer_manager_test.dir/build.make CMakeFiles/peer_manager_test.dir/src/tests/peer_manager_test.cpp.s
-.PHONY : src/tests/peer_manager_test.cpp.s
-
-src/tests/store_test.o: src/tests/store_test.cpp.o
-.PHONY : src/tests/store_test.o
-
-# target to build an object file
-src/tests/store_test.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/store_test.dir/build.make CMakeFiles/store_test.dir/src/tests/store_test.cpp.o
-.PHONY : src/tests/store_test.cpp.o
-
-src/tests/store_test.i: src/tests/store_test.cpp.i
-.PHONY : src/tests/store_test.i
-
-# target to preprocess a source file
-src/tests/store_test.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/store_test.dir/build.make CMakeFiles/store_test.dir/src/tests/store_test.cpp.i
-.PHONY : src/tests/store_test.cpp.i
-
-src/tests/store_test.s: src/tests/store_test.cpp.s
-.PHONY : src/tests/store_test.s
-
-# target to generate assembly for a file
-src/tests/store_test.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/store_test.dir/build.make CMakeFiles/store_test.dir/src/tests/store_test.cpp.s
-.PHONY : src/tests/store_test.cpp.s
-
-src/tests/tcp_peer_test.o: src/tests/tcp_peer_test.cpp.o
-.PHONY : src/tests/tcp_peer_test.o
-
-# target to build an object file
-src/tests/tcp_peer_test.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/tcp_peer_test.dir/build.make CMakeFiles/tcp_peer_test.dir/src/tests/tcp_peer_test.cpp.o
-.PHONY : src/tests/tcp_peer_test.cpp.o
-
-src/tests/tcp_peer_test.i: src/tests/tcp_peer_test.cpp.i
-.PHONY : src/tests/tcp_peer_test.i
-
-# target to preprocess a source file
-src/tests/tcp_peer_test.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/tcp_peer_test.dir/build.make CMakeFiles/tcp_peer_test.dir/src/tests/tcp_peer_test.cpp.i
-.PHONY : src/tests/tcp_peer_test.cpp.i
-
-src/tests/tcp_peer_test.s: src/tests/tcp_peer_test.cpp.s
-.PHONY : src/tests/tcp_peer_test.s
-
-# target to generate assembly for a file
-src/tests/tcp_peer_test.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/tcp_peer_test.dir/build.make CMakeFiles/tcp_peer_test.dir/src/tests/tcp_peer_test.cpp.s
-.PHONY : src/tests/tcp_peer_test.cpp.s
-
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -540,16 +308,9 @@ help:
 	@echo "... install/strip"
 	@echo "... list_install_components"
 	@echo "... rebuild_cache"
-	@echo "... test"
-	@echo "... channel_test"
-	@echo "... codec_test"
-	@echo "... crypto_stream_test"
 	@echo "... dfs_crypto"
 	@echo "... dfs_network"
 	@echo "... dfs_store"
-	@echo "... peer_manager_test"
-	@echo "... store_test"
-	@echo "... tcp_peer_test"
 	@echo "... src/crypto/crypto_stream.o"
 	@echo "... src/crypto/crypto_stream.i"
 	@echo "... src/crypto/crypto_stream.s"
@@ -562,24 +323,6 @@ help:
 	@echo "... src/store/store.o"
 	@echo "... src/store/store.i"
 	@echo "... src/store/store.s"
-	@echo "... src/tests/channel_test.o"
-	@echo "... src/tests/channel_test.i"
-	@echo "... src/tests/channel_test.s"
-	@echo "... src/tests/codec_test.o"
-	@echo "... src/tests/codec_test.i"
-	@echo "... src/tests/codec_test.s"
-	@echo "... src/tests/crypto_stream_test.o"
-	@echo "... src/tests/crypto_stream_test.i"
-	@echo "... src/tests/crypto_stream_test.s"
-	@echo "... src/tests/peer_manager_test.o"
-	@echo "... src/tests/peer_manager_test.i"
-	@echo "... src/tests/peer_manager_test.s"
-	@echo "... src/tests/store_test.o"
-	@echo "... src/tests/store_test.i"
-	@echo "... src/tests/store_test.s"
-	@echo "... src/tests/tcp_peer_test.o"
-	@echo "... src/tests/tcp_peer_test.i"
-	@echo "... src/tests/tcp_peer_test.s"
 .PHONY : help
 
 
