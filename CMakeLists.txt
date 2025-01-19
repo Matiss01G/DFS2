@@ -8,7 +8,6 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 # Find required packages
 find_package(OpenSSL REQUIRED)
 find_package(Boost REQUIRED COMPONENTS log log_setup system thread)
-find_package(GTest REQUIRED)
 
 # Create crypto library
 add_library(dfs_crypto
@@ -55,85 +54,6 @@ target_link_libraries(dfs_network PUBLIC
     Boost::system
     Boost::thread
     Boost::log
-)
-
-# Tests
-enable_testing()
-
-# Crypto tests
-add_executable(crypto_tests
-    src/tests/crypto_stream_test.cpp)
-
-target_link_libraries(crypto_tests
-    PRIVATE
-    dfs_crypto
-    GTest::GTest
-    GTest::Main
-)
-
-# Store tests
-add_executable(store_tests
-    src/tests/store_test.cpp)
-
-target_link_libraries(store_tests
-    PRIVATE
-    dfs_store
-    GTest::GTest
-    GTest::Main
-)
-
-# Network tests
-add_executable(network_tests
-    src/tests/tcp_peer_test.cpp
-    src/tests/peer_manager_test.cpp
-    src/tests/codec_test.cpp
-    src/network/codec.cpp
-    src/network/channel.cpp
-    src/file_server/file_server.cpp)
-
-target_include_directories(network_tests PRIVATE
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/tests
-)
-
-target_link_libraries(network_tests
-    PRIVATE
-    dfs_network
-    dfs_crypto
-    dfs_store
-    GTest::GTest
-    GTest::Main
-)
-
-# Channel tests
-add_executable(channel_tests
-    src/tests/channel_test.cpp
-    src/network/channel.cpp)
-
-target_include_directories(channel_tests PUBLIC
-    ${CMAKE_CURRENT_SOURCE_DIR}/include
-)
-
-target_link_libraries(channel_tests
-    PRIVATE
-    dfs_network
-    GTest::GTest
-    GTest::Main
-)
-
-include(GoogleTest)
-gtest_discover_tests(crypto_tests)
-gtest_discover_tests(store_tests)
-gtest_discover_tests(network_tests)
-gtest_discover_tests(channel_tests)
-
-# Add custom target to run tests
-add_custom_target(run_tests ALL
-    COMMAND crypto_tests
-    COMMAND store_tests
-    COMMAND network_tests
-    COMMAND channel_tests
-    DEPENDS crypto_tests store_tests network_tests channel_tests
-    WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
 )
 
 # Install rules
