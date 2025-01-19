@@ -5,23 +5,18 @@
 #include <thread>
 #include <chrono>
 
+
 namespace dfs {
 namespace network {
 
-FileServer::FileServer(uint32_t server_id, const std::vector<uint8_t>& key, std::shared_ptr<Channel> channel)
+FileServer::FileServer(uint32_t server_id, const std::vector<uint8_t>& key)
     : server_id_(server_id)
-    , key_(key)
-    , channel_(channel) {
+    , key_(key) {
 
     // Validate key size (32 bytes for AES-256)
     if (key_.empty() || key_.size() != 32) {
         BOOST_LOG_TRIVIAL(error) << "Invalid key size: " << key_.size() << " bytes. Expected 32 bytes.";
         throw std::invalid_argument("Invalid cryptographic key size");
-    }
-
-    if (!channel_) {
-        BOOST_LOG_TRIVIAL(error) << "Invalid channel pointer";
-        throw std::invalid_argument("Invalid channel pointer");
     }
 
     BOOST_LOG_TRIVIAL(info) << "Initializing FileServer with ID: " << server_id_;
@@ -35,6 +30,9 @@ FileServer::FileServer(uint32_t server_id, const std::vector<uint8_t>& key, std:
 
         // Initialize codec with the provided cryptographic key
         codec_ = std::make_unique<Codec>(key_);
+
+        // Initialize peer manager
+        peer_manager_ = std::make_shared<PeerManager>();
 
         BOOST_LOG_TRIVIAL(info) << "FileServer initialization complete";
     }
@@ -84,12 +82,14 @@ std::string FileServer::extract_filename(const MessageFrame& frame) {
     }
 }
 
-bool FileServer::prepare_file(const std::string& filename, MessageFrame& frame) {
+bool FileServer::prepare_and_send(const std::string& filename, std::optional<uint32_t> peer_id) {
     try {
-        BOOST_LOG_TRIVIAL(info) << "Preparing file: " << filename;
+        BOOST_LOG_TRIVIAL(info) << "Preparing to send file: " << filename;
 
+        // Create message frame with empty payload stream
+        MessageFrame frame;
         frame.source_id = server_id_;
-        frame.message_type = MessageType::STORE_FILE;
+        frame.message_type = MessageType::STORE_FILE;  // Set message type to STORE_FILE
         frame.payload_stream = std::make_shared<std::stringstream>();
         frame.filename_length = filename.length();
 
@@ -110,11 +110,35 @@ bool FileServer::prepare_file(const std::string& filename, MessageFrame& frame) 
             return false;
         }
 
-        BOOST_LOG_TRIVIAL(info) << "Successfully prepared file: " << filename;
+        // Create stream for serialized data
+        std::stringstream serialized_stream;
+
+        // Serialize the frame
+        if (!codec_->serialize(frame, serialized_stream)) {
+            BOOST_LOG_TRIVIAL(error) << "Failed to serialize message frame";
+            return false;
+        }
+
+        // Send to specific peer or broadcast
+        bool success;
+        if (peer_id) {
+            BOOST_LOG_TRIVIAL(info) << "Sending file to peer: " << *peer_id;
+            success = peer_manager_->send_to_peer(*peer_id, serialized_stream);
+        } else {
+            BOOST_LOG_TRIVIAL(info) << "Broadcasting file to all peers";
+            success = peer_manager_->broadcast_stream(serialized_stream);
+        }
+
+        if (!success) {
+            BOOST_LOG_TRIVIAL(error) << "Failed to send file";
+            return false;
+        }
+
+        BOOST_LOG_TRIVIAL(info) << "Successfully sent file: " << filename;
         return true;
     }
     catch (const std::exception& e) {
-        BOOST_LOG_TRIVIAL(error) << "Error in prepare_file: " << e.what();
+        BOOST_LOG_TRIVIAL(error) << "Error in prepare_and_send: " << e.what();
         return false;
     }
 }
@@ -137,17 +161,13 @@ bool FileServer::store_file(const std::string& filename, std::stringstream& inpu
             return false;
         }
 
-        // Prepare message frame for notification
-        MessageFrame frame;
-        if (!prepare_file(filename, frame)) {
-            BOOST_LOG_TRIVIAL(error) << "Failed to prepare file: " << filename;
+        // Prepare and send file to peers
+        if (!prepare_and_send(filename)) {
+            BOOST_LOG_TRIVIAL(error) << "Failed to prepare and send file: " << filename;
             return false;
         }
 
-        // Add to channel for processing
-        channel_->produce(frame);
-
-        BOOST_LOG_TRIVIAL(info) << "Successfully stored and prepared file: " << filename;
+        BOOST_LOG_TRIVIAL(info) << "Successfully stored and broadcast file: " << filename;
         return true;
     }
     catch (const std::exception& e) {
@@ -160,7 +180,7 @@ std::optional<std::stringstream> FileServer::get_file(const std::string& filenam
     try {
         BOOST_LOG_TRIVIAL(info) << "Attempting to get file: " << filename;
 
-        // Check local store
+        // First check local store
         std::stringstream local_result;
         try {
             store_->get(filename, local_result);
@@ -172,22 +192,37 @@ std::optional<std::stringstream> FileServer::get_file(const std::string& filenam
             BOOST_LOG_TRIVIAL(debug) << "File not found in local store: " << e.what();
         }
 
-        // Create message frame for requesting file
+        // Create message frame for network query
         MessageFrame frame;
         frame.source_id = server_id_;
-        frame.message_type = MessageType::GET_FILE;
-        frame.filename_length = filename.length();
-        frame.payload_stream = std::make_shared<std::stringstream>(filename);
+        frame.message_type = MessageType::GET_FILE;  // Set message type to GET_FILE
+        frame.payload_size = 0;  // Explicitly set payload size to 0
+        frame.payload_stream = std::make_shared<std::stringstream>();  // Empty payload stream
 
-        // Generate and set IV
+        // Generate and set IV for encryption
         crypto::CryptoStream crypto_stream;
         auto iv = crypto_stream.generate_IV();
         frame.iv_.assign(iv.begin(), iv.end());
 
-        // Add request to channel
-        channel_->produce(frame);
+        // Create serialization stream
+        std::stringstream serialized_stream;
 
-        BOOST_LOG_TRIVIAL(info) << "File request sent through channel for: " << filename;
+        // Serialize frame
+        if (!codec_->serialize(frame, serialized_stream)) {
+            BOOST_LOG_TRIVIAL(error) << "Failed to serialize message frame for file query";
+            return std::nullopt;
+        }
+
+        // Broadcast query to network
+        if (!peer_manager_->broadcast_stream(serialized_stream)) {
+            BOOST_LOG_TRIVIAL(error) << "Failed to broadcast file query to network";
+            return std::nullopt;
+        }
+
+        BOOST_LOG_TRIVIAL(info) << "Successfully broadcasted query for file: " << filename;
+
+        // Return empty optional since file wasn't found locally 
+        // and network query was sent
         return std::nullopt;
     }
     catch (const std::exception& e) {
@@ -249,18 +284,11 @@ bool FileServer::handle_get(const MessageFrame& frame) {
             return false;
         }
 
-        // Prepare response frame
-        MessageFrame response_frame;
-        if (!prepare_file(filename, response_frame)) {
-            BOOST_LOG_TRIVIAL(error) << "Failed to prepare file: " << filename;
+        // Prepare and send file to requesting peer
+        if (!prepare_and_send(filename, frame.source_id)) {
+            BOOST_LOG_TRIVIAL(error) << "Failed to prepare and send file: " << filename;
             return false;
         }
-
-        // Set the requestor as the target
-        response_frame.target_id = frame.source_id;
-
-        // Add response to channel
-        channel_->produce(response_frame);
 
         BOOST_LOG_TRIVIAL(info) << "Successfully handled get request for file: " << filename;
         return true;
@@ -277,9 +305,9 @@ void FileServer::channel_listener() {
         try {
             MessageFrame frame;
             // Try to consume a message from the channel
-            if (channel_->consume(frame)) {
+            if (channel_.consume(frame)) {
                 BOOST_LOG_TRIVIAL(debug) << "Retrieved message from channel, type: " 
-                                     << static_cast<int>(frame.message_type);
+                                      << static_cast<int>(frame.message_type);
 
                 // Handle the message
                 message_handler(frame);
