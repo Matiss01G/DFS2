@@ -38,6 +38,9 @@ public:
     // Handle incoming store message frame
     bool handle_store(const MessageFrame& frame);
 
+    // Handle incoming get message frame
+    bool handle_get(const MessageFrame& frame);
+
 private:
     uint32_t server_id_;
     std::vector<uint8_t> key_;

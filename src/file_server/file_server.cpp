@@ -262,5 +262,38 @@ bool FileServer::handle_store(const MessageFrame& frame) {
     }
 }
 
+bool FileServer::handle_get(const MessageFrame& frame) {
+    try {
+        BOOST_LOG_TRIVIAL(info) << "Handling get message frame";
+
+        // Extract filename from frame
+        std::string filename;
+        try {
+            filename = extract_filename(frame);
+        } catch (const std::exception& e) {
+            BOOST_LOG_TRIVIAL(error) << "Failed to extract filename: " << e.what();
+            return false;
+        }
+
+        // Check if file exists locally
+        if (!store_->has(filename)) {
+            BOOST_LOG_TRIVIAL(info) << "File not found locally: " << filename;
+            return false;
+        }
+
+        // Prepare and send file to requesting peer
+        if (!prepare_and_send(filename, frame.source_id)) {
+            BOOST_LOG_TRIVIAL(error) << "Failed to prepare and send file: " << filename;
+            return false;
+        }
+
+        BOOST_LOG_TRIVIAL(info) << "Successfully handled get request for file: " << filename;
+        return true;
+    } catch (const std::exception& e) {
+        BOOST_LOG_TRIVIAL(error) << "Error in handle_get: " << e.what();
+        return false;
+    }
+}
+
 } // namespace network
 } // namespace dfs
