@@ -35,6 +35,9 @@ public:
     // Get file either from local store or network
     std::optional<std::stringstream> get_file(const std::string& filename);
 
+    // Handle incoming store message frame
+    bool handle_store(const MessageFrame& frame);
+
 private:
     uint32_t server_id_;
     std::vector<uint8_t> key_;
