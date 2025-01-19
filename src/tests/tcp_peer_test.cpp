@@ -144,7 +144,7 @@ TEST_F(TCPPeerTest, ReceiveStreamTest) {
     bool data_received = false;
 
     // Setup stream processor with synchronization
-    test_peer->set_stream_processor([&](std::istream& stream) {
+    test_peer->set_stream_processor([&](std::istream& stream, const std::string&) {
         try {
             std::string line;
             std::getline(stream, line);
@@ -205,7 +205,7 @@ TEST_F(TCPPeerTest, MultipleMessagesTest) {
     const int expected_messages = 3;
 
     // Setup stream processor with synchronization
-    test_peer->set_stream_processor([&](std::istream& stream) {
+    test_peer->set_stream_processor([&](std::istream& stream, const std::string&) {
         try {
             std::string line;
             std::getline(stream, line);
