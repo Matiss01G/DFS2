@@ -4,21 +4,6 @@
 namespace dfs {
 namespace network {
 
-// Public interface methods that delegate to implementation
-bool TCP_Peer::connect(const std::string& address, uint16_t port) {
-    BOOST_LOG_TRIVIAL(error) << "[" << peer_id_ << "] Direct connection attempts are not allowed. Please use PeerManager instead.";
-    return false;
-}
-
-bool TCP_Peer::disconnect() {
-    BOOST_LOG_TRIVIAL(error) << "[" << peer_id_ << "] Direct disconnection is not allowed. Please use PeerManager instead.";
-    return false;
-}
-
-bool TCP_Peer::is_connected() const {
-    return is_connected_impl();
-}
-
 // Implementation methods for PeerManager's use
 bool TCP_Peer::connect_impl(const std::string& address, uint16_t port) {
     if (socket_->is_open()) {
@@ -110,17 +95,16 @@ TCP_Peer::TCP_Peer(const std::string& peer_id)
     BOOST_LOG_TRIVIAL(info) << "[" << peer_id_ << "] TCP_Peer instance created successfully";
 }
 
-// Destructor
+// Destructor ensures proper cleanup
 TCP_Peer::~TCP_Peer() {
     if (socket_ && socket_->is_open()) {
-        disconnect_impl(); //Call the implementation method here
+        disconnect_impl();
     }
     BOOST_LOG_TRIVIAL(debug) << "TCP_Peer destroyed: " << peer_id_;
 }
 
 // Initialize input stream for reading incoming data
 void TCP_Peer::initialize_streams() {
-    // Create input stream wrapper around the buffer for convenient reading
     input_stream_ = std::make_unique<std::istream>(input_buffer_.get());
 }
 
@@ -281,7 +265,6 @@ void TCP_Peer::async_read_next() {
         });
 }
 
-
 // Send data from an input stream through the socket
 bool TCP_Peer::send_message(const std::string& message) {
     std::istringstream iss(message);
@@ -370,11 +353,6 @@ void TCP_Peer::cleanup_connection() {
     }
 
     endpoint_.reset();
-}
-
-// Check if the peer is currently connected
-bool TCP_Peer::is_connected() const {
-    return is_connected_impl();
 }
 
 // Get the peer's unique identifier

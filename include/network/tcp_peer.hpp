@@ -22,9 +22,8 @@ class PeerManager;
  * It implements an asynchronous event-driven approach for handling network I/O,
  * utilizing boost::asio for efficient, non-blocking operations.
  * 
- * Note: While connect(), disconnect(), and is_connected() are part of the public
- * interface to satisfy the Peer contract, these operations should be performed
- * through the PeerManager for proper connection management and thread safety.
+ * Note: Connection management is handled exclusively through PeerManager
+ * for proper connection lifecycle and thread safety.
  * 
  * Key features:
  * - Asynchronous I/O operations for improved performance
@@ -42,11 +41,6 @@ public:
     // Delete copy operations to prevent socket duplication
     TCP_Peer(const TCP_Peer&) = delete;
     TCP_Peer& operator=(const TCP_Peer&) = delete;
-
-    // Connection management - implementations delegate to PeerManager
-    bool connect(const std::string& address, uint16_t port) override;
-    bool disconnect() override;
-    bool is_connected() const override;
 
     // Stream operations
     std::istream* get_input_stream() override;

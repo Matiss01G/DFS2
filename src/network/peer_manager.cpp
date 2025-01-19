@@ -81,7 +81,7 @@ void PeerManager::remove_peer(const std::string& peer_id) {
 
     auto it = peers_.find(peer_id);
     if (it != peers_.end()) {
-        it->second->disconnect();
+        it->second->disconnect_impl();
         peers_.erase(it);
         BOOST_LOG_TRIVIAL(info) << "Removed peer with ID: " << peer_id;
     } else {
@@ -124,7 +124,7 @@ bool PeerManager::broadcast_stream(std::istream& input_stream) {
             // Reset stream position for each peer
             input_stream.seekg(initial_pos);
 
-            if (!peer_pair.second->is_connected()) {
+            if (!peer_pair.second->is_connected_impl()) {
                 BOOST_LOG_TRIVIAL(warning) << "Skipping disconnected peer: " << peer_pair.first;
                 all_success = false;
                 continue;
@@ -166,7 +166,7 @@ bool PeerManager::send_to_peer(uint32_t peer_id, std::istream& stream) {
         return false;
     }
 
-    if (!it->second->is_connected()) {
+    if (!it->second->is_connected_impl()) {
         BOOST_LOG_TRIVIAL(warning) << "Peer is not connected: " << peer_id;
         return false;
     }
@@ -200,7 +200,7 @@ bool PeerManager::send_stream(const std::string& peer_id, std::istream& stream) 
         return false;
     }
 
-    if (!it->second->is_connected()) {
+    if (!it->second->is_connected_impl()) {
         BOOST_LOG_TRIVIAL(warning) << "Peer is not connected: " << peer_id;
         return false;
     }
@@ -227,7 +227,7 @@ void PeerManager::shutdown() {
 
     for (auto& peer_pair : peers_) {
         try {
-            peer_pair.second->disconnect();
+            peer_pair.second->disconnect_impl();
             BOOST_LOG_TRIVIAL(debug) << "Disconnected peer: " << peer_pair.first;
         } catch (const std::exception& e) {
             BOOST_LOG_TRIVIAL(error) << "Error disconnecting peer " << peer_pair.first 
