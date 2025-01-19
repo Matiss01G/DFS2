@@ -5,13 +5,13 @@
 #include <thread>
 #include <chrono>
 
+
 namespace dfs {
 namespace network {
 
-FileServer::FileServer(uint32_t server_id, const std::vector<uint8_t>& key, Channel& channel)
+FileServer::FileServer(uint32_t server_id, const std::vector<uint8_t>& key)
     : server_id_(server_id)
-    , key_(key)
-    , channel_(channel) {  // Initialize channel reference
+    , key_(key) {
 
     // Validate key size (32 bytes for AES-256)
     if (key_.empty() || key_.size() != 32) {
@@ -30,6 +30,9 @@ FileServer::FileServer(uint32_t server_id, const std::vector<uint8_t>& key, Chan
 
         // Initialize codec with the provided cryptographic key
         codec_ = std::make_unique<Codec>(key_);
+
+        // Initialize peer manager
+        peer_manager_ = std::make_shared<PeerManager>();
 
         BOOST_LOG_TRIVIAL(info) << "FileServer initialization complete";
     }
@@ -116,12 +119,25 @@ bool FileServer::prepare_and_send(const std::string& filename, std::optional<uin
             return false;
         }
 
-        // Add the serialized frame to the channel
-        channel_.produce(frame);
+        // Send to specific peer or broadcast
+        bool success;
+        if (peer_id) {
+            BOOST_LOG_TRIVIAL(info) << "Sending file to peer: " << *peer_id;
+            success = peer_manager_->send_to_peer(*peer_id, serialized_stream);
+        } else {
+            BOOST_LOG_TRIVIAL(info) << "Broadcasting file to all peers";
+            success = peer_manager_->broadcast_stream(serialized_stream);
+        }
+
+        if (!success) {
+            BOOST_LOG_TRIVIAL(error) << "Failed to send file";
+            return false;
+        }
+
         BOOST_LOG_TRIVIAL(info) << "Successfully sent file: " << filename;
         return true;
-
-    } catch (const std::exception& e) {
+    }
+    catch (const std::exception& e) {
         BOOST_LOG_TRIVIAL(error) << "Error in prepare_and_send: " << e.what();
         return false;
     }
@@ -198,11 +214,10 @@ std::optional<std::stringstream> FileServer::get_file(const std::string& filenam
         }
 
         // Broadcast query to network
-        //This line is removed because peer_manager_ is removed.
-        //if (!peer_manager_->broadcast_stream(serialized_stream)) {
-        //    BOOST_LOG_TRIVIAL(error) << "Failed to broadcast file query to network";
-        //    return std::nullopt;
-        //}
+        if (!peer_manager_->broadcast_stream(serialized_stream)) {
+            BOOST_LOG_TRIVIAL(error) << "Failed to broadcast file query to network";
+            return std::nullopt;
+        }
 
         BOOST_LOG_TRIVIAL(info) << "Successfully broadcasted query for file: " << filename;
 

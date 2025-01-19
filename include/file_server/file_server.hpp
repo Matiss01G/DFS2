@@ -6,11 +6,10 @@
 #include <memory>
 #include <string>
 #include <sstream>
-#include <optional>
 #include "store/store.hpp"
 #include "network/codec.hpp"
-#include "network/channel.hpp"
 #include "network/message_frame.hpp"
+#include "network/peer_manager.hpp"
 #include "crypto/crypto_stream.hpp"
 
 namespace dfs {
@@ -18,8 +17,8 @@ namespace network {
 
 class FileServer {
 public:
-    // Constructor takes server ID, encryption key, and channel
-    FileServer(uint32_t server_id, const std::vector<uint8_t>& key, Channel& channel);
+    // Constructor takes server ID and encryption key
+    FileServer(uint32_t server_id, const std::vector<uint8_t>& key);
 
     // Virtual destructor for proper cleanup
     virtual ~FileServer() = default;
@@ -47,7 +46,7 @@ private:
     std::vector<uint8_t> key_;
     std::unique_ptr<dfs::store::Store> store_;
     std::unique_ptr<Codec> codec_;
-    Channel& channel_;  // Reference to channel passed in constructor
+    std::shared_ptr<PeerManager> peer_manager_;
 
     // Channel listener continuously checks for messages in the channel queue
     void channel_listener();
