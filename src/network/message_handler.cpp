@@ -23,13 +23,19 @@ std::size_t MessageHandler::serialize(const MessageFrame& frame, std::istream& d
         write_bytes(output, &frame.message_type, sizeof(MessageType));
         total_bytes += sizeof(MessageType);
 
-        // Convert and write source_id in network byte order
-        uint32_t network_source_id = to_network_order(frame.source_id);
-        write_bytes(output, &network_source_id, sizeof(uint32_t));
+        // Write source_id string length and content
+        uint32_t source_id_length = frame.source_id.length();
+        uint32_t network_source_id_length = boost::endian::native_to_big(source_id_length);
+        write_bytes(output, &network_source_id_length, sizeof(uint32_t));
         total_bytes += sizeof(uint32_t);
 
+        if (!frame.source_id.empty()) {
+            write_bytes(output, frame.source_id.c_str(), source_id_length);
+            total_bytes += source_id_length;
+        }
+
         // Convert and write payload_size in network byte order
-        uint64_t network_payload_size = to_network_order(frame.payload_size);
+        uint64_t network_payload_size = boost::endian::native_to_big(frame.payload_size);
         write_bytes(output, &network_payload_size, sizeof(uint64_t));
         total_bytes += sizeof(uint64_t);
 
@@ -76,15 +82,21 @@ MessageHandler::deserialize(std::istream& input) {
         // Read message type
         read_bytes(input, &frame.message_type, sizeof(MessageType));
 
-        // Read and convert source_id from network byte order
-        uint32_t network_source_id;
-        read_bytes(input, &network_source_id, sizeof(uint32_t));
-        frame.source_id = from_network_order(network_source_id);
+        // Read source_id string length and content
+        uint32_t network_source_id_length;
+        read_bytes(input, &network_source_id_length, sizeof(uint32_t));
+        uint32_t source_id_length = boost::endian::big_to_native(network_source_id_length);
+
+        if (source_id_length > 0) {
+            std::vector<char> source_id_buffer(source_id_length + 1, '\0');
+            read_bytes(input, source_id_buffer.data(), source_id_length);
+            frame.source_id = std::string(source_id_buffer.data(), source_id_length);
+        }
 
         // Read and convert payload_size from network byte order
         uint64_t network_payload_size;
         read_bytes(input, &network_payload_size, sizeof(uint64_t));
-        frame.payload_size = from_network_order(network_payload_size);
+        frame.payload_size = boost::endian::big_to_native(network_payload_size);
 
         // Return the frame and input stream positioned at payload start
         return std::make_pair(frame, input);

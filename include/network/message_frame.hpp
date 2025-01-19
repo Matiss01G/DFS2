@@ -5,6 +5,7 @@
 #include <memory>
 #include <sstream>
 #include <vector>
+#include <string>
 #include <boost/endian/conversion.hpp>
 
 namespace dfs {
@@ -18,7 +19,7 @@ enum class MessageType : uint8_t {
 struct MessageFrame {
     std::vector<uint8_t> iv_;
     MessageType message_type;
-    string source_id;
+    std::string source_id;
     uint64_t payload_size;
     uint32_t filename_length;
     std::shared_ptr<std::stringstream> payload_stream;

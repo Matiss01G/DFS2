@@ -85,7 +85,7 @@ bool FileServer::prepare_and_send(const std::string& filename, std::optional<uin
 
     // Create message frame with empty payload stream
     MessageFrame frame;
-    frame.source_id = server_id_;
+    // source_id is intentionally left empty
     frame.message_type = MessageType::STORE_FILE;
     frame.payload_stream = std::make_shared<std::stringstream>();
     frame.filename_length = filename.length();

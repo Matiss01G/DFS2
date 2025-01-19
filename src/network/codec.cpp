@@ -29,27 +29,34 @@ std::size_t Codec::serialize(const MessageFrame& frame, std::ostream& output) {
         BOOST_LOG_TRIVIAL(debug) << "Writing IV of size: " << frame.iv_.size();
         write_bytes(output, frame.iv_.data(), frame.iv_.size());
         total_bytes += frame.iv_.size();
-        
+
         // Write message type
         uint8_t msg_type = static_cast<uint8_t>(frame.message_type);
         BOOST_LOG_TRIVIAL(debug) << "Writing message type: " << static_cast<int>(msg_type);
         write_bytes(output, &msg_type, sizeof(msg_type));
         total_bytes += sizeof(msg_type);
 
-        // Write source ID in network byte order
-        uint32_t network_source_id = to_network_order(frame.source_id);
-        BOOST_LOG_TRIVIAL(debug) << "Writing source ID: " << frame.source_id;
-        write_bytes(output, &network_source_id, sizeof(network_source_id));
-        total_bytes += sizeof(network_source_id);
+        // Write source ID as string
+        uint32_t source_id_length = frame.source_id.length();
+        uint32_t network_source_id_length = boost::endian::native_to_big(source_id_length);
+        BOOST_LOG_TRIVIAL(debug) << "Writing source ID length: " << source_id_length;
+        write_bytes(output, &network_source_id_length, sizeof(network_source_id_length));
+        total_bytes += sizeof(network_source_id_length);
+
+        if (!frame.source_id.empty()) {
+            BOOST_LOG_TRIVIAL(debug) << "Writing source ID: " << frame.source_id;
+            write_bytes(output, frame.source_id.c_str(), source_id_length);
+            total_bytes += source_id_length;
+        }
 
         // Write payload size in network byte order
-        uint64_t network_payload_size = to_network_order(frame.payload_size);
+        uint64_t network_payload_size = boost::endian::native_to_big(frame.payload_size);
         BOOST_LOG_TRIVIAL(debug) << "Writing payload size: " << frame.payload_size;
         write_bytes(output, &network_payload_size, sizeof(network_payload_size));
         total_bytes += sizeof(network_payload_size);
 
         // Encrypt and write filename length
-        uint32_t network_filename_length = to_network_order(frame.filename_length);
+        uint32_t network_filename_length = boost::endian::native_to_big(frame.filename_length);
         // Create stream for raw data
         std::stringstream filename_length_stream;
         filename_length_stream.write(reinterpret_cast<char*>(&network_filename_length), sizeof(network_filename_length));
@@ -110,18 +117,24 @@ MessageFrame Codec::deserialize(std::istream& input, Channel& channel, const std
         BOOST_LOG_TRIVIAL(debug) << "Read message type: " << static_cast<int>(msg_type);
         total_bytes += sizeof(msg_type);
 
-        // Set source ID from parameter instead of reading from stream
-        frame.source_id = std::stoul(source_id);
-        BOOST_LOG_TRIVIAL(debug) << "Using provided source ID: " << frame.source_id;
+        // Read source ID length
+        uint32_t network_source_id_length;
+        read_bytes(input, &network_source_id_length, sizeof(network_source_id_length));
+        uint32_t source_id_length = boost::endian::big_to_native(network_source_id_length);
+        total_bytes += sizeof(network_source_id_length);
 
-        // Skip reading network_source_id bytes from stream
-        input.seekg(sizeof(uint32_t), std::ios::cur);
-        total_bytes += sizeof(uint32_t);
+        // Read source ID if present
+        if (source_id_length > 0) {
+            std::vector<char> source_id_buffer(source_id_length + 1, '\0');
+            read_bytes(input, source_id_buffer.data(), source_id_length);
+            frame.source_id = std::string(source_id_buffer.data(), source_id_length);
+            total_bytes += source_id_length;
+        }
 
         // Read payload size
         uint64_t network_payload_size;
         read_bytes(input, &network_payload_size, sizeof(network_payload_size));
-        frame.payload_size = from_network_order(network_payload_size);
+        frame.payload_size = boost::endian::big_to_native(network_payload_size);
         BOOST_LOG_TRIVIAL(debug) << "Read payload size: " << frame.payload_size;
         total_bytes += sizeof(network_payload_size);
 
@@ -134,7 +147,7 @@ MessageFrame Codec::deserialize(std::istream& input, Channel& channel, const std
         crypto.decrypt(encrypted_filename_length_stream, decrypted_filename_length_stream);
         uint32_t network_filename_length;
         decrypted_filename_length_stream.read(reinterpret_cast<char*>(&network_filename_length), sizeof(network_filename_length));
-        frame.filename_length = from_network_order(network_filename_length);
+        frame.filename_length = boost::endian::big_to_native(network_filename_length);
         BOOST_LOG_TRIVIAL(debug) << "Read decrypted filename length: " << frame.filename_length;
         total_bytes += encrypted_filename_length.size();
 
