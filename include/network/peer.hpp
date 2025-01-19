@@ -23,12 +23,17 @@ class Peer {
 public:
     // Stream callback type for processing received data
     using StreamProcessor = std::function<void(std::istream&)>;
-
+    
     virtual ~Peer() = default;
+
+    // Connection management
+    virtual bool connect(const std::string& address, uint16_t port) = 0;
+    virtual bool disconnect() = 0;
+    virtual bool is_connected() const = 0;
 
     // Stream operations (required)
     virtual std::istream* get_input_stream() = 0;
-
+    
     // Message operations
     virtual bool send_message(const std::string& message) = 0;
 

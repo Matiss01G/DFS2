@@ -12,18 +12,12 @@
 namespace dfs {
 namespace network {
 
-// Forward declarations
-class PeerManager;
-
 /**
  * @brief TCP implementation of the Peer interface
  * 
  * This class provides TCP/IP-based network communication with stream support.
  * It implements an asynchronous event-driven approach for handling network I/O,
  * utilizing boost::asio for efficient, non-blocking operations.
- * 
- * Note: Connection management is handled exclusively through PeerManager
- * for proper connection lifecycle and thread safety.
  * 
  * Key features:
  * - Asynchronous I/O operations for improved performance
@@ -42,21 +36,27 @@ public:
     TCP_Peer(const TCP_Peer&) = delete;
     TCP_Peer& operator=(const TCP_Peer&) = delete;
 
+    // Connection management
+    bool connect(const std::string& address, uint16_t port) override;
+    bool disconnect() override;
+    bool is_connected() const override;
+
     // Stream operations
     std::istream* get_input_stream() override;
     bool send_message(const std::string& message) override;
-    bool send_stream(std::istream& input_stream, std::size_t buffer_size = 8192);
 
     // Stream processing
     void set_stream_processor(StreamProcessor processor) override;
     bool start_stream_processing() override;
     void stop_stream_processing() override;
 
-    // Getter
-    const std::string& get_peer_id() const;
+    // Asynchronous I/O Operations
+    void async_write();
+    bool send_stream(std::istream& input_stream, std::size_t buffer_size = 8192);
+    void async_read_next();
 
-    // Allow PeerManager to access implementation details
-    friend class PeerManager;
+    // Getter
+    const std::string& get_peer_id() const { return peer_id_; }
 
 private:
     // Core attributes
@@ -68,7 +68,7 @@ private:
     std::unique_ptr<boost::asio::ip::tcp::socket> socket_;
     std::unique_ptr<boost::asio::ip::tcp::endpoint> endpoint_;
     std::mutex io_mutex_;  // Mutex for synchronizing I/O operations
-
+    
     // Processing thread
     std::unique_ptr<std::thread> processing_thread_;
     std::atomic<bool> processing_active_{false};
@@ -81,12 +81,6 @@ private:
     void initialize_streams();
     void cleanup_connection();
     void process_stream();
-    void async_read_next();
-
-    // Implementation methods for connection management
-    bool connect_impl(const std::string& address, uint16_t port);
-    bool disconnect_impl();
-    bool is_connected_impl() const;
 };
 
 } // namespace network

@@ -12,51 +12,6 @@ PeerManager::~PeerManager() {
     shutdown();
 }
 
-bool PeerManager::connect(const std::string& peer_id, const std::string& address, uint16_t port) {
-    std::lock_guard<std::mutex> lock(mutex_);
-
-    auto it = peers_.find(peer_id);
-    if (it == peers_.end()) {
-        BOOST_LOG_TRIVIAL(error) << "Attempted to connect non-existent peer: " << peer_id;
-        return false;
-    }
-
-    try {
-        return it->second->connect_impl(address, port);
-    } catch (const std::exception& e) {
-        BOOST_LOG_TRIVIAL(error) << "Connection error for peer " << peer_id << ": " << e.what();
-        return false;
-    }
-}
-
-bool PeerManager::disconnect(const std::string& peer_id) {
-    std::lock_guard<std::mutex> lock(mutex_);
-
-    auto it = peers_.find(peer_id);
-    if (it == peers_.end()) {
-        BOOST_LOG_TRIVIAL(error) << "Attempted to disconnect non-existent peer: " << peer_id;
-        return false;
-    }
-
-    try {
-        return it->second->disconnect_impl();
-    } catch (const std::exception& e) {
-        BOOST_LOG_TRIVIAL(error) << "Disconnection error for peer " << peer_id << ": " << e.what();
-        return false;
-    }
-}
-
-bool PeerManager::is_connected(const std::string& peer_id) const {
-    std::lock_guard<std::mutex> lock(mutex_);
-
-    auto it = peers_.find(peer_id);
-    if (it == peers_.end()) {
-        return false;
-    }
-
-    return it->second->is_connected_impl();
-}
-
 void PeerManager::add_peer(std::shared_ptr<TCP_Peer> peer) {
     if (!peer) {
         BOOST_LOG_TRIVIAL(error) << "Attempted to add null peer";
@@ -81,7 +36,7 @@ void PeerManager::remove_peer(const std::string& peer_id) {
 
     auto it = peers_.find(peer_id);
     if (it != peers_.end()) {
-        it->second->disconnect_impl();
+        it->second->disconnect();
         peers_.erase(it);
         BOOST_LOG_TRIVIAL(info) << "Removed peer with ID: " << peer_id;
     } else {
@@ -124,7 +79,7 @@ bool PeerManager::broadcast_stream(std::istream& input_stream) {
             // Reset stream position for each peer
             input_stream.seekg(initial_pos);
 
-            if (!peer_pair.second->is_connected_impl()) {
+            if (!peer_pair.second->is_connected()) {
                 BOOST_LOG_TRIVIAL(warning) << "Skipping disconnected peer: " << peer_pair.first;
                 all_success = false;
                 continue;
@@ -166,7 +121,7 @@ bool PeerManager::send_to_peer(uint32_t peer_id, std::istream& stream) {
         return false;
     }
 
-    if (!it->second->is_connected_impl()) {
+    if (!it->second->is_connected()) {
         BOOST_LOG_TRIVIAL(warning) << "Peer is not connected: " << peer_id;
         return false;
     }
@@ -200,7 +155,7 @@ bool PeerManager::send_stream(const std::string& peer_id, std::istream& stream) 
         return false;
     }
 
-    if (!it->second->is_connected_impl()) {
+    if (!it->second->is_connected()) {
         BOOST_LOG_TRIVIAL(warning) << "Peer is not connected: " << peer_id;
         return false;
     }
@@ -227,7 +182,7 @@ void PeerManager::shutdown() {
 
     for (auto& peer_pair : peers_) {
         try {
-            peer_pair.second->disconnect_impl();
+            peer_pair.second->disconnect();
             BOOST_LOG_TRIVIAL(debug) << "Disconnected peer: " << peer_pair.first;
         } catch (const std::exception& e) {
             BOOST_LOG_TRIVIAL(error) << "Error disconnecting peer " << peer_pair.first 

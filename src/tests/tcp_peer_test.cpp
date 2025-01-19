@@ -1,7 +1,6 @@
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
 #include "network/tcp_peer.hpp"
-#include "network/peer_manager.hpp"
 #include <boost/asio.hpp>
 #include <boost/log/core.hpp>
 #include <boost/log/trivial.hpp>
@@ -22,10 +21,7 @@ protected:
         boost::log::core::get()->set_filter(
             boost::log::trivial::severity >= boost::log::trivial::error
         );
-        peer_manager = std::make_unique<PeerManager>();
-        test_peer = std::make_shared<TCP_Peer>("test_peer");  // Changed to make_shared
-        peer_manager->add_peer(test_peer);
-
+        test_peer = std::make_unique<TCP_Peer>("test_peer");
         server_endpoint.address(boost::asio::ip::make_address("127.0.0.1"));
         server_endpoint.port(12345);
 
@@ -37,7 +33,9 @@ protected:
     }
 
     void TearDown() override {
-        peer_manager->shutdown();
+        if (test_peer && test_peer->is_connected()) {
+            test_peer->disconnect();
+        }
         if (server_socket && server_socket->is_open()) {
             server_socket->close();
         }
@@ -57,8 +55,7 @@ protected:
         });
     }
 
-    std::unique_ptr<PeerManager> peer_manager;
-    std::shared_ptr<TCP_Peer> test_peer;  // Changed to shared_ptr
+    std::unique_ptr<TCP_Peer> test_peer;
     boost::asio::io_context io_context;
     boost::asio::ip::tcp::endpoint server_endpoint;
     std::unique_ptr<boost::asio::ip::tcp::acceptor> acceptor;
@@ -70,9 +67,9 @@ protected:
 TEST_F(TCPPeerTest, ConnectionTest) {
     start_server_thread();
 
-    // Test connection through peer manager
-    EXPECT_TRUE(peer_manager->connect("test_peer", "127.0.0.1", 12345));
-    EXPECT_TRUE(peer_manager->is_connected("test_peer"));
+    // Test connection
+    EXPECT_TRUE(test_peer->connect("127.0.0.1", 12345));
+    EXPECT_TRUE(test_peer->is_connected());
 
     if (server_thread.joinable()) {
         server_thread.join();
@@ -83,9 +80,9 @@ TEST_F(TCPPeerTest, ConnectionTest) {
 TEST_F(TCPPeerTest, DisconnectionTest) {
     start_server_thread();
 
-    ASSERT_TRUE(peer_manager->connect("test_peer", "127.0.0.1", 12345));
-    EXPECT_TRUE(peer_manager->disconnect("test_peer"));
-    EXPECT_FALSE(peer_manager->is_connected("test_peer"));
+    ASSERT_TRUE(test_peer->connect("127.0.0.1", 12345));
+    EXPECT_TRUE(test_peer->disconnect());
+    EXPECT_FALSE(test_peer->is_connected());
 
     if (server_thread.joinable()) {
         server_thread.join();
@@ -96,7 +93,7 @@ TEST_F(TCPPeerTest, DisconnectionTest) {
 TEST_F(TCPPeerTest, SendStreamTest) {
     start_server_thread();
 
-    ASSERT_TRUE(peer_manager->connect("test_peer", "127.0.0.1", 12345));
+    ASSERT_TRUE(test_peer->connect("127.0.0.1", 12345));
 
     // Wait for server to accept connection
     if (server_thread.joinable()) {
@@ -108,7 +105,7 @@ TEST_F(TCPPeerTest, SendStreamTest) {
     std::istringstream input_stream(test_data);
 
     // Send data using send_stream
-    EXPECT_TRUE(peer_manager->send_stream("test_peer", input_stream));
+    EXPECT_TRUE(test_peer->send_stream(input_stream));
 
     // Verify data received on server side
     std::vector<char> received_data(test_data.size());
@@ -128,7 +125,7 @@ TEST_F(TCPPeerTest, SendStreamTest) {
 TEST_F(TCPPeerTest, ReceiveStreamTest) {
     start_server_thread();
 
-    ASSERT_TRUE(peer_manager->connect("test_peer", "127.0.0.1", 12345));
+    ASSERT_TRUE(test_peer->connect("127.0.0.1", 12345));
 
     // Wait for server to accept connection
     if (server_thread.joinable()) {
@@ -184,16 +181,94 @@ TEST_F(TCPPeerTest, ReceiveStreamTest) {
     test_peer->stop_stream_processing();
 }
 
+// Test receiving multiple messages through same connection
+TEST_F(TCPPeerTest, MultipleMessagesTest) {
+    start_server_thread();
+
+    ASSERT_TRUE(test_peer->connect("127.0.0.1", 12345));
+
+    // Wait for server to accept connection
+    if (server_thread.joinable()) {
+        server_thread.join();
+    }
+
+    // Setup synchronization primitives
+    std::mutex mtx;
+    std::condition_variable cv;
+    std::vector<std::string> received_messages;
+    std::atomic<int> messages_received{0};
+    const int expected_messages = 3;
+
+    // Setup stream processor with synchronization
+    test_peer->set_stream_processor([&](std::istream& stream) {
+        try {
+            std::string line;
+            std::getline(stream, line);
+            {
+                std::lock_guard<std::mutex> lock(mtx);
+                received_messages.push_back(line + '\n');  // Add back the newline that getline removes
+                messages_received++;
+            }
+            cv.notify_one();
+        } catch (const std::exception& e) {
+            BOOST_LOG_TRIVIAL(error) << "Stream processor error: " << e.what();
+        }
+    });
+
+    // Start stream processing before sending data
+    ASSERT_TRUE(test_peer->start_stream_processing());
+
+    // Test messages to send
+    std::vector<std::string> test_messages = {
+        "First message!\n",
+        "Second message!\n",
+        "Third message!\n"
+    };
+
+    // Send messages with small delays between them
+    for (const auto& msg : test_messages) {
+        boost::system::error_code ec;
+        boost::asio::write(*server_socket,
+            boost::asio::buffer(msg),
+            boost::asio::transfer_exactly(msg.size()),
+            ec
+        );
+        ASSERT_FALSE(ec) << "Failed to write message: " << ec.message();
+        std::this_thread::sleep_for(std::chrono::milliseconds(10));  // Small delay between messages
+    }
+
+    // Wait for all messages with timeout
+    {
+        std::unique_lock<std::mutex> lock(mtx);
+        ASSERT_TRUE(cv.wait_for(lock, std::chrono::milliseconds(500),
+            [&]{ return messages_received == expected_messages; }))
+            << "Timeout waiting for messages, received " << messages_received << " of " << expected_messages;
+
+        // Verify messages were received in order
+        ASSERT_EQ(received_messages.size(), test_messages.size());
+        for (size_t i = 0; i < test_messages.size(); ++i) {
+            EXPECT_EQ(received_messages[i], test_messages[i])
+                << "Message " << i << " does not match";
+        }
+    }
+
+    // Stop processing and cleanup
+    test_peer->stop_stream_processing();
+}
+
 // Test edge cases and error conditions
 TEST_F(TCPPeerTest, EdgeCasesTest) {
     // Test connecting to non-existent server
-    EXPECT_FALSE(peer_manager->connect("test_peer", "127.0.0.1", 54321));
-    EXPECT_FALSE(peer_manager->is_connected("test_peer"));
+    EXPECT_FALSE(test_peer->connect("127.0.0.1", 54321));
+    EXPECT_FALSE(test_peer->is_connected());
 
     // Test disconnecting when not connected
-    EXPECT_FALSE(peer_manager->disconnect("test_peer"));
+    EXPECT_FALSE(test_peer->disconnect());
 
     // Test sending when not connected
     std::istringstream input_stream("Test message\n");
-    EXPECT_FALSE(peer_manager->send_stream("test_peer", input_stream));
+    EXPECT_FALSE(test_peer->send_stream(input_stream));
+
+    // Test getting input stream when not connected
+    EXPECT_EQ(test_peer->get_input_stream(), nullptr);
 }
