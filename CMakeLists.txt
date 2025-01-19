@@ -56,7 +56,7 @@ target_link_libraries(dfs_network PUBLIC
     Boost::log
 )
 
-# Skip building tests
+# Skip building tests entirely
 set(BUILD_TESTING OFF CACHE BOOL "Disable testing" FORCE)
 
 # Install rules
