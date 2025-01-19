@@ -57,7 +57,6 @@ bool CodecTest::logging_initialized = false;
 TEST_F(CodecTest, MinimalFrameSerializeDeserialize) {
     MessageFrame input_frame;
     input_frame.message_type = MessageType::STORE_FILE;
-    input_frame.source_id = "54321"; // Changed to string
     input_frame.payload_size = 0;
     input_frame.iv_ = generate_test_iv();
 
@@ -78,16 +77,17 @@ TEST_F(CodecTest, MinimalFrameSerializeDeserialize) {
     output_stream.seekg(0);
     ASSERT_TRUE(output_stream.good()) << "Failed to reset output stream position";
 
+    const std::string test_source_id = "test_source";
     MessageFrame deserialized_frame;
     ASSERT_NO_THROW({
-        deserialized_frame = codec.deserialize(output_stream, channel);
+        deserialized_frame = codec.deserialize(output_stream, channel, test_source_id);
     }) << "Deserialization threw an exception";
 
     MessageFrame output_frame;
     ASSERT_TRUE(channel.consume(output_frame)) << "Failed to consume frame from channel";
 
     EXPECT_EQ(output_frame.message_type, input_frame.message_type);
-    EXPECT_EQ(output_frame.source_id, input_frame.source_id);
+    EXPECT_EQ(output_frame.source_id, test_source_id) << "Source ID not set from parameter";
     EXPECT_EQ(output_frame.payload_size, input_frame.payload_size);
     EXPECT_EQ(output_frame.iv_, input_frame.iv_);
 
@@ -97,7 +97,6 @@ TEST_F(CodecTest, MinimalFrameSerializeDeserialize) {
 TEST_F(CodecTest, BasicSerializeDeserialize) {
     MessageFrame input_frame;
     input_frame.message_type = MessageType::STORE_FILE;
-    input_frame.source_id = "12345"; // Changed to string
     input_frame.iv_ = generate_test_iv();
 
     const std::string test_data = "TestData123";
@@ -124,16 +123,17 @@ TEST_F(CodecTest, BasicSerializeDeserialize) {
     output_stream.seekg(0);
     ASSERT_TRUE(output_stream.good()) << "Failed to reset output stream position";
 
+    const std::string test_source_id = "test_source_basic";
     MessageFrame deserialized_frame;
     ASSERT_NO_THROW({
-        deserialized_frame = codec.deserialize(output_stream, channel);
+        deserialized_frame = codec.deserialize(output_stream, channel, test_source_id);
     }) << "Deserialization threw an exception";
 
     MessageFrame output_frame;
     ASSERT_TRUE(channel.consume(output_frame)) << "Failed to consume frame from channel";
 
     EXPECT_EQ(output_frame.message_type, input_frame.message_type);
-    EXPECT_EQ(output_frame.source_id, input_frame.source_id);
+    EXPECT_EQ(output_frame.source_id, test_source_id) << "Source ID not set from parameter";
     EXPECT_EQ(output_frame.payload_size, input_frame.payload_size);
     EXPECT_EQ(output_frame.filename_length, input_frame.filename_length);
     EXPECT_EQ(output_frame.iv_, input_frame.iv_);
@@ -157,7 +157,6 @@ TEST_F(CodecTest, BasicSerializeDeserialize) {
 TEST_F(CodecTest, LargePayloadChunkedProcessing) {
     MessageFrame input_frame;
     input_frame.message_type = MessageType::STORE_FILE;
-    input_frame.source_id = "98765"; // Changed to string
     input_frame.iv_ = generate_test_iv();
 
     const size_t payload_size = 10 * 1024 * 1024;
@@ -180,16 +179,17 @@ TEST_F(CodecTest, LargePayloadChunkedProcessing) {
 
     output_stream.seekg(0);
 
+    const std::string test_source_id = "test_source_large";
     MessageFrame deserialized_frame;
     ASSERT_NO_THROW({
-        deserialized_frame = codec.deserialize(output_stream, channel);
+        deserialized_frame = codec.deserialize(output_stream, channel, test_source_id);
     }) << "Deserialization of large payload threw an exception";
 
     MessageFrame output_frame;
     ASSERT_TRUE(channel.consume(output_frame)) << "Failed to consume large frame from channel";
 
     EXPECT_EQ(output_frame.message_type, input_frame.message_type);
-    EXPECT_EQ(output_frame.source_id, input_frame.source_id);
+    EXPECT_EQ(output_frame.source_id, test_source_id) << "Source ID not set from parameter";
     EXPECT_EQ(output_frame.payload_size, input_frame.payload_size);
     EXPECT_EQ(output_frame.filename_length, input_frame.filename_length);
     EXPECT_EQ(output_frame.iv_, input_frame.iv_);
@@ -210,17 +210,16 @@ TEST_F(CodecTest, MalformedInputHandling) {
     std::stringstream malformed_stream;
 
     // Test 1: Empty stream
-    EXPECT_THROW(codec.deserialize(malformed_stream, channel), std::runtime_error);
+    EXPECT_THROW(codec.deserialize(malformed_stream, channel, "test_source_malformed"), std::runtime_error);
 
     // Test 2: Incomplete header (missing IV)
     malformed_stream.write("\x01\x02\x03", 3);
     malformed_stream.seekg(0);
-    EXPECT_THROW(codec.deserialize(malformed_stream, channel), std::runtime_error);
+    EXPECT_THROW(codec.deserialize(malformed_stream, channel, "test_source_malformed"), std::runtime_error);
 
     // Test 3: Invalid IV size
     MessageFrame frame;
     frame.message_type = MessageType::STORE_FILE;
-    frame.source_id = "12345"; // Changed to string
     frame.payload_size = 1000;
     frame.filename_length = 8;
     frame.iv_ = std::vector<uint8_t>(dfs::crypto::CryptoStream::IV_SIZE - 1, 0x42); // Invalid IV size
@@ -232,7 +231,6 @@ TEST_F(CodecTest, MalformedInputHandling) {
 TEST_F(CodecTest, EmptySourceId) {
     MessageFrame input_frame;
     input_frame.message_type = MessageType::STORE_FILE;
-    input_frame.source_id = ""; // Empty string source_id
     input_frame.payload_size = 0;
     input_frame.filename_length = 0;
     input_frame.iv_ = generate_test_iv();
@@ -243,12 +241,13 @@ TEST_F(CodecTest, EmptySourceId) {
     ASSERT_GT(written, 0) << "No data written for frame with empty source_id";
 
     output_stream.seekg(0);
-    MessageFrame deserialized_frame = codec.deserialize(output_stream, channel);
+    const std::string test_source_id = "test_source_empty";
+    MessageFrame deserialized_frame = codec.deserialize(output_stream, channel, test_source_id);
 
     MessageFrame output_frame;
     ASSERT_TRUE(channel.consume(output_frame));
 
-    EXPECT_TRUE(output_frame.source_id.empty()) << "Deserialized source_id should be empty";
+    EXPECT_EQ(output_frame.source_id, test_source_id) << "Deserialized source_id should be set from parameter";
     EXPECT_EQ(output_frame.message_type, input_frame.message_type);
     EXPECT_EQ(output_frame.payload_size, 0);
     EXPECT_EQ(output_frame.filename_length, 0);

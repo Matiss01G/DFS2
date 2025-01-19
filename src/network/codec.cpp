@@ -36,19 +36,6 @@ std::size_t Codec::serialize(const MessageFrame& frame, std::ostream& output) {
         write_bytes(output, &msg_type, sizeof(msg_type));
         total_bytes += sizeof(msg_type);
 
-        // Write source ID as string
-        uint32_t source_id_length = frame.source_id.length();
-        uint32_t network_source_id_length = boost::endian::native_to_big(source_id_length);
-        BOOST_LOG_TRIVIAL(debug) << "Writing source ID length: " << source_id_length;
-        write_bytes(output, &network_source_id_length, sizeof(network_source_id_length));
-        total_bytes += sizeof(network_source_id_length);
-
-        if (!frame.source_id.empty()) {
-            BOOST_LOG_TRIVIAL(debug) << "Writing source ID: " << frame.source_id;
-            write_bytes(output, frame.source_id.c_str(), source_id_length);
-            total_bytes += source_id_length;
-        }
-
         // Write payload size in network byte order
         uint64_t network_payload_size = boost::endian::native_to_big(frame.payload_size);
         BOOST_LOG_TRIVIAL(debug) << "Writing payload size: " << frame.payload_size;
@@ -93,6 +80,7 @@ MessageFrame Codec::deserialize(std::istream& input, Channel& channel, const std
     }
 
     MessageFrame frame;
+    frame.source_id = source_id; 
     std::size_t total_bytes = 0;
 
     // Create CryptoStream instance
@@ -116,20 +104,6 @@ MessageFrame Codec::deserialize(std::istream& input, Channel& channel, const std
         frame.message_type = static_cast<MessageType>(msg_type);
         BOOST_LOG_TRIVIAL(debug) << "Read message type: " << static_cast<int>(msg_type);
         total_bytes += sizeof(msg_type);
-
-        // Read source ID length
-        uint32_t network_source_id_length;
-        read_bytes(input, &network_source_id_length, sizeof(network_source_id_length));
-        uint32_t source_id_length = boost::endian::big_to_native(network_source_id_length);
-        total_bytes += sizeof(network_source_id_length);
-
-        // Read source ID if present
-        if (source_id_length > 0) {
-            std::vector<char> source_id_buffer(source_id_length + 1, '\0');
-            read_bytes(input, source_id_buffer.data(), source_id_length);
-            frame.source_id = std::string(source_id_buffer.data(), source_id_length);
-            total_bytes += source_id_length;
-        }
 
         // Read payload size
         uint64_t network_payload_size;
