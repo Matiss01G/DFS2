@@ -35,6 +35,9 @@ public:
     // Send data to a specific peer by ID
     bool send_to_peer(uint32_t peer_id, std::istream& stream);
 
+    // Get the current number of managed peers
+    std::size_t size() const;
+
     // Shutdown all peer connections and clear the peers map
     void shutdown();
 

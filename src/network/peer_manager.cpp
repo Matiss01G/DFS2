@@ -194,5 +194,10 @@ void PeerManager::shutdown() {
     BOOST_LOG_TRIVIAL(info) << "PeerManager shutdown complete";
 }
 
+std::size_t PeerManager::size() const {
+    std::lock_guard<std::mutex> lock(mutex_);
+    return peers_.size();
+}
+
 } // namespace network
 } // namespace dfs
