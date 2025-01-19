@@ -2,6 +2,9 @@
 #include <boost/log/trivial.hpp>
 #include <filesystem>
 #include <optional>
+#include <thread>
+#include <chrono>
+
 
 namespace dfs {
 namespace network {
@@ -292,6 +295,59 @@ bool FileServer::handle_get(const MessageFrame& frame) {
     } catch (const std::exception& e) {
         BOOST_LOG_TRIVIAL(error) << "Error in handle_get: " << e.what();
         return false;
+    }
+}
+
+void FileServer::channel_listener() {
+    BOOST_LOG_TRIVIAL(info) << "Starting channel listener";
+
+    while (true) {
+        try {
+            MessageFrame frame;
+            // Try to consume a message from the channel
+            if (channel_.consume(frame)) {
+                BOOST_LOG_TRIVIAL(debug) << "Retrieved message from channel, type: " 
+                                      << static_cast<int>(frame.message_type);
+
+                // Handle the message
+                message_handler(frame);
+            }
+
+            // Small sleep to prevent busy waiting
+            std::this_thread::sleep_for(std::chrono::milliseconds(10));
+        }
+        catch (const std::exception& e) {
+            BOOST_LOG_TRIVIAL(error) << "Error in channel listener: " << e.what();
+        }
+    }
+}
+
+void FileServer::message_handler(const MessageFrame& frame) {
+    try {
+        BOOST_LOG_TRIVIAL(info) << "Handling message of type: " << static_cast<int>(frame.message_type);
+
+        switch (frame.message_type) {
+            case MessageType::STORE_FILE:
+                BOOST_LOG_TRIVIAL(debug) << "Forwarding to handle_store";
+                if (!handle_store(frame)) {
+                    BOOST_LOG_TRIVIAL(error) << "Failed to handle store message";
+                }
+                break;
+
+            case MessageType::GET_FILE:
+                BOOST_LOG_TRIVIAL(debug) << "Forwarding to handle_get";
+                if (!handle_get(frame)) {
+                    BOOST_LOG_TRIVIAL(error) << "Failed to handle get message";
+                }
+                break;
+
+            default:
+                BOOST_LOG_TRIVIAL(warning) << "Unknown message type: " << static_cast<int>(frame.message_type);
+                break;
+        }
+    }
+    catch (const std::exception& e) {
+        BOOST_LOG_TRIVIAL(error) << "Error in message handler: " << e.what();
     }
 }
 

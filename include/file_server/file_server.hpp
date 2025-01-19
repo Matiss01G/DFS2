@@ -47,6 +47,12 @@ private:
     std::unique_ptr<dfs::store::Store> store_;
     std::unique_ptr<Codec> codec_;
     std::shared_ptr<PeerManager> peer_manager_;
+
+    // Channel listener continuously checks for messages in the channel queue
+    void channel_listener();
+
+    // Message handler routes messages to appropriate handlers based on type
+    void message_handler(const MessageFrame& frame);
 };
 
 } // namespace network
