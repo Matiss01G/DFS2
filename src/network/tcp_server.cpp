@@ -75,7 +75,7 @@ void TCP_Server::start_accept() {
 }
 
 void TCP_Server::handle_accept(const boost::system::error_code& error,
-                std::shared_ptr<boost::asio::ip::tcp::socket> socket) {
+               std::shared_ptr<boost::asio::ip::tcp::socket> socket) {
   if (!error) {
     try {
       // Create a unique peer ID based on endpoint
@@ -85,32 +85,9 @@ void TCP_Server::handle_accept(const boost::system::error_code& error,
 
       // Create new TCP peer
       auto peer = std::make_shared<TCP_Peer>(peer_id);
-
-      // Set up the socket in the peer
-      peer->get_socket().swap(*socket);
-
-      // Set up stream processor to handle incoming data
-      peer->set_stream_processor([this, peer_id](std::istream& stream) {
-        try {
-          std::string data;
-          std::getline(stream, data);
-          BOOST_LOG_TRIVIAL(debug) << "[" << peer_id << "] Received data: " << data;
-
-          // Forward the message to the channel
-          channel_.broadcast(data);
-        } catch (const std::exception& e) {
-          BOOST_LOG_TRIVIAL(error) << "[" << peer_id << "] Stream processing error: " << e.what();
-        }
-      });
-
+      
       // Add peer to manager
       peer_manager_.add_peer(peer);
-
-      // Start stream processing
-      if (!peer->start_stream_processing()) {
-        BOOST_LOG_TRIVIAL(error) << "Failed to start stream processing for peer: " << peer_id;
-        return;
-      }
 
       BOOST_LOG_TRIVIAL(info) << "Accepted new connection from " << peer_id;
     } catch (const std::exception& e) {
