@@ -9,7 +9,7 @@
 #include "store/store.hpp"
 #include "network/codec.hpp"
 #include "network/message_frame.hpp"
-#include "network/peer_manager.hpp"
+#include "network/channel.hpp"
 #include "crypto/crypto_stream.hpp"
 
 namespace dfs {
@@ -17,8 +17,8 @@ namespace network {
 
 class FileServer {
 public:
-    // Constructor takes server ID and encryption key
-    FileServer(uint32_t server_id, const std::vector<uint8_t>& key);
+    // Constructor takes server ID, encryption key, and channel
+    FileServer(uint32_t server_id, const std::vector<uint8_t>& key, std::shared_ptr<Channel> channel);
 
     // Virtual destructor for proper cleanup
     virtual ~FileServer() = default;
@@ -26,13 +26,13 @@ public:
     // Extract filename from message frame's payload stream
     std::string extract_filename(const MessageFrame& frame);
 
-    // Prepare and send file to peers
-    bool prepare_and_send(const std::string& filename, std::optional<uint32_t> peer_id = std::nullopt);
+    // Prepare file for sending
+    bool prepare_file(const std::string& filename, MessageFrame& frame);
 
-    // Store file locally and broadcast to peers
+    // Store file locally
     bool store_file(const std::string& filename, std::stringstream& input);
 
-    // Get file either from local store or network
+    // Get file from local store
     std::optional<std::stringstream> get_file(const std::string& filename);
 
     // Handle incoming store message frame
@@ -46,7 +46,7 @@ private:
     std::vector<uint8_t> key_;
     std::unique_ptr<dfs::store::Store> store_;
     std::unique_ptr<Codec> codec_;
-    std::shared_ptr<PeerManager> peer_manager_;
+    std::shared_ptr<Channel> channel_;
 
     // Channel listener continuously checks for messages in the channel queue
     void channel_listener();
