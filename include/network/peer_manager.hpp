@@ -17,6 +17,11 @@ public:
     PeerManager();
     ~PeerManager();
 
+    // Connection management methods
+    bool connect(const std::string& peer_id, const std::string& address, uint16_t port);
+    bool disconnect(const std::string& peer_id);
+    bool is_connected(const std::string& peer_id) const;
+
     // Add a new peer to the manager
     void add_peer(std::shared_ptr<TCP_Peer> peer);
 

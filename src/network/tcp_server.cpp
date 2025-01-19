@@ -15,7 +15,7 @@ TCP_Server::TCP_Server(uint16_t port,
   , is_running_(false)
   , port_(port)
   , address_(address) {
-  
+
   BOOST_LOG_TRIVIAL(info) << "Initializing TCP server on " << address << ":" << port;
 }
 
@@ -67,7 +67,7 @@ void TCP_Server::start_accept() {
   }
 
   auto socket = std::make_shared<boost::asio::ip::tcp::socket>(io_context_);
-  
+
   acceptor_->async_accept(*socket,
     [this, socket](const boost::system::error_code& error) {
       handle_accept(error, socket);
@@ -85,11 +85,17 @@ void TCP_Server::handle_accept(const boost::system::error_code& error,
 
       // Create new TCP peer
       auto peer = std::make_shared<TCP_Peer>(peer_id);
-      
+
       // Add peer to manager
       peer_manager_.add_peer(peer);
 
-      BOOST_LOG_TRIVIAL(info) << "Accepted new connection from " << peer_id;
+      // Connect using peer manager instead of directly
+      if (peer_manager_.connect(peer_id, endpoint.address().to_string(), endpoint.port())) {
+        BOOST_LOG_TRIVIAL(info) << "Accepted new connection from " << peer_id;
+      } else {
+        BOOST_LOG_TRIVIAL(error) << "Failed to establish connection with " << peer_id;
+        peer_manager_.remove_peer(peer_id);
+      }
     } catch (const std::exception& e) {
       BOOST_LOG_TRIVIAL(error) << "Error handling new connection: " << e.what();
     }
@@ -109,7 +115,7 @@ void TCP_Server::shutdown() {
   }
 
   BOOST_LOG_TRIVIAL(info) << "Initiating server shutdown";
-  
+
   is_running_ = false;
 
   // Stop accepting new connections

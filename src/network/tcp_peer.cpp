@@ -4,6 +4,100 @@
 namespace dfs {
 namespace network {
 
+// Public interface methods that delegate to implementation
+bool TCP_Peer::connect(const std::string& address, uint16_t port) {
+    BOOST_LOG_TRIVIAL(error) << "[" << peer_id_ << "] Direct connection attempts are not allowed. Please use PeerManager instead.";
+    return false;
+}
+
+bool TCP_Peer::disconnect() {
+    BOOST_LOG_TRIVIAL(error) << "[" << peer_id_ << "] Direct disconnection is not allowed. Please use PeerManager instead.";
+    return false;
+}
+
+bool TCP_Peer::is_connected() const {
+    return is_connected_impl();
+}
+
+// Implementation methods for PeerManager's use
+bool TCP_Peer::connect_impl(const std::string& address, uint16_t port) {
+    if (socket_->is_open()) {
+        BOOST_LOG_TRIVIAL(error) << "[" << peer_id_ << "] Cannot connect - socket already connected";
+        return false;
+    }
+
+    try {
+        BOOST_LOG_TRIVIAL(debug) << "[" << peer_id_ << "] Entering connect() method";
+        BOOST_LOG_TRIVIAL(info) << "[" << peer_id_ << "] Initiating connection to " << address << ":" << port;
+
+        // Convert hostname/address string to IP address using async resolver
+        boost::asio::ip::tcp::resolver resolver(io_context_);
+        boost::system::error_code resolve_ec;
+        auto endpoints = resolver.resolve(address, std::to_string(port), resolve_ec);
+
+        if (resolve_ec) {
+            BOOST_LOG_TRIVIAL(error) << "[" << peer_id_ << "] DNS resolution failed: " << resolve_ec.message() 
+                        << " (code: " << resolve_ec.value() << ")";
+            return false;
+        }
+
+        BOOST_LOG_TRIVIAL(debug) << "[" << peer_id_ << "] Address resolved successfully";
+        endpoint_ = std::make_unique<boost::asio::ip::tcp::endpoint>(*endpoints.begin());
+
+        // Attempt synchronous connection to resolved endpoint
+        BOOST_LOG_TRIVIAL(debug) << "[" << peer_id_ << "] Attempting socket connection";
+        boost::system::error_code connect_ec;
+        socket_->connect(*endpoint_, connect_ec);
+
+        if (connect_ec) {
+            BOOST_LOG_TRIVIAL(error) << "[" << peer_id_ << "] Connection failed: " << connect_ec.message();
+            cleanup_connection();  // Clean up resources on failure
+            return false;
+        }
+
+        // Reset IO context if it's active to ensure clean state
+        if (!io_context_.stopped()) {
+            io_context_.reset();
+        }
+
+        BOOST_LOG_TRIVIAL(info) << "Successfully connected to " << address << ":" << port;
+        return true;
+    }
+    catch (const std::exception& e) {
+        // Handle any unexpected errors during connection process
+        BOOST_LOG_TRIVIAL(error) << "[" << peer_id_ << "] Connection error: " << e.what();
+        cleanup_connection();  // Ensure resources are cleaned up
+        return false;
+    }
+}
+
+bool TCP_Peer::disconnect_impl() {
+    if (!socket_->is_open()) {
+        return false;
+    }
+
+    try {
+        BOOST_LOG_TRIVIAL(debug) << "[" << peer_id_ << "] Initiating disconnect sequence";
+
+        // First stop any ongoing stream processing
+        stop_stream_processing();
+
+        // Then cleanup the connection
+        cleanup_connection();
+
+        BOOST_LOG_TRIVIAL(info) << "[" << peer_id_ << "] Successfully disconnected";
+        return true;
+    }
+    catch (const std::exception& e) {
+        BOOST_LOG_TRIVIAL(error) << "[" << peer_id_ << "] Disconnect error: " << e.what();
+        return false;
+    }
+}
+
+bool TCP_Peer::is_connected_impl() const {
+    return socket_ && socket_->is_open();
+}
+
 // Constructor initializes a TCP peer with a unique identifier
 // Sets up the networking components including socket and buffers
 TCP_Peer::TCP_Peer(const std::string& peer_id)
@@ -19,7 +113,7 @@ TCP_Peer::TCP_Peer(const std::string& peer_id)
 // Destructor
 TCP_Peer::~TCP_Peer() {
     if (socket_ && socket_->is_open()) {
-        disconnect();
+        disconnect_impl(); //Call the implementation method here
     }
     BOOST_LOG_TRIVIAL(debug) << "TCP_Peer destroyed: " << peer_id_;
 }
@@ -71,10 +165,10 @@ bool TCP_Peer::start_stream_processing() {
 void TCP_Peer::stop_stream_processing() {
     if (processing_active_) {
         BOOST_LOG_TRIVIAL(debug) << "[" << peer_id_ << "] Stopping stream processing";
-        
+
         // Signal processing to stop
         processing_active_ = false;
-        
+
         // Cancel any pending asynchronous operations
         if (socket_ && socket_->is_open()) {
             boost::system::error_code ec;
@@ -83,20 +177,20 @@ void TCP_Peer::stop_stream_processing() {
                 BOOST_LOG_TRIVIAL(error) << "[" << peer_id_ << "] Error canceling socket operations: " << ec.message();
             }
         }
-        
+
         // Stop io_context
         io_context_.stop();
-        
+
         // Wait for processing thread to complete
         if (processing_thread_ && processing_thread_->joinable()) {
             processing_thread_->join();
             processing_thread_.reset();
             BOOST_LOG_TRIVIAL(debug) << "[" << peer_id_ << "] Processing thread joined";
         }
-        
+
         // Reset io_context for potential reuse
         io_context_.restart();
-        
+
         BOOST_LOG_TRIVIAL(info) << "[" << peer_id_ << "] Stream processing stopped";
     }
 }
@@ -104,27 +198,27 @@ void TCP_Peer::stop_stream_processing() {
 // Main processing function that sets up async reading
 void TCP_Peer::process_stream() {
     BOOST_LOG_TRIVIAL(debug) << "[" << peer_id_ << "] Setting up stream processing";
-    
+
     try {
         // Create work guard to keep io_context running
         auto work_guard = boost::asio::make_work_guard(io_context_);
-        
+
         // Start the initial async read operation
         if (processing_active_ && socket_->is_open()) {
             async_read_next();
         }
-        
+
         // Run IO context in this thread
         while (processing_active_ && socket_->is_open()) {
             io_context_.run_one();
         }
-        
+
         // Release work guard to allow io_context to stop
         work_guard.reset();
-        
+
         // Run any remaining handlers
         while (io_context_.poll_one()) {}
-        
+
     } catch (const std::exception& e) {
         BOOST_LOG_TRIVIAL(error) << "[" << peer_id_ << "] Stream processing error: " << e.what();
     }
@@ -140,7 +234,7 @@ void TCP_Peer::async_read_next() {
     }
 
     BOOST_LOG_TRIVIAL(trace) << "[" << peer_id_ << "] Setting up next async read";
-    
+
     // Set up asynchronous read operation that continues until newline character
     boost::asio::async_read_until(
         *socket_,
@@ -155,7 +249,7 @@ void TCP_Peer::async_read_next() {
 
                 if (!data.empty()) {
                     BOOST_LOG_TRIVIAL(debug) << "[" << peer_id_ << "] Received data: " << data;
-                    
+
                     if (stream_processor_) {
                         // If stream processor exists, pass data through it
                         std::string framed_data = data + '\n';
@@ -187,82 +281,6 @@ void TCP_Peer::async_read_next() {
         });
 }
 
-// Establishes a TCP connection to the specified address and port
-bool TCP_Peer::connect(const std::string& address, uint16_t port) {
-    // Prevent connection attempt if socket is already connected
-    if (socket_->is_open()) {
-        BOOST_LOG_TRIVIAL(error) << "[" << peer_id_ << "] Cannot connect - socket already connected";
-        return false;
-    }
-
-    try {
-        BOOST_LOG_TRIVIAL(debug) << "[" << peer_id_ << "] Entering connect() method";
-        BOOST_LOG_TRIVIAL(info) << "[" << peer_id_ << "] Initiating connection to " << address << ":" << port;
-
-        // Convert hostname/address string to IP address using async resolver
-        boost::asio::ip::tcp::resolver resolver(io_context_);
-        boost::system::error_code resolve_ec;
-        auto endpoints = resolver.resolve(address, std::to_string(port), resolve_ec);
-
-        if (resolve_ec) {
-            BOOST_LOG_TRIVIAL(error) << "[" << peer_id_ << "] DNS resolution failed: " << resolve_ec.message() 
-                        << " (code: " << resolve_ec.value() << ")";
-            return false;
-        }
-
-        BOOST_LOG_TRIVIAL(debug) << "[" << peer_id_ << "] Address resolved successfully";
-        endpoint_ = std::make_unique<boost::asio::ip::tcp::endpoint>(*endpoints.begin());
-
-        // Attempt synchronous connection to resolved endpoint
-        BOOST_LOG_TRIVIAL(debug) << "[" << peer_id_ << "] Attempting socket connection";
-        boost::system::error_code connect_ec;
-        socket_->connect(*endpoint_, connect_ec);
-
-        if (connect_ec) {
-            BOOST_LOG_TRIVIAL(error) << "[" << peer_id_ << "] Connection failed: " << connect_ec.message();
-            cleanup_connection();  // Clean up resources on failure
-            return false;
-        }
-
-        // Reset IO context if it's active to ensure clean state
-        if (!io_context_.stopped()) {
-            io_context_.reset();
-        }
-
-        BOOST_LOG_TRIVIAL(info) << "Successfully connected to " << address << ":" << port;
-        return true;
-    }
-    catch (const std::exception& e) {
-        // Handle any unexpected errors during connection process
-        BOOST_LOG_TRIVIAL(error) << "[" << peer_id_ << "] Connection error: " << e.what();
-        cleanup_connection();  // Ensure resources are cleaned up
-        return false;
-    }
-}
-
-// Gracefully terminates the TCP connection
-bool TCP_Peer::disconnect() {
-    if (!socket_->is_open()) {
-        return false;
-    }
-
-    try {
-        BOOST_LOG_TRIVIAL(debug) << "[" << peer_id_ << "] Initiating disconnect sequence";
-
-        // First stop any ongoing stream processing
-        stop_stream_processing();
-
-        // Then cleanup the connection
-        cleanup_connection();
-
-        BOOST_LOG_TRIVIAL(info) << "[" << peer_id_ << "] Successfully disconnected";
-        return true;
-    }
-    catch (const std::exception& e) {
-        BOOST_LOG_TRIVIAL(error) << "[" << peer_id_ << "] Disconnect error: " << e.what();
-        return false;
-    }
-}
 
 // Send data from an input stream through the socket
 bool TCP_Peer::send_message(const std::string& message) {
@@ -356,7 +374,12 @@ void TCP_Peer::cleanup_connection() {
 
 // Check if the peer is currently connected
 bool TCP_Peer::is_connected() const {
-    return socket_ && socket_->is_open();
+    return is_connected_impl();
+}
+
+// Get the peer's unique identifier
+const std::string& TCP_Peer::get_peer_id() const {
+    return peer_id_;
 }
 
 } // namespace network
