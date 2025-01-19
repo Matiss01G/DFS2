@@ -44,6 +44,7 @@ target_link_libraries(dfs_store PUBLIC
 add_library(dfs_network
     src/network/tcp_peer.cpp
     src/network/peer_manager.cpp
+    src/file_server/file_server.cpp
 )
 target_include_directories(dfs_network PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
@@ -51,6 +52,7 @@ target_include_directories(dfs_network PUBLIC
 )
 target_link_libraries(dfs_network PUBLIC
     dfs_crypto
+    dfs_store
     Boost::system
     Boost::thread
     Boost::log

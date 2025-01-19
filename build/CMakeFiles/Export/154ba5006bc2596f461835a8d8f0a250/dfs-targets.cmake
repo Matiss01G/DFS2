@@ -76,7 +76,7 @@ add_library(dfs::dfs_network STATIC IMPORTED)
 
 set_target_properties(dfs::dfs_network PROPERTIES
   INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include"
-  INTERFACE_LINK_LIBRARIES "dfs::dfs_crypto;Boost::system;Boost::thread;Boost::log"
+  INTERFACE_LINK_LIBRARIES "dfs::dfs_crypto;dfs::dfs_store;Boost::system;Boost::thread;Boost::log"
 )
 
 # Load information for each installed configuration.
