@@ -79,13 +79,12 @@ std::string FileServer::extract_filename(const MessageFrame& frame) {
   }
 }
 
-bool FileServer::prepare_and_send(const std::string& filename, std::optional<uint32_t> peer_id) {
+bool FileServer::prepare_and_send(const std::string& filename, std::optional<std::string> peer_id) {
   try {
     BOOST_LOG_TRIVIAL(info) << "Preparing file: " << filename;
 
     // Create message frame with empty payload stream
     MessageFrame frame;
-    // source_id is intentionally left empty
     frame.message_type = MessageType::STORE_FILE;
     frame.payload_stream = std::make_shared<std::stringstream>();
     frame.filename_length = filename.length();

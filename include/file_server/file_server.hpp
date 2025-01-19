@@ -28,7 +28,7 @@ public:
     std::string extract_filename(const MessageFrame& frame);
 
     // Prepare and send file to peers
-    bool prepare_and_send(const std::string& filename, std::optional<uint32_t> peer_id = std::nullopt);
+    bool prepare_and_send(const std::string& filename, std::optional<std::string> peer_id = std::nullopt);
 
     // Store file locally and broadcast to peers
     bool store_file(const std::string& filename, std::stringstream& input);
