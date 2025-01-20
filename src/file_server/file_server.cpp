@@ -4,14 +4,16 @@
 #include <optional>
 #include <thread>
 #include <chrono>
+#include "network/peer_manager.hpp"  // Added include for PeerManager
 
 namespace dfs {
 namespace network {
 
-FileServer::FileServer(uint32_t server_id, const std::vector<uint8_t>& key, Channel& channel)
+FileServer::FileServer(uint32_t server_id, const std::vector<uint8_t>& key, PeerManager& peer_manager, Channel& channel)
   : server_id_(server_id)
   , key_(key)
-  , channel_(channel) {  // Initialize channel reference
+  , channel_(channel)
+  , peer_manager_(peer_manager) {  // Initialize PeerManager reference
 
   // Validate key size (32 bytes for AES-256)
   if (key_.empty() || key_.size() != 32) {

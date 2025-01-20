@@ -16,10 +16,13 @@
 namespace dfs {
 namespace network {
 
+// Forward declaration
+class PeerManager;
+
 class FileServer {
 public:
-    // Constructor takes server ID, encryption key and reference to shared channel
-    FileServer(uint32_t server_id, const std::vector<uint8_t>& key, Channel& channel);
+    // Constructor takes server ID, encryption key, PeerManager reference and reference to shared channel
+    FileServer(uint32_t server_id, const std::vector<uint8_t>& key, PeerManager& peer_manager, Channel& channel);
 
     // Virtual destructor for proper cleanup
     virtual ~FileServer() = default;
@@ -47,7 +50,8 @@ private:
     std::vector<uint8_t> key_;
     std::unique_ptr<dfs::store::Store> store_;
     std::unique_ptr<Codec> codec_;
-    Channel& channel_;  
+    Channel& channel_;
+    PeerManager& peer_manager_;  // Added PeerManager reference
 
     // Channel listener continuously checks for messages in the channel queue
     void channel_listener();
