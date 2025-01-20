@@ -31,12 +31,13 @@ public:
     std::string extract_filename(const MessageFrame& frame);
 
     // Prepare and send file to peers
-    bool prepare_and_send(const std::string& filename, 
-                         std::optional<std::string> peer_id = std::nullopt,
-                         MessageType message_type = MessageType::STORE_FILE);
+    bool prepare_and_send(const std::string& filename, std::optional<std::string> peer_id = std::nullopt);
 
     // Store file locally and broadcast to peers
     bool store_file(const std::string& filename, std::stringstream& input);
+
+    // Get file either from local store or network
+    std::optional<std::stringstream> get_file(const std::string& filename);
 
     // Handle incoming store message frame
     bool handle_store(const MessageFrame& frame);

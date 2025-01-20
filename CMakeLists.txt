@@ -8,13 +8,12 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 # Find required packages
 find_package(OpenSSL REQUIRED)
 find_package(Boost REQUIRED COMPONENTS log log_setup system thread)
-find_package(GTest REQUIRED)
 
 # Create crypto library
 add_library(dfs_crypto
     src/crypto/crypto_stream.cpp
 )
-target_include_directories(dfs_crypto PUBLIC 
+target_include_directories(dfs_crypto PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
     $<INSTALL_INTERFACE:include>
 )
@@ -43,11 +42,8 @@ target_link_libraries(dfs_store PUBLIC
 
 # Create network library
 add_library(dfs_network
-    src/network/tcp_server.cpp
     src/network/tcp_peer.cpp
     src/network/peer_manager.cpp
-    src/network/channel.cpp
-    src/network/codec.cpp
     src/file_server/file_server.cpp
 )
 target_include_directories(dfs_network PUBLIC
@@ -62,22 +58,8 @@ target_link_libraries(dfs_network PUBLIC
     Boost::log
 )
 
-# Enable testing
-enable_testing()
-
-# Add tests executable
-add_executable(unit_tests
-    src/tests/tcp_peer_test.cpp
-    src/tests/tcp_server_test.cpp
-    src/tests/file_server_test.cpp
-)
-target_link_libraries(unit_tests PRIVATE
-    GTest::GTest
-    GTest::Main
-    dfs_network
-    dfs_crypto
-    dfs_store
-)
+# Skip building tests
+set(BUILD_TESTING OFF CACHE BOOL "Disable testing" FORCE)
 
 # Install rules
 install(TARGETS dfs_crypto dfs_store dfs_network

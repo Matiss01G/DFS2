@@ -81,15 +81,15 @@ std::string FileServer::extract_filename(const MessageFrame& frame) {
   }
 }
 
-bool FileServer::prepare_and_send(const std::string& filename, std::optional<std::string> peer_id, MessageType message_type) {
+bool FileServer::prepare_and_send(const std::string& filename, std::optional<std::string> peer_id) {
   try {
     BOOST_LOG_TRIVIAL(info) << "Preparing file: " << filename 
-                          << " for " << (peer_id ? "peer " + *peer_id : "broadcast")
-                          << " with message type: " << static_cast<int>(message_type);
+                           << " for " << (peer_id ? "peer " + *peer_id : "broadcast");
 
-    // Create message frame
+    // Create message frame with empty payload stream
     MessageFrame frame;
-    frame.message_type = message_type;
+    // source_id is intentionally left empty
+    frame.message_type = MessageType::STORE_FILE;
     frame.payload_stream = std::make_shared<std::stringstream>();
     frame.filename_length = filename.length();
 
@@ -98,21 +98,16 @@ bool FileServer::prepare_and_send(const std::string& filename, std::optional<std
     auto iv = crypto_stream.generate_IV();
     frame.iv_.assign(iv.begin(), iv.end());
 
-    // Only get file data for STORE_FILE type
-    if (message_type == MessageType::STORE_FILE) {
-      try {
-        store_->get(filename, *frame.payload_stream);
-        if (!frame.payload_stream->good()) {
-          BOOST_LOG_TRIVIAL(error) << "Failed to get file from store: " << filename;
-          return false;
-        }
-      } catch (const std::exception& e) {
-        BOOST_LOG_TRIVIAL(error) << "Error getting file from store: " << e.what();
+    // Get file data from store into payload stream
+    try {
+      store_->get(filename, *frame.payload_stream);
+      if (!frame.payload_stream->good()) {
+        BOOST_LOG_TRIVIAL(error) << "Failed to get file from store: " << filename;
         return false;
       }
-    } else {
-      // For GET_FILE, we only need the filename in the payload
-      (*frame.payload_stream) << filename;
+    } catch (const std::exception& e) {
+      BOOST_LOG_TRIVIAL(error) << "Error getting file from store: " << e.what();
+      return false;
     }
 
     // Create stream for serialized data
@@ -128,11 +123,11 @@ bool FileServer::prepare_and_send(const std::string& filename, std::optional<std
     bool send_success;
     if (peer_id) {
       // Send to specific peer
-      BOOST_LOG_TRIVIAL(debug) << "Sending to peer: " << *peer_id;
+      BOOST_LOG_TRIVIAL(debug) << "Sending file to peer: " << *peer_id;
       send_success = peer_manager_.send_stream(*peer_id, serialized_stream);
     } else {
       // Broadcast to all peers
-      BOOST_LOG_TRIVIAL(debug) << "Broadcasting to all peers";
+      BOOST_LOG_TRIVIAL(debug) << "Broadcasting file to all peers";
       send_success = peer_manager_.broadcast_stream(serialized_stream);
     }
 
@@ -172,8 +167,8 @@ bool FileServer::store_file(const std::string& filename, std::stringstream& inpu
     input.clear();
     input.seekg(0);
 
-    // Broadcast the stored file to all peers with STORE_FILE type
-    if (!prepare_and_send(filename, std::nullopt, MessageType::STORE_FILE)) {
+    // Broadcast the stored file to all peers
+    if (!prepare_and_send(filename)) {
       BOOST_LOG_TRIVIAL(error) << "Failed to broadcast file: " << filename;
       return false;
     }
@@ -183,6 +178,65 @@ bool FileServer::store_file(const std::string& filename, std::stringstream& inpu
   }
   catch (const std::exception& e) {
     BOOST_LOG_TRIVIAL(error) << "Error in store_file: " << e.what();
+    return false;
+  }
+}
+
+std::optional<std::stringstream> FileServer::get_file(const std::string& filename) {
+  try {
+    BOOST_LOG_TRIVIAL(info) << "Attempting to get file: " << filename;
+
+    // Check local store
+    std::stringstream local_result;
+    try {
+      store_->get(filename, local_result);
+      if (local_result.good()) {
+        BOOST_LOG_TRIVIAL(info) << "File found in local store: " << filename;
+        return local_result;
+      }
+    } catch (const dfs::store::StoreError& e) {
+      BOOST_LOG_TRIVIAL(debug) << "File not found in local store: " << e.what();
+    }
+
+    BOOST_LOG_TRIVIAL(info) << "File not found: " << filename;
+    return std::nullopt;
+  }
+  catch (const std::exception& e) {
+    BOOST_LOG_TRIVIAL(error) << "Error in get_file: " << e.what();
+    return std::nullopt;
+  }
+}
+
+bool FileServer::handle_store(const MessageFrame& frame) {
+  try {
+    BOOST_LOG_TRIVIAL(info) << "Handling store message frame";
+
+    // Validate payload stream
+    if (!frame.payload_stream || !frame.payload_stream->good()) {
+      BOOST_LOG_TRIVIAL(error) << "Invalid payload stream in message frame";
+      return false;
+    }
+
+    // Extract filename from frame
+    std::string filename;
+    try {
+      filename = extract_filename(frame);
+    } catch (const std::exception& e) {
+      BOOST_LOG_TRIVIAL(error) << "Failed to extract filename: " << e.what();
+      return false;
+    }
+
+    // Store the file using the Store class
+    try {
+      store_->store(filename, *frame.payload_stream);
+      BOOST_LOG_TRIVIAL(info) << "Successfully stored file: " << filename;
+      return true;
+    } catch (const std::exception& e) {
+      BOOST_LOG_TRIVIAL(error) << "Failed to store file: " << e.what();
+      return false;
+    }
+  } catch (const std::exception& e) {
+    BOOST_LOG_TRIVIAL(error) << "Error in handle_store: " << e.what();
     return false;
   }
 }
@@ -206,8 +260,8 @@ bool FileServer::handle_get(const MessageFrame& frame) {
       return false;
     }
 
-    // Prepare and send file with GET_FILE type
-    if (!prepare_and_send(filename, frame.source_id, MessageType::GET_FILE)) {
+    // Prepare file
+    if (!prepare_and_send(filename, frame.source_id)) {
       BOOST_LOG_TRIVIAL(error) << "Failed to prepare file: " << filename;
       return false;
     }
