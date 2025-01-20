@@ -163,7 +163,17 @@ bool FileServer::store_file(const std::string& filename, std::stringstream& inpu
       return false;
     }
 
-    BOOST_LOG_TRIVIAL(info) << "Successfully stored file: " << filename;
+    // Reset stream position after store operation
+    input.clear();
+    input.seekg(0);
+
+    // Broadcast the stored file to all peers
+    if (!prepare_and_send(filename)) {
+      BOOST_LOG_TRIVIAL(error) << "Failed to broadcast file: " << filename;
+      return false;
+    }
+
+    BOOST_LOG_TRIVIAL(info) << "Successfully stored and broadcasted file: " << filename;
     return true;
   }
   catch (const std::exception& e) {
