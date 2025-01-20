@@ -81,15 +81,16 @@ std::string FileServer::extract_filename(const MessageFrame& frame) {
   }
 }
 
-bool FileServer::prepare_and_send(const std::string& filename, std::optional<std::string> peer_id) {
+bool FileServer::prepare_and_send(const std::string& filename, MessageType message_type, std::optional<std::string> peer_id) {
   try {
     BOOST_LOG_TRIVIAL(info) << "Preparing file: " << filename 
-                           << " for " << (peer_id ? "peer " + *peer_id : "broadcast");
+                          << " for " << (peer_id ? "peer " + *peer_id : "broadcast")
+                          << " with message type: " << static_cast<int>(message_type);
 
     // Create message frame with empty payload stream
     MessageFrame frame;
     // source_id is intentionally left empty
-    frame.message_type = MessageType::STORE_FILE;
+    frame.message_type = message_type;
     frame.payload_stream = std::make_shared<std::stringstream>();
     frame.filename_length = filename.length();
 
@@ -167,8 +168,8 @@ bool FileServer::store_file(const std::string& filename, std::stringstream& inpu
     input.clear();
     input.seekg(0);
 
-    // Broadcast the stored file to all peers
-    if (!prepare_and_send(filename)) {
+    // Broadcast the stored file to all peers with STORE_FILE message type
+    if (!prepare_and_send(filename, MessageType::STORE_FILE)) {
       BOOST_LOG_TRIVIAL(error) << "Failed to broadcast file: " << filename;
       return false;
     }
@@ -260,8 +261,8 @@ bool FileServer::handle_get(const MessageFrame& frame) {
       return false;
     }
 
-    // Prepare file
-    if (!prepare_and_send(filename, frame.source_id)) {
+    // Prepare file with GET_FILE message type and send to requesting peer
+    if (!prepare_and_send(filename, MessageType::GET_FILE, frame.source_id)) {
       BOOST_LOG_TRIVIAL(error) << "Failed to prepare file: " << filename;
       return false;
     }
