@@ -83,7 +83,8 @@ std::string FileServer::extract_filename(const MessageFrame& frame) {
 
 bool FileServer::prepare_and_send(const std::string& filename, std::optional<std::string> peer_id) {
   try {
-    BOOST_LOG_TRIVIAL(info) << "Preparing file: " << filename;
+    BOOST_LOG_TRIVIAL(info) << "Preparing file: " << filename 
+                           << " for " << (peer_id ? "peer " + *peer_id : "broadcast");
 
     // Create message frame with empty payload stream
     MessageFrame frame;
@@ -118,7 +119,24 @@ bool FileServer::prepare_and_send(const std::string& filename, std::optional<std
       return false;
     }
 
-    BOOST_LOG_TRIVIAL(info) << "Successfully prepared file: " << filename;
+    // Send the serialized data
+    bool send_success;
+    if (peer_id) {
+      // Send to specific peer
+      BOOST_LOG_TRIVIAL(debug) << "Sending file to peer: " << *peer_id;
+      send_success = peer_manager_.send_stream(*peer_id, serialized_stream);
+    } else {
+      // Broadcast to all peers
+      BOOST_LOG_TRIVIAL(debug) << "Broadcasting file to all peers";
+      send_success = peer_manager_.broadcast_stream(serialized_stream);
+    }
+
+    if (!send_success) {
+      BOOST_LOG_TRIVIAL(error) << "Failed to send file: " << filename;
+      return false;
+    }
+
+    BOOST_LOG_TRIVIAL(info) << "Successfully prepared and sent file: " << filename;
     return true;
   }
   catch (const std::exception& e) {
