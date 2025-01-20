@@ -16,6 +16,7 @@ namespace store {
 
 class Store {
 public:
+
     explicit Store(const std::string& base_path);
 
     // stores data stream under given key
@@ -23,10 +24,7 @@ public:
 
     // Retrieves data stream using given key
     void get(const std::string& key, std::stringstream& output);
-
-    // Retrieves a stream for reading the file without loading it entirely into memory
-    std::unique_ptr<std::istream> get_stream(const std::string& key);
-
+    
     // Checks if data exists using given key
     bool has(const std::string& key) const;
 

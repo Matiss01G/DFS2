@@ -146,27 +146,6 @@ void Store::clear() {
     BOOST_LOG_TRIVIAL(info) << "Store cleared successfully";
 }
 
-std::unique_ptr<std::istream> Store::get_stream(const std::string& key) {
-    BOOST_LOG_TRIVIAL(info) << "Opening file stream for key: " << key;
-
-    std::string hash = hash_key(key);
-    std::filesystem::path file_path = get_path_for_hash(hash);
-
-    if (!std::filesystem::exists(file_path)) {
-        BOOST_LOG_TRIVIAL(error) << "File not found: " << file_path.string();
-        throw StoreError("File not found");
-    }
-
-    // Create and return a file stream without loading the entire file
-    auto file_stream = std::make_unique<std::ifstream>(file_path, std::ios::binary);
-    if (!file_stream || !file_stream->good()) {
-        throw StoreError("Failed to open file stream: " + file_path.string());
-    }
-
-    BOOST_LOG_TRIVIAL(debug) << "Successfully opened file stream for: " << key;
-    return file_stream;
-}
-
 std::string Store::hash_key(const std::string& key) const {
     BOOST_LOG_TRIVIAL(debug) << "Generating hash for key: " << key;
 

@@ -15,19 +15,16 @@ public:
     // Default constructor
     explicit Codec(const std::vector<uint8_t>& key);
 
-    // Serializes only the header of a message frame to an output stream
-    std::size_t serialize_header(const MessageFrame& frame, std::ostream& output);
-
-    // Streams and encrypts payload data from input to output stream
-    std::size_t stream_encrypt_payload(std::istream& input, std::ostream& output, const std::vector<uint8_t>& iv);
+    // Serializes a message frame to an output stream
+    std::size_t serialize(const MessageFrame& frame, std::ostream& output);
 
     // Deserializes a message frame from an input stream and pushes it to the channel
-    MessageFrame deserialize(std::istream& input, Channel& channel, const std::string& source_id = "");
+    MessageFrame deserialize(std::istream& input, Channel& channel);
 
 private:
     // The encryption/decryption key
     std::vector<uint8_t> key_;
-
+    
     // Writes bytes to an output stream
     void write_bytes(std::ostream& output, const void* data, std::size_t size);
 
