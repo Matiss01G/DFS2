@@ -7,7 +7,8 @@
 namespace dfs {
 namespace network {
 
-Codec::Codec(const std::vector<uint8_t>& key) : key_(key) {
+Codec::Codec(const std::vector<uint8_t>& key, Channel& channel) 
+    : key_(key), channel_(channel) {
     BOOST_LOG_TRIVIAL(info) << "Initializing Codec with key of size: " << key_.size();
 }
 
@@ -127,7 +128,7 @@ MessageFrame Codec::deserialize(std::istream& input, const std::string& source_i
 
         frame.payload_stream = std::make_shared<std::stringstream>();
 
-        channel.produce(frame);
+        channel_.produce(frame); // Use the member variable channel_
 
         // Decrypt payload if present
         if (frame.payload_size > 0) {
