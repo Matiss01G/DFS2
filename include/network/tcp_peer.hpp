@@ -8,6 +8,8 @@
 #include <boost/asio.hpp>
 #include <boost/log/trivial.hpp>
 #include "peer.hpp"
+#include "channel.hpp"
+#include "codec.hpp"
 
 namespace dfs {
 namespace network {
@@ -25,7 +27,7 @@ public:
     // Update the StreamProcessor type to include the source identifier
     using StreamProcessor = std::function<void(std::istream&, const std::string&)>;
 
-    explicit TCP_Peer(const std::string& peer_id);
+    explicit TCP_Peer(const std::string& peer_id, Channel& channel, const std::vector<uint8_t>& key);
     ~TCP_Peer() override;
 
     // Delete copy operations to prevent socket duplication
@@ -72,6 +74,9 @@ private:
     void initialize_streams();
     void cleanup_connection();
     void process_stream();
+
+    // Codec for encryption/decryption
+    std::unique_ptr<Codec> codec_;
 
     friend class PeerManager;
 };

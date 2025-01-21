@@ -6,10 +6,11 @@ namespace network {
 
 // TCP_Peer represents a network peer connection that can send and receive data streams
 // It manages socket connections and provides asynchronous I/O operations
-TCP_Peer::TCP_Peer(const std::string& peer_id)
+TCP_Peer::TCP_Peer(const std::string& peer_id, Channel& channel, const std::vector<uint8_t>& key)
   : peer_id_(peer_id),  
     socket_(std::make_unique<boost::asio::ip::tcp::socket>(io_context_)),  
-    input_buffer_(std::make_unique<boost::asio::streambuf>()) {  
+    input_buffer_(std::make_unique<boost::asio::streambuf>()),
+    codec_(std::make_unique<Codec>(key, channel)) {  
     initialize_streams();
     BOOST_LOG_TRIVIAL(debug) << "[" << peer_id_ << "] Constructing TCP_Peer";
     BOOST_LOG_TRIVIAL(debug) << "[" << peer_id_ << "] Input stream initialized";
@@ -151,7 +152,7 @@ void TCP_Peer::async_read_next() {
                         try {
                             boost::asio::ip::tcp::endpoint remote_endpoint = socket_->remote_endpoint();
                             std::string source_id = remote_endpoint.address().to_string() + ":" + 
-                                                 std::to_string(remote_endpoint.port());
+                                                     std::to_string(remote_endpoint.port());
                             BOOST_LOG_TRIVIAL(debug) << "[" << peer_id_ << "] Processing data from " << source_id;
                             stream_processor_(iss, source_id);
                         } catch (const std::exception& e) {
