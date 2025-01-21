@@ -73,7 +73,7 @@ std::size_t Codec::serialize(const MessageFrame& frame, std::ostream& output) {
     }
 }
 
-MessageFrame Codec::deserialize(std::istream& input, Channel& channel, const std::string& source_id) {
+MessageFrame Codec::deserialize(std::istream& input, const std::string& source_id) {
     if (!input.good()) {
         BOOST_LOG_TRIVIAL(error) << "Invalid input stream state";
         throw std::runtime_error("Invalid input stream");
