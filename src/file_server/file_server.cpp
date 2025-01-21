@@ -30,8 +30,8 @@ FileServer::FileServer(uint32_t server_id, const std::vector<uint8_t>& key, Peer
     // Initialize store with the server-specific directory
     store_ = std::make_unique<dfs::store::Store>(store_path);
 
-    // Initialize codec with the provided cryptographic key and channel reference
-    codec_ = std::make_unique<Codec>(key_, channel_);
+    // Initialize codec with the provided cryptographic key
+    codec_ = std::make_unique<Codec>(key_);
 
     BOOST_LOG_TRIVIAL(info) << "FileServer initialization complete";
   }
