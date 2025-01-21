@@ -13,7 +13,7 @@ namespace network {
 class Codec {
 public:
     // Default constructor
-    explicit Codec(const std::vector<uint8_t>& key);
+    explicit Codec(const std::vector<uint8_t>& key, Channel& channel);
 
     // Serializes a message frame to an output stream
     std::size_t serialize(const MessageFrame& frame, std::ostream& output);
@@ -24,6 +24,9 @@ public:
 private:
     // The encryption/decryption key
     std::vector<uint8_t> key_;
+
+    // Reference to the channel for message delivery
+    Channel& channel_;
     
     // Writes bytes to an output stream
     void write_bytes(std::ostream& output, const void* data, std::size_t size);
