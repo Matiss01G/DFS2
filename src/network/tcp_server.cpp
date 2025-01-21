@@ -1,6 +1,6 @@
 #include "network/tcp_server.hpp"
 #include "network/tcp_peer.hpp"
-#include <boost/bind.hpp>
+#include <boost/bind/bind.hpp>
 #include <thread>
 
 namespace dfs {
@@ -15,7 +15,7 @@ TCP_Server::TCP_Server(uint16_t port,
   , is_running_(false)
   , port_(port)
   , address_(address) {
-  
+
   BOOST_LOG_TRIVIAL(info) << "Initializing TCP server on " << address << ":" << port;
 }
 
@@ -67,7 +67,7 @@ void TCP_Server::start_accept() {
   }
 
   auto socket = std::make_shared<boost::asio::ip::tcp::socket>(io_context_);
-  
+
   acceptor_->async_accept(*socket,
     [this, socket](const boost::system::error_code& error) {
       handle_accept(error, socket);
@@ -83,20 +83,20 @@ void TCP_Server::handle_accept(const boost::system::error_code& error,
       std::string peer_id = endpoint.address().to_string() + ":" + 
                 std::to_string(endpoint.port());
 
-      // Create new TCP peer
-      auto peer = std::make_shared<TCP_Peer>(peer_id);
+      // Create new TCP peer with channel and default key
+      std::vector<uint8_t> default_key(32, 0); // 32 bytes of zeros as default key
+      auto peer = std::make_shared<TCP_Peer>(peer_id, channel_, default_key);
 
-      // Set up socket and basic stream processor
-      peer->get_socket().swap(*socket);
+      // Move the accepted socket to the peer
+      peer->get_socket() = std::move(*socket);
 
       // Set up a basic stream processor that forwards data to channel
-      peer->set_stream_processor([this, peer_id](std::istream& stream) {
+      peer->set_stream_processor([this, peer_id](std::istream& stream, const std::string& source_id) {
         try {
           std::string data;
           std::getline(stream, data);
           if (!data.empty()) {
             BOOST_LOG_TRIVIAL(debug) << "[" << peer_id << "] Received data: " << data;
-
           }
         } catch (const std::exception& e) {
           BOOST_LOG_TRIVIAL(error) << "[" << peer_id << "] Stream processing error: " << e.what();
@@ -132,7 +132,7 @@ void TCP_Server::shutdown() {
   }
 
   BOOST_LOG_TRIVIAL(info) << "Initiating server shutdown";
-  
+
   is_running_ = false;
 
   // Stop accepting new connections
