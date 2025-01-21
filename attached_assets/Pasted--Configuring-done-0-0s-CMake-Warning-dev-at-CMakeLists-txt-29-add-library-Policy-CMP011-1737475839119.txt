@@ -1,0 +1,128 @@
+-- Configuring done (0.0s)
+CMake Warning (dev) at CMakeLists.txt:29 (add_library):
+  Policy CMP0115 is not set: Source file extensions must be explicit.  Run
+  "cmake --help-policy CMP0115" for policy details.  Use the cmake_policy
+  command to set the policy and suppress this warning.
+
+  File:
+
+    /home/runner/workspace/src/network/tcp_server.cpp
+This warning is for project developers.  Use -Wno-dev to suppress it.
+
+-- Generating done (0.0s)
+-- Build files have been written to: /home/runner/workspace/build
+[ 18%] Built target dfs_crypto
+[ 36%] Built target dfs_store
+[ 45%] Building CXX object CMakeFiles/dfs_network.dir/src/network/tcp_server.cpp.o
+In file included from include/boost/smart_ptr/detail/sp_thread_sleep.hpp:22,
+                 from include/boost/smart_ptr/detail/yield_k.hpp:23,
+                 from include/boost/smart_ptr/detail/spinlock_gcc_atomic.hpp:14,
+                 from include/boost/smart_ptr/detail/spinlock.hpp:42,
+                 from include/boost/smart_ptr/detail/spinlock_pool.hpp:25,
+                 from include/boost/smart_ptr/shared_ptr.hpp:29,
+                 from include/boost/shared_ptr.hpp:17,
+                 from include/boost/date_time/time_clock.hpp:17,
+                 from include/boost/date_time/posix_time/posix_time_types.hpp:10,
+                 from include/boost/asio/time_traits.hpp:23,
+                 from include/boost/asio/detail/timer_queue_ptime.hpp:22,
+                 from include/boost/asio/detail/deadline_timer_service.hpp:31,
+                 from include/boost/asio/basic_deadline_timer.hpp:25,
+                 from include/boost/asio.hpp:32,
+                 from /home/runner/workspace/include/network/tcp_server.hpp:3,
+                 from /home/runner/workspace/src/network/tcp_server.cpp:1:
+include/boost/bind.hpp:36:1: note: ‘#pragma message: The practice of declaring the Bind placeholders (_1, _2, ...) in the global namespace is deprecated. Please use <boost/bind/bind.hpp> + using namespace boost::placeholders, or define BOOST_BIND_GLOBAL_PLACEHOLDERS to retain the current behavior.’
+/home/runner/workspace/src/network/tcp_server.cpp: In member function ‘void dfs::network::TCP_Server::handle_accept(const boost::system::error_code&, std::shared_ptr<boost::asio::basic_stream_socket<boost::asio::ip::tcp> >)’:
+/home/runner/workspace/src/network/tcp_server.cpp:90:26: error: ‘boost::asio::ip::tcp::socket’ {aka ‘class boost::asio::basic_stream_socket<boost::asio::ip::tcp>’} has no member named ‘swap’
+   90 |       peer->get_socket().swap(*socket);
+      |                          ^~~~
+/home/runner/workspace/src/network/tcp_server.cpp:93:34: error: cannot convert ‘dfs::network::TCP_Server::handle_accept(const boost::system::error_code&, std::shared_ptr<boost::asio::basic_stream_socket<boost::asio::ip::tcp> >)::<lambda(std::istream&)>’ to ‘dfs::network::TCP_Peer::StreamProcessor’ {aka ‘std::function<void(std::basic_istream<char>&, const std::__cxx11::basic_string<char>&)>’}
+   93 |       peer->set_stream_processor([this, peer_id](std::istream& stream) {
+      |                                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      |                                  |
+      |                                  dfs::network::TCP_Server::handle_accept(const boost::system::error_code&, std::shared_ptr<boost::asio::basic_stream_socket<boost::asio::ip::tcp> >)::<lambda(std::istream&)>
+   94 |         try {
+      |         ~~~~~                     
+   95 |           std::string data;
+      |           ~~~~~~~~~~~~~~~~~       
+   96 |           std::getline(stream, data);
+      |           ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   97 |           if (!data.empty()) {
+      |           ~~~~~~~~~~~~~~~~~~~~    
+   98 |             BOOST_LOG_TRIVIAL(debug) << "[" << peer_id << "] Received data: " << data;
+      |             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   99 | 
+      |                                   
+  100 |           }
+      |           ~                       
+  101 |         } catch (const std::exception& e) {
+      |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  102 |           BOOST_LOG_TRIVIAL(error) << "[" << peer_id << "] Stream processing error: " << e.what();
+      |           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  103 |         }
+      |         ~                         
+  104 |       });
+      |       ~                           
+In file included from /home/runner/workspace/include/network/peer_manager.hpp:10,
+                 from /home/runner/workspace/include/network/tcp_server.hpp:7:
+/home/runner/workspace/include/network/tcp_peer.hpp:42:47: note:   initializing argument 1 of ‘virtual void dfs::network::TCP_Peer::set_stream_processor(StreamProcessor)’
+   42 |     void set_stream_processor(StreamProcessor processor) override;
+      |                               ~~~~~~~~~~~~~~~~^~~~~~~~~
+In file included from /nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/bits/stl_tempbuf.h:61,
+                 from /nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/memory:66,
+                 from include/boost/asio/detail/memory.hpp:21,
+                 from include/boost/asio/execution/detail/as_invocable.hpp:20,
+                 from include/boost/asio/execution/execute.hpp:23,
+                 from include/boost/asio/execution/executor.hpp:25,
+                 from include/boost/asio/execution/allocator.hpp:20,
+                 from include/boost/asio/execution.hpp:18,
+                 from include/boost/asio/any_completion_executor.hpp:22,
+                 from include/boost/asio.hpp:20:
+/nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/bits/stl_construct.h: In instantiation of ‘constexpr void std::_Construct(_Tp*, _Args&& ...) [with _Tp = dfs::network::TCP_Peer; _Args = {__cxx11::basic_string<char, char_traits<char>, allocator<char> >&}]’:
+/nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/bits/alloc_traits.h:660:19:   required from ‘static constexpr void std::allocator_traits<std::allocator<void> >::construct(allocator_type&, _Up*, _Args&& ...) [with _Up = dfs::network::TCP_Peer; _Args = {std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&}; allocator_type = std::allocator<void>]’
+/nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/bits/shared_ptr_base.h:604:39:   required from ‘std::_Sp_counted_ptr_inplace<_Tp, _Alloc, _Lp>::_Sp_counted_ptr_inplace(_Alloc, _Args&& ...) [with _Args = {std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&}; _Tp = dfs::network::TCP_Peer; _Alloc = std::allocator<void>; __gnu_cxx::_Lock_policy _Lp = __gnu_cxx::_S_atomic]’
+/nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/bits/shared_ptr_base.h:971:16:   required from ‘std::__shared_count<_Lp>::__shared_count(_Tp*&, std::_Sp_alloc_shared_tag<_Alloc>, _Args&& ...) [with _Tp = dfs::network::TCP_Peer; _Alloc = std::allocator<void>; _Args = {std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&}; __gnu_cxx::_Lock_policy _Lp = __gnu_cxx::_S_atomic]’
+/nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/bits/shared_ptr_base.h:1712:14:   required from ‘std::__shared_ptr<_Tp, _Lp>::__shared_ptr(std::_Sp_alloc_shared_tag<_Tp>, _Args&& ...) [with _Alloc = std::allocator<void>; _Args = {std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&}; _Tp = dfs::network::TCP_Peer; __gnu_cxx::_Lock_policy _Lp = __gnu_cxx::_S_atomic]’
+/nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/bits/shared_ptr.h:464:59:   required from ‘std::shared_ptr<_Tp>::shared_ptr(std::_Sp_alloc_shared_tag<_Tp>, _Args&& ...) [with _Alloc = std::allocator<void>; _Args = {std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&}; _Tp = dfs::network::TCP_Peer]’
+/nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/bits/shared_ptr.h:1009:14:   required from ‘std::shared_ptr<std::_NonArray<_Tp> > std::make_shared(_Args&& ...) [with _Tp = dfs::network::TCP_Peer; _Args = {__cxx11::basic_string<char, char_traits<char>, allocator<char> >&}; _NonArray<_Tp> = dfs::network::TCP_Peer]’
+/home/runner/workspace/src/network/tcp_server.cpp:87:45:   required from here
+/nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/bits/stl_construct.h:115:28: error: no matching function for call to ‘construct_at(dfs::network::TCP_Peer*&, std::__cxx11::basic_string<char>&)’
+  115 |           std::construct_at(__p, std::forward<_Args>(__args)...);
+      |           ~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/bits/stl_construct.h:94:5: note: candidate: ‘template<class _Tp, class ... _Args> constexpr decltype (::new(void*(0)) _Tp) std::construct_at(_Tp*, _Args&& ...)’
+   94 |     construct_at(_Tp* __location, _Args&&... __args)
+      |     ^~~~~~~~~~~~
+/nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/bits/stl_construct.h:94:5: note:   template argument deduction/substitution failed:
+/nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/bits/stl_construct.h: In substitution of ‘template<class _Tp, class ... _Args> constexpr decltype (::new(void*(0)) _Tp) std::construct_at(_Tp*, _Args&& ...) [with _Tp = dfs::network::TCP_Peer; _Args = {std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&}]’:
+/nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/bits/stl_construct.h:115:21:   required from ‘constexpr void std::_Construct(_Tp*, _Args&& ...) [with _Tp = dfs::network::TCP_Peer; _Args = {__cxx11::basic_string<char, char_traits<char>, allocator<char> >&}]’
+/nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/bits/alloc_traits.h:660:19:   required from ‘static constexpr void std::allocator_traits<std::allocator<void> >::construct(allocator_type&, _Up*, _Args&& ...) [with _Up = dfs::network::TCP_Peer; _Args = {std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&}; allocator_type = std::allocator<void>]’
+/nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/bits/shared_ptr_base.h:604:39:   required from ‘std::_Sp_counted_ptr_inplace<_Tp, _Alloc, _Lp>::_Sp_counted_ptr_inplace(_Alloc, _Args&& ...) [with _Args = {std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&}; _Tp = dfs::network::TCP_Peer; _Alloc = std::allocator<void>; __gnu_cxx::_Lock_policy _Lp = __gnu_cxx::_S_atomic]’
+/nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/bits/shared_ptr_base.h:971:16:   required from ‘std::__shared_count<_Lp>::__shared_count(_Tp*&, std::_Sp_alloc_shared_tag<_Alloc>, _Args&& ...) [with _Tp = dfs::network::TCP_Peer; _Alloc = std::allocator<void>; _Args = {std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&}; __gnu_cxx::_Lock_policy _Lp = __gnu_cxx::_S_atomic]’
+/nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/bits/shared_ptr_base.h:1712:14:   required from ‘std::__shared_ptr<_Tp, _Lp>::__shared_ptr(std::_Sp_alloc_shared_tag<_Tp>, _Args&& ...) [with _Alloc = std::allocator<void>; _Args = {std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&}; _Tp = dfs::network::TCP_Peer; __gnu_cxx::_Lock_policy _Lp = __gnu_cxx::_S_atomic]’
+/nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/bits/shared_ptr.h:464:59:   required from ‘std::shared_ptr<_Tp>::shared_ptr(std::_Sp_alloc_shared_tag<_Tp>, _Args&& ...) [with _Alloc = std::allocator<void>; _Args = {std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&}; _Tp = dfs::network::TCP_Peer]’
+/nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/bits/shared_ptr.h:1009:14:   required from ‘std::shared_ptr<std::_NonArray<_Tp> > std::make_shared(_Args&& ...) [with _Tp = dfs::network::TCP_Peer; _Args = {__cxx11::basic_string<char, char_traits<char>, allocator<char> >&}; _NonArray<_Tp> = dfs::network::TCP_Peer]’
+/home/runner/workspace/src/network/tcp_server.cpp:87:45:   required from here
+/nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/bits/stl_construct.h:96:17: error: no matching function for call to ‘dfs::network::TCP_Peer::TCP_Peer(std::__cxx11::basic_string<char>&)’
+   96 |     -> decltype(::new((void*)0) _Tp(std::declval<_Args>()...))
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/runner/workspace/include/network/tcp_peer.hpp:30:14: note: candidate: ‘dfs::network::TCP_Peer::TCP_Peer(const std::string&, dfs::network::Channel&, const std::vector<unsigned char>&)’
+   30 |     explicit TCP_Peer(const std::string& peer_id, Channel& channel, const std::vector<uint8_t>& key);
+      |              ^~~~~~~~
+/home/runner/workspace/include/network/tcp_peer.hpp:30:14: note:   candidate expects 3 arguments, 1 provided
+/nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/bits/stl_construct.h: In instantiation of ‘constexpr void std::_Construct(_Tp*, _Args&& ...) [with _Tp = dfs::network::TCP_Peer; _Args = {__cxx11::basic_string<char, char_traits<char>, allocator<char> >&}]’:
+/nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/bits/alloc_traits.h:660:19:   required from ‘static constexpr void std::allocator_traits<std::allocator<void> >::construct(allocator_type&, _Up*, _Args&& ...) [with _Up = dfs::network::TCP_Peer; _Args = {std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&}; allocator_type = std::allocator<void>]’
+/nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/bits/shared_ptr_base.h:604:39:   required from ‘std::_Sp_counted_ptr_inplace<_Tp, _Alloc, _Lp>::_Sp_counted_ptr_inplace(_Alloc, _Args&& ...) [with _Args = {std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&}; _Tp = dfs::network::TCP_Peer; _Alloc = std::allocator<void>; __gnu_cxx::_Lock_policy _Lp = __gnu_cxx::_S_atomic]’
+/nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/bits/shared_ptr_base.h:971:16:   required from ‘std::__shared_count<_Lp>::__shared_count(_Tp*&, std::_Sp_alloc_shared_tag<_Alloc>, _Args&& ...) [with _Tp = dfs::network::TCP_Peer; _Alloc = std::allocator<void>; _Args = {std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&}; __gnu_cxx::_Lock_policy _Lp = __gnu_cxx::_S_atomic]’
+/nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/bits/shared_ptr_base.h:1712:14:   required from ‘std::__shared_ptr<_Tp, _Lp>::__shared_ptr(std::_Sp_alloc_shared_tag<_Tp>, _Args&& ...) [with _Alloc = std::allocator<void>; _Args = {std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&}; _Tp = dfs::network::TCP_Peer; __gnu_cxx::_Lock_policy _Lp = __gnu_cxx::_S_atomic]’
+/nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/bits/shared_ptr.h:464:59:   required from ‘std::shared_ptr<_Tp>::shared_ptr(std::_Sp_alloc_shared_tag<_Tp>, _Args&& ...) [with _Alloc = std::allocator<void>; _Args = {std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&}; _Tp = dfs::network::TCP_Peer]’
+/nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/bits/shared_ptr.h:1009:14:   required from ‘std::shared_ptr<std::_NonArray<_Tp> > std::make_shared(_Args&& ...) [with _Tp = dfs::network::TCP_Peer; _Args = {__cxx11::basic_string<char, char_traits<char>, allocator<char> >&}; _NonArray<_Tp> = dfs::network::TCP_Peer]’
+/home/runner/workspace/src/network/tcp_server.cpp:87:45:   required from here
+/nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/bits/stl_construct.h:119:7: error: no matching function for call to ‘dfs::network::TCP_Peer::TCP_Peer(std::__cxx11::basic_string<char>&)’
+  119 |       ::new((void*)__p) _Tp(std::forward<_Args>(__args)...);
+      |       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/runner/workspace/include/network/tcp_peer.hpp:30:14: note: candidate: ‘dfs::network::TCP_Peer::TCP_Peer(const std::string&, dfs::network::Channel&, const std::vector<unsigned char>&)’
+   30 |     explicit TCP_Peer(const std::string& peer_id, Channel& channel, const std::vector<uint8_t>& key);
+      |              ^~~~~~~~
+/home/runner/workspace/include/network/tcp_peer.hpp:30:14: note:   candidate expects 3 arguments, 1 provided
+make[2]: *** [CMakeFiles/dfs_network.dir/build.make:132: CMakeFiles/dfs_network.dir/src/network/tcp_server.cpp.o] Error 1
+make[1]: *** [CMakeFiles/Makefile2:114: CMakeFiles/dfs_network.dir/all] Error 2
+make: *** [Makefile:136: all] Error 2

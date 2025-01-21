@@ -25,6 +25,27 @@ target_link_libraries(dfs_crypto PUBLIC
     Boost::thread
 )
 
+# Create network library
+add_library(dfs_network
+    src/network/channel.cpp
+    src/network/codec.cpp
+    src/network/peer_manager.cpp
+    src/network/tcp_peer.cpp
+    src/network/tcp_server.cpp
+    src/file_server/file_server.cpp
+)
+target_include_directories(dfs_network PUBLIC
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+    $<INSTALL_INTERFACE:include>
+)
+target_link_libraries(dfs_network PUBLIC
+    dfs_crypto
+    dfs_store
+    Boost::system
+    Boost::thread
+    Boost::log
+)
+
 # Create store library
 add_library(dfs_store
     src/store/store.cpp
@@ -38,24 +59,6 @@ target_link_libraries(dfs_store PUBLIC
     Boost::log
     Boost::log_setup
     Boost::system
-)
-
-# Create network library
-add_library(dfs_network
-    src/network/tcp_peer.cpp
-    src/network/peer_manager.cpp
-    src/file_server/file_server.cpp
-)
-target_include_directories(dfs_network PUBLIC
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-    $<INSTALL_INTERFACE:include>
-)
-target_link_libraries(dfs_network PUBLIC
-    dfs_crypto
-    dfs_store
-    Boost::system
-    Boost::thread
-    Boost::log
 )
 
 # Skip building tests

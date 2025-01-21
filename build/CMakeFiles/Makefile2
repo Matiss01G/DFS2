@@ -64,8 +64,8 @@ CMAKE_BINARY_DIR = /home/runner/workspace/build
 
 # The main recursive "all" target.
 all: CMakeFiles/dfs_crypto.dir/all
-all: CMakeFiles/dfs_store.dir/all
 all: CMakeFiles/dfs_network.dir/all
+all: CMakeFiles/dfs_store.dir/all
 .PHONY : all
 
 # The main recursive "preinstall" target.
@@ -74,8 +74,8 @@ preinstall:
 
 # The main recursive "clean" target.
 clean: CMakeFiles/dfs_crypto.dir/clean
-clean: CMakeFiles/dfs_store.dir/clean
 clean: CMakeFiles/dfs_network.dir/clean
+clean: CMakeFiles/dfs_store.dir/clean
 .PHONY : clean
 
 #=============================================================================
@@ -105,13 +105,40 @@ CMakeFiles/dfs_crypto.dir/clean:
 .PHONY : CMakeFiles/dfs_crypto.dir/clean
 
 #=============================================================================
+# Target rules for target CMakeFiles/dfs_network.dir
+
+# All Build rule for target.
+CMakeFiles/dfs_network.dir/all: CMakeFiles/dfs_crypto.dir/all
+CMakeFiles/dfs_network.dir/all: CMakeFiles/dfs_store.dir/all
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/dfs_network.dir/build.make CMakeFiles/dfs_network.dir/depend
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/dfs_network.dir/build.make CMakeFiles/dfs_network.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/runner/workspace/build/CMakeFiles --progress-num=3,4,5,6,7,8,9 "Built target dfs_network"
+.PHONY : CMakeFiles/dfs_network.dir/all
+
+# Build rule for subdir invocation for target.
+CMakeFiles/dfs_network.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/workspace/build/CMakeFiles 11
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/dfs_network.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/workspace/build/CMakeFiles 0
+.PHONY : CMakeFiles/dfs_network.dir/rule
+
+# Convenience name for target.
+dfs_network: CMakeFiles/dfs_network.dir/rule
+.PHONY : dfs_network
+
+# clean rule for target.
+CMakeFiles/dfs_network.dir/clean:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/dfs_network.dir/build.make CMakeFiles/dfs_network.dir/clean
+.PHONY : CMakeFiles/dfs_network.dir/clean
+
+#=============================================================================
 # Target rules for target CMakeFiles/dfs_store.dir
 
 # All Build rule for target.
 CMakeFiles/dfs_store.dir/all:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/dfs_store.dir/build.make CMakeFiles/dfs_store.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/dfs_store.dir/build.make CMakeFiles/dfs_store.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/runner/workspace/build/CMakeFiles --progress-num=7,8 "Built target dfs_store"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/runner/workspace/build/CMakeFiles --progress-num=10,11 "Built target dfs_store"
 .PHONY : CMakeFiles/dfs_store.dir/all
 
 # Build rule for subdir invocation for target.
@@ -129,33 +156,6 @@ dfs_store: CMakeFiles/dfs_store.dir/rule
 CMakeFiles/dfs_store.dir/clean:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/dfs_store.dir/build.make CMakeFiles/dfs_store.dir/clean
 .PHONY : CMakeFiles/dfs_store.dir/clean
-
-#=============================================================================
-# Target rules for target CMakeFiles/dfs_network.dir
-
-# All Build rule for target.
-CMakeFiles/dfs_network.dir/all: CMakeFiles/dfs_crypto.dir/all
-CMakeFiles/dfs_network.dir/all: CMakeFiles/dfs_store.dir/all
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/dfs_network.dir/build.make CMakeFiles/dfs_network.dir/depend
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/dfs_network.dir/build.make CMakeFiles/dfs_network.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/runner/workspace/build/CMakeFiles --progress-num=3,4,5,6 "Built target dfs_network"
-.PHONY : CMakeFiles/dfs_network.dir/all
-
-# Build rule for subdir invocation for target.
-CMakeFiles/dfs_network.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/workspace/build/CMakeFiles 8
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/dfs_network.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/workspace/build/CMakeFiles 0
-.PHONY : CMakeFiles/dfs_network.dir/rule
-
-# Convenience name for target.
-dfs_network: CMakeFiles/dfs_network.dir/rule
-.PHONY : dfs_network
-
-# clean rule for target.
-CMakeFiles/dfs_network.dir/clean:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/dfs_network.dir/build.make CMakeFiles/dfs_network.dir/clean
-.PHONY : CMakeFiles/dfs_network.dir/clean
 
 #=============================================================================
 # Special targets to cleanup operation of make.

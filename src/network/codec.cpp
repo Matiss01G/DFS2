@@ -129,7 +129,7 @@ MessageFrame Codec::deserialize(std::istream& input, const std::string& source_i
 
     frame.payload_stream = std::make_shared<std::stringstream>();
 
-    channel.produce(frame);
+    channel_.produce(frame);
 
     // Decrypt payload if present
     if (frame.payload_size > 0) {

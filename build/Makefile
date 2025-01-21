@@ -175,19 +175,6 @@ dfs_crypto/fast:
 .PHONY : dfs_crypto/fast
 
 #=============================================================================
-# Target rules for targets named dfs_store
-
-# Build rule for target.
-dfs_store: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 dfs_store
-.PHONY : dfs_store
-
-# fast build rule for target.
-dfs_store/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/dfs_store.dir/build.make CMakeFiles/dfs_store.dir/build
-.PHONY : dfs_store/fast
-
-#=============================================================================
 # Target rules for targets named dfs_network
 
 # Build rule for target.
@@ -199,6 +186,19 @@ dfs_network: cmake_check_build_system
 dfs_network/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/dfs_network.dir/build.make CMakeFiles/dfs_network.dir/build
 .PHONY : dfs_network/fast
+
+#=============================================================================
+# Target rules for targets named dfs_store
+
+# Build rule for target.
+dfs_store: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 dfs_store
+.PHONY : dfs_store
+
+# fast build rule for target.
+dfs_store/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/dfs_store.dir/build.make CMakeFiles/dfs_store.dir/build
+.PHONY : dfs_store/fast
 
 src/crypto/crypto_stream.o: src/crypto/crypto_stream.cpp.o
 .PHONY : src/crypto/crypto_stream.o
@@ -248,6 +248,54 @@ src/file_server/file_server.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/dfs_network.dir/build.make CMakeFiles/dfs_network.dir/src/file_server/file_server.cpp.s
 .PHONY : src/file_server/file_server.cpp.s
 
+src/network/channel.o: src/network/channel.cpp.o
+.PHONY : src/network/channel.o
+
+# target to build an object file
+src/network/channel.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/dfs_network.dir/build.make CMakeFiles/dfs_network.dir/src/network/channel.cpp.o
+.PHONY : src/network/channel.cpp.o
+
+src/network/channel.i: src/network/channel.cpp.i
+.PHONY : src/network/channel.i
+
+# target to preprocess a source file
+src/network/channel.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/dfs_network.dir/build.make CMakeFiles/dfs_network.dir/src/network/channel.cpp.i
+.PHONY : src/network/channel.cpp.i
+
+src/network/channel.s: src/network/channel.cpp.s
+.PHONY : src/network/channel.s
+
+# target to generate assembly for a file
+src/network/channel.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/dfs_network.dir/build.make CMakeFiles/dfs_network.dir/src/network/channel.cpp.s
+.PHONY : src/network/channel.cpp.s
+
+src/network/codec.o: src/network/codec.cpp.o
+.PHONY : src/network/codec.o
+
+# target to build an object file
+src/network/codec.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/dfs_network.dir/build.make CMakeFiles/dfs_network.dir/src/network/codec.cpp.o
+.PHONY : src/network/codec.cpp.o
+
+src/network/codec.i: src/network/codec.cpp.i
+.PHONY : src/network/codec.i
+
+# target to preprocess a source file
+src/network/codec.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/dfs_network.dir/build.make CMakeFiles/dfs_network.dir/src/network/codec.cpp.i
+.PHONY : src/network/codec.cpp.i
+
+src/network/codec.s: src/network/codec.cpp.s
+.PHONY : src/network/codec.s
+
+# target to generate assembly for a file
+src/network/codec.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/dfs_network.dir/build.make CMakeFiles/dfs_network.dir/src/network/codec.cpp.s
+.PHONY : src/network/codec.cpp.s
+
 src/network/peer_manager.o: src/network/peer_manager.cpp.o
 .PHONY : src/network/peer_manager.o
 
@@ -296,6 +344,30 @@ src/network/tcp_peer.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/dfs_network.dir/build.make CMakeFiles/dfs_network.dir/src/network/tcp_peer.cpp.s
 .PHONY : src/network/tcp_peer.cpp.s
 
+src/network/tcp_server.o: src/network/tcp_server.cpp.o
+.PHONY : src/network/tcp_server.o
+
+# target to build an object file
+src/network/tcp_server.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/dfs_network.dir/build.make CMakeFiles/dfs_network.dir/src/network/tcp_server.cpp.o
+.PHONY : src/network/tcp_server.cpp.o
+
+src/network/tcp_server.i: src/network/tcp_server.cpp.i
+.PHONY : src/network/tcp_server.i
+
+# target to preprocess a source file
+src/network/tcp_server.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/dfs_network.dir/build.make CMakeFiles/dfs_network.dir/src/network/tcp_server.cpp.i
+.PHONY : src/network/tcp_server.cpp.i
+
+src/network/tcp_server.s: src/network/tcp_server.cpp.s
+.PHONY : src/network/tcp_server.s
+
+# target to generate assembly for a file
+src/network/tcp_server.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/dfs_network.dir/build.make CMakeFiles/dfs_network.dir/src/network/tcp_server.cpp.s
+.PHONY : src/network/tcp_server.cpp.s
+
 src/store/store.o: src/store/store.cpp.o
 .PHONY : src/store/store.o
 
@@ -341,12 +413,21 @@ help:
 	@echo "... src/file_server/file_server.o"
 	@echo "... src/file_server/file_server.i"
 	@echo "... src/file_server/file_server.s"
+	@echo "... src/network/channel.o"
+	@echo "... src/network/channel.i"
+	@echo "... src/network/channel.s"
+	@echo "... src/network/codec.o"
+	@echo "... src/network/codec.i"
+	@echo "... src/network/codec.s"
 	@echo "... src/network/peer_manager.o"
 	@echo "... src/network/peer_manager.i"
 	@echo "... src/network/peer_manager.s"
 	@echo "... src/network/tcp_peer.o"
 	@echo "... src/network/tcp_peer.i"
 	@echo "... src/network/tcp_peer.s"
+	@echo "... src/network/tcp_server.o"
+	@echo "... src/network/tcp_server.i"
+	@echo "... src/network/tcp_server.s"
 	@echo "... src/store/store.o"
 	@echo "... src/store/store.i"
 	@echo "... src/store/store.s"

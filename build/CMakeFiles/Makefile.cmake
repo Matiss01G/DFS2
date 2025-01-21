@@ -81,6 +81,6 @@ set(CMAKE_MAKEFILE_PRODUCTS
 # Dependency information for all targets:
 set(CMAKE_DEPEND_INFO_FILES
   "CMakeFiles/dfs_crypto.dir/DependInfo.cmake"
-  "CMakeFiles/dfs_store.dir/DependInfo.cmake"
   "CMakeFiles/dfs_network.dir/DependInfo.cmake"
+  "CMakeFiles/dfs_store.dir/DependInfo.cmake"
   )

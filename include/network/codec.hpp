@@ -19,7 +19,7 @@ public:
     std::size_t serialize(const MessageFrame& frame, std::ostream& output);
 
     // Deserializes a message frame from an input stream and pushes it to the channel
-    MessageFrame deserialize(std::istream& input);
+    MessageFrame deserialize(std::istream& input, const std::string& source_id);
 
 private:
     // The encryption/decryption key
