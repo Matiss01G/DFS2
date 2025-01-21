@@ -11,7 +11,7 @@ namespace network {
 
 class TCP_Server {
 public:
-  TCP_Server(uint16_t port, const std::string& address, PeerManager& peer_manager);
+  TCP_Server(uint16_t port, const std::string& address, PeerManager& peer_manager;
 
   bool start_listener();
 
