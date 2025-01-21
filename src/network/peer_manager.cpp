@@ -21,7 +21,7 @@ PeerManager::~PeerManager() {
   shutdown();
 }
 
-void TCP_Server::create_peer(const boost::system::error_code& error,
+void PeerManager::create_peer(const boost::system::error_code& error,
         std::shared_ptr<boost::asio::ip::tcp::socket> socket) {
   if (!error) {
   try {
@@ -68,9 +68,7 @@ void TCP_Server::create_peer(const boost::system::error_code& error,
   }
 
   // Continue accepting new connections if server is still running
-  if (is_running_) {
-    tcp_server_.start_accept();
-  }
+  tcp_server_.start_accept();
 }
 
 void PeerManager::add_peer(std::shared_ptr<TCP_Peer> peer) {

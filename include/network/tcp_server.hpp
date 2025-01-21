@@ -9,9 +9,13 @@
 namespace dfs {
 namespace network {
 
+class PeerManager;
+
 class TCP_Server {
 public:
-  TCP_Server(uint16_t port, const std::string& address, PeerManager& peer_manager;
+  friend class PeerManager;  // Gives PeerManager access to private members
+
+  TCP_Server(uint16_t port, const std::string& address, PeerManager& peer_manager);
 
   bool start_listener();
 
