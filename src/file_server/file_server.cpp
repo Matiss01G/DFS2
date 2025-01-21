@@ -198,6 +198,11 @@ std::optional<std::stringstream> FileServer::get_file(const std::string& filenam
       }
     } catch (const dfs::store::StoreError& e) {
       BOOST_LOG_TRIVIAL(debug) << "File not found in local store: " << e.what();
+      // Try to get file from network by sending GET_FILE request
+      if (!prepare_and_send(filename, MessageType::GET_FILE)) {
+        BOOST_LOG_TRIVIAL(error) << "Failed to send GET_FILE request for: " << filename;
+        return std::nullopt; //Return nullopt if prepare_and_send fails.
+      }
     }
 
     BOOST_LOG_TRIVIAL(info) << "File not found: " << filename;
