@@ -28,9 +28,8 @@ public:
     std::shared_ptr<TCP_Peer> get_peer(const std::string& peer_id);
 
     // Stream Operations
-    bool send_stream(const std::string& peer_id, std::istream& stream);
+    bool send_to_peer(const std::string& peer_id, std::istream& stream);
     bool broadcast_stream(std::istream& input_stream);
-    bool send_to_peer(uint32_t peer_id, std::istream& stream);
 
     // Utility Methods
     std::size_t size() const;
