@@ -178,8 +178,8 @@ void TCP_Peer::async_read_next() {
         });
 }
 
-// Send data stream to peer with buffered writing
-bool TCP_Peer::send_stream(std::istream& input_stream, std::size_t buffer_size) {
+// Renamed from send_stream to send_to_peer
+bool TCP_Peer::send_to_peer(std::istream& input_stream, std::size_t buffer_size) {
     if (!socket_ || !socket_->is_open()) {
         BOOST_LOG_TRIVIAL(error) << "[" << peer_id_ << "] Cannot send stream - socket not connected";
         return false;
@@ -257,7 +257,7 @@ void TCP_Peer::cleanup_connection() {
 // Convenience method to send string message
 bool TCP_Peer::send_message(const std::string& message) {
     std::istringstream iss(message);
-    return send_stream(iss);
+    return send_to_peer(iss);
 }
 
 // Get peer identifier
