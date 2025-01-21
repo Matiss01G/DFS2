@@ -210,11 +210,12 @@ std::optional<std::stringstream> FileServer::get_file(const std::string& filenam
 
       // Try to get the file from local store again
       try {
-        std::stringstream retry_result;
-        store_->get(filename, retry_result);
-        if (retry_result.good()) {
+        local_result.clear(); // Clear any error flags
+        local_result.str(""); // Clear the content
+        store_->get(filename, local_result);
+        if (local_result.good()) {
           BOOST_LOG_TRIVIAL(info) << "File successfully retrieved from network: " << filename;
-          return retry_result;
+          return local_result;
         }
       } catch (const dfs::store::StoreError& e) {
         BOOST_LOG_TRIVIAL(debug) << "File not found after network retrieval attempt: " << e.what();
