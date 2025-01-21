@@ -89,7 +89,6 @@ bool FileServer::prepare_and_send(const std::string& filename, MessageType messa
 
     // Create message frame with empty payload stream
     MessageFrame frame;
-    // source_id is intentionally left empty
     frame.message_type = message_type;
     frame.payload_stream = std::make_shared<std::stringstream>();
     frame.filename_length = filename.length();
@@ -99,16 +98,18 @@ bool FileServer::prepare_and_send(const std::string& filename, MessageType messa
     auto iv = crypto_stream.generate_IV();
     frame.iv_.assign(iv.begin(), iv.end());
 
-    // Get file data from store into payload stream
-    try {
-      store_->get(filename, *frame.payload_stream);
-      if (!frame.payload_stream->good()) {
-        BOOST_LOG_TRIVIAL(error) << "Failed to get file from store: " << filename;
+    // Only retrieve and add file data for STORE_FILE message type
+    if (message_type == MessageType::STORE_FILE) {
+      try {
+        store_->get(filename, *frame.payload_stream);
+        if (!frame.payload_stream->good()) {
+          BOOST_LOG_TRIVIAL(error) << "Failed to get file from store: " << filename;
+          return false;
+        }
+      } catch (const std::exception& e) {
+        BOOST_LOG_TRIVIAL(error) << "Error getting file from store: " << e.what();
         return false;
       }
-    } catch (const std::exception& e) {
-      BOOST_LOG_TRIVIAL(error) << "Error getting file from store: " << e.what();
-      return false;
     }
 
     // Create stream for serialized data

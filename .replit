@@ -50,7 +50,7 @@ task = "packager.installForAll"
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "cd /home/runner/${REPL_SLUG}/build && ./tests/store_test"
+args = "cd /home/runner/${REPL_SLUG}/build && ctest --output-on-failure"
 
 [[workflows.workflow]]
 name = "Build Check"
