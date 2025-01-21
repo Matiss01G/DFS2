@@ -201,7 +201,23 @@ std::optional<std::stringstream> FileServer::get_file(const std::string& filenam
       // Try to get file from network by sending GET_FILE request
       if (!prepare_and_send(filename, MessageType::GET_FILE)) {
         BOOST_LOG_TRIVIAL(error) << "Failed to send GET_FILE request for: " << filename;
-        return std::nullopt; //Return nullopt if prepare_and_send fails.
+        return std::nullopt;
+      }
+
+      // Wait for potential network retrieval (5 seconds)
+      BOOST_LOG_TRIVIAL(debug) << "Waiting for network retrieval of file: " << filename;
+      std::this_thread::sleep_for(std::chrono::seconds(5));
+
+      // Try to get the file from local store again
+      try {
+        std::stringstream retry_result;
+        store_->get(filename, retry_result);
+        if (retry_result.good()) {
+          BOOST_LOG_TRIVIAL(info) << "File successfully retrieved from network: " << filename;
+          return retry_result;
+        }
+      } catch (const dfs::store::StoreError& e) {
+        BOOST_LOG_TRIVIAL(debug) << "File not found after network retrieval attempt: " << e.what();
       }
     }
 
