@@ -4,73 +4,12 @@
 namespace dfs {
 namespace network {
 
-PeerManager::PeerManager(Channel& channel, TCP_Server& tcp_server, const std::vector<uint8_t>& key)
-  : channel_(channel)
-  , tcp_server_(tcp_server)
-  , key_(key) {
-
-  if (key_.empty() || key_.size() != 32) {
-    BOOST_LOG_TRIVIAL(error) << "Invalid key size: " << key_.size() << " bytes. Expected 32 bytes.";
-    throw std::invalid_argument("Invalid cryptographic key size");
-  }
-
-  BOOST_LOG_TRIVIAL(info) << "PeerManager initialized with key size: " << key_.size() << " bytes";
+PeerManager::PeerManager() {
+  BOOST_LOG_TRIVIAL(info) << "PeerManager initialized";
 }
 
 PeerManager::~PeerManager() {
   shutdown();
-}
-
-void TCP_Server::create_peer(const boost::system::error_code& error,
-        std::shared_ptr<boost::asio::ip::tcp::socket> socket) {
-  if (!error) {
-  try {
-    // Create a unique peer ID based on endpoint
-    auto endpoint = socket->remote_endpoint();
-    std::string peer_id = endpoint.address().to_string() + ":" + 
-        std::to_string(endpoint.port());
-
-    // Create new TCP peer with channel and default key
-    std::vector<uint8_t> default_key(32, 0); // 32 bytes of zeros as default key
-    auto peer = std::make_shared<TCP_Peer>(peer_id, channel_, default_key);
-
-    // Move the accepted socket to the peer
-    peer->get_socket() = std::move(*socket);
-
-    // Set up a basic stream processor that forwards data to channel
-    peer->set_stream_processor([this, peer_id](std::istream& stream, const std::string& source_id) {
-    try {
-      std::string data;
-      std::getline(stream, data);
-      if (!data.empty()) {
-      BOOST_LOG_TRIVIAL(debug) << "[" << peer_id << "] Received data: " << data;
-      }
-    } catch (const std::exception& e) {
-      BOOST_LOG_TRIVIAL(error) << "[" << peer_id << "] Stream processing error: " << e.what();
-    }
-    });
-
-    // Start stream processing before adding to peer manager
-    if (!peer->start_stream_processing()) {
-    BOOST_LOG_TRIVIAL(error) << "Failed to start stream processing for peer: " << peer_id;
-    return;
-    }
-
-    // Add peer to manager
-    add_peer(peer);
-
-    BOOST_LOG_TRIVIAL(info) << "Accepted and initialized new connection from " << peer_id;
-  } catch (const std::exception& e) {
-    BOOST_LOG_TRIVIAL(error) << "Error handling new connection: " << e.what();
-  }
-  } else {
-  BOOST_LOG_TRIVIAL(error) << "Accept error: " << error.message();
-  }
-
-  // Continue accepting new connections if server is still running
-  if (is_running_) {
-    tcp_server_.start_accept();
-  }
 }
 
 void PeerManager::add_peer(std::shared_ptr<TCP_Peer> peer) {

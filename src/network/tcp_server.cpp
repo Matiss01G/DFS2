@@ -1,5 +1,6 @@
 #include "network/tcp_server.hpp"
 #include "network/tcp_peer.hpp"
+#include "network/peer_manager.hpp"
 #include <boost/bind/bind.hpp>
 #include <thread>
 
@@ -59,6 +60,38 @@ bool TCP_Server::start_listener() {
   }
 }
 
+void TCP_Server::create_peer(const boost::system::error_code& error,
+        std::shared_ptr<boost::asio::ip::tcp::socket> socket) {
+  if (!error) {
+    try {
+      // Create a unique peer ID based on endpoint
+      auto endpoint = socket->remote_endpoint();
+      std::string peer_id = endpoint.address().to_string() + ":" + 
+          std::to_string(endpoint.port());
+
+      // Create new TCP peer
+      auto peer = std::make_shared<TCP_Peer>(peer_id);
+
+      // Move the accepted socket to the peer
+      peer->get_socket() = std::move(*socket);
+
+      // Add peer to manager
+      peer_manager_.add_peer(peer);
+
+      BOOST_LOG_TRIVIAL(info) << "Accepted and initialized new connection from " << peer_id;
+    } catch (const std::exception& e) {
+      BOOST_LOG_TRIVIAL(error) << "Error handling new connection: " << e.what();
+    }
+  } else {
+    BOOST_LOG_TRIVIAL(error) << "Accept error: " << error.message();
+  }
+
+  // Continue accepting new connections if server is still running
+  if (is_running_) {
+    start_accept();
+  }
+}
+
 void TCP_Server::start_accept() {
   if (!acceptor_ || !is_running_) {
     return;
@@ -68,7 +101,7 @@ void TCP_Server::start_accept() {
 
   acceptor_->async_accept(*socket,
     [this, socket](const boost::system::error_code& error) {
-      peer_manager_.create_peer(error, socket);
+      create_peer(error, socket);
     });
 }
 
