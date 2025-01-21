@@ -17,6 +17,8 @@ namespace network {
 
 class PeerManager {
 public:
+    class TCP_Server;  // Forward declaration
+    
     PeerManager(Channel& channel, TCP_Server& tcp_server, const std::vector<uint8_t>& key);
     ~PeerManager();
 

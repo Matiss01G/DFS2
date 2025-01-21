@@ -9,7 +9,7 @@
 namespace dfs {
 namespace network {
 
-class PeerManager;
+class PeerManager; // Forward declaration
 
 class TCP_Server {
 public:
