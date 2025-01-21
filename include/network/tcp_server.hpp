@@ -5,14 +5,13 @@
 #include <memory>
 #include <string>
 #include "network/peer_manager.hpp"
-#include "network/channel.hpp"
 
 namespace dfs {
 namespace network {
 
 class TCP_Server {
 public:
-  TCP_Server(uint16_t port, const std::string& address, PeerManager& peer_manager, Channel& channel);
+  TCP_Server(uint16_t port, const std::string& address, PeerManager& peer_manager;
 
   bool start_listener();
 
@@ -21,15 +20,12 @@ public:
   ~TCP_Server();
 
 private:
-  void handle_accept(const boost::system::error_code& error,
-            std::shared_ptr<boost::asio::ip::tcp::socket> socket);
 
   void start_accept();
 
   boost::asio::io_context io_context_;
   std::unique_ptr<boost::asio::ip::tcp::acceptor> acceptor_;
   PeerManager& peer_manager_;
-  Channel& channel_;
   bool is_running_;
   std::unique_ptr<std::thread> io_thread_;
   const uint16_t port_;
