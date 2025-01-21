@@ -107,8 +107,8 @@ bool PeerManager::connect(const std::string& peer_id, const std::string& address
   std::lock_guard<std::mutex> lock(mutex_);
 
   auto it = peers_.find(peer_id);
-  if (it == peers_.end()) {
-    BOOST_LOG_TRIVIAL(error) << "Cannot connect - peer not found: " << peer_id;
+  if (it != peers_.end()) {
+    BOOST_LOG_TRIVIAL(error) << "Cannot connect - peer already exists " << peer_.id;
     return false;
   }
 
