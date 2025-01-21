@@ -138,6 +138,12 @@ bool PeerManager::connect(const std::string& peer_id, const std::string& address
       return false;
     }
 
+    // Create a shared pointer to the socket for create_peer
+    auto socket_ptr = std::make_shared<boost::asio::ip::tcp::socket>(std::move(peer_socket));
+
+    // Call create_peer with successful connection
+    create_peer(connect_ec, socket_ptr);
+
     BOOST_LOG_TRIVIAL(info) << "Successfully connected peer " << peer_id 
                 << " to " << address << ":" << port;
     return true;
