@@ -15,10 +15,10 @@
 namespace dfs {
 namespace network {
 
+class TCP_Server;  // Forward declaration
+
 class PeerManager {
-public:
-    class TCP_Server;  // Forward declaration
-    
+public:    
     PeerManager(Channel& channel, TCP_Server& tcp_server, const std::vector<uint8_t>& key);
     ~PeerManager();
 
