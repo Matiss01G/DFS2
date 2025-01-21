@@ -7,7 +7,9 @@
 namespace dfs {
 namespace network {
 
-Codec::Codec(const std::vector<uint8_t>& key) : key_(key) {
+Codec::Codec(const std::vector<uint8_t>& key, Channel& channel) 
+    : key_(key)
+    , channel_(channel) {
     BOOST_LOG_TRIVIAL(info) << "Initializing Codec with key of size: " << key_.size();
 }
 
@@ -19,7 +21,7 @@ std::size_t Codec::serialize(const MessageFrame& frame, std::ostream& output) {
 
     std::size_t total_bytes = 0;
 
-    // Create and nitialize crypto stream with key and IV
+    // Create and initialize crypto stream with key and IV
     crypto::CryptoStream crypto;
     crypto.initialize(key_, frame.iv_);
     BOOST_LOG_TRIVIAL(info) << "Starting message frame serialization";
@@ -44,13 +46,10 @@ std::size_t Codec::serialize(const MessageFrame& frame, std::ostream& output) {
 
         // Encrypt and write filename length
         uint32_t network_filename_length = boost::endian::native_to_big(frame.filename_length);
-        // Create stream for raw data
         std::stringstream filename_length_stream;
         filename_length_stream.write(reinterpret_cast<char*>(&network_filename_length), sizeof(network_filename_length));
-        // Encrypt the filename length
         std::stringstream encrypted_filename_length;
         crypto.encrypt(filename_length_stream, encrypted_filename_length);
-        // Write filename length
         BOOST_LOG_TRIVIAL(debug) << "Writing encrypted filename length";
         write_bytes(output, encrypted_filename_length.str().data(), encrypted_filename_length.str().size());
         total_bytes += encrypted_filename_length.str().size();
@@ -80,10 +79,9 @@ MessageFrame Codec::deserialize(std::istream& input, const std::string& source_i
     }
 
     MessageFrame frame;
-    frame.source_id = source_id; 
+    frame.source_id = source_id;
     std::size_t total_bytes = 0;
 
-    // Create CryptoStream instance
     crypto::CryptoStream crypto;
 
     BOOST_LOG_TRIVIAL(info) << "Starting message frame deserialization";
@@ -127,7 +125,7 @@ MessageFrame Codec::deserialize(std::istream& input, const std::string& source_i
 
         frame.payload_stream = std::make_shared<std::stringstream>();
 
-        channel.produce(frame);
+        channel_.produce(frame);
 
         // Decrypt payload if present
         if (frame.payload_size > 0) {
