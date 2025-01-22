@@ -16,14 +16,6 @@ author = "agent"
 task = "workflow.run"
 args = "Build and Test"
 
-[[workflows.workflow.tasks]]
-task = "workflow.run"
-args = "Test Runner"
-
-[[workflows.workflow.tasks]]
-task = "workflow.run"
-args = "Build Check"
-
 [[workflows.workflow]]
 name = "Build and Test"
 author = "agent"
@@ -36,35 +28,7 @@ task = "packager.installForAll"
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "cd /home/runner/workspace/build && cmake .. && make"
-
-[[workflows.workflow]]
-name = "Test Runner"
-author = "agent"
-
-[workflows.workflow.metadata]
-agentRequireRestartOnSave = false
-
-[[workflows.workflow.tasks]]
-task = "packager.installForAll"
-
-[[workflows.workflow.tasks]]
-task = "shell.exec"
-args = "cd /home/runner/${REPL_SLUG}/build && ctest --output-on-failure"
-
-[[workflows.workflow]]
-name = "Build Check"
-author = "agent"
-
-[workflows.workflow.metadata]
-agentRequireRestartOnSave = false
-
-[[workflows.workflow.tasks]]
-task = "packager.installForAll"
-
-[[workflows.workflow.tasks]]
-task = "shell.exec"
-args = "cd /home/runner/${REPL_SLUG}/build && make"
+args = "cd /home/runner/workspace/build && cmake .. && make && ctest --output-on-failure"
 
 [[ports]]
 localPort = 12345
@@ -72,4 +36,4 @@ externalPort = 80
 exposeLocalhost = true
 
 [deployment]
-run = ["sh", "-c", "cd /home/runner/workspace/build && cmake .. && make"]
+run = ["sh", "-c", "cd /home/runner/workspace/build && cmake .. && make && ctest --output-on-failure"]

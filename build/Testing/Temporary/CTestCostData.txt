@@ -1,1 +1,9 @@
+CryptoStreamTest.BasicStreamOperation 3 0.00699471
+CryptoStreamTest.UninitializedError 3 0.00530047
+CryptoStreamTest.EmptyStream 3 0.00819502
+CryptoStreamTest.LargeStream 3 0.00976186
+CryptoStreamTest.InvalidStreamState 3 0.00555917
+CryptoStreamTest.BlockAlignment 3 0.00494964
+CryptoStreamTest.StreamOperators 3 0.00754055
+CryptoStreamTest.IVGeneration 3 0.0074958
 ---

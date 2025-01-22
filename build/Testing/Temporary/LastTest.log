@@ -1,3 +1,353 @@
-Start testing: Jan 22 19:43 UTC
+Start testing: Jan 22 22:44 UTC
 ----------------------------------------------------------
-End testing: Jan 22 19:43 UTC
+1/8 Testing: CryptoStreamTest.BasicStreamOperation
+1/8 Test: CryptoStreamTest.BasicStreamOperation
+Command: "/home/runner/workspace/build/crypto_tests" "--gtest_filter=CryptoStreamTest.BasicStreamOperation" "--gtest_also_run_disabled_tests"
+Directory: /home/runner/workspace/build
+"CryptoStreamTest.BasicStreamOperation" start time: Jan 22 22:44 UTC
+Output:
+----------------------------------------------------------
+Running main() from /build/source/googletest/src/gtest_main.cc
+Note: Google Test filter = CryptoStreamTest.BasicStreamOperation
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from CryptoStreamTest
+[ RUN      ] CryptoStreamTest.BasicStreamOperation
+[2025-01-22 22:44:05.943720] [0x00007fdb392deb80] [info]    Initializing CryptoStream
+[2025-01-22 22:44:05.943860] [0x00007fdb392deb80] [debug]   CryptoStream initialization complete
+[2025-01-22 22:44:05.943870] [0x00007fdb392deb80] [info]    Initializing crypto parameters
+[2025-01-22 22:44:05.943872] [0x00007fdb392deb80] [debug]   Crypto parameters initialized successfully
+[2025-01-22 22:44:05.943881] [0x00007fdb392deb80] [info]    Starting stream encryption
+[2025-01-22 22:44:05.943887] [0x00007fdb392deb80] [debug]   Initializing cipher for encryption
+[2025-01-22 22:44:05.945674] [0x00007fdb392deb80] [debug]   Cipher initialization complete
+[2025-01-22 22:44:05.945693] [0x00007fdb392deb80] [info]    Starting stream decryption
+[2025-01-22 22:44:05.945697] [0x00007fdb392deb80] [debug]   Initializing cipher for decryption
+[2025-01-22 22:44:05.945703] [0x00007fdb392deb80] [debug]   Cipher initialization complete
+[2025-01-22 22:44:05.945710] [0x00007fdb392deb80] [debug]   Cleaning up CryptoStream resources
+[       OK ] CryptoStreamTest.BasicStreamOperation (2 ms)
+[----------] 1 test from CryptoStreamTest (2 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (2 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.02 sec
+----------------------------------------------------------
+Test Passed.
+"CryptoStreamTest.BasicStreamOperation" end time: Jan 22 22:44 UTC
+"CryptoStreamTest.BasicStreamOperation" time elapsed: 00:00:00
+----------------------------------------------------------
+
+2/8 Testing: CryptoStreamTest.UninitializedError
+2/8 Test: CryptoStreamTest.UninitializedError
+Command: "/home/runner/workspace/build/crypto_tests" "--gtest_filter=CryptoStreamTest.UninitializedError" "--gtest_also_run_disabled_tests"
+Directory: /home/runner/workspace/build
+"CryptoStreamTest.UninitializedError" start time: Jan 22 22:44 UTC
+Output:
+----------------------------------------------------------
+Running main() from /build/source/googletest/src/gtest_main.cc
+Note: Google Test filter = CryptoStreamTest.UninitializedError
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from CryptoStreamTest
+[ RUN      ] CryptoStreamTest.UninitializedError
+[2025-01-22 22:44:05.962868] [0x00007f8151103b80] [info]    Initializing CryptoStream
+[2025-01-22 22:44:05.963039] [0x00007f8151103b80] [debug]   CryptoStream initialization complete
+[2025-01-22 22:44:05.963049] [0x00007f8151103b80] [info]    Initializing crypto parameters
+[2025-01-22 22:44:05.963052] [0x00007f8151103b80] [debug]   Crypto parameters initialized successfully
+[2025-01-22 22:44:05.963056] [0x00007f8151103b80] [info]    Initializing CryptoStream
+[2025-01-22 22:44:05.963059] [0x00007f8151103b80] [debug]   CryptoStream initialization complete
+[2025-01-22 22:44:05.963067] [0x00007f8151103b80] [info]    Starting stream encryption
+[2025-01-22 22:44:05.963070] [0x00007f8151103b80] [debug]   Initializing cipher for encryption
+[2025-01-22 22:44:05.963071] [0x00007f8151103b80] [error]   Attempted to use uninitialized CryptoStream
+[2025-01-22 22:44:05.963102] [0x00007f8151103b80] [error]   Stream processing failed: Initialization error: CryptoStream not initialized
+[2025-01-22 22:44:05.963114] [0x00007f8151103b80] [debug]   Cleaning up CryptoStream resources
+[2025-01-22 22:44:05.963119] [0x00007f8151103b80] [debug]   Cleaning up CryptoStream resources
+[       OK ] CryptoStreamTest.UninitializedError (0 ms)
+[----------] 1 test from CryptoStreamTest (0 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (0 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.02 sec
+----------------------------------------------------------
+Test Passed.
+"CryptoStreamTest.UninitializedError" end time: Jan 22 22:44 UTC
+"CryptoStreamTest.UninitializedError" time elapsed: 00:00:00
+----------------------------------------------------------
+
+3/8 Testing: CryptoStreamTest.EmptyStream
+3/8 Test: CryptoStreamTest.EmptyStream
+Command: "/home/runner/workspace/build/crypto_tests" "--gtest_filter=CryptoStreamTest.EmptyStream" "--gtest_also_run_disabled_tests"
+Directory: /home/runner/workspace/build
+"CryptoStreamTest.EmptyStream" start time: Jan 22 22:44 UTC
+Output:
+----------------------------------------------------------
+Running main() from /build/source/googletest/src/gtest_main.cc
+Note: Google Test filter = CryptoStreamTest.EmptyStream
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from CryptoStreamTest
+[ RUN      ] CryptoStreamTest.EmptyStream
+[2025-01-22 22:44:05.986220] [0x00007fe80f100b80] [info]    Initializing CryptoStream
+[2025-01-22 22:44:05.986369] [0x00007fe80f100b80] [debug]   CryptoStream initialization complete
+[2025-01-22 22:44:05.986377] [0x00007fe80f100b80] [info]    Initializing crypto parameters
+[2025-01-22 22:44:05.986380] [0x00007fe80f100b80] [debug]   Crypto parameters initialized successfully
+[2025-01-22 22:44:05.986386] [0x00007fe80f100b80] [info]    Starting stream encryption
+[2025-01-22 22:44:05.986413] [0x00007fe80f100b80] [debug]   Initializing cipher for encryption
+[2025-01-22 22:44:05.988456] [0x00007fe80f100b80] [debug]   Cipher initialization complete
+[2025-01-22 22:44:05.988472] [0x00007fe80f100b80] [info]    Starting stream decryption
+[2025-01-22 22:44:05.988475] [0x00007fe80f100b80] [debug]   Initializing cipher for decryption
+[2025-01-22 22:44:05.988480] [0x00007fe80f100b80] [debug]   Cipher initialization complete
+[2025-01-22 22:44:05.988484] [0x00007fe80f100b80] [debug]   Cleaning up CryptoStream resources
+[       OK ] CryptoStreamTest.EmptyStream (2 ms)
+[----------] 1 test from CryptoStreamTest (2 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (2 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.02 sec
+----------------------------------------------------------
+Test Passed.
+"CryptoStreamTest.EmptyStream" end time: Jan 22 22:44 UTC
+"CryptoStreamTest.EmptyStream" time elapsed: 00:00:00
+----------------------------------------------------------
+
+4/8 Testing: CryptoStreamTest.LargeStream
+4/8 Test: CryptoStreamTest.LargeStream
+Command: "/home/runner/workspace/build/crypto_tests" "--gtest_filter=CryptoStreamTest.LargeStream" "--gtest_also_run_disabled_tests"
+Directory: /home/runner/workspace/build
+"CryptoStreamTest.LargeStream" start time: Jan 22 22:44 UTC
+Output:
+----------------------------------------------------------
+Running main() from /build/source/googletest/src/gtest_main.cc
+Note: Google Test filter = CryptoStreamTest.LargeStream
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from CryptoStreamTest
+[ RUN      ] CryptoStreamTest.LargeStream
+[2025-01-22 22:44:06.005467] [0x00007f5d10e85b80] [info]    Initializing CryptoStream
+[2025-01-22 22:44:06.005647] [0x00007f5d10e85b80] [debug]   CryptoStream initialization complete
+[2025-01-22 22:44:06.005657] [0x00007f5d10e85b80] [info]    Initializing crypto parameters
+[2025-01-22 22:44:06.005660] [0x00007f5d10e85b80] [debug]   Crypto parameters initialized successfully
+[2025-01-22 22:44:06.013459] [0x00007f5d10e85b80] [info]    Starting stream encryption
+[2025-01-22 22:44:06.013472] [0x00007f5d10e85b80] [debug]   Initializing cipher for encryption
+[2025-01-22 22:44:06.015133] [0x00007f5d10e85b80] [debug]   Cipher initialization complete
+[2025-01-22 22:44:06.017728] [0x00007f5d10e85b80] [info]    Starting stream decryption
+[2025-01-22 22:44:06.017740] [0x00007f5d10e85b80] [debug]   Initializing cipher for decryption
+[2025-01-22 22:44:06.017749] [0x00007f5d10e85b80] [debug]   Cipher initialization complete
+[2025-01-22 22:44:06.019273] [0x00007f5d10e85b80] [debug]   Cleaning up CryptoStream resources
+[       OK ] CryptoStreamTest.LargeStream (13 ms)
+[----------] 1 test from CryptoStreamTest (13 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (13 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.03 sec
+----------------------------------------------------------
+Test Passed.
+"CryptoStreamTest.LargeStream" end time: Jan 22 22:44 UTC
+"CryptoStreamTest.LargeStream" time elapsed: 00:00:00
+----------------------------------------------------------
+
+5/8 Testing: CryptoStreamTest.InvalidStreamState
+5/8 Test: CryptoStreamTest.InvalidStreamState
+Command: "/home/runner/workspace/build/crypto_tests" "--gtest_filter=CryptoStreamTest.InvalidStreamState" "--gtest_also_run_disabled_tests"
+Directory: /home/runner/workspace/build
+"CryptoStreamTest.InvalidStreamState" start time: Jan 22 22:44 UTC
+Output:
+----------------------------------------------------------
+Running main() from /build/source/googletest/src/gtest_main.cc
+Note: Google Test filter = CryptoStreamTest.InvalidStreamState
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from CryptoStreamTest
+[ RUN      ] CryptoStreamTest.InvalidStreamState
+[2025-01-22 22:44:06.037248] [0x00007f2068700b80] [info]    Initializing CryptoStream
+[2025-01-22 22:44:06.037428] [0x00007f2068700b80] [debug]   CryptoStream initialization complete
+[2025-01-22 22:44:06.037438] [0x00007f2068700b80] [info]    Initializing crypto parameters
+[2025-01-22 22:44:06.037442] [0x00007f2068700b80] [debug]   Crypto parameters initialized successfully
+[2025-01-22 22:44:06.037448] [0x00007f2068700b80] [info]    Starting stream encryption
+[2025-01-22 22:44:06.037452] [0x00007f2068700b80] [error]   Invalid stream state detected
+[2025-01-22 22:44:06.037488] [0x00007f2068700b80] [info]    Starting stream encryption
+[2025-01-22 22:44:06.037493] [0x00007f2068700b80] [error]   Invalid stream state detected
+[2025-01-22 22:44:06.037502] [0x00007f2068700b80] [debug]   Cleaning up CryptoStream resources
+[       OK ] CryptoStreamTest.InvalidStreamState (0 ms)
+[----------] 1 test from CryptoStreamTest (0 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (0 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.02 sec
+----------------------------------------------------------
+Test Passed.
+"CryptoStreamTest.InvalidStreamState" end time: Jan 22 22:44 UTC
+"CryptoStreamTest.InvalidStreamState" time elapsed: 00:00:00
+----------------------------------------------------------
+
+6/8 Testing: CryptoStreamTest.BlockAlignment
+6/8 Test: CryptoStreamTest.BlockAlignment
+Command: "/home/runner/workspace/build/crypto_tests" "--gtest_filter=CryptoStreamTest.BlockAlignment" "--gtest_also_run_disabled_tests"
+Directory: /home/runner/workspace/build
+"CryptoStreamTest.BlockAlignment" start time: Jan 22 22:44 UTC
+Output:
+----------------------------------------------------------
+Running main() from /build/source/googletest/src/gtest_main.cc
+Note: Google Test filter = CryptoStreamTest.BlockAlignment
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from CryptoStreamTest
+[ RUN      ] CryptoStreamTest.BlockAlignment
+[2025-01-22 22:44:06.052141] [0x00007fdd2a34fb80] [info]    Initializing CryptoStream
+[2025-01-22 22:44:06.052293] [0x00007fdd2a34fb80] [debug]   CryptoStream initialization complete
+[2025-01-22 22:44:06.052302] [0x00007fdd2a34fb80] [info]    Initializing crypto parameters
+[2025-01-22 22:44:06.052306] [0x00007fdd2a34fb80] [debug]   Crypto parameters initialized successfully
+[2025-01-22 22:44:06.052315] [0x00007fdd2a34fb80] [info]    Starting stream encryption
+[2025-01-22 22:44:06.052321] [0x00007fdd2a34fb80] [debug]   Initializing cipher for encryption
+[2025-01-22 22:44:06.053726] [0x00007fdd2a34fb80] [debug]   Cipher initialization complete
+[2025-01-22 22:44:06.053740] [0x00007fdd2a34fb80] [info]    Starting stream decryption
+[2025-01-22 22:44:06.053743] [0x00007fdd2a34fb80] [debug]   Initializing cipher for decryption
+[2025-01-22 22:44:06.053746] [0x00007fdd2a34fb80] [debug]   Cipher initialization complete
+[2025-01-22 22:44:06.053755] [0x00007fdd2a34fb80] [info]    Starting stream encryption
+[2025-01-22 22:44:06.053759] [0x00007fdd2a34fb80] [debug]   Initializing cipher for encryption
+[2025-01-22 22:44:06.053761] [0x00007fdd2a34fb80] [debug]   Cipher initialization complete
+[2025-01-22 22:44:06.053764] [0x00007fdd2a34fb80] [info]    Starting stream decryption
+[2025-01-22 22:44:06.053765] [0x00007fdd2a34fb80] [debug]   Initializing cipher for decryption
+[2025-01-22 22:44:06.053767] [0x00007fdd2a34fb80] [debug]   Cipher initialization complete
+[2025-01-22 22:44:06.053772] [0x00007fdd2a34fb80] [info]    Starting stream encryption
+[2025-01-22 22:44:06.053774] [0x00007fdd2a34fb80] [debug]   Initializing cipher for encryption
+[2025-01-22 22:44:06.053776] [0x00007fdd2a34fb80] [debug]   Cipher initialization complete
+[2025-01-22 22:44:06.053780] [0x00007fdd2a34fb80] [info]    Starting stream decryption
+[2025-01-22 22:44:06.053781] [0x00007fdd2a34fb80] [debug]   Initializing cipher for decryption
+[2025-01-22 22:44:06.053783] [0x00007fdd2a34fb80] [debug]   Cipher initialization complete
+[2025-01-22 22:44:06.053786] [0x00007fdd2a34fb80] [info]    Starting stream encryption
+[2025-01-22 22:44:06.053788] [0x00007fdd2a34fb80] [debug]   Initializing cipher for encryption
+[2025-01-22 22:44:06.053790] [0x00007fdd2a34fb80] [debug]   Cipher initialization complete
+[2025-01-22 22:44:06.053792] [0x00007fdd2a34fb80] [info]    Starting stream decryption
+[2025-01-22 22:44:06.053794] [0x00007fdd2a34fb80] [debug]   Initializing cipher for decryption
+[2025-01-22 22:44:06.053796] [0x00007fdd2a34fb80] [debug]   Cipher initialization complete
+[2025-01-22 22:44:06.053799] [0x00007fdd2a34fb80] [info]    Starting stream encryption
+[2025-01-22 22:44:06.053802] [0x00007fdd2a34fb80] [debug]   Initializing cipher for encryption
+[2025-01-22 22:44:06.053805] [0x00007fdd2a34fb80] [debug]   Cipher initialization complete
+[2025-01-22 22:44:06.053806] [0x00007fdd2a34fb80] [info]    Starting stream decryption
+[2025-01-22 22:44:06.053808] [0x00007fdd2a34fb80] [debug]   Initializing cipher for decryption
+[2025-01-22 22:44:06.053810] [0x00007fdd2a34fb80] [debug]   Cipher initialization complete
+[2025-01-22 22:44:06.053814] [0x00007fdd2a34fb80] [info]    Starting stream encryption
+[2025-01-22 22:44:06.053816] [0x00007fdd2a34fb80] [debug]   Initializing cipher for encryption
+[2025-01-22 22:44:06.053820] [0x00007fdd2a34fb80] [debug]   Cipher initialization complete
+[2025-01-22 22:44:06.053821] [0x00007fdd2a34fb80] [info]    Starting stream decryption
+[2025-01-22 22:44:06.053824] [0x00007fdd2a34fb80] [debug]   Initializing cipher for decryption
+[2025-01-22 22:44:06.053826] [0x00007fdd2a34fb80] [debug]   Cipher initialization complete
+[2025-01-22 22:44:06.053829] [0x00007fdd2a34fb80] [debug]   Cleaning up CryptoStream resources
+[       OK ] CryptoStreamTest.BlockAlignment (1 ms)
+[----------] 1 test from CryptoStreamTest (1 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (1 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"CryptoStreamTest.BlockAlignment" end time: Jan 22 22:44 UTC
+"CryptoStreamTest.BlockAlignment" time elapsed: 00:00:00
+----------------------------------------------------------
+
+7/8 Testing: CryptoStreamTest.StreamOperators
+7/8 Test: CryptoStreamTest.StreamOperators
+Command: "/home/runner/workspace/build/crypto_tests" "--gtest_filter=CryptoStreamTest.StreamOperators" "--gtest_also_run_disabled_tests"
+Directory: /home/runner/workspace/build
+"CryptoStreamTest.StreamOperators" start time: Jan 22 22:44 UTC
+Output:
+----------------------------------------------------------
+Running main() from /build/source/googletest/src/gtest_main.cc
+Note: Google Test filter = CryptoStreamTest.StreamOperators
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from CryptoStreamTest
+[ RUN      ] CryptoStreamTest.StreamOperators
+[2025-01-22 22:44:06.072683] [0x00007f08c0405b80] [info]    Initializing CryptoStream
+[2025-01-22 22:44:06.075077] [0x00007f08c0405b80] [debug]   CryptoStream initialization complete
+[2025-01-22 22:44:06.075087] [0x00007f08c0405b80] [info]    Initializing crypto parameters
+[2025-01-22 22:44:06.075090] [0x00007f08c0405b80] [debug]   Crypto parameters initialized successfully
+[2025-01-22 22:44:06.075093] [0x00007f08c0405b80] [debug]   Stream operator<< called, storing input stream for processing
+[2025-01-22 22:44:06.075095] [0x00007f08c0405b80] [debug]   Stream operator>> called in encryption mode
+[2025-01-22 22:44:06.075098] [0x00007f08c0405b80] [info]    Starting stream encryption
+[2025-01-22 22:44:06.075101] [0x00007f08c0405b80] [debug]   Initializing cipher for encryption
+[2025-01-22 22:44:06.076666] [0x00007f08c0405b80] [debug]   Cipher initialization complete
+[2025-01-22 22:44:06.076729] [0x00007f08c0405b80] [debug]   Stream processing complete
+[2025-01-22 22:44:06.076741] [0x00007f08c0405b80] [debug]   Stream operator<< called, storing input stream for processing
+[2025-01-22 22:44:06.076749] [0x00007f08c0405b80] [debug]   Stream operator>> called in decryption mode
+[2025-01-22 22:44:06.076757] [0x00007f08c0405b80] [info]    Starting stream decryption
+[2025-01-22 22:44:06.076764] [0x00007f08c0405b80] [debug]   Initializing cipher for decryption
+[2025-01-22 22:44:06.076773] [0x00007f08c0405b80] [debug]   Cipher initialization complete
+[2025-01-22 22:44:06.076781] [0x00007f08c0405b80] [debug]   Stream processing complete
+[2025-01-22 22:44:06.076789] [0x00007f08c0405b80] [debug]   Stream operator>> called in decryption mode
+[2025-01-22 22:44:06.076796] [0x00007f08c0405b80] [error]   Stream operator>> called without prior input stream
+[2025-01-22 22:44:06.076833] [0x00007f08c0405b80] [debug]   Cleaning up CryptoStream resources
+[       OK ] CryptoStreamTest.StreamOperators (4 ms)
+[----------] 1 test from CryptoStreamTest (4 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (4 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.02 sec
+----------------------------------------------------------
+Test Passed.
+"CryptoStreamTest.StreamOperators" end time: Jan 22 22:44 UTC
+"CryptoStreamTest.StreamOperators" time elapsed: 00:00:00
+----------------------------------------------------------
+
+8/8 Testing: CryptoStreamTest.IVGeneration
+8/8 Test: CryptoStreamTest.IVGeneration
+Command: "/home/runner/workspace/build/crypto_tests" "--gtest_filter=CryptoStreamTest.IVGeneration" "--gtest_also_run_disabled_tests"
+Directory: /home/runner/workspace/build
+"CryptoStreamTest.IVGeneration" start time: Jan 22 22:44 UTC
+Output:
+----------------------------------------------------------
+Running main() from /build/source/googletest/src/gtest_main.cc
+Note: Google Test filter = CryptoStreamTest.IVGeneration
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from CryptoStreamTest
+[ RUN      ] CryptoStreamTest.IVGeneration
+[2025-01-22 22:44:06.099601] [0x00007fdceb9c6b80] [info]    Initializing CryptoStream
+[2025-01-22 22:44:06.099725] [0x00007fdceb9c6b80] [debug]   CryptoStream initialization complete
+[2025-01-22 22:44:06.099736] [0x00007fdceb9c6b80] [info]    Initializing crypto parameters
+[2025-01-22 22:44:06.099738] [0x00007fdceb9c6b80] [debug]   Crypto parameters initialized successfully
+[2025-01-22 22:44:06.099740] [0x00007fdceb9c6b80] [info]    Initializing CryptoStream
+[2025-01-22 22:44:06.099741] [0x00007fdceb9c6b80] [debug]   CryptoStream initialization complete
+[2025-01-22 22:44:06.099743] [0x00007fdceb9c6b80] [debug]   Generating initialization vector
+[2025-01-22 22:44:06.101307] [0x00007fdceb9c6b80] [debug]   Successfully generated initialization vector
+[2025-01-22 22:44:06.101316] [0x00007fdceb9c6b80] [debug]   Generating initialization vector
+[2025-01-22 22:44:06.101320] [0x00007fdceb9c6b80] [debug]   Successfully generated initialization vector
+[2025-01-22 22:44:06.101322] [0x00007fdceb9c6b80] [info]    Initializing crypto parameters
+[2025-01-22 22:44:06.101323] [0x00007fdceb9c6b80] [debug]   Crypto parameters initialized successfully
+[2025-01-22 22:44:06.101329] [0x00007fdceb9c6b80] [info]    Starting stream encryption
+[2025-01-22 22:44:06.101331] [0x00007fdceb9c6b80] [debug]   Initializing cipher for encryption
+[2025-01-22 22:44:06.101335] [0x00007fdceb9c6b80] [debug]   Cipher initialization complete
+[2025-01-22 22:44:06.101341] [0x00007fdceb9c6b80] [info]    Starting stream decryption
+[2025-01-22 22:44:06.101345] [0x00007fdceb9c6b80] [debug]   Initializing cipher for decryption
+[2025-01-22 22:44:06.101348] [0x00007fdceb9c6b80] [debug]   Cipher initialization complete
+[2025-01-22 22:44:06.101352] [0x00007fdceb9c6b80] [debug]   Cleaning up CryptoStream resources
+[2025-01-22 22:44:06.101356] [0x00007fdceb9c6b80] [debug]   Cleaning up CryptoStream resources
+[       OK ] CryptoStreamTest.IVGeneration (1 ms)
+[----------] 1 test from CryptoStreamTest (1 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (1 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.02 sec
+----------------------------------------------------------
+Test Passed.
+"CryptoStreamTest.IVGeneration" end time: Jan 22 22:44 UTC
+"CryptoStreamTest.IVGeneration" time elapsed: 00:00:00
+----------------------------------------------------------
+
+End testing: Jan 22 22:44 UTC
