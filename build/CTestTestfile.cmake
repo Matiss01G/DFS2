@@ -5,3 +5,5 @@
 # This file includes the relevant testing commands required for 
 # testing this directory and lists subdirectories to be tested as well.
 include("/home/runner/workspace/build/crypto_tests[1]_include.cmake")
+include("/home/runner/workspace/build/store_tests[1]_include.cmake")
+include("/home/runner/workspace/build/channel_tests[1]_include.cmake")
