@@ -100,17 +100,29 @@ target_link_libraries(channel_tests
     GTest::Main
 )
 
+# Network tests (from network)
+add_executable(codec_tests
+    src/tests/codec_test.cpp
+    src/network/codec.cpp)
+target_include_directories(codec_tests PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/tests
+)
+target_link_libraries(codec_tests
+    PRIVATE
+    dfs_network
+    dfs_crypto
+    dfs_store
+    GTest::GTest
+    GTest::Main
+)
+
 include(GoogleTest)
 gtest_discover_tests(crypto_tests)
-gtest_discover_tests(store_tests)
-gtest_discover_tests(channel_tests)
 
 # Add custom target to run tests
 add_custom_target(run_tests ALL
     COMMAND crypto_tests
-    COMMAND store_tests
-    COMMAND channel_tests
-    DEPENDS crypto_tests store_tests channel_tests
+    DEPENDS crypto_tests
     WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
 )
 

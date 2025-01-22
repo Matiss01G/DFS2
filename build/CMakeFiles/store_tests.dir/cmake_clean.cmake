@@ -3,7 +3,6 @@ file(REMOVE_RECURSE
   "CMakeFiles/store_tests.dir/src/tests/store_test.cpp.o.d"
   "store_tests"
   "store_tests.pdb"
-  "store_tests[1]_tests.cmake"
 )
 
 # Per-language clean rules from dependency scanning.
