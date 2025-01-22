@@ -4,7 +4,7 @@
 #include <optional>
 #include <thread>
 #include <chrono>
-#include "network/peer_manager.hpp"  // Added include for PeerManager
+#include "network/peer_manager.hpp"
 #include <memory>
 #include <functional>
 
@@ -20,8 +20,8 @@ public:
   StreamPipeline(std::function<bool(std::stringstream&)> producer)
     : producer_(producer) {}
 
-  // Override sync to implement on-demand data production
-  virtual int sync() override {
+  // Sync method to implement on-demand data production
+  virtual int sync() {
     if (!produced_) {
       produced_ = true;
       std::stringstream temp;
