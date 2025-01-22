@@ -92,11 +92,13 @@ target_link_libraries(channel_tests
 
 include(GoogleTest)
 gtest_discover_tests(crypto_tests)
+gtest_discover_tests(channel_tests)
 
 # Add custom target to run tests
 add_custom_target(run_tests ALL
     COMMAND crypto_tests
-    DEPENDS crypto_tests
+    COMMAND channel_tests
+    DEPENDS crypto_tests channel_tests
     WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
 )
 

@@ -1,10 +1,10 @@
-Start testing: Jan 22 22:44 UTC
+Start testing: Jan 22 22:46 UTC
 ----------------------------------------------------------
-1/8 Testing: CryptoStreamTest.BasicStreamOperation
-1/8 Test: CryptoStreamTest.BasicStreamOperation
+1/14 Testing: CryptoStreamTest.BasicStreamOperation
+1/14 Test: CryptoStreamTest.BasicStreamOperation
 Command: "/home/runner/workspace/build/crypto_tests" "--gtest_filter=CryptoStreamTest.BasicStreamOperation" "--gtest_also_run_disabled_tests"
 Directory: /home/runner/workspace/build
-"CryptoStreamTest.BasicStreamOperation" start time: Jan 22 22:44 UTC
+"CryptoStreamTest.BasicStreamOperation" start time: Jan 22 22:46 UTC
 Output:
 ----------------------------------------------------------
 Running main() from /build/source/googletest/src/gtest_main.cc
@@ -13,17 +13,17 @@ Note: Google Test filter = CryptoStreamTest.BasicStreamOperation
 [----------] Global test environment set-up.
 [----------] 1 test from CryptoStreamTest
 [ RUN      ] CryptoStreamTest.BasicStreamOperation
-[2025-01-22 22:44:05.943720] [0x00007fdb392deb80] [info]    Initializing CryptoStream
-[2025-01-22 22:44:05.943860] [0x00007fdb392deb80] [debug]   CryptoStream initialization complete
-[2025-01-22 22:44:05.943870] [0x00007fdb392deb80] [info]    Initializing crypto parameters
-[2025-01-22 22:44:05.943872] [0x00007fdb392deb80] [debug]   Crypto parameters initialized successfully
-[2025-01-22 22:44:05.943881] [0x00007fdb392deb80] [info]    Starting stream encryption
-[2025-01-22 22:44:05.943887] [0x00007fdb392deb80] [debug]   Initializing cipher for encryption
-[2025-01-22 22:44:05.945674] [0x00007fdb392deb80] [debug]   Cipher initialization complete
-[2025-01-22 22:44:05.945693] [0x00007fdb392deb80] [info]    Starting stream decryption
-[2025-01-22 22:44:05.945697] [0x00007fdb392deb80] [debug]   Initializing cipher for decryption
-[2025-01-22 22:44:05.945703] [0x00007fdb392deb80] [debug]   Cipher initialization complete
-[2025-01-22 22:44:05.945710] [0x00007fdb392deb80] [debug]   Cleaning up CryptoStream resources
+[2025-01-22 22:46:40.662743] [0x00007f8e64527b80] [info]    Initializing CryptoStream
+[2025-01-22 22:46:40.662888] [0x00007f8e64527b80] [debug]   CryptoStream initialization complete
+[2025-01-22 22:46:40.662894] [0x00007f8e64527b80] [info]    Initializing crypto parameters
+[2025-01-22 22:46:40.662898] [0x00007f8e64527b80] [debug]   Crypto parameters initialized successfully
+[2025-01-22 22:46:40.662907] [0x00007f8e64527b80] [info]    Starting stream encryption
+[2025-01-22 22:46:40.662911] [0x00007f8e64527b80] [debug]   Initializing cipher for encryption
+[2025-01-22 22:46:40.664808] [0x00007f8e64527b80] [debug]   Cipher initialization complete
+[2025-01-22 22:46:40.664827] [0x00007f8e64527b80] [info]    Starting stream decryption
+[2025-01-22 22:46:40.664831] [0x00007f8e64527b80] [debug]   Initializing cipher for decryption
+[2025-01-22 22:46:40.664836] [0x00007f8e64527b80] [debug]   Cipher initialization complete
+[2025-01-22 22:46:40.664841] [0x00007f8e64527b80] [debug]   Cleaning up CryptoStream resources
 [       OK ] CryptoStreamTest.BasicStreamOperation (2 ms)
 [----------] 1 test from CryptoStreamTest (2 ms total)
 
@@ -34,15 +34,15 @@ Note: Google Test filter = CryptoStreamTest.BasicStreamOperation
 Test time =   0.02 sec
 ----------------------------------------------------------
 Test Passed.
-"CryptoStreamTest.BasicStreamOperation" end time: Jan 22 22:44 UTC
+"CryptoStreamTest.BasicStreamOperation" end time: Jan 22 22:46 UTC
 "CryptoStreamTest.BasicStreamOperation" time elapsed: 00:00:00
 ----------------------------------------------------------
 
-2/8 Testing: CryptoStreamTest.UninitializedError
-2/8 Test: CryptoStreamTest.UninitializedError
+2/14 Testing: CryptoStreamTest.UninitializedError
+2/14 Test: CryptoStreamTest.UninitializedError
 Command: "/home/runner/workspace/build/crypto_tests" "--gtest_filter=CryptoStreamTest.UninitializedError" "--gtest_also_run_disabled_tests"
 Directory: /home/runner/workspace/build
-"CryptoStreamTest.UninitializedError" start time: Jan 22 22:44 UTC
+"CryptoStreamTest.UninitializedError" start time: Jan 22 22:46 UTC
 Output:
 ----------------------------------------------------------
 Running main() from /build/source/googletest/src/gtest_main.cc
@@ -51,18 +51,18 @@ Note: Google Test filter = CryptoStreamTest.UninitializedError
 [----------] Global test environment set-up.
 [----------] 1 test from CryptoStreamTest
 [ RUN      ] CryptoStreamTest.UninitializedError
-[2025-01-22 22:44:05.962868] [0x00007f8151103b80] [info]    Initializing CryptoStream
-[2025-01-22 22:44:05.963039] [0x00007f8151103b80] [debug]   CryptoStream initialization complete
-[2025-01-22 22:44:05.963049] [0x00007f8151103b80] [info]    Initializing crypto parameters
-[2025-01-22 22:44:05.963052] [0x00007f8151103b80] [debug]   Crypto parameters initialized successfully
-[2025-01-22 22:44:05.963056] [0x00007f8151103b80] [info]    Initializing CryptoStream
-[2025-01-22 22:44:05.963059] [0x00007f8151103b80] [debug]   CryptoStream initialization complete
-[2025-01-22 22:44:05.963067] [0x00007f8151103b80] [info]    Starting stream encryption
-[2025-01-22 22:44:05.963070] [0x00007f8151103b80] [debug]   Initializing cipher for encryption
-[2025-01-22 22:44:05.963071] [0x00007f8151103b80] [error]   Attempted to use uninitialized CryptoStream
-[2025-01-22 22:44:05.963102] [0x00007f8151103b80] [error]   Stream processing failed: Initialization error: CryptoStream not initialized
-[2025-01-22 22:44:05.963114] [0x00007f8151103b80] [debug]   Cleaning up CryptoStream resources
-[2025-01-22 22:44:05.963119] [0x00007f8151103b80] [debug]   Cleaning up CryptoStream resources
+[2025-01-22 22:46:40.679366] [0x00007fcc19e88b80] [info]    Initializing CryptoStream
+[2025-01-22 22:46:40.679544] [0x00007fcc19e88b80] [debug]   CryptoStream initialization complete
+[2025-01-22 22:46:40.679555] [0x00007fcc19e88b80] [info]    Initializing crypto parameters
+[2025-01-22 22:46:40.679559] [0x00007fcc19e88b80] [debug]   Crypto parameters initialized successfully
+[2025-01-22 22:46:40.679561] [0x00007fcc19e88b80] [info]    Initializing CryptoStream
+[2025-01-22 22:46:40.679562] [0x00007fcc19e88b80] [debug]   CryptoStream initialization complete
+[2025-01-22 22:46:40.679567] [0x00007fcc19e88b80] [info]    Starting stream encryption
+[2025-01-22 22:46:40.679570] [0x00007fcc19e88b80] [debug]   Initializing cipher for encryption
+[2025-01-22 22:46:40.679572] [0x00007fcc19e88b80] [error]   Attempted to use uninitialized CryptoStream
+[2025-01-22 22:46:40.679601] [0x00007fcc19e88b80] [error]   Stream processing failed: Initialization error: CryptoStream not initialized
+[2025-01-22 22:46:40.679613] [0x00007fcc19e88b80] [debug]   Cleaning up CryptoStream resources
+[2025-01-22 22:46:40.679618] [0x00007fcc19e88b80] [debug]   Cleaning up CryptoStream resources
 [       OK ] CryptoStreamTest.UninitializedError (0 ms)
 [----------] 1 test from CryptoStreamTest (0 ms total)
 
@@ -70,18 +70,18 @@ Note: Google Test filter = CryptoStreamTest.UninitializedError
 [==========] 1 test from 1 test suite ran. (0 ms total)
 [  PASSED  ] 1 test.
 <end of output>
-Test time =   0.02 sec
+Test time =   0.01 sec
 ----------------------------------------------------------
 Test Passed.
-"CryptoStreamTest.UninitializedError" end time: Jan 22 22:44 UTC
+"CryptoStreamTest.UninitializedError" end time: Jan 22 22:46 UTC
 "CryptoStreamTest.UninitializedError" time elapsed: 00:00:00
 ----------------------------------------------------------
 
-3/8 Testing: CryptoStreamTest.EmptyStream
-3/8 Test: CryptoStreamTest.EmptyStream
+3/14 Testing: CryptoStreamTest.EmptyStream
+3/14 Test: CryptoStreamTest.EmptyStream
 Command: "/home/runner/workspace/build/crypto_tests" "--gtest_filter=CryptoStreamTest.EmptyStream" "--gtest_also_run_disabled_tests"
 Directory: /home/runner/workspace/build
-"CryptoStreamTest.EmptyStream" start time: Jan 22 22:44 UTC
+"CryptoStreamTest.EmptyStream" start time: Jan 22 22:46 UTC
 Output:
 ----------------------------------------------------------
 Running main() from /build/source/googletest/src/gtest_main.cc
@@ -90,17 +90,17 @@ Note: Google Test filter = CryptoStreamTest.EmptyStream
 [----------] Global test environment set-up.
 [----------] 1 test from CryptoStreamTest
 [ RUN      ] CryptoStreamTest.EmptyStream
-[2025-01-22 22:44:05.986220] [0x00007fe80f100b80] [info]    Initializing CryptoStream
-[2025-01-22 22:44:05.986369] [0x00007fe80f100b80] [debug]   CryptoStream initialization complete
-[2025-01-22 22:44:05.986377] [0x00007fe80f100b80] [info]    Initializing crypto parameters
-[2025-01-22 22:44:05.986380] [0x00007fe80f100b80] [debug]   Crypto parameters initialized successfully
-[2025-01-22 22:44:05.986386] [0x00007fe80f100b80] [info]    Starting stream encryption
-[2025-01-22 22:44:05.986413] [0x00007fe80f100b80] [debug]   Initializing cipher for encryption
-[2025-01-22 22:44:05.988456] [0x00007fe80f100b80] [debug]   Cipher initialization complete
-[2025-01-22 22:44:05.988472] [0x00007fe80f100b80] [info]    Starting stream decryption
-[2025-01-22 22:44:05.988475] [0x00007fe80f100b80] [debug]   Initializing cipher for decryption
-[2025-01-22 22:44:05.988480] [0x00007fe80f100b80] [debug]   Cipher initialization complete
-[2025-01-22 22:44:05.988484] [0x00007fe80f100b80] [debug]   Cleaning up CryptoStream resources
+[2025-01-22 22:46:40.694151] [0x00007f9a87edab80] [info]    Initializing CryptoStream
+[2025-01-22 22:46:40.694331] [0x00007f9a87edab80] [debug]   CryptoStream initialization complete
+[2025-01-22 22:46:40.694342] [0x00007f9a87edab80] [info]    Initializing crypto parameters
+[2025-01-22 22:46:40.694345] [0x00007f9a87edab80] [debug]   Crypto parameters initialized successfully
+[2025-01-22 22:46:40.694352] [0x00007f9a87edab80] [info]    Starting stream encryption
+[2025-01-22 22:46:40.694356] [0x00007f9a87edab80] [debug]   Initializing cipher for encryption
+[2025-01-22 22:46:40.696126] [0x00007f9a87edab80] [debug]   Cipher initialization complete
+[2025-01-22 22:46:40.696162] [0x00007f9a87edab80] [info]    Starting stream decryption
+[2025-01-22 22:46:40.696168] [0x00007f9a87edab80] [debug]   Initializing cipher for decryption
+[2025-01-22 22:46:40.696174] [0x00007f9a87edab80] [debug]   Cipher initialization complete
+[2025-01-22 22:46:40.696179] [0x00007f9a87edab80] [debug]   Cleaning up CryptoStream resources
 [       OK ] CryptoStreamTest.EmptyStream (2 ms)
 [----------] 1 test from CryptoStreamTest (2 ms total)
 
@@ -111,15 +111,15 @@ Note: Google Test filter = CryptoStreamTest.EmptyStream
 Test time =   0.02 sec
 ----------------------------------------------------------
 Test Passed.
-"CryptoStreamTest.EmptyStream" end time: Jan 22 22:44 UTC
+"CryptoStreamTest.EmptyStream" end time: Jan 22 22:46 UTC
 "CryptoStreamTest.EmptyStream" time elapsed: 00:00:00
 ----------------------------------------------------------
 
-4/8 Testing: CryptoStreamTest.LargeStream
-4/8 Test: CryptoStreamTest.LargeStream
+4/14 Testing: CryptoStreamTest.LargeStream
+4/14 Test: CryptoStreamTest.LargeStream
 Command: "/home/runner/workspace/build/crypto_tests" "--gtest_filter=CryptoStreamTest.LargeStream" "--gtest_also_run_disabled_tests"
 Directory: /home/runner/workspace/build
-"CryptoStreamTest.LargeStream" start time: Jan 22 22:44 UTC
+"CryptoStreamTest.LargeStream" start time: Jan 22 22:46 UTC
 Output:
 ----------------------------------------------------------
 Running main() from /build/source/googletest/src/gtest_main.cc
@@ -128,36 +128,36 @@ Note: Google Test filter = CryptoStreamTest.LargeStream
 [----------] Global test environment set-up.
 [----------] 1 test from CryptoStreamTest
 [ RUN      ] CryptoStreamTest.LargeStream
-[2025-01-22 22:44:06.005467] [0x00007f5d10e85b80] [info]    Initializing CryptoStream
-[2025-01-22 22:44:06.005647] [0x00007f5d10e85b80] [debug]   CryptoStream initialization complete
-[2025-01-22 22:44:06.005657] [0x00007f5d10e85b80] [info]    Initializing crypto parameters
-[2025-01-22 22:44:06.005660] [0x00007f5d10e85b80] [debug]   Crypto parameters initialized successfully
-[2025-01-22 22:44:06.013459] [0x00007f5d10e85b80] [info]    Starting stream encryption
-[2025-01-22 22:44:06.013472] [0x00007f5d10e85b80] [debug]   Initializing cipher for encryption
-[2025-01-22 22:44:06.015133] [0x00007f5d10e85b80] [debug]   Cipher initialization complete
-[2025-01-22 22:44:06.017728] [0x00007f5d10e85b80] [info]    Starting stream decryption
-[2025-01-22 22:44:06.017740] [0x00007f5d10e85b80] [debug]   Initializing cipher for decryption
-[2025-01-22 22:44:06.017749] [0x00007f5d10e85b80] [debug]   Cipher initialization complete
-[2025-01-22 22:44:06.019273] [0x00007f5d10e85b80] [debug]   Cleaning up CryptoStream resources
-[       OK ] CryptoStreamTest.LargeStream (13 ms)
-[----------] 1 test from CryptoStreamTest (13 ms total)
+[2025-01-22 22:46:40.711304] [0x00007f2eec515b80] [info]    Initializing CryptoStream
+[2025-01-22 22:46:40.711476] [0x00007f2eec515b80] [debug]   CryptoStream initialization complete
+[2025-01-22 22:46:40.711513] [0x00007f2eec515b80] [info]    Initializing crypto parameters
+[2025-01-22 22:46:40.711520] [0x00007f2eec515b80] [debug]   Crypto parameters initialized successfully
+[2025-01-22 22:46:40.720314] [0x00007f2eec515b80] [info]    Starting stream encryption
+[2025-01-22 22:46:40.720326] [0x00007f2eec515b80] [debug]   Initializing cipher for encryption
+[2025-01-22 22:46:40.721958] [0x00007f2eec515b80] [debug]   Cipher initialization complete
+[2025-01-22 22:46:40.724660] [0x00007f2eec515b80] [info]    Starting stream decryption
+[2025-01-22 22:46:40.724675] [0x00007f2eec515b80] [debug]   Initializing cipher for decryption
+[2025-01-22 22:46:40.724684] [0x00007f2eec515b80] [debug]   Cipher initialization complete
+[2025-01-22 22:46:40.726003] [0x00007f2eec515b80] [debug]   Cleaning up CryptoStream resources
+[       OK ] CryptoStreamTest.LargeStream (14 ms)
+[----------] 1 test from CryptoStreamTest (14 ms total)
 
 [----------] Global test environment tear-down
-[==========] 1 test from 1 test suite ran. (13 ms total)
+[==========] 1 test from 1 test suite ran. (14 ms total)
 [  PASSED  ] 1 test.
 <end of output>
 Test time =   0.03 sec
 ----------------------------------------------------------
 Test Passed.
-"CryptoStreamTest.LargeStream" end time: Jan 22 22:44 UTC
+"CryptoStreamTest.LargeStream" end time: Jan 22 22:46 UTC
 "CryptoStreamTest.LargeStream" time elapsed: 00:00:00
 ----------------------------------------------------------
 
-5/8 Testing: CryptoStreamTest.InvalidStreamState
-5/8 Test: CryptoStreamTest.InvalidStreamState
+5/14 Testing: CryptoStreamTest.InvalidStreamState
+5/14 Test: CryptoStreamTest.InvalidStreamState
 Command: "/home/runner/workspace/build/crypto_tests" "--gtest_filter=CryptoStreamTest.InvalidStreamState" "--gtest_also_run_disabled_tests"
 Directory: /home/runner/workspace/build
-"CryptoStreamTest.InvalidStreamState" start time: Jan 22 22:44 UTC
+"CryptoStreamTest.InvalidStreamState" start time: Jan 22 22:46 UTC
 Output:
 ----------------------------------------------------------
 Running main() from /build/source/googletest/src/gtest_main.cc
@@ -166,15 +166,15 @@ Note: Google Test filter = CryptoStreamTest.InvalidStreamState
 [----------] Global test environment set-up.
 [----------] 1 test from CryptoStreamTest
 [ RUN      ] CryptoStreamTest.InvalidStreamState
-[2025-01-22 22:44:06.037248] [0x00007f2068700b80] [info]    Initializing CryptoStream
-[2025-01-22 22:44:06.037428] [0x00007f2068700b80] [debug]   CryptoStream initialization complete
-[2025-01-22 22:44:06.037438] [0x00007f2068700b80] [info]    Initializing crypto parameters
-[2025-01-22 22:44:06.037442] [0x00007f2068700b80] [debug]   Crypto parameters initialized successfully
-[2025-01-22 22:44:06.037448] [0x00007f2068700b80] [info]    Starting stream encryption
-[2025-01-22 22:44:06.037452] [0x00007f2068700b80] [error]   Invalid stream state detected
-[2025-01-22 22:44:06.037488] [0x00007f2068700b80] [info]    Starting stream encryption
-[2025-01-22 22:44:06.037493] [0x00007f2068700b80] [error]   Invalid stream state detected
-[2025-01-22 22:44:06.037502] [0x00007f2068700b80] [debug]   Cleaning up CryptoStream resources
+[2025-01-22 22:46:40.741865] [0x00007f1531df4b80] [info]    Initializing CryptoStream
+[2025-01-22 22:46:40.741991] [0x00007f1531df4b80] [debug]   CryptoStream initialization complete
+[2025-01-22 22:46:40.742000] [0x00007f1531df4b80] [info]    Initializing crypto parameters
+[2025-01-22 22:46:40.742004] [0x00007f1531df4b80] [debug]   Crypto parameters initialized successfully
+[2025-01-22 22:46:40.742011] [0x00007f1531df4b80] [info]    Starting stream encryption
+[2025-01-22 22:46:40.742015] [0x00007f1531df4b80] [error]   Invalid stream state detected
+[2025-01-22 22:46:40.742058] [0x00007f1531df4b80] [info]    Starting stream encryption
+[2025-01-22 22:46:40.742065] [0x00007f1531df4b80] [error]   Invalid stream state detected
+[2025-01-22 22:46:40.742074] [0x00007f1531df4b80] [debug]   Cleaning up CryptoStream resources
 [       OK ] CryptoStreamTest.InvalidStreamState (0 ms)
 [----------] 1 test from CryptoStreamTest (0 ms total)
 
@@ -182,18 +182,18 @@ Note: Google Test filter = CryptoStreamTest.InvalidStreamState
 [==========] 1 test from 1 test suite ran. (0 ms total)
 [  PASSED  ] 1 test.
 <end of output>
-Test time =   0.02 sec
+Test time =   0.01 sec
 ----------------------------------------------------------
 Test Passed.
-"CryptoStreamTest.InvalidStreamState" end time: Jan 22 22:44 UTC
+"CryptoStreamTest.InvalidStreamState" end time: Jan 22 22:46 UTC
 "CryptoStreamTest.InvalidStreamState" time elapsed: 00:00:00
 ----------------------------------------------------------
 
-6/8 Testing: CryptoStreamTest.BlockAlignment
-6/8 Test: CryptoStreamTest.BlockAlignment
+6/14 Testing: CryptoStreamTest.BlockAlignment
+6/14 Test: CryptoStreamTest.BlockAlignment
 Command: "/home/runner/workspace/build/crypto_tests" "--gtest_filter=CryptoStreamTest.BlockAlignment" "--gtest_also_run_disabled_tests"
 Directory: /home/runner/workspace/build
-"CryptoStreamTest.BlockAlignment" start time: Jan 22 22:44 UTC
+"CryptoStreamTest.BlockAlignment" start time: Jan 22 22:46 UTC
 Output:
 ----------------------------------------------------------
 Running main() from /build/source/googletest/src/gtest_main.cc
@@ -202,48 +202,94 @@ Note: Google Test filter = CryptoStreamTest.BlockAlignment
 [----------] Global test environment set-up.
 [----------] 1 test from CryptoStreamTest
 [ RUN      ] CryptoStreamTest.BlockAlignment
-[2025-01-22 22:44:06.052141] [0x00007fdd2a34fb80] [info]    Initializing CryptoStream
-[2025-01-22 22:44:06.052293] [0x00007fdd2a34fb80] [debug]   CryptoStream initialization complete
-[2025-01-22 22:44:06.052302] [0x00007fdd2a34fb80] [info]    Initializing crypto parameters
-[2025-01-22 22:44:06.052306] [0x00007fdd2a34fb80] [debug]   Crypto parameters initialized successfully
-[2025-01-22 22:44:06.052315] [0x00007fdd2a34fb80] [info]    Starting stream encryption
-[2025-01-22 22:44:06.052321] [0x00007fdd2a34fb80] [debug]   Initializing cipher for encryption
-[2025-01-22 22:44:06.053726] [0x00007fdd2a34fb80] [debug]   Cipher initialization complete
-[2025-01-22 22:44:06.053740] [0x00007fdd2a34fb80] [info]    Starting stream decryption
-[2025-01-22 22:44:06.053743] [0x00007fdd2a34fb80] [debug]   Initializing cipher for decryption
-[2025-01-22 22:44:06.053746] [0x00007fdd2a34fb80] [debug]   Cipher initialization complete
-[2025-01-22 22:44:06.053755] [0x00007fdd2a34fb80] [info]    Starting stream encryption
-[2025-01-22 22:44:06.053759] [0x00007fdd2a34fb80] [debug]   Initializing cipher for encryption
-[2025-01-22 22:44:06.053761] [0x00007fdd2a34fb80] [debug]   Cipher initialization complete
-[2025-01-22 22:44:06.053764] [0x00007fdd2a34fb80] [info]    Starting stream decryption
-[2025-01-22 22:44:06.053765] [0x00007fdd2a34fb80] [debug]   Initializing cipher for decryption
-[2025-01-22 22:44:06.053767] [0x00007fdd2a34fb80] [debug]   Cipher initialization complete
-[2025-01-22 22:44:06.053772] [0x00007fdd2a34fb80] [info]    Starting stream encryption
-[2025-01-22 22:44:06.053774] [0x00007fdd2a34fb80] [debug]   Initializing cipher for encryption
-[2025-01-22 22:44:06.053776] [0x00007fdd2a34fb80] [debug]   Cipher initialization complete
-[2025-01-22 22:44:06.053780] [0x00007fdd2a34fb80] [info]    Starting stream decryption
-[2025-01-22 22:44:06.053781] [0x00007fdd2a34fb80] [debug]   Initializing cipher for decryption
-[2025-01-22 22:44:06.053783] [0x00007fdd2a34fb80] [debug]   Cipher initialization complete
-[2025-01-22 22:44:06.053786] [0x00007fdd2a34fb80] [info]    Starting stream encryption
-[2025-01-22 22:44:06.053788] [0x00007fdd2a34fb80] [debug]   Initializing cipher for encryption
-[2025-01-22 22:44:06.053790] [0x00007fdd2a34fb80] [debug]   Cipher initialization complete
-[2025-01-22 22:44:06.053792] [0x00007fdd2a34fb80] [info]    Starting stream decryption
-[2025-01-22 22:44:06.053794] [0x00007fdd2a34fb80] [debug]   Initializing cipher for decryption
-[2025-01-22 22:44:06.053796] [0x00007fdd2a34fb80] [debug]   Cipher initialization complete
-[2025-01-22 22:44:06.053799] [0x00007fdd2a34fb80] [info]    Starting stream encryption
-[2025-01-22 22:44:06.053802] [0x00007fdd2a34fb80] [debug]   Initializing cipher for encryption
-[2025-01-22 22:44:06.053805] [0x00007fdd2a34fb80] [debug]   Cipher initialization complete
-[2025-01-22 22:44:06.053806] [0x00007fdd2a34fb80] [info]    Starting stream decryption
-[2025-01-22 22:44:06.053808] [0x00007fdd2a34fb80] [debug]   Initializing cipher for decryption
-[2025-01-22 22:44:06.053810] [0x00007fdd2a34fb80] [debug]   Cipher initialization complete
-[2025-01-22 22:44:06.053814] [0x00007fdd2a34fb80] [info]    Starting stream encryption
-[2025-01-22 22:44:06.053816] [0x00007fdd2a34fb80] [debug]   Initializing cipher for encryption
-[2025-01-22 22:44:06.053820] [0x00007fdd2a34fb80] [debug]   Cipher initialization complete
-[2025-01-22 22:44:06.053821] [0x00007fdd2a34fb80] [info]    Starting stream decryption
-[2025-01-22 22:44:06.053824] [0x00007fdd2a34fb80] [debug]   Initializing cipher for decryption
-[2025-01-22 22:44:06.053826] [0x00007fdd2a34fb80] [debug]   Cipher initialization complete
-[2025-01-22 22:44:06.053829] [0x00007fdd2a34fb80] [debug]   Cleaning up CryptoStream resources
-[       OK ] CryptoStreamTest.BlockAlignment (1 ms)
+[2025-01-22 22:46:40.756792] [0x00007f9bcd3ebb80] [info]    Initializing CryptoStream
+[2025-01-22 22:46:40.756965] [0x00007f9bcd3ebb80] [debug]   CryptoStream initialization complete
+[2025-01-22 22:46:40.756976] [0x00007f9bcd3ebb80] [info]    Initializing crypto parameters
+[2025-01-22 22:46:40.756991] [0x00007f9bcd3ebb80] [debug]   Crypto parameters initialized successfully
+[2025-01-22 22:46:40.757000] [0x00007f9bcd3ebb80] [info]    Starting stream encryption
+[2025-01-22 22:46:40.757008] [0x00007f9bcd3ebb80] [debug]   Initializing cipher for encryption
+[2025-01-22 22:46:40.758933] [0x00007f9bcd3ebb80] [debug]   Cipher initialization complete
+[2025-01-22 22:46:40.758949] [0x00007f9bcd3ebb80] [info]    Starting stream decryption
+[2025-01-22 22:46:40.758954] [0x00007f9bcd3ebb80] [debug]   Initializing cipher for decryption
+[2025-01-22 22:46:40.758959] [0x00007f9bcd3ebb80] [debug]   Cipher initialization complete
+[2025-01-22 22:46:40.758973] [0x00007f9bcd3ebb80] [info]    Starting stream encryption
+[2025-01-22 22:46:40.758976] [0x00007f9bcd3ebb80] [debug]   Initializing cipher for encryption
+[2025-01-22 22:46:40.758980] [0x00007f9bcd3ebb80] [debug]   Cipher initialization complete
+[2025-01-22 22:46:40.758984] [0x00007f9bcd3ebb80] [info]    Starting stream decryption
+[2025-01-22 22:46:40.758987] [0x00007f9bcd3ebb80] [debug]   Initializing cipher for decryption
+[2025-01-22 22:46:40.758992] [0x00007f9bcd3ebb80] [debug]   Cipher initialization complete
+[2025-01-22 22:46:40.758998] [0x00007f9bcd3ebb80] [info]    Starting stream encryption
+[2025-01-22 22:46:40.759002] [0x00007f9bcd3ebb80] [debug]   Initializing cipher for encryption
+[2025-01-22 22:46:40.759006] [0x00007f9bcd3ebb80] [debug]   Cipher initialization complete
+[2025-01-22 22:46:40.759009] [0x00007f9bcd3ebb80] [info]    Starting stream decryption
+[2025-01-22 22:46:40.759015] [0x00007f9bcd3ebb80] [debug]   Initializing cipher for decryption
+[2025-01-22 22:46:40.759018] [0x00007f9bcd3ebb80] [debug]   Cipher initialization complete
+[2025-01-22 22:46:40.759026] [0x00007f9bcd3ebb80] [info]    Starting stream encryption
+[2025-01-22 22:46:40.759030] [0x00007f9bcd3ebb80] [debug]   Initializing cipher for encryption
+[2025-01-22 22:46:40.759034] [0x00007f9bcd3ebb80] [debug]   Cipher initialization complete
+[2025-01-22 22:46:40.759037] [0x00007f9bcd3ebb80] [info]    Starting stream decryption
+[2025-01-22 22:46:40.759042] [0x00007f9bcd3ebb80] [debug]   Initializing cipher for decryption
+[2025-01-22 22:46:40.759046] [0x00007f9bcd3ebb80] [debug]   Cipher initialization complete
+[2025-01-22 22:46:40.759053] [0x00007f9bcd3ebb80] [info]    Starting stream encryption
+[2025-01-22 22:46:40.759055] [0x00007f9bcd3ebb80] [debug]   Initializing cipher for encryption
+[2025-01-22 22:46:40.759061] [0x00007f9bcd3ebb80] [debug]   Cipher initialization complete
+[2025-01-22 22:46:40.759065] [0x00007f9bcd3ebb80] [info]    Starting stream decryption
+[2025-01-22 22:46:40.759068] [0x00007f9bcd3ebb80] [debug]   Initializing cipher for decryption
+[2025-01-22 22:46:40.759072] [0x00007f9bcd3ebb80] [debug]   Cipher initialization complete
+[2025-01-22 22:46:40.759078] [0x00007f9bcd3ebb80] [info]    Starting stream encryption
+[2025-01-22 22:46:40.759081] [0x00007f9bcd3ebb80] [debug]   Initializing cipher for encryption
+[2025-01-22 22:46:40.759084] [0x00007f9bcd3ebb80] [debug]   Cipher initialization complete
+[2025-01-22 22:46:40.759088] [0x00007f9bcd3ebb80] [info]    Starting stream decryption
+[2025-01-22 22:46:40.759092] [0x00007f9bcd3ebb80] [debug]   Initializing cipher for decryption
+[2025-01-22 22:46:40.759096] [0x00007f9bcd3ebb80] [debug]   Cipher initialization complete
+[2025-01-22 22:46:40.759104] [0x00007f9bcd3ebb80] [debug]   Cleaning up CryptoStream resources
+[       OK ] CryptoStreamTest.BlockAlignment (2 ms)
+[----------] 1 test from CryptoStreamTest (2 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (2 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.02 sec
+----------------------------------------------------------
+Test Passed.
+"CryptoStreamTest.BlockAlignment" end time: Jan 22 22:46 UTC
+"CryptoStreamTest.BlockAlignment" time elapsed: 00:00:00
+----------------------------------------------------------
+
+7/14 Testing: CryptoStreamTest.StreamOperators
+7/14 Test: CryptoStreamTest.StreamOperators
+Command: "/home/runner/workspace/build/crypto_tests" "--gtest_filter=CryptoStreamTest.StreamOperators" "--gtest_also_run_disabled_tests"
+Directory: /home/runner/workspace/build
+"CryptoStreamTest.StreamOperators" start time: Jan 22 22:46 UTC
+Output:
+----------------------------------------------------------
+Running main() from /build/source/googletest/src/gtest_main.cc
+Note: Google Test filter = CryptoStreamTest.StreamOperators
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from CryptoStreamTest
+[ RUN      ] CryptoStreamTest.StreamOperators
+[2025-01-22 22:46:40.773040] [0x00007faf90e30b80] [info]    Initializing CryptoStream
+[2025-01-22 22:46:40.773179] [0x00007faf90e30b80] [debug]   CryptoStream initialization complete
+[2025-01-22 22:46:40.773187] [0x00007faf90e30b80] [info]    Initializing crypto parameters
+[2025-01-22 22:46:40.773189] [0x00007faf90e30b80] [debug]   Crypto parameters initialized successfully
+[2025-01-22 22:46:40.773192] [0x00007faf90e30b80] [debug]   Stream operator<< called, storing input stream for processing
+[2025-01-22 22:46:40.773194] [0x00007faf90e30b80] [debug]   Stream operator>> called in encryption mode
+[2025-01-22 22:46:40.773200] [0x00007faf90e30b80] [info]    Starting stream encryption
+[2025-01-22 22:46:40.773203] [0x00007faf90e30b80] [debug]   Initializing cipher for encryption
+[2025-01-22 22:46:40.774753] [0x00007faf90e30b80] [debug]   Cipher initialization complete
+[2025-01-22 22:46:40.774766] [0x00007faf90e30b80] [debug]   Stream processing complete
+[2025-01-22 22:46:40.774769] [0x00007faf90e30b80] [debug]   Stream operator<< called, storing input stream for processing
+[2025-01-22 22:46:40.774771] [0x00007faf90e30b80] [debug]   Stream operator>> called in decryption mode
+[2025-01-22 22:46:40.774773] [0x00007faf90e30b80] [info]    Starting stream decryption
+[2025-01-22 22:46:40.774775] [0x00007faf90e30b80] [debug]   Initializing cipher for decryption
+[2025-01-22 22:46:40.774778] [0x00007faf90e30b80] [debug]   Cipher initialization complete
+[2025-01-22 22:46:40.774783] [0x00007faf90e30b80] [debug]   Stream processing complete
+[2025-01-22 22:46:40.774785] [0x00007faf90e30b80] [debug]   Stream operator>> called in decryption mode
+[2025-01-22 22:46:40.774787] [0x00007faf90e30b80] [error]   Stream operator>> called without prior input stream
+[2025-01-22 22:46:40.774816] [0x00007faf90e30b80] [debug]   Cleaning up CryptoStream resources
+[       OK ] CryptoStreamTest.StreamOperators (1 ms)
 [----------] 1 test from CryptoStreamTest (1 ms total)
 
 [----------] Global test environment tear-down
@@ -253,61 +299,15 @@ Note: Google Test filter = CryptoStreamTest.BlockAlignment
 Test time =   0.01 sec
 ----------------------------------------------------------
 Test Passed.
-"CryptoStreamTest.BlockAlignment" end time: Jan 22 22:44 UTC
-"CryptoStreamTest.BlockAlignment" time elapsed: 00:00:00
-----------------------------------------------------------
-
-7/8 Testing: CryptoStreamTest.StreamOperators
-7/8 Test: CryptoStreamTest.StreamOperators
-Command: "/home/runner/workspace/build/crypto_tests" "--gtest_filter=CryptoStreamTest.StreamOperators" "--gtest_also_run_disabled_tests"
-Directory: /home/runner/workspace/build
-"CryptoStreamTest.StreamOperators" start time: Jan 22 22:44 UTC
-Output:
-----------------------------------------------------------
-Running main() from /build/source/googletest/src/gtest_main.cc
-Note: Google Test filter = CryptoStreamTest.StreamOperators
-[==========] Running 1 test from 1 test suite.
-[----------] Global test environment set-up.
-[----------] 1 test from CryptoStreamTest
-[ RUN      ] CryptoStreamTest.StreamOperators
-[2025-01-22 22:44:06.072683] [0x00007f08c0405b80] [info]    Initializing CryptoStream
-[2025-01-22 22:44:06.075077] [0x00007f08c0405b80] [debug]   CryptoStream initialization complete
-[2025-01-22 22:44:06.075087] [0x00007f08c0405b80] [info]    Initializing crypto parameters
-[2025-01-22 22:44:06.075090] [0x00007f08c0405b80] [debug]   Crypto parameters initialized successfully
-[2025-01-22 22:44:06.075093] [0x00007f08c0405b80] [debug]   Stream operator<< called, storing input stream for processing
-[2025-01-22 22:44:06.075095] [0x00007f08c0405b80] [debug]   Stream operator>> called in encryption mode
-[2025-01-22 22:44:06.075098] [0x00007f08c0405b80] [info]    Starting stream encryption
-[2025-01-22 22:44:06.075101] [0x00007f08c0405b80] [debug]   Initializing cipher for encryption
-[2025-01-22 22:44:06.076666] [0x00007f08c0405b80] [debug]   Cipher initialization complete
-[2025-01-22 22:44:06.076729] [0x00007f08c0405b80] [debug]   Stream processing complete
-[2025-01-22 22:44:06.076741] [0x00007f08c0405b80] [debug]   Stream operator<< called, storing input stream for processing
-[2025-01-22 22:44:06.076749] [0x00007f08c0405b80] [debug]   Stream operator>> called in decryption mode
-[2025-01-22 22:44:06.076757] [0x00007f08c0405b80] [info]    Starting stream decryption
-[2025-01-22 22:44:06.076764] [0x00007f08c0405b80] [debug]   Initializing cipher for decryption
-[2025-01-22 22:44:06.076773] [0x00007f08c0405b80] [debug]   Cipher initialization complete
-[2025-01-22 22:44:06.076781] [0x00007f08c0405b80] [debug]   Stream processing complete
-[2025-01-22 22:44:06.076789] [0x00007f08c0405b80] [debug]   Stream operator>> called in decryption mode
-[2025-01-22 22:44:06.076796] [0x00007f08c0405b80] [error]   Stream operator>> called without prior input stream
-[2025-01-22 22:44:06.076833] [0x00007f08c0405b80] [debug]   Cleaning up CryptoStream resources
-[       OK ] CryptoStreamTest.StreamOperators (4 ms)
-[----------] 1 test from CryptoStreamTest (4 ms total)
-
-[----------] Global test environment tear-down
-[==========] 1 test from 1 test suite ran. (4 ms total)
-[  PASSED  ] 1 test.
-<end of output>
-Test time =   0.02 sec
-----------------------------------------------------------
-Test Passed.
-"CryptoStreamTest.StreamOperators" end time: Jan 22 22:44 UTC
+"CryptoStreamTest.StreamOperators" end time: Jan 22 22:46 UTC
 "CryptoStreamTest.StreamOperators" time elapsed: 00:00:00
 ----------------------------------------------------------
 
-8/8 Testing: CryptoStreamTest.IVGeneration
-8/8 Test: CryptoStreamTest.IVGeneration
+8/14 Testing: CryptoStreamTest.IVGeneration
+8/14 Test: CryptoStreamTest.IVGeneration
 Command: "/home/runner/workspace/build/crypto_tests" "--gtest_filter=CryptoStreamTest.IVGeneration" "--gtest_also_run_disabled_tests"
 Directory: /home/runner/workspace/build
-"CryptoStreamTest.IVGeneration" start time: Jan 22 22:44 UTC
+"CryptoStreamTest.IVGeneration" start time: Jan 22 22:46 UTC
 Output:
 ----------------------------------------------------------
 Running main() from /build/source/googletest/src/gtest_main.cc
@@ -316,38 +316,712 @@ Note: Google Test filter = CryptoStreamTest.IVGeneration
 [----------] Global test environment set-up.
 [----------] 1 test from CryptoStreamTest
 [ RUN      ] CryptoStreamTest.IVGeneration
-[2025-01-22 22:44:06.099601] [0x00007fdceb9c6b80] [info]    Initializing CryptoStream
-[2025-01-22 22:44:06.099725] [0x00007fdceb9c6b80] [debug]   CryptoStream initialization complete
-[2025-01-22 22:44:06.099736] [0x00007fdceb9c6b80] [info]    Initializing crypto parameters
-[2025-01-22 22:44:06.099738] [0x00007fdceb9c6b80] [debug]   Crypto parameters initialized successfully
-[2025-01-22 22:44:06.099740] [0x00007fdceb9c6b80] [info]    Initializing CryptoStream
-[2025-01-22 22:44:06.099741] [0x00007fdceb9c6b80] [debug]   CryptoStream initialization complete
-[2025-01-22 22:44:06.099743] [0x00007fdceb9c6b80] [debug]   Generating initialization vector
-[2025-01-22 22:44:06.101307] [0x00007fdceb9c6b80] [debug]   Successfully generated initialization vector
-[2025-01-22 22:44:06.101316] [0x00007fdceb9c6b80] [debug]   Generating initialization vector
-[2025-01-22 22:44:06.101320] [0x00007fdceb9c6b80] [debug]   Successfully generated initialization vector
-[2025-01-22 22:44:06.101322] [0x00007fdceb9c6b80] [info]    Initializing crypto parameters
-[2025-01-22 22:44:06.101323] [0x00007fdceb9c6b80] [debug]   Crypto parameters initialized successfully
-[2025-01-22 22:44:06.101329] [0x00007fdceb9c6b80] [info]    Starting stream encryption
-[2025-01-22 22:44:06.101331] [0x00007fdceb9c6b80] [debug]   Initializing cipher for encryption
-[2025-01-22 22:44:06.101335] [0x00007fdceb9c6b80] [debug]   Cipher initialization complete
-[2025-01-22 22:44:06.101341] [0x00007fdceb9c6b80] [info]    Starting stream decryption
-[2025-01-22 22:44:06.101345] [0x00007fdceb9c6b80] [debug]   Initializing cipher for decryption
-[2025-01-22 22:44:06.101348] [0x00007fdceb9c6b80] [debug]   Cipher initialization complete
-[2025-01-22 22:44:06.101352] [0x00007fdceb9c6b80] [debug]   Cleaning up CryptoStream resources
-[2025-01-22 22:44:06.101356] [0x00007fdceb9c6b80] [debug]   Cleaning up CryptoStream resources
-[       OK ] CryptoStreamTest.IVGeneration (1 ms)
-[----------] 1 test from CryptoStreamTest (1 ms total)
+[2025-01-22 22:46:40.787213] [0x00007f586e1fcb80] [info]    Initializing CryptoStream
+[2025-01-22 22:46:40.787451] [0x00007f586e1fcb80] [debug]   CryptoStream initialization complete
+[2025-01-22 22:46:40.787466] [0x00007f586e1fcb80] [info]    Initializing crypto parameters
+[2025-01-22 22:46:40.787470] [0x00007f586e1fcb80] [debug]   Crypto parameters initialized successfully
+[2025-01-22 22:46:40.787473] [0x00007f586e1fcb80] [info]    Initializing CryptoStream
+[2025-01-22 22:46:40.787476] [0x00007f586e1fcb80] [debug]   CryptoStream initialization complete
+[2025-01-22 22:46:40.787479] [0x00007f586e1fcb80] [debug]   Generating initialization vector
+[2025-01-22 22:46:40.789168] [0x00007f586e1fcb80] [debug]   Successfully generated initialization vector
+[2025-01-22 22:46:40.789182] [0x00007f586e1fcb80] [debug]   Generating initialization vector
+[2025-01-22 22:46:40.789188] [0x00007f586e1fcb80] [debug]   Successfully generated initialization vector
+[2025-01-22 22:46:40.789191] [0x00007f586e1fcb80] [info]    Initializing crypto parameters
+[2025-01-22 22:46:40.789193] [0x00007f586e1fcb80] [debug]   Crypto parameters initialized successfully
+[2025-01-22 22:46:40.789203] [0x00007f586e1fcb80] [info]    Starting stream encryption
+[2025-01-22 22:46:40.789209] [0x00007f586e1fcb80] [debug]   Initializing cipher for encryption
+[2025-01-22 22:46:40.789222] [0x00007f586e1fcb80] [debug]   Cipher initialization complete
+[2025-01-22 22:46:40.789241] [0x00007f586e1fcb80] [info]    Starting stream decryption
+[2025-01-22 22:46:40.789248] [0x00007f586e1fcb80] [debug]   Initializing cipher for decryption
+[2025-01-22 22:46:40.789252] [0x00007f586e1fcb80] [debug]   Cipher initialization complete
+[2025-01-22 22:46:40.789259] [0x00007f586e1fcb80] [debug]   Cleaning up CryptoStream resources
+[2025-01-22 22:46:40.789263] [0x00007f586e1fcb80] [debug]   Cleaning up CryptoStream resources
+[       OK ] CryptoStreamTest.IVGeneration (2 ms)
+[----------] 1 test from CryptoStreamTest (2 ms total)
 
 [----------] Global test environment tear-down
-[==========] 1 test from 1 test suite ran. (1 ms total)
+[==========] 1 test from 1 test suite ran. (2 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"CryptoStreamTest.IVGeneration" end time: Jan 22 22:46 UTC
+"CryptoStreamTest.IVGeneration" time elapsed: 00:00:00
+----------------------------------------------------------
+
+9/14 Testing: ChannelTest.InitialState
+9/14 Test: ChannelTest.InitialState
+Command: "/home/runner/workspace/build/channel_tests" "--gtest_filter=ChannelTest.InitialState" "--gtest_also_run_disabled_tests"
+Directory: /home/runner/workspace/build
+"ChannelTest.InitialState" start time: Jan 22 22:46 UTC
+Output:
+----------------------------------------------------------
+Running main() from /build/source/googletest/src/gtest_main.cc
+Note: Google Test filter = ChannelTest.InitialState
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from ChannelTest
+[ RUN      ] ChannelTest.InitialState
+[       OK ] ChannelTest.InitialState (0 ms)
+[----------] 1 test from ChannelTest (0 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (0 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"ChannelTest.InitialState" end time: Jan 22 22:46 UTC
+"ChannelTest.InitialState" time elapsed: 00:00:00
+----------------------------------------------------------
+
+10/14 Testing: ChannelTest.SingleProduceConsume
+10/14 Test: ChannelTest.SingleProduceConsume
+Command: "/home/runner/workspace/build/channel_tests" "--gtest_filter=ChannelTest.SingleProduceConsume" "--gtest_also_run_disabled_tests"
+Directory: /home/runner/workspace/build
+"ChannelTest.SingleProduceConsume" start time: Jan 22 22:46 UTC
+Output:
+----------------------------------------------------------
+Running main() from /build/source/googletest/src/gtest_main.cc
+Note: Google Test filter = ChannelTest.SingleProduceConsume
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from ChannelTest
+[ RUN      ] ChannelTest.SingleProduceConsume
+[2025-01-22 22:46:40.815894] [0x00007f9c17582c40] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.815902] [0x00007f9c17582c40] [debug]   Retrieved message frame from channel. Channel size: 0
+[       OK ] ChannelTest.SingleProduceConsume (0 ms)
+[----------] 1 test from ChannelTest (0 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (0 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"ChannelTest.SingleProduceConsume" end time: Jan 22 22:46 UTC
+"ChannelTest.SingleProduceConsume" time elapsed: 00:00:00
+----------------------------------------------------------
+
+11/14 Testing: ChannelTest.MultipleMessages
+11/14 Test: ChannelTest.MultipleMessages
+Command: "/home/runner/workspace/build/channel_tests" "--gtest_filter=ChannelTest.MultipleMessages" "--gtest_also_run_disabled_tests"
+Directory: /home/runner/workspace/build
+"ChannelTest.MultipleMessages" start time: Jan 22 22:46 UTC
+Output:
+----------------------------------------------------------
+Running main() from /build/source/googletest/src/gtest_main.cc
+Note: Google Test filter = ChannelTest.MultipleMessages
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from ChannelTest
+[ RUN      ] ChannelTest.MultipleMessages
+[2025-01-22 22:46:40.829294] [0x00007fac4af37c40] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.829305] [0x00007fac4af37c40] [debug]   Added message frame to channel. Channel size: 2
+[2025-01-22 22:46:40.829309] [0x00007fac4af37c40] [debug]   Added message frame to channel. Channel size: 3
+[2025-01-22 22:46:40.829312] [0x00007fac4af37c40] [debug]   Added message frame to channel. Channel size: 4
+[2025-01-22 22:46:40.829316] [0x00007fac4af37c40] [debug]   Added message frame to channel. Channel size: 5
+[2025-01-22 22:46:40.829320] [0x00007fac4af37c40] [debug]   Retrieved message frame from channel. Channel size: 4
+[2025-01-22 22:46:40.829323] [0x00007fac4af37c40] [debug]   Retrieved message frame from channel. Channel size: 3
+[2025-01-22 22:46:40.829332] [0x00007fac4af37c40] [debug]   Retrieved message frame from channel. Channel size: 2
+[2025-01-22 22:46:40.829334] [0x00007fac4af37c40] [debug]   Retrieved message frame from channel. Channel size: 1
+[2025-01-22 22:46:40.829337] [0x00007fac4af37c40] [debug]   Retrieved message frame from channel. Channel size: 0
+[       OK ] ChannelTest.MultipleMessages (0 ms)
+[----------] 1 test from ChannelTest (0 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (0 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"ChannelTest.MultipleMessages" end time: Jan 22 22:46 UTC
+"ChannelTest.MultipleMessages" time elapsed: 00:00:00
+----------------------------------------------------------
+
+12/14 Testing: ChannelTest.ConsumeEmptyChannel
+12/14 Test: ChannelTest.ConsumeEmptyChannel
+Command: "/home/runner/workspace/build/channel_tests" "--gtest_filter=ChannelTest.ConsumeEmptyChannel" "--gtest_also_run_disabled_tests"
+Directory: /home/runner/workspace/build
+"ChannelTest.ConsumeEmptyChannel" start time: Jan 22 22:46 UTC
+Output:
+----------------------------------------------------------
+Running main() from /build/source/googletest/src/gtest_main.cc
+Note: Google Test filter = ChannelTest.ConsumeEmptyChannel
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from ChannelTest
+[ RUN      ] ChannelTest.ConsumeEmptyChannel
+[       OK ] ChannelTest.ConsumeEmptyChannel (0 ms)
+[----------] 1 test from ChannelTest (0 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (0 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"ChannelTest.ConsumeEmptyChannel" end time: Jan 22 22:46 UTC
+"ChannelTest.ConsumeEmptyChannel" time elapsed: 00:00:00
+----------------------------------------------------------
+
+13/14 Testing: ChannelTest.ConcurrentProducersConsumers
+13/14 Test: ChannelTest.ConcurrentProducersConsumers
+Command: "/home/runner/workspace/build/channel_tests" "--gtest_filter=ChannelTest.ConcurrentProducersConsumers" "--gtest_also_run_disabled_tests"
+Directory: /home/runner/workspace/build
+"ChannelTest.ConcurrentProducersConsumers" start time: Jan 22 22:46 UTC
+Output:
+----------------------------------------------------------
+Running main() from /build/source/googletest/src/gtest_main.cc
+Note: Google Test filter = ChannelTest.ConcurrentProducersConsumers
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from ChannelTest
+[ RUN      ] ChannelTest.ConcurrentProducersConsumers
+[2025-01-22 22:46:40.855465] [0x00007f1798c526c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.855666] [0x00007f179644d6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.855705] [0x00007f1797c506c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.855742] [0x00007f179744f6c0] [debug]   Added message frame to channel. Channel size: 2
+[2025-01-22 22:46:40.855768] [0x00007f17984516c0] [debug]   Added message frame to channel. Channel size: 3
+[2025-01-22 22:46:40.855837] [0x00007f1795c4c6c0] [debug]   Retrieved message frame from channel. Channel size: 2
+[2025-01-22 22:46:40.855853] [0x00007f1795c4c6c0] [debug]   Retrieved message frame from channel. Channel size: 1
+[2025-01-22 22:46:40.855865] [0x00007f1795c4c6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.855874] [0x00007f1798c526c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.855889] [0x00007f17984516c0] [debug]   Added message frame to channel. Channel size: 2
+[2025-01-22 22:46:40.855927] [0x00007f179544b6c0] [debug]   Retrieved message frame from channel. Channel size: 1
+[2025-01-22 22:46:40.855943] [0x00007f179644d6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.855979] [0x00007f179744f6c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.856002] [0x00007f1797c506c0] [debug]   Added message frame to channel. Channel size: 2
+[2025-01-22 22:46:40.856071] [0x00007f1796c4e6c0] [debug]   Retrieved message frame from channel. Channel size: 1
+[2025-01-22 22:46:40.856086] [0x00007f1796c4e6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.856119] [0x00007f1798c526c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.856164] [0x00007f179644d6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.856177] [0x00007f1797c506c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.856184] [0x00007f179644d6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.856207] [0x00007f1798c526c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.856216] [0x00007f179644d6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.856244] [0x00007f179744f6c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.856276] [0x00007f1796c4e6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.856292] [0x00007f1797c506c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.856300] [0x00007f179644d6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.856309] [0x00007f17984516c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.856323] [0x00007f1796c4e6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.856364] [0x00007f1798c526c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.856381] [0x00007f179644d6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.856415] [0x00007f1798c526c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.856451] [0x00007f17984516c0] [debug]   Added message frame to channel. Channel size: 2
+[2025-01-22 22:46:40.856477] [0x00007f179744f6c0] [debug]   Added message frame to channel. Channel size: 3
+[2025-01-22 22:46:40.856495] [0x00007f1796c4e6c0] [debug]   Retrieved message frame from channel. Channel size: 2
+[2025-01-22 22:46:40.856505] [0x00007f1796c4e6c0] [debug]   Retrieved message frame from channel. Channel size: 1
+[2025-01-22 22:46:40.856507] [0x00007f1796c4e6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.856516] [0x00007f1797c506c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.856530] [0x00007f179644d6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.856555] [0x00007f1798c526c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.856569] [0x00007f179644d6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.856589] [0x00007f17984516c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.856604] [0x00007f179744f6c0] [debug]   Added message frame to channel. Channel size: 2
+[2025-01-22 22:46:40.856622] [0x00007f179544b6c0] [debug]   Retrieved message frame from channel. Channel size: 1
+[2025-01-22 22:46:40.856634] [0x00007f179544b6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.856661] [0x00007f1797c506c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.856692] [0x00007f179544b6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.856704] [0x00007f17984516c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.856716] [0x00007f1796c4e6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.856748] [0x00007f1798c526c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.856766] [0x00007f179544b6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.856775] [0x00007f179744f6c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.856785] [0x00007f1796c4e6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.856824] [0x00007f17984516c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.856838] [0x00007f1796c4e6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.856865] [0x00007f179744f6c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.856880] [0x00007f179644d6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.856898] [0x00007f1797c506c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.856912] [0x00007f1796c4e6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.856948] [0x00007f179744f6c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.856957] [0x00007f17984516c0] [debug]   Added message frame to channel. Channel size: 2
+[2025-01-22 22:46:40.856969] [0x00007f1798c526c0] [debug]   Added message frame to channel. Channel size: 3
+[2025-01-22 22:46:40.856978] [0x00007f179644d6c0] [debug]   Retrieved message frame from channel. Channel size: 2
+[2025-01-22 22:46:40.856986] [0x00007f179544b6c0] [debug]   Retrieved message frame from channel. Channel size: 1
+[2025-01-22 22:46:40.857009] [0x00007f179544b6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.857044] [0x00007f1797c506c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.857068] [0x00007f179644d6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.857101] [0x00007f17984516c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.857107] [0x00007f179544b6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.857195] [0x00007f179744f6c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.857211] [0x00007f1795c4c6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.857302] [0x00007f1797c506c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.857317] [0x00007f179644d6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.857329] [0x00007f1798c526c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.857342] [0x00007f1795c4c6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.857361] [0x00007f17984516c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.857371] [0x00007f1795c4c6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.857445] [0x00007f1798c526c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.857489] [0x00007f1797c506c0] [debug]   Added message frame to channel. Channel size: 2
+[2025-01-22 22:46:40.857525] [0x00007f1796c4e6c0] [debug]   Retrieved message frame from channel. Channel size: 1
+[2025-01-22 22:46:40.857535] [0x00007f1796c4e6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.857560] [0x00007f179744f6c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.857574] [0x00007f1796c4e6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.857600] [0x00007f17984516c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.857620] [0x00007f1795c4c6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.857652] [0x00007f1798c526c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.857668] [0x00007f179644d6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.857675] [0x00007f179744f6c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.857679] [0x00007f179644d6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.857734] [0x00007f17984516c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.857748] [0x00007f179544b6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.857785] [0x00007f1798c526c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.857795] [0x00007f1796c4e6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.857809] [0x00007f1797c506c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.857839] [0x00007f1795c4c6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.857902] [0x00007f17984516c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.857912] [0x00007f1798c526c0] [debug]   Added message frame to channel. Channel size: 2
+[2025-01-22 22:46:40.857962] [0x00007f179544b6c0] [debug]   Retrieved message frame from channel. Channel size: 1
+[2025-01-22 22:46:40.857974] [0x00007f179544b6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.857978] [0x00007f179744f6c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.857986] [0x00007f1795c4c6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.857999] [0x00007f1797c506c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.858037] [0x00007f1798c526c0] [debug]   Added message frame to channel. Channel size: 2
+[2025-01-22 22:46:40.858064] [0x00007f17984516c0] [debug]   Added message frame to channel. Channel size: 3
+[2025-01-22 22:46:40.858078] [0x00007f179544b6c0] [debug]   Retrieved message frame from channel. Channel size: 2
+[2025-01-22 22:46:40.858086] [0x00007f179544b6c0] [debug]   Retrieved message frame from channel. Channel size: 1
+[2025-01-22 22:46:40.858088] [0x00007f179544b6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.858190] [0x00007f17984516c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.858224] [0x00007f179644d6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.858248] [0x00007f1798c526c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.858357] [0x00007f17984516c0] [debug]   Added message frame to channel. Channel size: 2
+[2025-01-22 22:46:40.858410] [0x00007f1796c4e6c0] [debug]   Retrieved message frame from channel. Channel size: 1
+[2025-01-22 22:46:40.858482] [0x00007f1796c4e6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.858640] [0x00007f17984516c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.858659] [0x00007f1796c4e6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.858765] [0x00007f17984516c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.858782] [0x00007f179644d6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.858874] [0x00007f17984516c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.858891] [0x00007f1795c4c6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.858993] [0x00007f17984516c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.859013] [0x00007f1795c4c6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.859041] [0x00007f1798c526c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.859057] [0x00007f179544b6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.859153] [0x00007f17984516c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.859170] [0x00007f1795c4c6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.859236] [0x00007f179744f6c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.859249] [0x00007f1796c4e6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.859256] [0x00007f1797c506c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.859266] [0x00007f179644d6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.859278] [0x00007f17984516c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.859295] [0x00007f1795c4c6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.859323] [0x00007f1798c526c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.859344] [0x00007f179644d6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.859375] [0x00007f179744f6c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.859384] [0x00007f179644d6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.859391] [0x00007f1797c506c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.859501] [0x00007f1796c4e6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.859521] [0x00007f17984516c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.859549] [0x00007f179644d6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.859566] [0x00007f1798c526c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.859586] [0x00007f1797c506c0] [debug]   Added message frame to channel. Channel size: 2
+[2025-01-22 22:46:40.859610] [0x00007f179744f6c0] [debug]   Added message frame to channel. Channel size: 3
+[2025-01-22 22:46:40.859629] [0x00007f1796c4e6c0] [debug]   Retrieved message frame from channel. Channel size: 2
+[2025-01-22 22:46:40.859637] [0x00007f1796c4e6c0] [debug]   Retrieved message frame from channel. Channel size: 1
+[2025-01-22 22:46:40.859641] [0x00007f1796c4e6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.859676] [0x00007f17984516c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.859690] [0x00007f1796c4e6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.859718] [0x00007f179744f6c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.859729] [0x00007f1795c4c6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.859734] [0x00007f1798c526c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.859740] [0x00007f1798c526c0] [debug]   Added message frame to channel. Channel size: 2
+[2025-01-22 22:46:40.859746] [0x00007f179644d6c0] [debug]   Retrieved message frame from channel. Channel size: 1
+[2025-01-22 22:46:40.859749] [0x00007f179644d6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.859809] [0x00007f1797c506c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.859820] [0x00007f1798c526c0] [debug]   Added message frame to channel. Channel size: 2
+[2025-01-22 22:46:40.859825] [0x00007f1795c4c6c0] [debug]   Retrieved message frame from channel. Channel size: 1
+[2025-01-22 22:46:40.859831] [0x00007f1795c4c6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.859846] [0x00007f179744f6c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.859859] [0x00007f179644d6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.859869] [0x00007f17984516c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.859882] [0x00007f179544b6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.859914] [0x00007f1797c506c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.859926] [0x00007f1796c4e6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.859933] [0x00007f179744f6c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.859940] [0x00007f1798c526c0] [debug]   Added message frame to channel. Channel size: 2
+[2025-01-22 22:46:40.859965] [0x00007f179544b6c0] [debug]   Retrieved message frame from channel. Channel size: 1
+[2025-01-22 22:46:40.859975] [0x00007f179544b6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.860008] [0x00007f1797c506c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.860021] [0x00007f179544b6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.860037] [0x00007f17984516c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.860057] [0x00007f179644d6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.860095] [0x00007f1797c506c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.860112] [0x00007f1795c4c6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.860122] [0x00007f17984516c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.860129] [0x00007f179644d6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.860143] [0x00007f1798c526c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.860161] [0x00007f1796c4e6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.860176] [0x00007f179744f6c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.860228] [0x00007f1797c506c0] [debug]   Added message frame to channel. Channel size: 2
+[2025-01-22 22:46:40.860239] [0x00007f179644d6c0] [debug]   Retrieved message frame from channel. Channel size: 1
+[2025-01-22 22:46:40.860246] [0x00007f179644d6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.860256] [0x00007f1798c526c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.860262] [0x00007f179544b6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.860274] [0x00007f17984516c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.860288] [0x00007f1795c4c6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.860332] [0x00007f179744f6c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.860351] [0x00007f1797c506c0] [debug]   Added message frame to channel. Channel size: 2
+[2025-01-22 22:46:40.860360] [0x00007f1798c526c0] [debug]   Added message frame to channel. Channel size: 3
+[2025-01-22 22:46:40.860368] [0x00007f179544b6c0] [debug]   Retrieved message frame from channel. Channel size: 2
+[2025-01-22 22:46:40.860376] [0x00007f179544b6c0] [debug]   Retrieved message frame from channel. Channel size: 1
+[2025-01-22 22:46:40.860383] [0x00007f179544b6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.860439] [0x00007f1798c526c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.860507] [0x00007f179544b6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.860540] [0x00007f17984516c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.860553] [0x00007f1797c506c0] [debug]   Added message frame to channel. Channel size: 2
+[2025-01-22 22:46:40.860569] [0x00007f1796c4e6c0] [debug]   Retrieved message frame from channel. Channel size: 1
+[2025-01-22 22:46:40.860577] [0x00007f1796c4e6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.860620] [0x00007f1798c526c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.860634] [0x00007f1795c4c6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.860659] [0x00007f179744f6c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.860673] [0x00007f1796c4e6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.860690] [0x00007f1797c506c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.860704] [0x00007f179644d6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.860719] [0x00007f1798c526c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.860739] [0x00007f179544b6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.860746] [0x00007f17984516c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.860750] [0x00007f179544b6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.860765] [0x00007f179744f6c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.860771] [0x00007f179644d6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.860845] [0x00007f1798c526c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.860855] [0x00007f179644d6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.860884] [0x00007f179744f6c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.860898] [0x00007f1795c4c6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.860905] [0x00007f1797c506c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.860911] [0x00007f17984516c0] [debug]   Added message frame to channel. Channel size: 2
+[2025-01-22 22:46:40.860925] [0x00007f1796c4e6c0] [debug]   Retrieved message frame from channel. Channel size: 1
+[2025-01-22 22:46:40.860938] [0x00007f1798c526c0] [debug]   Added message frame to channel. Channel size: 2
+[2025-01-22 22:46:40.860961] [0x00007f179644d6c0] [debug]   Retrieved message frame from channel. Channel size: 1
+[2025-01-22 22:46:40.860966] [0x00007f179644d6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.861018] [0x00007f179744f6c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.861032] [0x00007f179544b6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.861043] [0x00007f1798c526c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.861055] [0x00007f1796c4e6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.861076] [0x00007f17984516c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.861104] [0x00007f1796c4e6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.861110] [0x00007f179744f6c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.861120] [0x00007f179544b6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.861164] [0x00007f1797c506c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.861178] [0x00007f1795c4c6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.861194] [0x00007f1798c526c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.861204] [0x00007f1797c506c0] [debug]   Added message frame to channel. Channel size: 2
+[2025-01-22 22:46:40.861223] [0x00007f179644d6c0] [debug]   Retrieved message frame from channel. Channel size: 1
+[2025-01-22 22:46:40.861234] [0x00007f179644d6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.861256] [0x00007f17984516c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.861266] [0x00007f1795c4c6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.861274] [0x00007f179744f6c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.861289] [0x00007f179544b6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.861335] [0x00007f17984516c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.861344] [0x00007f1798c526c0] [debug]   Added message frame to channel. Channel size: 2
+[2025-01-22 22:46:40.861351] [0x00007f1797c506c0] [debug]   Added message frame to channel. Channel size: 3
+[2025-01-22 22:46:40.861364] [0x00007f1796c4e6c0] [debug]   Retrieved message frame from channel. Channel size: 2
+[2025-01-22 22:46:40.861372] [0x00007f1796c4e6c0] [debug]   Retrieved message frame from channel. Channel size: 1
+[2025-01-22 22:46:40.861378] [0x00007f179544b6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.861493] [0x00007f17984516c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.861530] [0x00007f1797c506c0] [debug]   Added message frame to channel. Channel size: 2
+[2025-01-22 22:46:40.861544] [0x00007f1796c4e6c0] [debug]   Retrieved message frame from channel. Channel size: 1
+[2025-01-22 22:46:40.861556] [0x00007f1796c4e6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.861579] [0x00007f179744f6c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.861590] [0x00007f179644d6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.861597] [0x00007f1798c526c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.861609] [0x00007f1795c4c6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.861624] [0x00007f17984516c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.861638] [0x00007f1796c4e6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.861666] [0x00007f1797c506c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.861688] [0x00007f17984516c0] [debug]   Added message frame to channel. Channel size: 2
+[2025-01-22 22:46:40.861709] [0x00007f1798c526c0] [debug]   Added message frame to channel. Channel size: 3
+[2025-01-22 22:46:40.861725] [0x00007f179644d6c0] [debug]   Retrieved message frame from channel. Channel size: 2
+[2025-01-22 22:46:40.861736] [0x00007f179644d6c0] [debug]   Retrieved message frame from channel. Channel size: 1
+[2025-01-22 22:46:40.861742] [0x00007f179644d6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.861754] [0x00007f179744f6c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.861763] [0x00007f17984516c0] [debug]   Added message frame to channel. Channel size: 2
+[2025-01-22 22:46:40.861768] [0x00007f1796c4e6c0] [debug]   Retrieved message frame from channel. Channel size: 1
+[2025-01-22 22:46:40.861781] [0x00007f1796c4e6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.861840] [0x00007f1797c506c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.861867] [0x00007f1795c4c6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.861897] [0x00007f179744f6c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.861909] [0x00007f1798c526c0] [debug]   Added message frame to channel. Channel size: 2
+[2025-01-22 22:46:40.861913] [0x00007f179644d6c0] [debug]   Retrieved message frame from channel. Channel size: 1
+[2025-01-22 22:46:40.861919] [0x00007f179644d6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.861928] [0x00007f17984516c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.861951] [0x00007f1797c506c0] [debug]   Added message frame to channel. Channel size: 2
+[2025-01-22 22:46:40.861966] [0x00007f179544b6c0] [debug]   Retrieved message frame from channel. Channel size: 1
+[2025-01-22 22:46:40.861972] [0x00007f179544b6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.861981] [0x00007f1798c526c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.861993] [0x00007f179644d6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.862054] [0x00007f17984516c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.862062] [0x00007f179644d6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.862073] [0x00007f179744f6c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.862093] [0x00007f1795c4c6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.862119] [0x00007f1797c506c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.862142] [0x00007f179644d6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.862149] [0x00007f1798c526c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.862160] [0x00007f1796c4e6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.862219] [0x00007f179744f6c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.862235] [0x00007f17984516c0] [debug]   Added message frame to channel. Channel size: 2
+[2025-01-22 22:46:40.862276] [0x00007f1796c4e6c0] [debug]   Retrieved message frame from channel. Channel size: 1
+[2025-01-22 22:46:40.862285] [0x00007f1796c4e6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.862302] [0x00007f1798c526c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.862312] [0x00007f179544b6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.862325] [0x00007f1797c506c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.862336] [0x00007f17984516c0] [debug]   Added message frame to channel. Channel size: 2
+[2025-01-22 22:46:40.862345] [0x00007f179744f6c0] [debug]   Added message frame to channel. Channel size: 3
+[2025-01-22 22:46:40.862362] [0x00007f179644d6c0] [debug]   Retrieved message frame from channel. Channel size: 2
+[2025-01-22 22:46:40.862373] [0x00007f179644d6c0] [debug]   Retrieved message frame from channel. Channel size: 1
+[2025-01-22 22:46:40.862377] [0x00007f179644d6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.862545] [0x00007f1797c506c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.862613] [0x00007f1795c4c6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.862637] [0x00007f1798c526c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.862649] [0x00007f1797c506c0] [debug]   Added message frame to channel. Channel size: 2
+[2025-01-22 22:46:40.862662] [0x00007f179644d6c0] [debug]   Retrieved message frame from channel. Channel size: 1
+[2025-01-22 22:46:40.862675] [0x00007f179644d6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.862691] [0x00007f179744f6c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.862718] [0x00007f179544b6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.862748] [0x00007f17984516c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.862755] [0x00007f179544b6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.862769] [0x00007f1797c506c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.862785] [0x00007f1796c4e6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.862798] [0x00007f179744f6c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.862810] [0x00007f17984516c0] [debug]   Added message frame to channel. Channel size: 2
+[2025-01-22 22:46:40.862825] [0x00007f1798c526c0] [debug]   Added message frame to channel. Channel size: 3
+[2025-01-22 22:46:40.862836] [0x00007f179644d6c0] [debug]   Retrieved message frame from channel. Channel size: 2
+[2025-01-22 22:46:40.862839] [0x00007f1796c4e6c0] [debug]   Retrieved message frame from channel. Channel size: 1
+[2025-01-22 22:46:40.862860] [0x00007f1797c506c0] [debug]   Added message frame to channel. Channel size: 2
+[2025-01-22 22:46:40.862868] [0x00007f1795c4c6c0] [debug]   Retrieved message frame from channel. Channel size: 1
+[2025-01-22 22:46:40.862878] [0x00007f1795c4c6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.862910] [0x00007f179744f6c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.862927] [0x00007f179544b6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.862966] [0x00007f17984516c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.863044] [0x00007f1795c4c6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.863146] [0x00007f179744f6c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.863157] [0x00007f1796c4e6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.863171] [0x00007f1798c526c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.863183] [0x00007f1795c4c6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.863198] [0x00007f179744f6c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.863215] [0x00007f17984516c0] [debug]   Added message frame to channel. Channel size: 2
+[2025-01-22 22:46:40.863242] [0x00007f179644d6c0] [debug]   Retrieved message frame from channel. Channel size: 1
+[2025-01-22 22:46:40.863252] [0x00007f179644d6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.863263] [0x00007f1797c506c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.863280] [0x00007f179644d6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.863290] [0x00007f1798c526c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.863297] [0x00007f1796c4e6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.863354] [0x00007f179744f6c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.863360] [0x00007f179644d6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.863367] [0x00007f17984516c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.863378] [0x00007f1795c4c6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.863391] [0x00007f1797c506c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.863431] [0x00007f1798c526c0] [debug]   Added message frame to channel. Channel size: 2
+[2025-01-22 22:46:40.863472] [0x00007f1795c4c6c0] [debug]   Retrieved message frame from channel. Channel size: 1
+[2025-01-22 22:46:40.863477] [0x00007f1795c4c6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.863498] [0x00007f179744f6c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.863523] [0x00007f1796c4e6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.863581] [0x00007f17984516c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.863590] [0x00007f179744f6c0] [debug]   Added message frame to channel. Channel size: 2
+[2025-01-22 22:46:40.863599] [0x00007f1798c526c0] [debug]   Added message frame to channel. Channel size: 3
+[2025-01-22 22:46:40.863610] [0x00007f179644d6c0] [debug]   Retrieved message frame from channel. Channel size: 2
+[2025-01-22 22:46:40.863616] [0x00007f179644d6c0] [debug]   Retrieved message frame from channel. Channel size: 1
+[2025-01-22 22:46:40.863622] [0x00007f179644d6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.863647] [0x00007f1797c506c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.863661] [0x00007f179644d6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.863690] [0x00007f1798c526c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.863699] [0x00007f1796c4e6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.863722] [0x00007f17984516c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.863734] [0x00007f1796c4e6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.863750] [0x00007f179744f6c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.863763] [0x00007f179644d6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.863804] [0x00007f1797c506c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.863812] [0x00007f1795c4c6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.863822] [0x00007f1798c526c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.863840] [0x00007f179644d6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.863875] [0x00007f179744f6c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.863884] [0x00007f1797c506c0] [debug]   Added message frame to channel. Channel size: 2
+[2025-01-22 22:46:40.863889] [0x00007f179644d6c0] [debug]   Retrieved message frame from channel. Channel size: 1
+[2025-01-22 22:46:40.863892] [0x00007f1795c4c6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.863903] [0x00007f17984516c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.863916] [0x00007f1796c4e6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.863940] [0x00007f1798c526c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.863953] [0x00007f179644d6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.863976] [0x00007f179744f6c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.863991] [0x00007f1796c4e6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.864059] [0x00007f1798c526c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.864069] [0x00007f179644d6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.864087] [0x00007f179744f6c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.864099] [0x00007f1797c506c0] [debug]   Added message frame to channel. Channel size: 2
+[2025-01-22 22:46:40.864108] [0x00007f179644d6c0] [debug]   Retrieved message frame from channel. Channel size: 1
+[2025-01-22 22:46:40.864115] [0x00007f179644d6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.864230] [0x00007f179744f6c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.864240] [0x00007f1797c506c0] [debug]   Added message frame to channel. Channel size: 2
+[2025-01-22 22:46:40.864246] [0x00007f1795c4c6c0] [debug]   Retrieved message frame from channel. Channel size: 1
+[2025-01-22 22:46:40.864257] [0x00007f1795c4c6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.864312] [0x00007f179744f6c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.864327] [0x00007f1797c506c0] [debug]   Added message frame to channel. Channel size: 2
+[2025-01-22 22:46:40.864339] [0x00007f1796c4e6c0] [debug]   Retrieved message frame from channel. Channel size: 1
+[2025-01-22 22:46:40.864350] [0x00007f1796c4e6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.864410] [0x00007f179744f6c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.864456] [0x00007f1796c4e6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.864469] [0x00007f1797c506c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.864476] [0x00007f1796c4e6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.864550] [0x00007f179744f6c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.864569] [0x00007f1796c4e6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.864591] [0x00007f1797c506c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.864608] [0x00007f179644d6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.864643] [0x00007f179744f6c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.864652] [0x00007f1796c4e6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.864714] [0x00007f1797c506c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.864728] [0x00007f179744f6c0] [debug]   Added message frame to channel. Channel size: 2
+[2025-01-22 22:46:40.864752] [0x00007f179644d6c0] [debug]   Retrieved message frame from channel. Channel size: 1
+[2025-01-22 22:46:40.864763] [0x00007f179644d6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.866770] [0x00007f1797c506c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.866792] [0x00007f179544b6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.870561] [0x00007f1797c506c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.870589] [0x00007f1795c4c6c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[       OK ] ChannelTest.ConcurrentProducersConsumers (15 ms)
+[----------] 1 test from ChannelTest (15 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (15 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.03 sec
+----------------------------------------------------------
+Test Passed.
+"ChannelTest.ConcurrentProducersConsumers" end time: Jan 22 22:46 UTC
+"ChannelTest.ConcurrentProducersConsumers" time elapsed: 00:00:00
+----------------------------------------------------------
+
+14/14 Testing: ChannelTest.AlternatingProduceConsume
+14/14 Test: ChannelTest.AlternatingProduceConsume
+Command: "/home/runner/workspace/build/channel_tests" "--gtest_filter=ChannelTest.AlternatingProduceConsume" "--gtest_also_run_disabled_tests"
+Directory: /home/runner/workspace/build
+"ChannelTest.AlternatingProduceConsume" start time: Jan 22 22:46 UTC
+Output:
+----------------------------------------------------------
+Running main() from /build/source/googletest/src/gtest_main.cc
+Note: Google Test filter = ChannelTest.AlternatingProduceConsume
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from ChannelTest
+[ RUN      ] ChannelTest.AlternatingProduceConsume
+[2025-01-22 22:46:40.886325] [0x00007f6a7e7d16c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.886337] [0x00007f6a7e7d16c0] [debug]   Added message frame to channel. Channel size: 2
+[2025-01-22 22:46:40.886340] [0x00007f6a7e7d16c0] [debug]   Added message frame to channel. Channel size: 3
+[2025-01-22 22:46:40.886344] [0x00007f6a7e7d16c0] [debug]   Added message frame to channel. Channel size: 4
+[2025-01-22 22:46:40.886389] [0x00007f6a7dfd06c0] [debug]   Retrieved message frame from channel. Channel size: 3
+[2025-01-22 22:46:40.886416] [0x00007f6a7dfd06c0] [debug]   Retrieved message frame from channel. Channel size: 2
+[2025-01-22 22:46:40.886419] [0x00007f6a7dfd06c0] [debug]   Retrieved message frame from channel. Channel size: 1
+[2025-01-22 22:46:40.886422] [0x00007f6a7dfd06c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.886432] [0x00007f6a7e7d16c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.886447] [0x00007f6a7dfd06c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.886453] [0x00007f6a7e7d16c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.886457] [0x00007f6a7dfd06c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.886461] [0x00007f6a7e7d16c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.886465] [0x00007f6a7dfd06c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.886474] [0x00007f6a7e7d16c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.886478] [0x00007f6a7dfd06c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.886482] [0x00007f6a7e7d16c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.886487] [0x00007f6a7dfd06c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.886492] [0x00007f6a7e7d16c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.886497] [0x00007f6a7dfd06c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.886502] [0x00007f6a7e7d16c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.886507] [0x00007f6a7dfd06c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.886512] [0x00007f6a7e7d16c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.886516] [0x00007f6a7dfd06c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.886520] [0x00007f6a7e7d16c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.886524] [0x00007f6a7dfd06c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.886529] [0x00007f6a7e7d16c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.886537] [0x00007f6a7dfd06c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.886540] [0x00007f6a7e7d16c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.886543] [0x00007f6a7dfd06c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.886546] [0x00007f6a7e7d16c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.886549] [0x00007f6a7dfd06c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.886551] [0x00007f6a7e7d16c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.886558] [0x00007f6a7dfd06c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.886563] [0x00007f6a7e7d16c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.886571] [0x00007f6a7dfd06c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.886574] [0x00007f6a7e7d16c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.886577] [0x00007f6a7dfd06c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.886580] [0x00007f6a7e7d16c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.886587] [0x00007f6a7dfd06c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.886593] [0x00007f6a7e7d16c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.886600] [0x00007f6a7dfd06c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.886605] [0x00007f6a7e7d16c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.886613] [0x00007f6a7dfd06c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.886618] [0x00007f6a7e7d16c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.886624] [0x00007f6a7dfd06c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.886627] [0x00007f6a7e7d16c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.886629] [0x00007f6a7dfd06c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.886634] [0x00007f6a7e7d16c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.886637] [0x00007f6a7dfd06c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.886641] [0x00007f6a7e7d16c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.886648] [0x00007f6a7dfd06c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.886653] [0x00007f6a7e7d16c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.886658] [0x00007f6a7dfd06c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.886677] [0x00007f6a7e7d16c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.886682] [0x00007f6a7dfd06c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.886687] [0x00007f6a7e7d16c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.886692] [0x00007f6a7dfd06c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.886696] [0x00007f6a7e7d16c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.886704] [0x00007f6a7dfd06c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.886708] [0x00007f6a7e7d16c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.886716] [0x00007f6a7dfd06c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.886721] [0x00007f6a7e7d16c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.886726] [0x00007f6a7dfd06c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.886733] [0x00007f6a7e7d16c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.886735] [0x00007f6a7dfd06c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.886738] [0x00007f6a7e7d16c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.886741] [0x00007f6a7dfd06c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.886743] [0x00007f6a7e7d16c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.886746] [0x00007f6a7dfd06c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.886748] [0x00007f6a7e7d16c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.886751] [0x00007f6a7dfd06c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.886754] [0x00007f6a7e7d16c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.886756] [0x00007f6a7dfd06c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.886759] [0x00007f6a7e7d16c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.886761] [0x00007f6a7dfd06c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.886764] [0x00007f6a7e7d16c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.886769] [0x00007f6a7dfd06c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.886772] [0x00007f6a7e7d16c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.886776] [0x00007f6a7dfd06c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.886783] [0x00007f6a7e7d16c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.886788] [0x00007f6a7dfd06c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.886795] [0x00007f6a7e7d16c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.886799] [0x00007f6a7dfd06c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.886803] [0x00007f6a7e7d16c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.886806] [0x00007f6a7dfd06c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.886809] [0x00007f6a7e7d16c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.886811] [0x00007f6a7dfd06c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.886816] [0x00007f6a7e7d16c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.886819] [0x00007f6a7dfd06c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.886821] [0x00007f6a7e7d16c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.886824] [0x00007f6a7dfd06c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.886826] [0x00007f6a7e7d16c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.886831] [0x00007f6a7dfd06c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.886833] [0x00007f6a7e7d16c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.886836] [0x00007f6a7dfd06c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.886839] [0x00007f6a7e7d16c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.886843] [0x00007f6a7dfd06c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[2025-01-22 22:46:40.886846] [0x00007f6a7e7d16c0] [debug]   Added message frame to channel. Channel size: 1
+[2025-01-22 22:46:40.886848] [0x00007f6a7dfd06c0] [debug]   Retrieved message frame from channel. Channel size: 0
+[       OK ] ChannelTest.AlternatingProduceConsume (0 ms)
+[----------] 1 test from ChannelTest (0 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (0 ms total)
 [  PASSED  ] 1 test.
 <end of output>
 Test time =   0.02 sec
 ----------------------------------------------------------
 Test Passed.
-"CryptoStreamTest.IVGeneration" end time: Jan 22 22:44 UTC
-"CryptoStreamTest.IVGeneration" time elapsed: 00:00:00
+"ChannelTest.AlternatingProduceConsume" end time: Jan 22 22:46 UTC
+"ChannelTest.AlternatingProduceConsume" time elapsed: 00:00:00
 ----------------------------------------------------------
 
-End testing: Jan 22 22:44 UTC
+End testing: Jan 22 22:46 UTC
