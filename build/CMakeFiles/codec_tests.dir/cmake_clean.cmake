@@ -5,6 +5,7 @@ file(REMOVE_RECURSE
   "CMakeFiles/codec_tests.dir/src/tests/codec_test.cpp.o.d"
   "codec_tests"
   "codec_tests.pdb"
+  "codec_tests[1]_tests.cmake"
 )
 
 # Per-language clean rules from dependency scanning.

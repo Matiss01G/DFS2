@@ -118,11 +118,17 @@ target_link_libraries(codec_tests
 
 include(GoogleTest)
 gtest_discover_tests(crypto_tests)
+gtest_discover_tests(store_tests)
+gtest_discover_tests(channel_tests)
+gtest_discover_tests(codec_tests)
 
 # Add custom target to run tests
 add_custom_target(run_tests ALL
     COMMAND crypto_tests
-    DEPENDS crypto_tests
+    COMMAND store_tests
+    COMMAND channel_tests
+    COMMAND codec_tests
+    DEPENDS crypto_tests store_tests channel_tests codec_tests
     WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
 )
 
