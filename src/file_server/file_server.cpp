@@ -5,9 +5,35 @@
 #include <thread>
 #include <chrono>
 #include "network/peer_manager.hpp"  // Added include for PeerManager
+#include <memory>
+#include <functional>
 
 namespace dfs {
 namespace network {
+
+// Helper class for streaming pipeline
+class StreamPipeline : public std::stringstream {
+  std::function<bool(std::stringstream&)> producer_;
+  mutable bool produced_ = false;
+
+public:
+  StreamPipeline(std::function<bool(std::stringstream&)> producer)
+    : producer_(producer) {}
+
+  // Override sync to implement on-demand data production
+  virtual int sync() override {
+    if (!produced_) {
+      produced_ = true;
+      std::stringstream temp;
+      if (!producer_(temp)) {
+        setstate(std::ios::failbit);
+        return -1;
+      }
+      str(temp.str());
+    }
+    return 0;
+  }
+};
 
 FileServer::FileServer(uint32_t ID, const std::vector<uint8_t>& key, PeerManager& peer_manager, Channel& channel)
   : ID_(ID)
@@ -84,14 +110,13 @@ std::string FileServer::extract_filename(const MessageFrame& frame) {
 bool FileServer::prepare_and_send(const std::string& filename, MessageType message_type, std::optional<uint8_t> peer_id) {
   try {
     BOOST_LOG_TRIVIAL(info) << "Preparing file: " << filename 
-                          << " for " << (peer_id ? "peer " + *peer_id : "broadcast")
+                          << " for " << (peer_id ? "peer " + std::to_string(*peer_id) : "broadcast")
                           << " with message type: " << static_cast<int>(message_type);
 
-    // Create message frame with empty payload stream
+    // Create message frame
     MessageFrame frame;
     frame.message_type = message_type;
     frame.source_id = ID_;
-    frame.payload_stream = std::make_shared<std::stringstream>();
     frame.filename_length = filename.length();
 
     // Generate and set IV
@@ -99,37 +124,45 @@ bool FileServer::prepare_and_send(const std::string& filename, MessageType messa
     auto iv = crypto_stream.generate_IV();
     frame.iv_.assign(iv.begin(), iv.end());
 
-    // Only retrieve and add file data for STORE_FILE message type
+    // For STORE_FILE, implement streaming pipeline
     if (message_type == MessageType::STORE_FILE) {
-      try {
-        store_->get(filename, *frame.payload_stream);
-        if (!frame.payload_stream->good()) {
-          BOOST_LOG_TRIVIAL(error) << "Failed to get file from store: " << filename;
+      // Create producer function that reads from store
+      auto store_producer = [this, &filename](std::stringstream& output) -> bool {
+        try {
+          store_->get(filename, output);
+          return output.good();
+        } catch (const std::exception& e) {
+          BOOST_LOG_TRIVIAL(error) << "Error reading from store: " << e.what();
           return false;
         }
-      } catch (const std::exception& e) {
-        BOOST_LOG_TRIVIAL(error) << "Error getting file from store: " << e.what();
+      };
+
+      // Create streaming payload
+      frame.payload_stream = std::make_shared<StreamPipeline>(store_producer);
+
+      if (!frame.payload_stream->good()) {
+        BOOST_LOG_TRIVIAL(error) << "Failed to initialize streaming payload";
         return false;
       }
+    } else {
+      // For other message types, use regular stringstream
+      frame.payload_stream = std::make_shared<std::stringstream>();
     }
 
-    // Create stream for serialized data
-    std::stringstream serialized_stream;
+    // Create serialization producer
+    auto serialize_producer = [this, &frame](std::stringstream& output) -> bool {
+      return codec_->serialize(frame, output);
+    };
 
-    // Serialize the frame
-    if (!codec_->serialize(frame, serialized_stream)) {
-      BOOST_LOG_TRIVIAL(error) << "Failed to serialize message frame";
-      return false;
-    }
+    // Create serialization pipeline
+    StreamPipeline serialized_stream(serialize_producer);
 
     // Send the serialized data
     bool send_success;
     if (peer_id) {
-      // Send to specific peer
       BOOST_LOG_TRIVIAL(debug) << "Sending file to peer: " << *peer_id;
       send_success = peer_manager_.send_to_peer(*peer_id, serialized_stream);
     } else {
-      // Broadcast to all peers
       BOOST_LOG_TRIVIAL(debug) << "Broadcasting file to all peers";
       send_success = peer_manager_.broadcast_stream(serialized_stream);
     }
