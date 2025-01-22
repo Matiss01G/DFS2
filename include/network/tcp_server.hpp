@@ -26,6 +26,8 @@ public:
 private:
 
   void start_accept();
+  void handle_new_connection(std::shared_ptr<boost::asio::ip::tcp::socket> socket);
+  void send_local_port(std::shared_ptr<boost::asio::ip::tcp::socket> socket, uint16_t local_port);
 
   boost::asio::io_context io_context_;
   std::unique_ptr<boost::asio::ip::tcp::acceptor> acceptor_;

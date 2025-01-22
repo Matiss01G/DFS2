@@ -32,6 +32,7 @@ public:
     std::shared_ptr<boost::asio::ip::tcp::socket> socket);
 
     // Peer Management
+    std::shared_ptr<TCP_Peer> find_peer_by_endpoint(const boost::asio::ip::tcp::endpoint& endpoint);
     void add_peer(std::shared_ptr<TCP_Peer> peer);
     void remove_peer(const std::string& peer_id);
     std::shared_ptr<TCP_Peer> get_peer(const std::string& peer_id);

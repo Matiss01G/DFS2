@@ -68,10 +68,66 @@ void TCP_Server::start_accept() {
 
   acceptor_->async_accept(*socket,
     [this, socket](const boost::system::error_code& error) {
-      peer_manager_.create_peer(error, socket);
+      if (!error) {
+        handle_new_connection(socket);
+      } else {
+        BOOST_LOG_TRIVIAL(error) << "Accept error: " << error.message();
+      }
+      start_accept(); // Continue accepting new connections
     });
 }
+    
+void TCP_Server::handle_new_connection(std::shared_ptr<boost::asio::ip::tcp::socket> socket) {
+  try {
+    auto remote_endpoint = socket->remote_endpoint();
 
+    // Check if this peer already exists
+    if (auto existing_peer = peer_manager_.find_peer_by_endpoint(remote_endpoint)) {
+        BOOST_LOG_TRIVIAL(warning) << "Rejecting connection from " 
+            << remote_endpoint.address().to_string() << ":" 
+            << remote_endpoint.port() << " - peer already exists";
+
+        // Close the new socket
+        boost::system::error_code ec;
+        socket->close(ec);
+        if (ec) {
+            BOOST_LOG_TRIVIAL(error) << "Error closing duplicate connection: " << ec.message();
+        }
+        return;
+    }
+    
+    // Get the source port from the remote endpoint
+    uint16_t source_port = socket->local_endpoint().port();
+    BOOST_LOG_TRIVIAL(debug) << "New connection from port: " << source_port;
+
+    // Send the source port back to the client
+    send_local_port(socket, local_port);
+
+    // Then create the peer
+    peer_manager_.create_peer(boost::system::error_code(), socket);
+
+  } catch (const std::exception& e) {
+    BOOST_LOG_TRIVIAL(error) << "Error handling new connection: " << e.what();
+  }
+}
+
+void TCP_Server::send_local_port(std::shared_ptr<boost::asio::ip::tcp::socket> socket, uint16_t local_port) {
+  try {
+    // Convert port to network byte order
+    uint16_t port_network = htons(local_port);
+
+    // Send the port number
+    boost::system::error_code ec;
+    boost::asio::write(*socket, boost::asio::buffer(&port_network, sizeof(port_network)), ec);
+
+    if (ec) {
+      BOOST_LOG_TRIVIAL(error) << "Error sending local port: " << ec.message();
+    }
+  } catch (const std::exception& e) {
+    BOOST_LOG_TRIVIAL(error) << "Error sending local port: " << e.what();
+  }
+}
+  
 void TCP_Server::shutdown() {
   if (!is_running_) {
     return;
