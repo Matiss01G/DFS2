@@ -14,10 +14,10 @@ author = "agent"
 
 [[workflows.workflow.tasks]]
 task = "workflow.run"
-args = "Build and Test"
+args = "Build and Test Project"
 
 [[workflows.workflow]]
-name = "Build and Test"
+name = "Build and Test Project"
 author = "agent"
 
 [workflows.workflow.metadata]
