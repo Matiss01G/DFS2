@@ -22,7 +22,7 @@ class PeerManager;
 class FileServer {
 public:
     // Constructor takes server ID, encryption key, PeerManager reference and reference to shared channel
-    FileServer(uint32_t server_id, const std::vector<uint8_t>& key, PeerManager& peer_manager, Channel& channel);
+    FileServer(uint32_t ID, const std::vector<uint8_t>& key, PeerManager& peer_manager, Channel& channel);
 
     // Virtual destructor for proper cleanup
     virtual ~FileServer() = default;
@@ -46,7 +46,7 @@ public:
     bool handle_get(const MessageFrame& frame);
 
 private:
-    uint32_t server_id_;
+    uint32_t ID_;
     std::vector<uint8_t> key_;
     std::unique_ptr<dfs::store::Store> store_;
     std::unique_ptr<Codec> codec_;

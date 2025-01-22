@@ -23,22 +23,20 @@ public:
     ~PeerManager();
 
     // Connection Management
-    bool connect(const std::string& peer_id, const std::string& address, uint16_t port);
-    bool disconnect(const std::string& peer_id);
-    bool is_connected(const std::string& peer_id);
+    bool disconnect(uint8_t peer_id);
+    bool is_connected(uint8_t peer_id);
 
     // Peer creation
-    void create_peer(const boost::system::error_code& error,
-    std::shared_ptr<boost::asio::ip::tcp::socket> socket);
+    void create_peer(std::shared_ptr<boost::asio::ip::tcp::socket> socket, uint8_t peer_id);
 
     // Peer Management
-    std::shared_ptr<TCP_Peer> find_peer_by_endpoint(const boost::asio::ip::tcp::endpoint& endpoint);
-    void add_peer(std::shared_ptr<TCP_Peer> peer);
-    void remove_peer(const std::string& peer_id);
-    std::shared_ptr<TCP_Peer> get_peer(const std::string& peer_id);
+    bool has_peer(uint8_t peer_id);
+    std::shared_ptr<TCP_Peer> get_peer(uint8_t peer_id);
+    void add_peer(const std::shared_ptr<TCP_Peer> peer);
+    void remove_peer(uint8_t peer_id);
 
     // Stream Operations
-    bool send_to_peer(const std::string& peer_id, std::istream& stream);
+    bool send_to_peer(uint8_t peer_id, std::istream& stream);
     bool broadcast_stream(std::istream& input_stream);
 
     // Utility Methods
@@ -53,7 +51,7 @@ private:
     Channel& channel_;
     TCP_Server& tcp_server_;
     std::vector<uint8_t> key_;
-    std::map<std::string, std::shared_ptr<TCP_Peer>> peers_;
+    std::map<uint8_t, std::shared_ptr<TCP_Peer>> peers_;
     mutable std::mutex mutex_;
 };
 

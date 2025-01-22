@@ -22,7 +22,7 @@ namespace network {
 class Peer {
 public:
     // Stream callback type for processing received data
-    using StreamProcessor = std::function<void(std::istream&, const std::string&)>;
+    using StreamProcessor = std::function<void(std::istream&)>;
 
     virtual ~Peer() = default;
 

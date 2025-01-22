@@ -9,8 +9,8 @@
 namespace dfs {
 namespace network {
 
-FileServer::FileServer(uint32_t server_id, const std::vector<uint8_t>& key, PeerManager& peer_manager, Channel& channel)
-  : server_id_(server_id)
+FileServer::FileServer(uint32_t ID, const std::vector<uint8_t>& key, PeerManager& peer_manager, Channel& channel)
+  : ID_(ID)
   , key_(key)
   , channel_(channel)
   , peer_manager_(peer_manager) {  // Initialize PeerManager reference
@@ -21,11 +21,11 @@ FileServer::FileServer(uint32_t server_id, const std::vector<uint8_t>& key, Peer
     throw std::invalid_argument("Invalid cryptographic key size");
   }
 
-  BOOST_LOG_TRIVIAL(info) << "Initializing FileServer with ID: " << server_id_;
+  BOOST_LOG_TRIVIAL(info) << "Initializing FileServer with ID: " << ID__;
 
   try {
     // Create store directory based on server ID
-    std::string store_path = "fileserver_" + std::to_string(server_id_);
+    std::string store_path = "fileserver_" + std::to_string(ID__);
 
     // Initialize store with the server-specific directory
     store_ = std::make_unique<dfs::store::Store>(store_path);
@@ -90,6 +90,7 @@ bool FileServer::prepare_and_send(const std::string& filename, MessageType messa
     // Create message frame with empty payload stream
     MessageFrame frame;
     frame.message_type = message_type;
+    frame.source_id = ID__;
     frame.payload_stream = std::make_shared<std::stringstream>();
     frame.filename_length = filename.length();
 

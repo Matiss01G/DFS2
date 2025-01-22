@@ -25,9 +25,9 @@ class TCP_Peer : public Peer,
                  public std::enable_shared_from_this<TCP_Peer> {
 public:
     // Update the StreamProcessor type to include the source identifier
-    using StreamProcessor = std::function<void(std::istream&, const std::string&)>;
+    using StreamProcessor = std::function<void(std::istream&)>;
 
-    explicit TCP_Peer(const std::string& peer_id, Channel& channel, const std::vector<uint8_t>& key);
+    explicit TCP_Peer(uint8_t peer_id, Channel& channel, const std::vector<uint8_t>& key);
     ~TCP_Peer() override;
 
     // Delete copy operations to prevent socket duplication
@@ -49,11 +49,11 @@ public:
     void async_read_next();
 
     // Getters
-    const std::string& get_peer_id() const;
+    uint8_t get_peer_id() const;
     boost::asio::ip::tcp::socket& get_socket();
 
 private:
-    std::string peer_id_;
+    uint8_t peer_id_;
     StreamProcessor stream_processor_;
 
     // Network components

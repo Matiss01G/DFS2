@@ -21,66 +21,42 @@ PeerManager::~PeerManager() {
   shutdown();
 }
 
-void PeerManager::create_peer(const boost::system::error_code& error,
-        std::shared_ptr<boost::asio::ip::tcp::socket> socket) {
-  if (!error) {
+void PeerManager::create_peer(std::shared_ptr<boost::asio::ip::tcp::socket> socket, uint8_t peer_id) {
   try {
-    // Create a unique peer ID based on endpoint
-    auto endpoint = socket->remote_endpoint();
-    std::string peer_id = endpoint.address().to_string() + ":" + 
-        std::to_string(endpoint.port());
 
     // Create new TCP peer with channel and default key
-    std::vector<uint8_t> default_key(32, 0); // 32 bytes of zeros as default key
-    auto peer = std::make_shared<TCP_Peer>(peer_id, channel_, default_key);
+    auto peer = std::make_shared<TCP_Peer>(peer_id, channel_, key_);
 
     // Move the accepted socket to the peer
     peer->get_socket() = std::move(*socket);
 
+    // Add peer to map
+    add_peer(peer);
+
     // Set up stream processor to use codec's deserialize function
     peer->set_stream_processor(
-       [peer](std::istream& stream, const std::string& source_id) {
+       [peer](std::istream& stream) {
          try {
-           peer->codec_->deserialize(stream, source_id);
+           peer->codec_->deserialize(stream);
          } catch (const std::exception& e) {
            BOOST_LOG_TRIVIAL(error) << "Deserialization error: " << e.what();
          }
        }
      );
 
-    // Start stream processing before adding to peer manager
+    // Start stream processing
     if (!peer->start_stream_processing()) {
     BOOST_LOG_TRIVIAL(error) << "Failed to start stream processing for peer: " << peer_id;
     return;
     }
 
-    // Add peer to manager
-    add_peer(peer);
-
     BOOST_LOG_TRIVIAL(info) << "Accepted and initialized new connection from " << peer_id;
   } catch (const std::exception& e) {
     BOOST_LOG_TRIVIAL(error) << "Error handling new connection: " << e.what();
   }
-  } else {
-  BOOST_LOG_TRIVIAL(error) << "Accept error: " << error.message();
-  }
 
   // Continue accepting new connections if server is still running
   tcp_server_.start_accept();
-}
-
-std::shared_ptr<TCP_Peer> PeerManager::find_peer_by_endpoint(const boost::asio::ip::tcp::endpoint& endpoint) {
-    std::lock_guard<std::mutex> lock(mutex_);
-
-    std::string peer_id = endpoint.address().to_string() + ":" + 
-                         std::to_string(endpoint.port());
-
-    auto it = peers_.find(peer_id);
-    if (it != peers_.end()) {
-        return it->second;
-    }
-
-    return nullptr;
 }
 
 void PeerManager::add_peer(std::shared_ptr<TCP_Peer> peer) {
@@ -90,10 +66,9 @@ void PeerManager::add_peer(std::shared_ptr<TCP_Peer> peer) {
   }
 
   std::lock_guard<std::mutex> lock(mutex_);
-  const std::string& peer_id = peer->get_peer_id();
+  uint8_t peer_id = peer->get_peer_id();
 
-  auto it = peers_.find(peer_id);
-  if (it != peers_.end()) {
+  if (has_peer(peer_id)) {
     BOOST_LOG_TRIVIAL(warning) << "Peer with ID " << peer_id << " already exists";
     return;
   }
@@ -102,7 +77,7 @@ void PeerManager::add_peer(std::shared_ptr<TCP_Peer> peer) {
   BOOST_LOG_TRIVIAL(info) << "Added peer with ID: " << peer_id;
 }
 
-void PeerManager::remove_peer(const std::string& peer_id) {
+void PeerManager::remove_peer(uint8_t peer_id) {
   std::lock_guard<std::mutex> lock(mutex_);
 
   auto it = peers_.find(peer_id);
@@ -115,78 +90,7 @@ void PeerManager::remove_peer(const std::string& peer_id) {
   }
 }
 
-bool PeerManager::connect(const std::string& peer_id, const std::string& address, uint16_t port) {
-  std::lock_guard<std::mutex> lock(mutex_);
-
-  auto it = peers_.find(peer_id);
-  if (it != peers_.end()) {
-    BOOST_LOG_TRIVIAL(error) << "Cannot connect - peer already exists: " << peer_id;
-    return false;
-  }
-
-  try {
-    // Create a new socket
-    boost::asio::ip::tcp::socket socket(tcp_server_.io_context_);
-
-    if (socket.is_open()) {
-      BOOST_LOG_TRIVIAL(error) << "Cannot connect - socket already connected for peer: " << peer_id;
-      return false;
-    }
-
-    // Resolve and connect
-    boost::asio::ip::tcp::resolver resolver(tcp_server_.io_context_);
-    boost::system::error_code resolve_ec;
-    auto endpoints = resolver.resolve(address, std::to_string(port), resolve_ec);
-
-    if (resolve_ec) {
-      BOOST_LOG_TRIVIAL(error) << "DNS resolution failed for peer " << peer_id 
-                << ": " << resolve_ec.message();
-      return false;
-    }
-
-    boost::system::error_code connect_ec;
-    socket.connect(*endpoints.begin(), connect_ec);
-
-    if (connect_ec) {
-      BOOST_LOG_TRIVIAL(error) << "Connection failed for peer " << peer_id 
-                << ": " << connect_ec.message();
-      return false;
-    }
-
-    // Read the source port sent by the server
-    uint16_t received_port;
-    boost::system::error_code read_ec;
-    boost::asio::read(socket, boost::asio::buffer(&received_port, sizeof(received_port)), read_ec);
-
-    if (read_ec) {
-      BOOST_LOG_TRIVIAL(error) << "Error reading source port: " << read_ec.message();
-      return false;
-    }
-
-    // Convert from network byte order
-    received_port = ntohs(received_port);
-    BOOST_LOG_TRIVIAL(info) << "Received source port: " << received_port;
-
-    // Create new socket for create_peer
-    auto socket_ptr = std::make_shared<boost::asio::ip::tcp::socket>(tcp_server_.io_context_);
-    *socket_ptr = std::move(socket);  // Move connected socket to new shared_ptr
-
-    // Call create_peer with successful connection
-    create_peer(connect_ec, socket_ptr);
-
-    BOOST_LOG_TRIVIAL(info) << "Successfully connected peer " << peer_id 
-              << " to " << address << ":" << port 
-              << " using source port: " << received_port;
-    return true;
-  }
-  catch (const std::exception& e) {
-    BOOST_LOG_TRIVIAL(error) << "Connection error for peer " << peer_id 
-              << ": " << e.what();
-    return false;
-  }
-}
-
-bool PeerManager::disconnect(const std::string& peer_id) {
+bool PeerManager::disconnect(uint8_t peer_id) {
   std::lock_guard<std::mutex> lock(mutex_);
 
   auto it = peers_.find(peer_id);
@@ -209,7 +113,7 @@ bool PeerManager::disconnect(const std::string& peer_id) {
   }
 }
 
-bool PeerManager::is_connected(const std::string& peer_id) {
+bool PeerManager::is_connected(uint8_t peer_id) {
   std::lock_guard<std::mutex> lock(mutex_);
 
   auto it = peers_.find(peer_id);
@@ -220,7 +124,12 @@ bool PeerManager::is_connected(const std::string& peer_id) {
   return it->second->get_socket().is_open();
 }
 
-std::shared_ptr<TCP_Peer> PeerManager::get_peer(const std::string& peer_id) {
+bool PeerManager::has_peer(uint8_t peer_id) {
+    std::lock_guard<std::mutex> lock(mutex_);
+    return peers_.find(peer_id) != peers_.end();
+}
+
+std::shared_ptr<TCP_Peer> PeerManager::get_peer(uint8_t peer_id) {
   std::lock_guard<std::mutex> lock(mutex_);
 
   auto it = peers_.find(peer_id);
@@ -278,7 +187,7 @@ bool PeerManager::broadcast_stream(std::istream& input_stream) {
   return all_success;
 }
 
-bool PeerManager::send_to_peer(const std::string& peer_id, std::istream& stream) {
+bool PeerManager::send_to_peer(uint8_t peer_id, std::istream& stream) {
   if (!stream.good()) {
     BOOST_LOG_TRIVIAL(error) << "Invalid input stream provided for peer_id: " << peer_id;
     return false;

@@ -6,16 +6,132 @@
 namespace dfs {
 namespace network {
 
-TCP_Server::TCP_Server(uint16_t port,
-           const std::string& address,
-           PeerManager& peer_manager)
+TCP_Server::TCP_Server(const uint16_t port, const std::string& address, const uint8_t ID, const PeerManager& peer_manager)
   : peer_manager_(peer_manager)
   , is_running_(false)
   , port_(port)
-  , address_(address) {
-
-  BOOST_LOG_TRIVIAL(info) << "Initializing TCP server on " << address << ":" << port;
+  , address_(address)
+  , ID_(ID) {
+  BOOST_LOG_TRIVIAL(info) << "Initializing TCP server " << ID << " on " << address << ":" << port;
 }
+
+
+bool TCP_Server::send_ID(std::shared_ptr<boost::asio::ip::tcp::socket> socket) {
+  try {
+    // Write ID_ as raw bytes to socket
+    boost::asio::write(*socket, boost::asio::buffer(&ID_, sizeof(ID_)));
+    BOOST_LOG_TRIVIAL(info) << "Sent ID: " << static_cast<int>(ID_);
+    return true;
+  }
+  catch (const std::exception& e) {
+    BOOST_LOG_TRIVIAL(error) << "Failed to send ID: " << e.what();
+    return false;
+  }
+}
+
+  
+uint8_t TCP_Server::read_ID(std::shared_ptr<boost::asio::ip::tcp::socket> socket) {
+  uint8_t peer_id;
+  try {
+    // Read exact number of bytes for ID
+    boost::asio::read(*socket, boost::asio::buffer(&peer_id, sizeof(peer_id)));
+    BOOST_LOG_TRIVIAL(info) << "Received ID: " << static_cast<int>(peer_id);
+    return peer_id;
+  }
+  catch (const std::exception& e) {
+    BOOST_LOG_TRIVIAL(error) << "Failed to read ID: " << e.what();
+    throw;
+  }
+}
+
+  
+// Initiates connection and performs ID exchange with remote server
+bool TCP_Server::initiate_handshake(std::shared_ptr<boost::asio::ip::tcp::socket> socket) {
+  try {
+    if (!send_ID(socket)) {
+      return false;
+    }
+    return true;
+  } catch (const std::exception& e) {
+    BOOST_LOG_TRIVIAL(error) << "Handshake failed: " << e.what();
+    return false;
+  }
+}
+
+  
+// Handles incoming connection by performing ID exchange and peer creation
+void TCP_Server::receive_handshake(std::shared_ptr<boost::asio::ip::tcp::socket> socket) {
+  try {
+    // Read remote server's ID
+    uint8_t peer_id = read_ID(socket);
+
+    // Check if we already have this peer
+    if (peer_manager_.has_peer(peer_id)) {
+      BOOST_LOG_TRIVIAL(warning) << "Peer " << peer_id << " already exists, terminating connection";
+      socket->close();
+    }
+
+    // Create new peer with the received ID
+    peer_manager_.create_peer(socket, peer_id);
+  }
+  catch (const std::exception& e) {
+    BOOST_LOG_TRIVIAL(error) << "Handshake failed: " << e.what();
+    socket->close();
+  }
+}
+
+
+bool TCP_Server::initiate_connection(const std::string& remote_address, uint16_t remote_port,
+                                   std::shared_ptr<boost::asio::ip::tcp::socket>& socket) {
+  try {
+    // Resolve remote address to endpoints
+    boost::asio::ip::tcp::resolver resolver(io_context_);
+    auto endpoints = resolver.resolve(remote_address, std::to_string(remote_port));
+
+    // Connect to the first available endpoint
+    boost::asio::connect(*socket, endpoints);
+
+    BOOST_LOG_TRIVIAL(info) << "Successfully connected to " << remote_address << ":" << remote_port;
+    return true;
+  }
+  catch (const std::exception& e) {
+    BOOST_LOG_TRIVIAL(error) << "Connection failed: " << e.what();
+    return false;
+  }
+}
+
+  
+bool TCP_Server::connect(const std::string& remote_address, uint16_t remote_port) {
+  auto socket = std::make_shared<boost::asio::ip::tcp::socket>(io_context_);
+
+  if (!initiate_connection(remote_address, remote_port, socket)) {
+    return false;
+  }
+
+  return initiate_handshake(socket);
+}
+
+  
+void TCP_Server::start_accept() {
+  if (!acceptor_ || !is_running_) {
+    return;
+  }
+
+  // Create new socket for incoming connection
+  auto socket = std::make_shared<boost::asio::ip::tcp::socket>(io_context_);
+
+  // Set up async accept operation
+  acceptor_->async_accept(*socket,
+    [this, socket](const boost::system::error_code& error) {
+      if (!error) {
+        receive_handshake(socket);  // Process new connection with handshake
+      } else {
+        BOOST_LOG_TRIVIAL(error) << "Accept error: " << error.message();
+      }
+      start_accept();  // Continue accepting new connections
+    });
+}
+
 
 bool TCP_Server::start_listener() {
   if (is_running_) {
@@ -59,74 +175,6 @@ bool TCP_Server::start_listener() {
   }
 }
 
-void TCP_Server::start_accept() {
-  if (!acceptor_ || !is_running_) {
-    return;
-  }
-
-  auto socket = std::make_shared<boost::asio::ip::tcp::socket>(io_context_);
-
-  acceptor_->async_accept(*socket,
-    [this, socket](const boost::system::error_code& error) {
-      if (!error) {
-        handle_new_connection(socket);
-      } else {
-        BOOST_LOG_TRIVIAL(error) << "Accept error: " << error.message();
-      }
-      start_accept(); // Continue accepting new connections
-    });
-}
-    
-void TCP_Server::handle_new_connection(std::shared_ptr<boost::asio::ip::tcp::socket> socket) {
-  try {
-    auto remote_endpoint = socket->remote_endpoint();
-
-    // Check if this peer already exists
-    if (auto existing_peer = peer_manager_.find_peer_by_endpoint(remote_endpoint)) {
-        BOOST_LOG_TRIVIAL(warning) << "Rejecting connection from " 
-            << remote_endpoint.address().to_string() << ":" 
-            << remote_endpoint.port() << " - peer already exists";
-
-        // Close the new socket
-        boost::system::error_code ec;
-        socket->close(ec);
-        if (ec) {
-            BOOST_LOG_TRIVIAL(error) << "Error closing duplicate connection: " << ec.message();
-        }
-        return;
-    }
-    
-    // Get the source port from the remote endpoint
-    uint16_t source_port = socket->local_endpoint().port();
-    BOOST_LOG_TRIVIAL(debug) << "New connection from port: " << source_port;
-
-    // Send the source port back to the client
-    send_local_port(socket, local_port);
-
-    // Then create the peer
-    peer_manager_.create_peer(boost::system::error_code(), socket);
-
-  } catch (const std::exception& e) {
-    BOOST_LOG_TRIVIAL(error) << "Error handling new connection: " << e.what();
-  }
-}
-
-void TCP_Server::send_local_port(std::shared_ptr<boost::asio::ip::tcp::socket> socket, uint16_t local_port) {
-  try {
-    // Convert port to network byte order
-    uint16_t port_network = htons(local_port);
-
-    // Send the port number
-    boost::system::error_code ec;
-    boost::asio::write(*socket, boost::asio::buffer(&port_network, sizeof(port_network)), ec);
-
-    if (ec) {
-      BOOST_LOG_TRIVIAL(error) << "Error sending local port: " << ec.message();
-    }
-  } catch (const std::exception& e) {
-    BOOST_LOG_TRIVIAL(error) << "Error sending local port: " << e.what();
-  }
-}
   
 void TCP_Server::shutdown() {
   if (!is_running_) {

@@ -38,6 +38,11 @@ std::size_t Codec::serialize(const MessageFrame& frame, std::ostream& output) {
     write_bytes(output, &msg_type, sizeof(msg_type));
     total_bytes += sizeof(msg_type);
 
+    // Write source id 
+    BOOST_LOG_TRIVIAL(debug) << "Writing source id: " << static_cast<int>(frame.source_id);
+    write_bytes(output, &frame.source_id, sizeof(frame.source_id));
+    total_bytes += sizeof(frame.source_id);
+
     // Write payload size in network byte order
     uint64_t network_payload_size = boost::endian::native_to_big(frame.payload_size);
     BOOST_LOG_TRIVIAL(debug) << "Writing payload size: " << frame.payload_size;
@@ -75,14 +80,13 @@ std::size_t Codec::serialize(const MessageFrame& frame, std::ostream& output) {
   }
 }
 
-MessageFrame Codec::deserialize(std::istream& input, const std::string& source_id) {
+MessageFrame Codec::deserialize(std::istream& input) {
   if (!input.good()) {
     BOOST_LOG_TRIVIAL(error) << "Invalid input stream state";
     throw std::runtime_error("Invalid input stream");
   }
 
   MessageFrame frame;
-  frame.source_id = source_id; 
   std::size_t total_bytes = 0;
 
   // Create CryptoStream instance
@@ -106,6 +110,13 @@ MessageFrame Codec::deserialize(std::istream& input, const std::string& source_i
     frame.message_type = static_cast<MessageType>(msg_type);
     BOOST_LOG_TRIVIAL(debug) << "Read message type: " << static_cast<int>(msg_type);
     total_bytes += sizeof(msg_type);
+
+    // Read source id
+    uint8_t source_id;
+    read_bytes(input, &source_id, sizeof(source_id));
+    frame.source_id = source_id;
+    BOOST_LOG_TRIVIAL(debug) << "Read source id: " << static_cast<int>(source_id);
+    total_bytes += sizeof(source_id);
 
     // Read payload size
     uint64_t network_payload_size;
