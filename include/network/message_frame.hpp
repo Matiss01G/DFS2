@@ -19,7 +19,7 @@ enum class MessageType : uint8_t {
 struct MessageFrame {
     std::vector<uint8_t> iv_;
     MessageType message_type;
-    std::string source_id;  // Changed from uint8_t to std::string
+    uint8_t source_id;
     uint64_t payload_size;
     uint32_t filename_length;
     std::shared_ptr<std::stringstream> payload_stream;
