@@ -8,6 +8,8 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 # Find required packages
 find_package(OpenSSL REQUIRED)
 find_package(Boost REQUIRED COMPONENTS log log_setup system thread)
+find_package(GTest REQUIRED)
+
 
 # Create crypto library
 add_library(dfs_crypto
@@ -61,8 +63,28 @@ target_link_libraries(dfs_store PUBLIC
     Boost::system
 )
 
-# Skip building tests
-set(BUILD_TESTING OFF CACHE BOOL "Disable testing" FORCE)
+# Tests
+enable_testing()
+
+# Crypto tests
+add_executable(crypto_tests
+    src/tests/crypto_stream_test.cpp)
+target_link_libraries(crypto_tests
+    PRIVATE
+    dfs_crypto
+    GTest::GTest
+    GTest::Main
+)
+
+include(GoogleTest)
+gtest_discover_tests(crypto_tests)
+
+# Add custom target to run tests
+add_custom_target(run_tests ALL
+    COMMAND crypto_tests
+    DEPENDS crypto_tests
+    WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+)
 
 # Install rules
 install(TARGETS dfs_crypto dfs_store dfs_network

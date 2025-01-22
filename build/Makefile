@@ -65,6 +65,16 @@ CMAKE_BINARY_DIR = /home/runner/workspace/build
 #=============================================================================
 # Targets provided globally by CMake.
 
+# Special rule for the target test
+test:
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --cyan "Running tests..."
+	/nix/store/q1nssraba326p2kp6627hldd2bhg254c-cmake-3.29.2/bin/ctest --force-new-ctest-process $(ARGS)
+.PHONY : test
+
+# Special rule for the target test
+test/fast: test
+.PHONY : test/fast
+
 # Special rule for the target edit_cache
 edit_cache:
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --cyan "No interactive CMake dialog available..."
@@ -199,6 +209,32 @@ dfs_store: cmake_check_build_system
 dfs_store/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/dfs_store.dir/build.make CMakeFiles/dfs_store.dir/build
 .PHONY : dfs_store/fast
+
+#=============================================================================
+# Target rules for targets named crypto_tests
+
+# Build rule for target.
+crypto_tests: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 crypto_tests
+.PHONY : crypto_tests
+
+# fast build rule for target.
+crypto_tests/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/crypto_tests.dir/build.make CMakeFiles/crypto_tests.dir/build
+.PHONY : crypto_tests/fast
+
+#=============================================================================
+# Target rules for targets named run_tests
+
+# Build rule for target.
+run_tests: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 run_tests
+.PHONY : run_tests
+
+# fast build rule for target.
+run_tests/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/run_tests.dir/build.make CMakeFiles/run_tests.dir/build
+.PHONY : run_tests/fast
 
 src/crypto/crypto_stream.o: src/crypto/crypto_stream.cpp.o
 .PHONY : src/crypto/crypto_stream.o
@@ -392,6 +428,30 @@ src/store/store.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/dfs_store.dir/build.make CMakeFiles/dfs_store.dir/src/store/store.cpp.s
 .PHONY : src/store/store.cpp.s
 
+src/tests/crypto_stream_test.o: src/tests/crypto_stream_test.cpp.o
+.PHONY : src/tests/crypto_stream_test.o
+
+# target to build an object file
+src/tests/crypto_stream_test.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/crypto_tests.dir/build.make CMakeFiles/crypto_tests.dir/src/tests/crypto_stream_test.cpp.o
+.PHONY : src/tests/crypto_stream_test.cpp.o
+
+src/tests/crypto_stream_test.i: src/tests/crypto_stream_test.cpp.i
+.PHONY : src/tests/crypto_stream_test.i
+
+# target to preprocess a source file
+src/tests/crypto_stream_test.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/crypto_tests.dir/build.make CMakeFiles/crypto_tests.dir/src/tests/crypto_stream_test.cpp.i
+.PHONY : src/tests/crypto_stream_test.cpp.i
+
+src/tests/crypto_stream_test.s: src/tests/crypto_stream_test.cpp.s
+.PHONY : src/tests/crypto_stream_test.s
+
+# target to generate assembly for a file
+src/tests/crypto_stream_test.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/crypto_tests.dir/build.make CMakeFiles/crypto_tests.dir/src/tests/crypto_stream_test.cpp.s
+.PHONY : src/tests/crypto_stream_test.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -404,6 +464,9 @@ help:
 	@echo "... install/strip"
 	@echo "... list_install_components"
 	@echo "... rebuild_cache"
+	@echo "... test"
+	@echo "... run_tests"
+	@echo "... crypto_tests"
 	@echo "... dfs_crypto"
 	@echo "... dfs_network"
 	@echo "... dfs_store"
@@ -431,6 +494,9 @@ help:
 	@echo "... src/store/store.o"
 	@echo "... src/store/store.i"
 	@echo "... src/store/store.s"
+	@echo "... src/tests/crypto_stream_test.o"
+	@echo "... src/tests/crypto_stream_test.i"
+	@echo "... src/tests/crypto_stream_test.s"
 .PHONY : help
 
 

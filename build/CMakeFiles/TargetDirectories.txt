@@ -1,6 +1,9 @@
 /home/runner/workspace/build/CMakeFiles/dfs_crypto.dir
 /home/runner/workspace/build/CMakeFiles/dfs_network.dir
 /home/runner/workspace/build/CMakeFiles/dfs_store.dir
+/home/runner/workspace/build/CMakeFiles/crypto_tests.dir
+/home/runner/workspace/build/CMakeFiles/run_tests.dir
+/home/runner/workspace/build/CMakeFiles/test.dir
 /home/runner/workspace/build/CMakeFiles/edit_cache.dir
 /home/runner/workspace/build/CMakeFiles/rebuild_cache.dir
 /home/runner/workspace/build/CMakeFiles/list_install_components.dir

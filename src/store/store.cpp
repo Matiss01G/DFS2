@@ -61,7 +61,7 @@ void Store::store(const std::string& key, std::istream& data) {
   BOOST_LOG_TRIVIAL(info) << "Successfully stored " << bytes_written << " bytes with key: " << key;
 }
 
-void Store::get(const std::string& key, std::stringstream& output) {
+void Store::get(const std::string& key, std::ostream& output) {
   BOOST_LOG_TRIVIAL(info) << "Retrieving data for key: " << key;
 
   // Generate file path and verify existence
@@ -75,28 +75,35 @@ void Store::get(const std::string& key, std::stringstream& output) {
   // Handle empty file case
   if (std::filesystem::file_size(file_path) == 0) {
     BOOST_LOG_TRIVIAL(debug) << "Retrieved empty content for key: " << key;
-    output.str("");
     return;
   }
 
-  // Open file in binary mode and stream content
+  // Open file in binary mode
   std::ifstream file(file_path, std::ios::binary);
   if (!file) {
     throw StoreError("Failed to open file: " + file_path.string());
   }
 
-  // Clear the output stream and copy file contents to it
-  output.clear();
-  output.str("");
-  output << file.rdbuf();
+  // Stream data in chunks for memory efficiency
+  char buffer[4096];  // 4KB chunks for balanced memory usage and I/O performance
+  size_t total_bytes = 0;
 
-  // Verify stream state and reset position
-  if (!output.good()) {
-    throw StoreError("Failed to read file contents");
+  while (file.read(buffer, sizeof(buffer))) {
+    output.write(buffer, file.gcount());
+    total_bytes += file.gcount();
   }
-  output.seekg(0);  // Reset read position to beginning
+  // Handle final partial chunk if any
+  if (file.gcount() > 0) {
+    output.write(buffer, file.gcount());
+    total_bytes += file.gcount();
+  }
 
-  BOOST_LOG_TRIVIAL(info) << "Successfully retrieved data for key: " << key;
+  // Verify stream state
+  if (!output.good()) {
+    throw StoreError("Failed to write to output stream");
+  }
+
+  BOOST_LOG_TRIVIAL(info) << "Successfully streamed " << total_bytes << " bytes for key: " << key;
 }
 
 bool Store::has(const std::string& key) const {
