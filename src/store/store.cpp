@@ -14,30 +14,31 @@ Store::Store(const std::string& base_path) : base_path_(base_path) {
 
 void Store::store(const std::string& key, std::istream& data) {
   BOOST_LOG_TRIVIAL(info) << "Storing data with key: " << key;
-  
+
   // Check stream state before attempting any operations
   if (!data.good()) {
     BOOST_LOG_TRIVIAL(error) << "Invalid input stream provided for key: " << key;
     throw StoreError("Invalid input stream");
   }
-  
+
   // Create hierarchical directory structure based on key hash
   std::string hash = hash_key(key);  // Generate SHA-256 hash from key
   std::filesystem::path file_path = get_path_for_hash(hash);  // Convert hash to path
   ensure_directory_exists(file_path.parent_path());  // Create directories if needed
-  
+
   BOOST_LOG_TRIVIAL(debug) << "Calculated file path: " << file_path.string();
-  
+
   // Create output file in binary mode for cross-platform compatibility
   std::ofstream file(file_path, std::ios::binary);
   if (!file) {
     throw StoreError("Failed to create file: " + file_path.string());
   }
-  
+
   // Stream data in chunks for memory efficiency
-  size_t bytes_written = 0;
-  char buffer[4096];  // 4KB chunks balance memory usage and I/O performance
-  
+  constexpr size_t buffer_size = 4096;  // 4KB chunks for efficient I/O
+  char buffer[buffer_size];
+  size_t total_bytes = 0;
+
   // Handle empty stream case
   data.peek();
   if (data.eof()) {
@@ -46,19 +47,36 @@ void Store::store(const std::string& key, std::istream& data) {
     BOOST_LOG_TRIVIAL(info) << "Successfully stored 0 bytes with key: " << key;
     return;
   }
-  
-  while (data.read(buffer, sizeof(buffer))) {  // Read full chunks
-    file.write(buffer, data.gcount());
-    bytes_written += data.gcount();
+
+  while (data) {
+    data.read(buffer, buffer_size);
+    std::streamsize bytes_read = data.gcount();
+    if (bytes_read > 0) {
+      file.write(buffer, bytes_read);
+      total_bytes += bytes_read;
+
+      // Check output file stream state after write
+      if (!file.good()) {
+        throw StoreError("Failed to write to output file");
+      }
+    }
   }
-  // Handle final partial chunk if any
-  if (data.gcount() > 0) {
-    file.write(buffer, data.gcount());
-    bytes_written += data.gcount();
+
+  // Check for read errors
+  if (data.bad()) {
+    file.close();
+    throw StoreError("Error occurred while reading input stream");
   }
-  
+
+  // Ensure all data is written and close the file
+  file.flush();
+  if (!file.good()) {
+    file.close();
+    throw StoreError("Failed to flush output file");
+  }
   file.close();
-  BOOST_LOG_TRIVIAL(info) << "Successfully stored " << bytes_written << " bytes with key: " << key;
+
+  BOOST_LOG_TRIVIAL(info) << "Successfully stored " << total_bytes << " bytes with key: " << key;
 }
 
 void Store::get(const std::string& key, std::stringstream& output) {
