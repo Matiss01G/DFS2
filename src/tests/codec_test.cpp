@@ -14,10 +14,10 @@ using namespace dfs::network;
 
 class CodecTest : public ::testing::Test {
 protected:
-    // Initialize codec with a test key
+    // Initialize codec with a test key and channel
     std::vector<uint8_t> test_key = std::vector<uint8_t>(32, 0x42); // 32-byte test key
-    Codec codec{test_key};
     Channel channel;
+    Codec codec{test_key, channel};
     static bool logging_initialized;
 
     void SetUp() override {
@@ -59,6 +59,7 @@ TEST_F(CodecTest, MinimalFrameSerializeDeserialize) {
     input_frame.message_type = MessageType::STORE_FILE;
     input_frame.payload_size = 0;
     input_frame.iv_ = generate_test_iv();
+    input_frame.source_id = 1;  // Set a numeric source ID
 
     std::stringstream output_stream;
     ASSERT_TRUE(output_stream.good()) << "Output stream not in good state before serialization";
@@ -77,17 +78,16 @@ TEST_F(CodecTest, MinimalFrameSerializeDeserialize) {
     output_stream.seekg(0);
     ASSERT_TRUE(output_stream.good()) << "Failed to reset output stream position";
 
-    const std::string test_source_id = "test_source";
     MessageFrame deserialized_frame;
     ASSERT_NO_THROW({
-        deserialized_frame = codec.deserialize(output_stream, channel, test_source_id);
+        deserialized_frame = codec.deserialize(output_stream);
     }) << "Deserialization threw an exception";
 
     MessageFrame output_frame;
     ASSERT_TRUE(channel.consume(output_frame)) << "Failed to consume frame from channel";
 
     EXPECT_EQ(output_frame.message_type, input_frame.message_type);
-    EXPECT_EQ(output_frame.source_id, test_source_id) << "Source ID not set from parameter";
+    EXPECT_EQ(output_frame.source_id, input_frame.source_id);
     EXPECT_EQ(output_frame.payload_size, input_frame.payload_size);
     EXPECT_EQ(output_frame.iv_, input_frame.iv_);
 
@@ -98,6 +98,7 @@ TEST_F(CodecTest, BasicSerializeDeserialize) {
     MessageFrame input_frame;
     input_frame.message_type = MessageType::STORE_FILE;
     input_frame.iv_ = generate_test_iv();
+    input_frame.source_id = 2;  // Set a numeric source ID
 
     const std::string test_data = "TestData123";
     input_frame.payload_size = test_data.length();
@@ -123,17 +124,16 @@ TEST_F(CodecTest, BasicSerializeDeserialize) {
     output_stream.seekg(0);
     ASSERT_TRUE(output_stream.good()) << "Failed to reset output stream position";
 
-    const std::string test_source_id = "test_source_basic";
     MessageFrame deserialized_frame;
     ASSERT_NO_THROW({
-        deserialized_frame = codec.deserialize(output_stream, channel, test_source_id);
+        deserialized_frame = codec.deserialize(output_stream);
     }) << "Deserialization threw an exception";
 
     MessageFrame output_frame;
     ASSERT_TRUE(channel.consume(output_frame)) << "Failed to consume frame from channel";
 
     EXPECT_EQ(output_frame.message_type, input_frame.message_type);
-    EXPECT_EQ(output_frame.source_id, test_source_id) << "Source ID not set from parameter";
+    EXPECT_EQ(output_frame.source_id, input_frame.source_id);
     EXPECT_EQ(output_frame.payload_size, input_frame.payload_size);
     EXPECT_EQ(output_frame.filename_length, input_frame.filename_length);
     EXPECT_EQ(output_frame.iv_, input_frame.iv_);
@@ -144,8 +144,10 @@ TEST_F(CodecTest, BasicSerializeDeserialize) {
     input_frame.payload_stream->seekg(0);
     output_frame.payload_stream->seekg(0);
 
-    std::string input_data = input_frame.payload_stream->str();
-    std::string output_data = output_frame.payload_stream->str();
+    std::string input_data((std::istreambuf_iterator<char>(*input_frame.payload_stream)),
+                           std::istreambuf_iterator<char>());
+    std::string output_data((std::istreambuf_iterator<char>(*output_frame.payload_stream)),
+                            std::istreambuf_iterator<char>());
 
     EXPECT_EQ(output_data.length(), input_data.length()) << "Decrypted payload size mismatch";
     EXPECT_EQ(output_data, input_data) << "Decrypted payload data mismatch";
@@ -158,8 +160,9 @@ TEST_F(CodecTest, LargePayloadChunkedProcessing) {
     MessageFrame input_frame;
     input_frame.message_type = MessageType::STORE_FILE;
     input_frame.iv_ = generate_test_iv();
+    input_frame.source_id = 3;  // Set a numeric source ID
 
-    const size_t payload_size = 10 * 1024 * 1024;
+    const size_t payload_size = 10 * 1024 * 1024;  // 10MB
     std::string large_data = generate_random_data(payload_size);
     input_frame.payload_size = payload_size;
     input_frame.filename_length = 12;
@@ -179,17 +182,16 @@ TEST_F(CodecTest, LargePayloadChunkedProcessing) {
 
     output_stream.seekg(0);
 
-    const std::string test_source_id = "test_source_large";
     MessageFrame deserialized_frame;
     ASSERT_NO_THROW({
-        deserialized_frame = codec.deserialize(output_stream, channel, test_source_id);
+        deserialized_frame = codec.deserialize(output_stream);
     }) << "Deserialization of large payload threw an exception";
 
     MessageFrame output_frame;
     ASSERT_TRUE(channel.consume(output_frame)) << "Failed to consume large frame from channel";
 
     EXPECT_EQ(output_frame.message_type, input_frame.message_type);
-    EXPECT_EQ(output_frame.source_id, test_source_id) << "Source ID not set from parameter";
+    EXPECT_EQ(output_frame.source_id, input_frame.source_id);
     EXPECT_EQ(output_frame.payload_size, input_frame.payload_size);
     EXPECT_EQ(output_frame.filename_length, input_frame.filename_length);
     EXPECT_EQ(output_frame.iv_, input_frame.iv_);
@@ -204,24 +206,27 @@ TEST_F(CodecTest, LargePayloadChunkedProcessing) {
 
     EXPECT_EQ(output_data.length(), input_data.length()) << "Decrypted payload size mismatch";
     EXPECT_EQ(output_data, input_data) << "Decrypted large payload data mismatch";
+
+    EXPECT_TRUE(channel.empty());
 }
 
 TEST_F(CodecTest, MalformedInputHandling) {
     std::stringstream malformed_stream;
 
     // Test 1: Empty stream
-    EXPECT_THROW(codec.deserialize(malformed_stream, channel, "test_source_malformed"), std::runtime_error);
+    EXPECT_THROW(codec.deserialize(malformed_stream), std::runtime_error);
 
     // Test 2: Incomplete header (missing IV)
     malformed_stream.write("\x01\x02\x03", 3);
     malformed_stream.seekg(0);
-    EXPECT_THROW(codec.deserialize(malformed_stream, channel, "test_source_malformed"), std::runtime_error);
+    EXPECT_THROW(codec.deserialize(malformed_stream), std::runtime_error);
 
     // Test 3: Invalid IV size
     MessageFrame frame;
     frame.message_type = MessageType::STORE_FILE;
     frame.payload_size = 1000;
     frame.filename_length = 8;
+    frame.source_id = 4;  // Set a numeric source ID
     frame.iv_ = std::vector<uint8_t>(dfs::crypto::CryptoStream::IV_SIZE - 1, 0x42); // Invalid IV size
 
     std::stringstream partial_stream;
@@ -234,6 +239,7 @@ TEST_F(CodecTest, EmptySourceId) {
     input_frame.payload_size = 0;
     input_frame.filename_length = 0;
     input_frame.iv_ = generate_test_iv();
+    input_frame.source_id = 0;  // Set source ID to 0
 
     std::stringstream output_stream;
 
@@ -241,15 +247,14 @@ TEST_F(CodecTest, EmptySourceId) {
     ASSERT_GT(written, 0) << "No data written for frame with empty source_id";
 
     output_stream.seekg(0);
-    const std::string test_source_id = "test_source_empty";
-    MessageFrame deserialized_frame = codec.deserialize(output_stream, channel, test_source_id);
+    MessageFrame deserialized_frame = codec.deserialize(output_stream);
 
     MessageFrame output_frame;
     ASSERT_TRUE(channel.consume(output_frame));
 
-    EXPECT_EQ(output_frame.source_id, test_source_id) << "Deserialized source_id should be set from parameter";
+    EXPECT_EQ(output_frame.source_id, 0u);  // Using unsigned comparison
     EXPECT_EQ(output_frame.message_type, input_frame.message_type);
-    EXPECT_EQ(output_frame.payload_size, 0);
-    EXPECT_EQ(output_frame.filename_length, 0);
+    EXPECT_EQ(output_frame.payload_size, 0u);  // Using unsigned comparison
+    EXPECT_EQ(output_frame.filename_length, 0u);  // Using unsigned comparison
     EXPECT_EQ(output_frame.iv_, input_frame.iv_);
 }
