@@ -224,6 +224,19 @@ crypto_tests/fast:
 .PHONY : crypto_tests/fast
 
 #=============================================================================
+# Target rules for targets named store_tests
+
+# Build rule for target.
+store_tests: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 store_tests
+.PHONY : store_tests
+
+# fast build rule for target.
+store_tests/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/store_tests.dir/build.make CMakeFiles/store_tests.dir/build
+.PHONY : store_tests/fast
+
+#=============================================================================
 # Target rules for targets named channel_tests
 
 # Build rule for target.
@@ -492,6 +505,30 @@ src/tests/crypto_stream_test.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/crypto_tests.dir/build.make CMakeFiles/crypto_tests.dir/src/tests/crypto_stream_test.cpp.s
 .PHONY : src/tests/crypto_stream_test.cpp.s
 
+src/tests/store_test.o: src/tests/store_test.cpp.o
+.PHONY : src/tests/store_test.o
+
+# target to build an object file
+src/tests/store_test.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/store_tests.dir/build.make CMakeFiles/store_tests.dir/src/tests/store_test.cpp.o
+.PHONY : src/tests/store_test.cpp.o
+
+src/tests/store_test.i: src/tests/store_test.cpp.i
+.PHONY : src/tests/store_test.i
+
+# target to preprocess a source file
+src/tests/store_test.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/store_tests.dir/build.make CMakeFiles/store_tests.dir/src/tests/store_test.cpp.i
+.PHONY : src/tests/store_test.cpp.i
+
+src/tests/store_test.s: src/tests/store_test.cpp.s
+.PHONY : src/tests/store_test.s
+
+# target to generate assembly for a file
+src/tests/store_test.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/store_tests.dir/build.make CMakeFiles/store_tests.dir/src/tests/store_test.cpp.s
+.PHONY : src/tests/store_test.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -511,6 +548,7 @@ help:
 	@echo "... dfs_crypto"
 	@echo "... dfs_network"
 	@echo "... dfs_store"
+	@echo "... store_tests"
 	@echo "... src/crypto/crypto_stream.o"
 	@echo "... src/crypto/crypto_stream.i"
 	@echo "... src/crypto/crypto_stream.s"
@@ -541,6 +579,9 @@ help:
 	@echo "... src/tests/crypto_stream_test.o"
 	@echo "... src/tests/crypto_stream_test.i"
 	@echo "... src/tests/crypto_stream_test.s"
+	@echo "... src/tests/store_test.o"
+	@echo "... src/tests/store_test.i"
+	@echo "... src/tests/store_test.s"
 .PHONY : help
 
 
