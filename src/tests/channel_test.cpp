@@ -23,7 +23,7 @@ TEST_F(ChannelTest, InitialState) {
 TEST_F(ChannelTest, SingleProduceConsume) {
     MessageFrame input_frame;
     input_frame.message_type = MessageType::STORE_FILE;
-    input_frame.source_id = "123"; // Changed to string
+    input_frame.source_id = 123;  // Changed to uint8_t value
     input_frame.payload_size = 5;
 
     // Create a string stream for payload
@@ -62,7 +62,7 @@ TEST_F(ChannelTest, MultipleMessages) {
     for (int i = 0; i < frame_count; ++i) {
         MessageFrame frame;
         frame.message_type = MessageType::STORE_FILE;
-        frame.source_id = std::to_string(i * 100); // Changed to string
+        frame.source_id = static_cast<uint8_t>((i * 100) % 256);  // Convert to uint8_t, handle overflow
         frame.payload_size = 1;
 
         auto payload = std::make_shared<std::stringstream>();
@@ -115,7 +115,7 @@ TEST_F(ChannelTest, ConcurrentProducersConsumers) {
             for (int j = 0; j < messages_per_producer; ++j) {
                 MessageFrame frame;
                 frame.message_type = MessageType::STORE_FILE;
-                frame.source_id = std::to_string(j); // Changed to string
+                frame.source_id = static_cast<uint8_t>(j % 256);  // Convert to uint8_t, handle overflow
                 frame.payload_size = sizeof(int);
 
                 auto payload = std::make_shared<std::stringstream>();
@@ -175,7 +175,7 @@ TEST_F(ChannelTest, AlternatingProduceConsume) {
         for (int i = 0; i < iterations; ++i) {
             MessageFrame frame;
             frame.message_type = MessageType::STORE_FILE;
-            frame.source_id = std::to_string(i); // Changed to string
+            frame.source_id = static_cast<uint8_t>(i % 256);  // Convert to uint8_t, handle overflow
             frame.payload_size = sizeof(int);
 
             auto payload = std::make_shared<std::stringstream>();
