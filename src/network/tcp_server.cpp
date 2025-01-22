@@ -6,7 +6,7 @@
 namespace dfs {
 namespace network {
 
-TCP_Server::TCP_Server(const uint16_t port, const std::string& address, const uint8_t ID, const PeerManager& peer_manager)
+TCP_Server::TCP_Server(const uint16_t port, const std::string& address, const uint8_t ID, PeerManager& peer_manager)
   : peer_manager_(peer_manager)
   , is_running_(false)
   , port_(port)

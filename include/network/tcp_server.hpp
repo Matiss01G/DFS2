@@ -15,7 +15,7 @@ class TCP_Server {
 public:
   friend class PeerManager;  // Gives PeerManager access to private members
 
-  TCP_Server(const uint16_t port, const std::string& address, const uint8_t ID, const PeerManager& peer_manager);
+  TCP_Server(const uint16_t port, const std::string& address, const uint8_t ID, PeerManager& peer_manager);
 
   // Initialization and teardown of server
   bool start_listener();
@@ -41,7 +41,7 @@ private:
   // Parameters
   boost::asio::io_context io_context_;
   std::unique_ptr<boost::asio::ip::tcp::acceptor> acceptor_;
-  const PeerManager& peer_manager_;
+  PeerManager& peer_manager_;
   bool is_running_;
   std::unique_ptr<std::thread> io_thread_;
   const uint16_t port_;
