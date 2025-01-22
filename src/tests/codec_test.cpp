@@ -16,9 +16,11 @@ class CodecTest : public ::testing::Test {
 protected:
     // Initialize codec with a test key
     std::vector<uint8_t> test_key = std::vector<uint8_t>(32, 0x42); // 32-byte test key
-    Codec codec{test_key};
     Channel channel;
+    Codec codec;
     static bool logging_initialized;
+
+    CodecTest() : codec(test_key, channel) {}
 
     void SetUp() override {
         if (!logging_initialized) {
@@ -59,6 +61,7 @@ TEST_F(CodecTest, MinimalFrameSerializeDeserialize) {
     input_frame.message_type = MessageType::STORE_FILE;
     input_frame.payload_size = 0;
     input_frame.iv_ = generate_test_iv();
+    input_frame.source_id = "";
 
     std::stringstream output_stream;
     ASSERT_TRUE(output_stream.good()) << "Output stream not in good state before serialization";
@@ -86,10 +89,12 @@ TEST_F(CodecTest, MinimalFrameSerializeDeserialize) {
     MessageFrame output_frame;
     ASSERT_TRUE(channel.consume(output_frame)) << "Failed to consume frame from channel";
 
-    EXPECT_EQ(output_frame.message_type, input_frame.message_type);
+    EXPECT_EQ(static_cast<int>(output_frame.message_type), 
+              static_cast<int>(input_frame.message_type));
     EXPECT_EQ(output_frame.source_id, test_source_id) << "Source ID not set from parameter";
     EXPECT_EQ(output_frame.payload_size, input_frame.payload_size);
-    EXPECT_EQ(output_frame.iv_, input_frame.iv_);
+    EXPECT_TRUE(std::equal(output_frame.iv_.begin(), output_frame.iv_.end(),
+                          input_frame.iv_.begin()));
 
     EXPECT_TRUE(channel.empty());
 }
@@ -98,6 +103,7 @@ TEST_F(CodecTest, BasicSerializeDeserialize) {
     MessageFrame input_frame;
     input_frame.message_type = MessageType::STORE_FILE;
     input_frame.iv_ = generate_test_iv();
+    input_frame.source_id = "";
 
     const std::string test_data = "TestData123";
     input_frame.payload_size = test_data.length();
@@ -132,11 +138,11 @@ TEST_F(CodecTest, BasicSerializeDeserialize) {
     MessageFrame output_frame;
     ASSERT_TRUE(channel.consume(output_frame)) << "Failed to consume frame from channel";
 
-    EXPECT_EQ(output_frame.message_type, input_frame.message_type);
+    EXPECT_EQ(static_cast<int>(output_frame.message_type), static_cast<int>(input_frame.message_type));
     EXPECT_EQ(output_frame.source_id, test_source_id) << "Source ID not set from parameter";
     EXPECT_EQ(output_frame.payload_size, input_frame.payload_size);
     EXPECT_EQ(output_frame.filename_length, input_frame.filename_length);
-    EXPECT_EQ(output_frame.iv_, input_frame.iv_);
+    EXPECT_TRUE(std::equal(output_frame.iv_.begin(), output_frame.iv_.end(), input_frame.iv_.begin()));
 
     ASSERT_TRUE(output_frame.payload_stream != nullptr);
     ASSERT_TRUE(input_frame.payload_stream != nullptr);
@@ -158,6 +164,7 @@ TEST_F(CodecTest, LargePayloadChunkedProcessing) {
     MessageFrame input_frame;
     input_frame.message_type = MessageType::STORE_FILE;
     input_frame.iv_ = generate_test_iv();
+    input_frame.source_id = "";
 
     const size_t payload_size = 10 * 1024 * 1024;
     std::string large_data = generate_random_data(payload_size);
@@ -188,11 +195,11 @@ TEST_F(CodecTest, LargePayloadChunkedProcessing) {
     MessageFrame output_frame;
     ASSERT_TRUE(channel.consume(output_frame)) << "Failed to consume large frame from channel";
 
-    EXPECT_EQ(output_frame.message_type, input_frame.message_type);
+    EXPECT_EQ(static_cast<int>(output_frame.message_type), static_cast<int>(input_frame.message_type));
     EXPECT_EQ(output_frame.source_id, test_source_id) << "Source ID not set from parameter";
     EXPECT_EQ(output_frame.payload_size, input_frame.payload_size);
     EXPECT_EQ(output_frame.filename_length, input_frame.filename_length);
-    EXPECT_EQ(output_frame.iv_, input_frame.iv_);
+    EXPECT_TRUE(std::equal(output_frame.iv_.begin(), output_frame.iv_.end(), input_frame.iv_.begin()));
 
     output_frame.payload_stream->seekg(0);
     input_frame.payload_stream->seekg(0);
@@ -223,6 +230,7 @@ TEST_F(CodecTest, MalformedInputHandling) {
     frame.payload_size = 1000;
     frame.filename_length = 8;
     frame.iv_ = std::vector<uint8_t>(dfs::crypto::CryptoStream::IV_SIZE - 1, 0x42); // Invalid IV size
+    frame.source_id = "";
 
     std::stringstream partial_stream;
     EXPECT_THROW(codec.serialize(frame, partial_stream), std::runtime_error);
@@ -234,6 +242,7 @@ TEST_F(CodecTest, EmptySourceId) {
     input_frame.payload_size = 0;
     input_frame.filename_length = 0;
     input_frame.iv_ = generate_test_iv();
+    input_frame.source_id = "";
 
     std::stringstream output_stream;
 
@@ -248,8 +257,8 @@ TEST_F(CodecTest, EmptySourceId) {
     ASSERT_TRUE(channel.consume(output_frame));
 
     EXPECT_EQ(output_frame.source_id, test_source_id) << "Deserialized source_id should be set from parameter";
-    EXPECT_EQ(output_frame.message_type, input_frame.message_type);
+    EXPECT_EQ(static_cast<int>(output_frame.message_type), static_cast<int>(input_frame.message_type));
     EXPECT_EQ(output_frame.payload_size, 0);
     EXPECT_EQ(output_frame.filename_length, 0);
-    EXPECT_EQ(output_frame.iv_, input_frame.iv_);
+    EXPECT_TRUE(std::equal(output_frame.iv_.begin(), output_frame.iv_.end(), input_frame.iv_.begin()));
 }
