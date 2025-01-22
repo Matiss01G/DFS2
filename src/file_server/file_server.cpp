@@ -81,7 +81,7 @@ std::string FileServer::extract_filename(const MessageFrame& frame) {
   }
 }
 
-bool FileServer::prepare_and_send(const std::string& filename, MessageType message_type, std::optional<std::string> peer_id) {
+bool FileServer::prepare_and_send(const std::string& filename, MessageType message_type, std::optional<uint8_t> peer_id) {
   try {
     BOOST_LOG_TRIVIAL(info) << "Preparing file: " << filename 
                           << " for " << (peer_id ? "peer " + *peer_id : "broadcast")
