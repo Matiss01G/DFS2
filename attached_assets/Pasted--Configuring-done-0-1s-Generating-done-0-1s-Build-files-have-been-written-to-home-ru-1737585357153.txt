@@ -1,0 +1,35 @@
+-- Configuring done (0.1s)
+-- Generating done (0.1s)
+-- Build files have been written to: /home/runner/workspace/build
+[ 12%] Built target dfs_crypto
+[ 25%] Built target dfs_store
+[ 68%] Built target dfs_network
+[ 81%] Built target crypto_tests
+[ 87%] Building CXX object CMakeFiles/channel_tests.dir/src/tests/channel_test.cpp.o
+/home/runner/workspace/src/tests/channel_test.cpp: In member function ‘virtual void ChannelTest_SingleProduceConsume_Test::TestBody()’:
+/home/runner/workspace/src/tests/channel_test.cpp:26:29: error: invalid conversion from ‘const char*’ to ‘uint8_t’ {aka ‘unsigned char’} [-fpermissive]
+   26 |     input_frame.source_id = "123"; // Changed to string
+      |                             ^~~~~
+      |                             |
+      |                             const char*
+/home/runner/workspace/src/tests/channel_test.cpp: In member function ‘virtual void ChannelTest_MultipleMessages_Test::TestBody()’:
+/home/runner/workspace/src/tests/channel_test.cpp:65:41: error: cannot convert ‘std::string’ {aka ‘std::__cxx11::basic_string<char>’} to ‘uint8_t’ {aka ‘unsigned char’} in assignment
+   65 |         frame.source_id = std::to_string(i * 100); // Changed to string
+      |                           ~~~~~~~~~~~~~~^~~~~~~~~
+      |                                         |
+      |                                         std::string {aka std::__cxx11::basic_string<char>}
+/home/runner/workspace/src/tests/channel_test.cpp: In lambda function:
+/home/runner/workspace/src/tests/channel_test.cpp:118:49: error: cannot convert ‘std::string’ {aka ‘std::__cxx11::basic_string<char>’} to ‘uint8_t’ {aka ‘unsigned char’} in assignment
+  118 |                 frame.source_id = std::to_string(j); // Changed to string
+      |                                   ~~~~~~~~~~~~~~^~~
+      |                                                 |
+      |                                                 std::string {aka std::__cxx11::basic_string<char>}
+/home/runner/workspace/src/tests/channel_test.cpp: In lambda function:
+/home/runner/workspace/src/tests/channel_test.cpp:178:45: error: cannot convert ‘std::string’ {aka ‘std::__cxx11::basic_string<char>’} to ‘uint8_t’ {aka ‘unsigned char’} in assignment
+  178 |             frame.source_id = std::to_string(i); // Changed to string
+      |                               ~~~~~~~~~~~~~~^~~
+      |                                             |
+      |                                             std::string {aka std::__cxx11::basic_string<char>}
+make[2]: *** [CMakeFiles/channel_tests.dir/build.make:76: CMakeFiles/channel_tests.dir/src/tests/channel_test.cpp.o] Error 1
+make[1]: *** [CMakeFiles/Makefile2:200: CMakeFiles/channel_tests.dir/all] Error 2
+make: *** [Makefile:146: all] Error 2

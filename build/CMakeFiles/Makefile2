@@ -67,6 +67,7 @@ all: CMakeFiles/dfs_crypto.dir/all
 all: CMakeFiles/dfs_network.dir/all
 all: CMakeFiles/dfs_store.dir/all
 all: CMakeFiles/crypto_tests.dir/all
+all: CMakeFiles/channel_tests.dir/all
 all: CMakeFiles/run_tests.dir/all
 .PHONY : all
 
@@ -79,6 +80,7 @@ clean: CMakeFiles/dfs_crypto.dir/clean
 clean: CMakeFiles/dfs_network.dir/clean
 clean: CMakeFiles/dfs_store.dir/clean
 clean: CMakeFiles/crypto_tests.dir/clean
+clean: CMakeFiles/channel_tests.dir/clean
 clean: CMakeFiles/run_tests.dir/clean
 .PHONY : clean
 
@@ -89,7 +91,7 @@ clean: CMakeFiles/run_tests.dir/clean
 CMakeFiles/dfs_crypto.dir/all:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/dfs_crypto.dir/build.make CMakeFiles/dfs_crypto.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/dfs_crypto.dir/build.make CMakeFiles/dfs_crypto.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/runner/workspace/build/CMakeFiles --progress-num=3,4 "Built target dfs_crypto"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/runner/workspace/build/CMakeFiles --progress-num=6,7 "Built target dfs_crypto"
 .PHONY : CMakeFiles/dfs_crypto.dir/all
 
 # Build rule for subdir invocation for target.
@@ -116,7 +118,7 @@ CMakeFiles/dfs_network.dir/all: CMakeFiles/dfs_crypto.dir/all
 CMakeFiles/dfs_network.dir/all: CMakeFiles/dfs_store.dir/all
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/dfs_network.dir/build.make CMakeFiles/dfs_network.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/dfs_network.dir/build.make CMakeFiles/dfs_network.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/runner/workspace/build/CMakeFiles --progress-num=5,6,7,8,9,10,11 "Built target dfs_network"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/runner/workspace/build/CMakeFiles --progress-num=8,9,10,11,12,13,14 "Built target dfs_network"
 .PHONY : CMakeFiles/dfs_network.dir/all
 
 # Build rule for subdir invocation for target.
@@ -142,7 +144,7 @@ CMakeFiles/dfs_network.dir/clean:
 CMakeFiles/dfs_store.dir/all:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/dfs_store.dir/build.make CMakeFiles/dfs_store.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/dfs_store.dir/build.make CMakeFiles/dfs_store.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/runner/workspace/build/CMakeFiles --progress-num=12,13 "Built target dfs_store"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/runner/workspace/build/CMakeFiles --progress-num=15,16 "Built target dfs_store"
 .PHONY : CMakeFiles/dfs_store.dir/all
 
 # Build rule for subdir invocation for target.
@@ -168,7 +170,7 @@ CMakeFiles/dfs_store.dir/clean:
 CMakeFiles/crypto_tests.dir/all: CMakeFiles/dfs_crypto.dir/all
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/crypto_tests.dir/build.make CMakeFiles/crypto_tests.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/crypto_tests.dir/build.make CMakeFiles/crypto_tests.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/runner/workspace/build/CMakeFiles --progress-num=1,2 "Built target crypto_tests"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/runner/workspace/build/CMakeFiles --progress-num=4,5 "Built target crypto_tests"
 .PHONY : CMakeFiles/crypto_tests.dir/all
 
 # Build rule for subdir invocation for target.
@@ -186,6 +188,34 @@ crypto_tests: CMakeFiles/crypto_tests.dir/rule
 CMakeFiles/crypto_tests.dir/clean:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/crypto_tests.dir/build.make CMakeFiles/crypto_tests.dir/clean
 .PHONY : CMakeFiles/crypto_tests.dir/clean
+
+#=============================================================================
+# Target rules for target CMakeFiles/channel_tests.dir
+
+# All Build rule for target.
+CMakeFiles/channel_tests.dir/all: CMakeFiles/dfs_crypto.dir/all
+CMakeFiles/channel_tests.dir/all: CMakeFiles/dfs_network.dir/all
+CMakeFiles/channel_tests.dir/all: CMakeFiles/dfs_store.dir/all
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/channel_tests.dir/build.make CMakeFiles/channel_tests.dir/depend
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/channel_tests.dir/build.make CMakeFiles/channel_tests.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/runner/workspace/build/CMakeFiles --progress-num=1,2,3 "Built target channel_tests"
+.PHONY : CMakeFiles/channel_tests.dir/all
+
+# Build rule for subdir invocation for target.
+CMakeFiles/channel_tests.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/workspace/build/CMakeFiles 14
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/channel_tests.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/workspace/build/CMakeFiles 0
+.PHONY : CMakeFiles/channel_tests.dir/rule
+
+# Convenience name for target.
+channel_tests: CMakeFiles/channel_tests.dir/rule
+.PHONY : channel_tests
+
+# clean rule for target.
+CMakeFiles/channel_tests.dir/clean:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/channel_tests.dir/build.make CMakeFiles/channel_tests.dir/clean
+.PHONY : CMakeFiles/channel_tests.dir/clean
 
 #=============================================================================
 # Target rules for target CMakeFiles/run_tests.dir

@@ -76,6 +76,20 @@ target_link_libraries(crypto_tests
     GTest::Main
 )
 
+# Channel tests
+add_executable(channel_tests
+    src/tests/channel_test.cpp
+    src/network/channel.cpp)
+target_include_directories(channel_tests PUBLIC
+    ${CMAKE_CURRENT_SOURCE_DIR}/include
+)
+target_link_libraries(channel_tests
+    PRIVATE
+    dfs_network
+    GTest::GTest
+    GTest::Main
+)
+
 include(GoogleTest)
 gtest_discover_tests(crypto_tests)
 

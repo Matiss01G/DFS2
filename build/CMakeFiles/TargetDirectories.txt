@@ -2,6 +2,7 @@
 /home/runner/workspace/build/CMakeFiles/dfs_network.dir
 /home/runner/workspace/build/CMakeFiles/dfs_store.dir
 /home/runner/workspace/build/CMakeFiles/crypto_tests.dir
+/home/runner/workspace/build/CMakeFiles/channel_tests.dir
 /home/runner/workspace/build/CMakeFiles/run_tests.dir
 /home/runner/workspace/build/CMakeFiles/test.dir
 /home/runner/workspace/build/CMakeFiles/edit_cache.dir

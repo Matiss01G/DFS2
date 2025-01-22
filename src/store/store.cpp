@@ -61,7 +61,7 @@ void Store::store(const std::string& key, std::istream& data) {
   BOOST_LOG_TRIVIAL(info) << "Successfully stored " << bytes_written << " bytes with key: " << key;
 }
 
-void Store::get(const std::string& key, std::ostream& output) {
+void Store::get(const std::string& key, std::stringstream& output) {
   BOOST_LOG_TRIVIAL(info) << "Retrieving data for key: " << key;
 
   // Generate file path and verify existence
