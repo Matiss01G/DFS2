@@ -41,7 +41,7 @@ private:
   // Parameters
   boost::asio::io_context io_context_;
   std::unique_ptr<boost::asio::ip::tcp::acceptor> acceptor_;
-  PeerManager& peer_manager_;
+  const PeerManager& peer_manager_;
   bool is_running_;
   std::unique_ptr<std::thread> io_thread_;
   const uint16_t port_;
