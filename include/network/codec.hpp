@@ -6,6 +6,8 @@
 #include <mutex>
 #include "network/message_frame.hpp"
 #include "network/channel.hpp"
+#include <string>
+
 
 namespace dfs {
 namespace network {
@@ -13,21 +15,19 @@ namespace network {
 class Codec {
 public:
     // Default constructor
-    explicit Codec(const std::vector<uint8_t>& key, Channel& channel);
+    explicit Codec(const std::vector<uint8_t>& key) : key_(key) {}
+    Codec(const std::vector<uint8_t>& key, Channel& channel) : key_(key) {}
 
     // Serializes a message frame to an output stream
     std::size_t serialize(const MessageFrame& frame, std::ostream& output);
 
     // Deserializes a message frame from an input stream and pushes it to the channel
-    MessageFrame deserialize(std::istream& input);
+    MessageFrame deserialize(std::istream& input, Channel& channel, const std::string& source_id);
 
 private:
     // The encryption/decryption key
     std::vector<uint8_t> key_;
 
-    // Reference to the channel for message delivery
-    Channel& channel_;
-    
     // Writes bytes to an output stream
     void write_bytes(std::ostream& output, const void* data, std::size_t size);
 
