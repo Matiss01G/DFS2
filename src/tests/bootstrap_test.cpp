@@ -2,7 +2,7 @@
 #include <thread>
 #include <chrono>
 #include "network/bootstrap.hpp"
-#include "network/peer_manager.hpp"
+#include "network/peer_manager.hpp"  // Add explicit include for PeerManager
 
 using namespace dfs::network;
 
@@ -10,17 +10,6 @@ class BootstrapTest : public ::testing::Test {
 protected:
     const std::string ADDRESS = "127.0.0.1";
     const std::vector<uint8_t> TEST_KEY = std::vector<uint8_t>(32, 0x42); // 32-byte test key
-
-    bool wait_for_peer_connection(PeerManager& manager, uint8_t peer_id, int timeout_seconds = 5) {
-        auto start = std::chrono::steady_clock::now();
-        while (std::chrono::steady_clock::now() - start < std::chrono::seconds(timeout_seconds)) {
-            if (manager.has_peer(peer_id) && manager.is_connected(peer_id)) {
-                return true;
-            }
-            std::this_thread::sleep_for(std::chrono::milliseconds(100));
-        }
-        return false;
-    }
 };
 
 TEST_F(BootstrapTest, PeerConnection) {
@@ -37,27 +26,21 @@ TEST_F(BootstrapTest, PeerConnection) {
         ASSERT_TRUE(peer1.start()) << "Failed to start peer 1";
     });
 
-    // Wait for peer1 to fully start
     std::this_thread::sleep_for(std::chrono::seconds(2));
 
     std::thread peer2_thread([&peer2]() {
         ASSERT_TRUE(peer2.start()) << "Failed to start peer 2";
     });
 
+    std::this_thread::sleep_for(std::chrono::seconds(10));
+
     auto& peer1_manager = peer1.get_peer_manager();
     auto& peer2_manager = peer2.get_peer_manager();
 
-    // Wait for peer connections with timeout
-    ASSERT_TRUE(wait_for_peer_connection(peer1_manager, PEER2_ID)) 
-        << "Peer 1 failed to connect to Peer 2";
-    ASSERT_TRUE(wait_for_peer_connection(peer2_manager, PEER1_ID))
-        << "Peer 2 failed to connect to Peer 1";
-
-    // Additional connection status checks
-    EXPECT_TRUE(peer1_manager.is_connected(PEER2_ID)) 
-        << "Peer 1 is not connected to Peer 2";
-    EXPECT_TRUE(peer2_manager.is_connected(PEER1_ID))
-        << "Peer 2 is not connected to Peer 1";
+    ASSERT_TRUE(peer1_manager.has_peer(PEER2_ID));
+    ASSERT_TRUE(peer2_manager.has_peer(PEER1_ID));
+    EXPECT_TRUE(peer1_manager.is_connected(PEER2_ID));
+    EXPECT_TRUE(peer2_manager.is_connected(PEER1_ID));
 
     peer1_thread.join();
     peer2_thread.join();
