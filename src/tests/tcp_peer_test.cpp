@@ -71,19 +71,15 @@ protected:
 
         // Set up stream processors for both peers
         peer1_->set_stream_processor([this](std::istream& stream) {
-            MessageFrame frame;
             Codec codec(key_, *channel_);
-            if (codec.deserialize(stream, frame)) {
-                channel_->produce(frame);
-            }
+            auto frame = codec.deserialize(stream);
+            channel_->produce(frame);
         });
 
         peer2_->set_stream_processor([this](std::istream& stream) {
-            MessageFrame frame;
             Codec codec(key_, *channel_);
-            if (codec.deserialize(stream, frame)) {
-                channel_->produce(frame);
-            }
+            auto frame = codec.deserialize(stream);
+            channel_->produce(frame);
         });
 
         // Start stream processing
@@ -129,8 +125,8 @@ TEST_F(TCP_PeerTest, SerializeDeserializeMessageFrame) {
 
     // Generate IV using CryptoStream
     crypto::CryptoStream crypto_stream;
-    std::vector<uint8_t> iv = crypto_stream.generate_IV();
-    send_frame.iv_.assign(iv.begin(), iv.end());
+    auto iv_array = crypto_stream.generate_IV();
+    send_frame.iv_.assign(iv_array.begin(), iv_array.end());
 
     // Create serialized stream
     std::stringstream serialized_stream;
