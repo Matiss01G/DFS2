@@ -5,7 +5,7 @@ modules = ["cpp"]
 channel = "stable-24_05"
 
 [workflows]
-runButton = "Build and Test Project"
+runButton = "Project"
 
 [[workflows.workflow]]
 name = "Project"
@@ -28,7 +28,7 @@ task = "packager.installForAll"
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "cd /home/runner/workspace/build && cmake .. && make && ctest --output-on-failure"
+args = "mkdir -p /home/runner/workspace/build && cd /home/runner/workspace/build && cmake .. && make && ctest --output-on-failure"
 
 [[ports]]
 localPort = 12345
@@ -36,4 +36,4 @@ externalPort = 80
 exposeLocalhost = true
 
 [deployment]
-run = ["sh", "-c", "cd /home/runner/workspace/build && cmake .. && make && ctest --output-on-failure"]
+run = ["sh", "-c", "mkdir -p /home/runner/workspace/build && cd /home/runner/workspace/build && cmake .. && make && ctest --output-on-failure"]
