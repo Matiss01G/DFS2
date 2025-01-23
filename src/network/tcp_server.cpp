@@ -52,6 +52,11 @@ bool TCP_Server::initiate_handshake(std::shared_ptr<boost::asio::ip::tcp::socket
     if (!send_ID(socket)) {
       return false;
     }
+    uint8_t peer_id = read_ID(socket);
+    // Create peer only after full ID exchange
+    if (peer_manager_ && !peer_manager_->has_peer(peer_id)) {
+      peer_manager_->create_peer(socket, peer_id);
+    }
     return true;
   } catch (const std::exception& e) {
     BOOST_LOG_TRIVIAL(error) << "Handshake failed: " << e.what();
@@ -61,23 +66,30 @@ bool TCP_Server::initiate_handshake(std::shared_ptr<boost::asio::ip::tcp::socket
 
 void TCP_Server::receive_handshake(std::shared_ptr<boost::asio::ip::tcp::socket> socket) {
   if (!peer_manager_) {
-    BOOST_LOG_TRIVIAL(error) << "No PeerManager set, cannot handle incoming connection";
+    BOOST_LOG_TRIVIAL(error) << "No PeerManager set";
     socket->close();
     return;
   }
 
   try {
-    // Read remote server's ID
     uint8_t peer_id = read_ID(socket);
-
-    // Check if we already have this peer
     if (peer_manager_->has_peer(peer_id)) {
-      BOOST_LOG_TRIVIAL(warning) << "Peer " << peer_id << " already exists, terminating connection";
+      BOOST_LOG_TRIVIAL(warning) << "Peer " << peer_id << " already exists";
       socket->close();
+      return;
     }
 
-    // Create new peer with the received ID
+    BOOST_LOG_TRIVIAL(debug) << "Preparing to send ID back to peer: " << static_cast<int>(ID_);
+    if (!send_ID(socket)) {
+      BOOST_LOG_TRIVIAL(error) << "Failed to send ID back to peer";
+      socket->close();
+      return;
+    }
+    BOOST_LOG_TRIVIAL(debug) << "Successfully sent ID back to peer";
+
+    // Create peer only after full ID exchange
     peer_manager_->create_peer(socket, peer_id);
+    BOOST_LOG_TRIVIAL(debug) << "Handshake complete for peer: " << static_cast<int>(peer_id);
   }
   catch (const std::exception& e) {
     BOOST_LOG_TRIVIAL(error) << "Handshake failed: " << e.what();

@@ -33,6 +33,10 @@ TEST_F(BootstrapTest, PeerConnection) {
 
     // Start both peers
     ASSERT_TRUE(peer2.start()) << "Failed to start peer 2";
+    
+    // Allow time for server initialization
+    std::this_thread::sleep_for(std::chrono::seconds(2));
+    
     ASSERT_TRUE(peer1.start()) << "Failed to start peer 1";
 
     // Allow time for connection establishment
