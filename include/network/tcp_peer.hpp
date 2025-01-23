@@ -62,6 +62,9 @@ private:
     std::unique_ptr<boost::asio::ip::tcp::endpoint> endpoint_;
     std::mutex io_mutex_;
 
+    // Message framing
+    uint32_t message_size_;
+
     // Processing thread
     std::unique_ptr<std::thread> processing_thread_;
     std::atomic<bool> processing_active_{false};
