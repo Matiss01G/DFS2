@@ -3,6 +3,8 @@
 
 CMakeFiles/tcp_peer_tests.dir/src/tests/tcp_peer_test.cpp.o
  /home/runner/workspace/src/tests/tcp_peer_test.cpp
+ /home/runner/workspace/include/crypto/crypto_error.hpp
+ /home/runner/workspace/include/crypto/crypto_stream.hpp
  /home/runner/workspace/include/network/channel.hpp
  /home/runner/workspace/include/network/codec.hpp
  /home/runner/workspace/include/network/message_frame.hpp
