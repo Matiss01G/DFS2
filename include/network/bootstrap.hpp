@@ -8,6 +8,7 @@
 #include <string>
 #include <vector>
 #include <memory>
+#include <stdexcept>
 
 namespace dfs {
 namespace network {
@@ -26,7 +27,7 @@ public:
     Bootstrap(const std::string& address, uint16_t port,
              const std::vector<uint8_t>& key, uint8_t ID,
              const std::vector<std::string>& bootstrap_nodes);
-    
+
     /**
      * @brief Starts the bootstrap process
      * 
@@ -34,12 +35,25 @@ public:
      * @return false if startup failed
      */
     bool start();
-    
+
+    /**
+     * @brief Get reference to the peer manager
+     * 
+     * @return PeerManager& Reference to the peer manager instance
+     * @throw std::runtime_error if peer manager is not initialized
+     */
+    PeerManager& get_peer_manager() {
+        if (!peer_manager_) {
+            throw std::runtime_error("Peer manager not initialized");
+        }
+        return *peer_manager_;
+    }
+
     /**
      * @brief Destructor ensures proper cleanup
      */
     ~Bootstrap();
-    
+
 private:
     /**
      * @brief Connects to all configured bootstrap nodes
@@ -48,14 +62,14 @@ private:
      * @return false if any connection failed
      */
     bool connect_to_bootstrap_nodes();
-    
+
     // Configuration
     std::string address_;
     uint16_t port_;
     std::vector<uint8_t> key_;
     uint8_t ID_;
     std::vector<std::string> bootstrap_nodes_;
-    
+
     // Components
     std::unique_ptr<Channel> channel_;
     std::unique_ptr<PeerManager> peer_manager_;

@@ -137,6 +137,7 @@ target_link_libraries(tcp_peer_tests
 add_executable(bootstrap_tests
     src/tests/bootstrap_test.cpp)
 target_include_directories(bootstrap_tests PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}/include
     ${CMAKE_CURRENT_SOURCE_DIR}/src/tests
 )
 target_link_libraries(bootstrap_tests

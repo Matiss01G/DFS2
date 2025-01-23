@@ -2,6 +2,7 @@
 #include <thread>
 #include <chrono>
 #include "network/bootstrap.hpp"
+#include "network/peer_manager.hpp"  // Add explicit include for PeerManager
 
 using namespace dfs::network;
 
@@ -18,7 +19,7 @@ TEST_F(BootstrapTest, PeerConnection) {
     std::vector<std::string> peer1_bootstrap_nodes = {
         ADDRESS + ":8002"  // Connect to peer 2
     };
-    
+
     // Set up peer 2 (listening on port 8002)
     const uint8_t PEER2_ID = 2;
     const uint16_t PEER2_PORT = 8002;
