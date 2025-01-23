@@ -17,13 +17,11 @@ bool Channel::consume(MessageFrame& frame) {
     if (queue_.empty()) {
         return false;
     }
-    // Get the front message
-    MessageFrame& queued_frame = queue_.front();
 
-    frame = queued_frame;
-
+    // Get and store the front message
     frame = queue_.front();
     queue_.pop();
+
     BOOST_LOG_TRIVIAL(debug) << "Retrieved message frame from channel. Channel size: " << queue_.size();
     return true;
 }
