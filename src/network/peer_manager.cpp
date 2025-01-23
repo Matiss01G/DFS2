@@ -23,40 +23,48 @@ PeerManager::~PeerManager() {
 
 void PeerManager::create_peer(std::shared_ptr<boost::asio::ip::tcp::socket> socket, uint8_t peer_id) {
   try {
+    std::lock_guard<std::mutex> lock(mutex_);
 
-    // Create new TCP peer with channel and default key
-    auto peer = std::make_shared<TCP_Peer>(peer_id, channel_, key_);
-
-    // Move the accepted socket to the peer
-    peer->get_socket() = std::move(*socket);
-
-    // Add peer to map
-    add_peer(peer);
-
-    // Set up stream processor to use codec's deserialize function
-    peer->set_stream_processor(
-       [peer](std::istream& stream) {
-         try {
-           peer->codec_->deserialize(stream);
-         } catch (const std::exception& e) {
-           BOOST_LOG_TRIVIAL(error) << "Deserialization error: " << e.what();
-         }
-       }
-     );
-
-    // Start stream processing
-    if (!peer->start_stream_processing()) {
-    BOOST_LOG_TRIVIAL(error) << "Failed to start stream processing for peer: " << peer_id;
-    return;
+    if (has_peer(peer_id)) {
+      BOOST_LOG_TRIVIAL(warning) << "Peer " << peer_id << " already exists";
+      return;
     }
 
-    BOOST_LOG_TRIVIAL(info) << "Accepted and initialized new connection from " << peer_id;
-  } catch (const std::exception& e) {
-    BOOST_LOG_TRIVIAL(error) << "Error handling new connection: " << e.what();
-  }
+    BOOST_LOG_TRIVIAL(debug) << "Creating new peer with ID: " << peer_id;
 
-  // Continue accepting new connections if server is still running
-  tcp_server_.start_accept();
+    // Create new TCP peer with channel and key
+    auto peer = std::make_shared<TCP_Peer>(peer_id, channel_, key_);
+
+    // Move the socket to the peer
+    peer->get_socket() = std::move(*socket);
+    socket.reset(); // Clear the original socket pointer
+
+    // Set up stream processor before adding to map
+    peer->set_stream_processor(
+      [peer](std::istream& stream) {
+        try {
+          peer->codec_->deserialize(stream);
+        } catch (const std::exception& e) {
+          BOOST_LOG_TRIVIAL(error) << "Deserialization error: " << e.what();
+        }
+      }
+    );
+
+    // Add peer to map first
+    peers_[peer_id] = peer;
+
+    // Start stream processing only after peer is in the map
+    if (!peer->start_stream_processing()) {
+      BOOST_LOG_TRIVIAL(error) << "Failed to start stream processing for peer: " << peer_id;
+      peers_.erase(peer_id);
+      return;
+    }
+
+    BOOST_LOG_TRIVIAL(info) << "Successfully created and initialized peer: " << peer_id;
+  } catch (const std::exception& e) {
+    BOOST_LOG_TRIVIAL(error) << "Error creating peer " << peer_id << ": " << e.what();
+    throw; // Rethrow to notify caller
+  }
 }
 
 void PeerManager::add_peer(std::shared_ptr<TCP_Peer> peer) {
@@ -100,9 +108,12 @@ bool PeerManager::disconnect(uint8_t peer_id) {
   }
 
   try {
+    BOOST_LOG_TRIVIAL(debug) << "Starting disconnect process for peer: " << peer_id;
+
     auto& peer = it->second;
     peer->stop_stream_processing();
     peer->cleanup_connection();
+
     BOOST_LOG_TRIVIAL(info) << "Successfully disconnected peer: " << peer_id;
     return true;
   }
@@ -121,12 +132,16 @@ bool PeerManager::is_connected(uint8_t peer_id) {
     return false;
   }
 
-  return it->second->get_socket().is_open();
+  bool connected = it->second->get_socket().is_open();
+  BOOST_LOG_TRIVIAL(debug) << "Peer " << peer_id << " connection status: " << (connected ? "connected" : "disconnected");
+  return connected;
 }
 
 bool PeerManager::has_peer(uint8_t peer_id) {
-    std::lock_guard<std::mutex> lock(mutex_);
-    return peers_.find(peer_id) != peers_.end();
+  std::lock_guard<std::mutex> lock(mutex_);
+  bool exists = peers_.find(peer_id) != peers_.end();
+  BOOST_LOG_TRIVIAL(debug) << "Checking for peer " << peer_id << ": " << (exists ? "exists" : "not found");
+  return exists;
 }
 
 std::shared_ptr<TCP_Peer> PeerManager::get_peer(uint8_t peer_id) {
@@ -138,6 +153,29 @@ std::shared_ptr<TCP_Peer> PeerManager::get_peer(uint8_t peer_id) {
   }
 
   return nullptr;
+}
+
+void PeerManager::shutdown() {
+  std::lock_guard<std::mutex> lock(mutex_);
+
+  BOOST_LOG_TRIVIAL(info) << "Initiating PeerManager shutdown";
+
+  for (auto& peer_pair : peers_) {
+    try {
+      disconnect(peer_pair.first);
+    } catch (const std::exception& e) {
+      BOOST_LOG_TRIVIAL(error) << "Error disconnecting peer " << peer_pair.first 
+                  << ": " << e.what();
+    }
+  }
+
+  peers_.clear();
+  BOOST_LOG_TRIVIAL(info) << "PeerManager shutdown complete";
+}
+
+std::size_t PeerManager::size() const {
+  std::lock_guard<std::mutex> lock(mutex_);
+  return peers_.size();
 }
 
 bool PeerManager::broadcast_stream(std::istream& input_stream) {
@@ -221,29 +259,6 @@ bool PeerManager::send_to_peer(uint8_t peer_id, std::istream& stream) {
   }
 }
 
-void PeerManager::shutdown() {
-  std::lock_guard<std::mutex> lock(mutex_);
-
-  BOOST_LOG_TRIVIAL(info) << "Initiating PeerManager shutdown";
-
-  for (auto& peer_pair : peers_) {
-    try {
-      disconnect(peer_pair.first);
-      BOOST_LOG_TRIVIAL(debug) << "Disconnected peer: " << peer_pair.first;
-    } catch (const std::exception& e) {
-      BOOST_LOG_TRIVIAL(error) << "Error disconnecting peer " << peer_pair.first 
-                  << ": " << e.what();
-    }
-  }
-
-  peers_.clear();
-  BOOST_LOG_TRIVIAL(info) << "PeerManager shutdown complete";
-}
-
-std::size_t PeerManager::size() const {
-  std::lock_guard<std::mutex> lock(mutex_);
-  return peers_.size();
-}
 
 } // namespace network
 } // namespace dfs
