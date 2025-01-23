@@ -276,6 +276,19 @@ tcp_peer_tests/fast:
 .PHONY : tcp_peer_tests/fast
 
 #=============================================================================
+# Target rules for targets named bootstrap_tests
+
+# Build rule for target.
+bootstrap_tests: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 bootstrap_tests
+.PHONY : bootstrap_tests
+
+# fast build rule for target.
+bootstrap_tests/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/bootstrap_tests.dir/build.make CMakeFiles/bootstrap_tests.dir/build
+.PHONY : bootstrap_tests/fast
+
+#=============================================================================
 # Target rules for targets named run_tests
 
 # Build rule for target.
@@ -513,6 +526,30 @@ src/store/store.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/dfs_store.dir/build.make CMakeFiles/dfs_store.dir/src/store/store.cpp.s
 .PHONY : src/store/store.cpp.s
 
+src/tests/bootstrap_test.o: src/tests/bootstrap_test.cpp.o
+.PHONY : src/tests/bootstrap_test.o
+
+# target to build an object file
+src/tests/bootstrap_test.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/bootstrap_tests.dir/build.make CMakeFiles/bootstrap_tests.dir/src/tests/bootstrap_test.cpp.o
+.PHONY : src/tests/bootstrap_test.cpp.o
+
+src/tests/bootstrap_test.i: src/tests/bootstrap_test.cpp.i
+.PHONY : src/tests/bootstrap_test.i
+
+# target to preprocess a source file
+src/tests/bootstrap_test.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/bootstrap_tests.dir/build.make CMakeFiles/bootstrap_tests.dir/src/tests/bootstrap_test.cpp.i
+.PHONY : src/tests/bootstrap_test.cpp.i
+
+src/tests/bootstrap_test.s: src/tests/bootstrap_test.cpp.s
+.PHONY : src/tests/bootstrap_test.s
+
+# target to generate assembly for a file
+src/tests/bootstrap_test.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/bootstrap_tests.dir/build.make CMakeFiles/bootstrap_tests.dir/src/tests/bootstrap_test.cpp.s
+.PHONY : src/tests/bootstrap_test.cpp.s
+
 src/tests/channel_test.o: src/tests/channel_test.cpp.o
 .PHONY : src/tests/channel_test.o
 
@@ -647,6 +684,7 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... test"
 	@echo "... run_tests"
+	@echo "... bootstrap_tests"
 	@echo "... channel_tests"
 	@echo "... codec_tests"
 	@echo "... crypto_tests"
@@ -682,6 +720,9 @@ help:
 	@echo "... src/store/store.o"
 	@echo "... src/store/store.i"
 	@echo "... src/store/store.s"
+	@echo "... src/tests/bootstrap_test.o"
+	@echo "... src/tests/bootstrap_test.i"
+	@echo "... src/tests/bootstrap_test.s"
 	@echo "... src/tests/channel_test.o"
 	@echo "... src/tests/channel_test.i"
 	@echo "... src/tests/channel_test.s"

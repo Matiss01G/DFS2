@@ -94,5 +94,6 @@ set(CMAKE_DEPEND_INFO_FILES
   "CMakeFiles/channel_tests.dir/DependInfo.cmake"
   "CMakeFiles/codec_tests.dir/DependInfo.cmake"
   "CMakeFiles/tcp_peer_tests.dir/DependInfo.cmake"
+  "CMakeFiles/bootstrap_tests.dir/DependInfo.cmake"
   "CMakeFiles/run_tests.dir/DependInfo.cmake"
   )
