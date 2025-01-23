@@ -1,0 +1,143 @@
+[==========] Running 3 tests from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 3 tests from TCP_PeerTest
+[ RUN      ] TCP_PeerTest.BasicConnection
+[2025-01-23 00:11:29.651416] [0x00007fafd9abbd80] [info]    Initializing Codec with key of size: 32
+[2025-01-23 00:11:29.651440] [0x00007fafd9abbd80] [debug]   [] Constructing TCP_Peer
+[2025-01-23 00:11:29.651447] [0x00007fafd9abbd80] [debug]   [] Input stream initialized
+[2025-01-23 00:11:29.651451] [0x00007fafd9abbd80] [info]    [] TCP_Peer instance created successfully
+[2025-01-23 00:11:29.651930] [0x00007fafd9ab56c0] [info]    Initializing Codec with key of size: 32
+[2025-01-23 00:11:29.653179] [0x00007fafd9ab56c0] [debug]   [] Constructing TCP_Peer
+[2025-01-23 00:11:29.653393] [0x00007fafd9ab56c0] [debug]   [] Input stream initialized
+[2025-01-23 00:11:29.653417] [0x00007fafd9ab56c0] [info]    [] TCP_Peer instance created successfully
+[2025-01-23 00:11:29.653460] [0x00007fafd9abbd80] [debug]   [] Setting stream processor
+[2025-01-23 00:11:29.653471] [0x00007fafd9abbd80] [debug]   [] Stream processor configured
+[2025-01-23 00:11:29.653486] [0x00007fafd9abbd80] [debug]   [] Setting stream processor
+[2025-01-23 00:11:29.653494] [0x00007fafd9abbd80] [debug]   [] Stream processor configured
+[2025-01-23 00:11:29.653498] [0x00007fafd9abbd80] [debug]   [] Attempting to start stream processing
+[2025-01-23 00:11:29.653561] [0x00007fafd9abbd80] [info]    [] Stream processing started successfully
+[2025-01-23 00:11:29.653572] [0x00007fafd9abbd80] [debug]   [] Attempting to start stream processing
+[2025-01-23 00:11:29.653587] [0x00007fafd9ab56c0] [debug]   [] Setting up stream processing
+[2025-01-23 00:11:29.653623] [0x00007fafd9ab56c0] [trace]   [] Setting up next async read
+[2025-01-23 00:11:29.653634] [0x00007fafd9abbd80] [info]    [] Stream processing started successfully
+[2025-01-23 00:11:29.653646] [0x00007fafd9abbd80] [debug]   [] Stopping stream processing
+[2025-01-23 00:11:29.653674] [0x00007fafd92b46c0] [debug]   [] Setting up stream processing
+[2025-01-23 00:11:29.653686] [0x00007fafd92b46c0] [trace]   [] Setting up next async read
+[2025-01-23 00:11:29.653734] [0x00007fafd9ab56c0] [info]    [] Stream processing stopped
+[2025-01-23 00:11:29.653768] [0x00007fafd9abbd80] [debug]   [] Processing thread joined
+[2025-01-23 00:11:29.653790] [0x00007fafd9abbd80] [info]    [] Stream processing stopped
+[2025-01-23 00:11:29.653795] [0x00007fafd9abbd80] [debug]   [] Stopping stream processing
+[2025-01-23 00:11:29.653810] [0x00007fafd92b46c0] [info]    [] Stream processing stopped
+[2025-01-23 00:11:29.653834] [0x00007fafd9abbd80] [debug]   [] Processing thread joined
+[2025-01-23 00:11:29.653841] [0x00007fafd9abbd80] [info]    [] Stream processing stopped
+[2025-01-23 00:11:29.653879] [0x00007fafd9abbd80] [debug]   TCP_Peer destroyed: 
+[2025-01-23 00:11:29.653897] [0x00007fafd9abbd80] [debug]   TCP_Peer destroyed: 
+[       OK ] TCP_PeerTest.BasicConnection (3 ms)
+[ RUN      ] TCP_PeerTest.SendReceiveSimpleMessage
+[2025-01-23 00:11:29.655040] [0x00007fafd9abbd80] [info]    Initializing Codec with key of size: 32
+[2025-01-23 00:11:29.655056] [0x00007fafd9abbd80] [debug]   [] Constructing TCP_Peer
+[2025-01-23 00:11:29.655065] [0x00007fafd9abbd80] [debug]   [] Input stream initialized
+[2025-01-23 00:11:29.655070] [0x00007fafd9abbd80] [info]    [] TCP_Peer instance created successfully
+[2025-01-23 00:11:29.655192] [0x00007fafd92b46c0] [info]    Initializing Codec with key of size: 32
+[2025-01-23 00:11:29.655229] [0x00007fafd92b46c0] [debug]   [] Constructing TCP_Peer
+[2025-01-23 00:11:29.655238] [0x00007fafd92b46c0] [debug]   [] Input stream initialized
+[2025-01-23 00:11:29.655242] [0x00007fafd92b46c0] [info]    [] TCP_Peer instance created successfully
+[2025-01-23 00:11:29.655271] [0x00007fafd9abbd80] [debug]   [] Setting stream processor
+[2025-01-23 00:11:29.655280] [0x00007fafd9abbd80] [debug]   [] Stream processor configured
+[2025-01-23 00:11:29.655284] [0x00007fafd9abbd80] [debug]   [] Setting stream processor
+[2025-01-23 00:11:29.655309] [0x00007fafd9abbd80] [debug]   [] Stream processor configured
+[2025-01-23 00:11:29.655311] [0x00007fafd9abbd80] [debug]   [] Attempting to start stream processing
+[2025-01-23 00:11:29.655328] [0x00007fafd9abbd80] [info]    [] Stream processing started successfully
+[2025-01-23 00:11:29.655333] [0x00007fafd9abbd80] [debug]   [] Attempting to start stream processing
+[2025-01-23 00:11:29.655355] [0x00007fafd9abbd80] [info]    [] Stream processing started successfully
+[2025-01-23 00:11:29.655384] [0x00007fafd9ab56c0] [debug]   [] Setting up stream processing
+[2025-01-23 00:11:29.655511] [0x00007fafd9ab56c0] [trace]   [] Setting up next async read
+[2025-01-23 00:11:29.655540] [0x00007fafd92b46c0] [debug]   [] Setting up stream processing
+[2025-01-23 00:11:29.655554] [0x00007fafd92b46c0] [trace]   [] Setting up next async read
+[2025-01-23 00:11:29.655584] [0x00007fafd9abbd80] [debug]   [] Sent 12 bytes from stream
+[2025-01-23 00:11:29.755715] [0x00007fafd9abbd80] [debug]   [] Stopping stream processing
+[2025-01-23 00:11:29.755799] [0x00007fafd92b46c0] [info]    [] Stream processing stopped
+[2025-01-23 00:11:29.755840] [0x00007fafd9abbd80] [debug]   [] Processing thread joined
+[2025-01-23 00:11:29.755856] [0x00007fafd9abbd80] [info]    [] Stream processing stopped
+[2025-01-23 00:11:29.755860] [0x00007fafd9abbd80] [debug]   [] Stopping stream processing
+[2025-01-23 00:11:29.755933] [0x00007fafd9ab56c0] [info]    [] Stream processing stopped
+[2025-01-23 00:11:29.755963] [0x00007fafd9abbd80] [debug]   [] Processing thread joined
+[2025-01-23 00:11:29.755970] [0x00007fafd9abbd80] [info]    [] Stream processing stopped
+[2025-01-23 00:11:29.756044] [0x00007fafd9abbd80] [debug]   TCP_Peer destroyed: 
+[2025-01-23 00:11:29.756070] [0x00007fafd9abbd80] [debug]   TCP_Peer destroyed: 
+[       OK ] TCP_PeerTest.SendReceiveSimpleMessage (102 ms)
+[ RUN      ] TCP_PeerTest.SerializeDeserializeMessageFrame
+[2025-01-23 00:11:29.758090] [0x00007fafd9abbd80] [info]    Initializing Codec with key of size: 32
+[2025-01-23 00:11:29.758109] [0x00007fafd9ab56c0] [info]    Initializing Codec with key of size: 32
+[2025-01-23 00:11:29.758270] [0x00007fafd9abbd80] [debug]   [] Constructing TCP_Peer
+[2025-01-23 00:11:29.758374] [0x00007fafd9abbd80] [debug]   [] Input stream initialized
+[2025-01-23 00:11:29.758387] [0x00007fafd9abbd80] [info]    [] TCP_Peer instance created successfully
+[2025-01-23 00:11:29.758648] [0x00007fafd9ab56c0] [debug]   [] Constructing TCP_Peer
+[2025-01-23 00:11:29.758659] [0x00007fafd9ab56c0] [debug]   [] Input stream initialized
+[2025-01-23 00:11:29.758663] [0x00007fafd9ab56c0] [info]    [] TCP_Peer instance created successfully
+[2025-01-23 00:11:29.758964] [0x00007fafd9abbd80] [debug]   [] Setting stream processor
+[2025-01-23 00:11:29.758974] [0x00007fafd9abbd80] [debug]   [] Stream processor configured
+[2025-01-23 00:11:29.758977] [0x00007fafd9abbd80] [debug]   [] Setting stream processor
+[2025-01-23 00:11:29.758984] [0x00007fafd9abbd80] [debug]   [] Stream processor configured
+[2025-01-23 00:11:29.759085] [0x00007fafd9abbd80] [debug]   [] Attempting to start stream processing
+[2025-01-23 00:11:29.759290] [0x00007fafd9abbd80] [info]    [] Stream processing started successfully
+[2025-01-23 00:11:29.759302] [0x00007fafd9abbd80] [debug]   [] Attempting to start stream processing
+[2025-01-23 00:11:29.759591] [0x00007fafd9ab56c0] [debug]   [] Setting up stream processing
+[2025-01-23 00:11:29.759614] [0x00007fafd9ab56c0] [trace]   [] Setting up next async read
+[2025-01-23 00:11:29.759764] [0x00007fafd9abbd80] [info]    [] Stream processing started successfully
+[2025-01-23 00:11:29.759781] [0x00007fafd9abbd80] [info]    Initializing CryptoStream
+[2025-01-23 00:11:29.759940] [0x00007fafd92b46c0] [debug]   [] Setting up stream processing
+[2025-01-23 00:11:29.760173] [0x00007fafd9abbd80] [debug]   CryptoStream initialization complete
+[2025-01-23 00:11:29.760188] [0x00007fafd9abbd80] [debug]   Generating initialization vector
+[2025-01-23 00:11:29.761067] [0x00007fafd92b46c0] [trace]   [] Setting up next async read
+[2025-01-23 00:11:29.763582] [0x00007fafd9abbd80] [debug]   Successfully generated initialization vector
+[2025-01-23 00:11:29.763600] [0x00007fafd9abbd80] [info]    Initializing Codec with key of size: 32
+[2025-01-23 00:11:29.763604] [0x00007fafd9abbd80] [info]    Initializing CryptoStream
+[2025-01-23 00:11:29.763608] [0x00007fafd9abbd80] [debug]   CryptoStream initialization complete
+[2025-01-23 00:11:29.763612] [0x00007fafd9abbd80] [info]    Initializing crypto parameters
+[2025-01-23 00:11:29.763616] [0x00007fafd9abbd80] [debug]   Crypto parameters initialized successfully
+[2025-01-23 00:11:29.763619] [0x00007fafd9abbd80] [info]    Starting message frame serialization
+[2025-01-23 00:11:29.763623] [0x00007fafd9abbd80] [debug]   Writing IV of size: 16
+[2025-01-23 00:11:29.763629] [0x00007fafd9abbd80] [debug]   Writing message type: 0
+[2025-01-23 00:11:29.763633] [0x00007fafd9abbd80] [debug]   Writing source id: 1
+[2025-01-23 00:11:29.763636] [0x00007fafd9abbd80] [debug]   Writing payload size: 3544382613239116379
+[2025-01-23 00:11:29.763651] [0x00007fafd9abbd80] [info]    Starting stream encryption
+[2025-01-23 00:11:29.763655] [0x00007fafd9abbd80] [debug]   Initializing cipher for encryption
+[2025-01-23 00:11:29.763666] [0x00007fafd9abbd80] [debug]   Cipher initialization complete
+[2025-01-23 00:11:29.763674] [0x00007fafd9abbd80] [debug]   Writing encrypted filename length
+[2025-01-23 00:11:29.763678] [0x00007fafd9abbd80] [debug]   Encrypting and writing payload of size: 3544382613239116379
+[2025-01-23 00:11:29.763682] [0x00007fafd9abbd80] [info]    Starting stream encryption
+[2025-01-23 00:11:29.763685] [0x00007fafd9abbd80] [debug]   Initializing cipher for encryption
+[2025-01-23 00:11:29.763691] [0x00007fafd9abbd80] [debug]   Cipher initialization complete
+[2025-01-23 00:11:29.763695] [0x00007fafd9abbd80] [info]    Encrypted message frame serialization complete. Total bytes written: 3544382613239116421
+[2025-01-23 00:11:29.763700] [0x00007fafd9abbd80] [debug]   Cleaning up CryptoStream resources
+[2025-01-23 00:11:29.763736] [0x00007fafd9abbd80] [debug]   [] Sent 74 bytes from stream
+/home/runner/workspace/src/tests/tcp_peer_test.cpp:144: Failure
+Value of: channel_->consume(received_frame)
+  Actual: false
+Expected: true
+
+[2025-01-23 00:11:29.865904] [0x00007fafd9abbd80] [debug]   Cleaning up CryptoStream resources
+[2025-01-23 00:11:29.866101] [0x00007fafd9abbd80] [debug]   [] Stopping stream processing
+[2025-01-23 00:11:29.866971] [0x00007fafd9ab56c0] [info]    [] Stream processing stopped
+[2025-01-23 00:11:29.867337] [0x00007fafd9abbd80] [debug]   [] Processing thread joined
+[2025-01-23 00:11:29.868225] [0x00007fafd9abbd80] [info]    [] Stream processing stopped
+[2025-01-23 00:11:29.868321] [0x00007fafd9abbd80] [debug]   [] Stopping stream processing
+[2025-01-23 00:11:29.868347] [0x00007fafd92b46c0] [info]    [] Stream processing stopped
+[2025-01-23 00:11:29.868374] [0x00007fafd9abbd80] [debug]   [] Processing thread joined
+[2025-01-23 00:11:29.868385] [0x00007fafd9abbd80] [info]    [] Stream processing stopped
+[2025-01-23 00:11:29.868499] [0x00007fafd9abbd80] [debug]   TCP_Peer destroyed: 
+[2025-01-23 00:11:29.868708] [0x00007fafd9abbd80] [debug]   TCP_Peer destroyed: 
+[  FAILED  ] TCP_PeerTest.SerializeDeserializeMessageFrame (112 ms)
+[----------] 3 tests from TCP_PeerTest (218 ms total)
+
+[----------] Global test environment tear-down
+[==========] 3 tests from 1 test suite ran. (218 ms total)
+[  PASSED  ] 2 tests.
+[  FAILED  ] 1 test, listed below:
+[  FAILED  ] TCP_PeerTest.SerializeDeserializeMessageFrame
+
+ 1 FAILED TEST
+make[2]: *** [CMakeFiles/run_tests.dir/build.make:78: CMakeFiles/run_tests] Error 1
+make[1]: *** [CMakeFiles/Makefile2:318: CMakeFiles/run_tests.dir/all] Error 2
+make: *** [Makefile:146: all] Error 2
