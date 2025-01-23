@@ -118,7 +118,7 @@ target_link_libraries(codec_tests
 
 # TCP Peer tests
 add_executable(tcp_peer_tests
-    src/tests/tcp_peer_test.cpp
+    src/tests/tcp_peer_tests.cpp
     src/network/tcp_peer.cpp)
 target_include_directories(tcp_peer_tests PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/src/tests

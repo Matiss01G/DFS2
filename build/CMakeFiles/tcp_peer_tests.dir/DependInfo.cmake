@@ -9,7 +9,7 @@ set(CMAKE_DEPENDS_LANGUAGES
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "/home/runner/workspace/src/network/tcp_peer.cpp" "CMakeFiles/tcp_peer_tests.dir/src/network/tcp_peer.cpp.o" "gcc" "CMakeFiles/tcp_peer_tests.dir/src/network/tcp_peer.cpp.o.d"
-  "/home/runner/workspace/src/tests/tcp_peer_test.cpp" "CMakeFiles/tcp_peer_tests.dir/src/tests/tcp_peer_test.cpp.o" "gcc" "CMakeFiles/tcp_peer_tests.dir/src/tests/tcp_peer_test.cpp.o.d"
+  "/home/runner/workspace/src/tests/tcp_peer_tests.cpp" "CMakeFiles/tcp_peer_tests.dir/src/tests/tcp_peer_tests.cpp.o" "gcc" "CMakeFiles/tcp_peer_tests.dir/src/tests/tcp_peer_tests.cpp.o.d"
   )
 
 # Targets to which this target links which contain Fortran sources.

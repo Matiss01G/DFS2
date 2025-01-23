@@ -1679,4 +1679,7 @@ CMakeFiles/tcp_peer_tests.dir/src/tests/tcp_peer_test.cpp.o: \
  /nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/bits/deque.tcc \
  /nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/bits/stl_queue.h \
  /home/runner/workspace/include/network/message_frame.hpp \
- /home/runner/workspace/include/network/codec.hpp
+ /home/runner/workspace/include/network/codec.hpp \
+ /home/runner/workspace/include/network/codec.hpp \
+ /home/runner/workspace/include/crypto/crypto_stream.hpp \
+ /home/runner/workspace/include/crypto/crypto_error.hpp
