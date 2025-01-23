@@ -125,126 +125,102 @@ void TCP_Peer::process_stream() {
 
 // Setup next asynchronous read operation with delimiter-based framing
 void TCP_Peer::async_read_next() {
-    if (!processing_active_ || !socket_->is_open()) {
-        return;
-    }
+  if (!processing_active_ || !socket_->is_open()) {
+    return;
+  }
 
-    BOOST_LOG_TRIVIAL(trace) << "[" << peer_id_ << "] Setting up next async read";
+  BOOST_LOG_TRIVIAL(trace) << "[" << peer_id_ << "] Setting up next async read";
 
-    // First read the message size (4 bytes)
-    boost::asio::async_read(*socket_, 
-        boost::asio::buffer(&message_size_, sizeof(message_size_)),
-        [this](const boost::system::error_code& ec, std::size_t bytes_transferred) {
-            if (!ec && bytes_transferred == sizeof(message_size_)) {
-                message_size_ = ntohl(message_size_); // Convert from network byte order
-                BOOST_LOG_TRIVIAL(debug) << "[" << peer_id_ << "] Reading message of size: " << message_size_;
+  // Read until newline delimiter
+  boost::asio::async_read_until(
+    *socket_,
+    *input_buffer_,
+    '\n',
+    [this](const boost::system::error_code& ec, std::size_t bytes_transferred) {
+      if (!ec && bytes_transferred > 0) {
+        std::string data;
+        std::istream is(input_buffer_.get());
+        std::getline(is, data);
 
-                // Now read the actual message into the input buffer
-                boost::asio::async_read(*socket_,
-                    *input_buffer_,
-                    boost::asio::transfer_exactly(message_size_),
-                    [this](const boost::system::error_code& ec, std::size_t bytes_transferred) {
-                        if (!ec && bytes_transferred > 0) {
-                            BOOST_LOG_TRIVIAL(debug) << "[" << peer_id_ << "] Received " << bytes_transferred << " bytes";
+        if (!data.empty()) {
+          BOOST_LOG_TRIVIAL(debug) << "[" << peer_id_ << "] Received data: " << data;
 
-                            if (stream_processor_) {
-                                try {
-                                    // Create a new input stream from the buffer
-                                    std::istream is(input_buffer_.get());
-                                    stream_processor_(is);
-
-                                    // Clear the buffer after processing
-                                    input_buffer_->consume(bytes_transferred);
-                                } catch (const std::exception& e) {
-                                    BOOST_LOG_TRIVIAL(error) << "[" << peer_id_ << "] Stream processor error: " << e.what();
-                                }
-                            }
-
-                            // Continue reading if still active
-                            if (processing_active_ && socket_->is_open()) {
-                                async_read_next();
-                            }
-                        } else if (ec != boost::asio::error::operation_aborted) {
-                            BOOST_LOG_TRIVIAL(error) << "[" << peer_id_ << "] Read error: " << ec.message();
-                            if (processing_active_ && socket_->is_open()) {
-                                async_read_next();
-                            }
-                        }
-                    });
-            } else if (ec != boost::asio::error::operation_aborted) {
-                BOOST_LOG_TRIVIAL(error) << "[" << peer_id_ << "] Size read error: " << ec.message();
-                if (processing_active_ && socket_->is_open()) {
-                    async_read_next();
-                }
+          // Process data using stream processor if available
+          if (stream_processor_) {
+            std::string framed_data = data + '\n';
+            std::istringstream iss(framed_data);
+            try {
+              boost::asio::ip::tcp::endpoint remote_endpoint = socket_->remote_endpoint();
+              std::string source_id = remote_endpoint.address().to_string() + ":" + 
+                           std::to_string(remote_endpoint.port());
+              BOOST_LOG_TRIVIAL(debug) << "[" << peer_id_ << "] Processing data from " << source_id;
+              stream_processor_(iss);
+            } catch (const std::exception& e) {
+              BOOST_LOG_TRIVIAL(error) << "[" << peer_id_ << "] Stream processor error: " << e.what();
             }
-        });
+          } else {
+            // Store data in input buffer if no processor is set
+            std::string framed_data = data + '\n';
+            input_buffer_->sputn(framed_data.c_str(), framed_data.length());
+            BOOST_LOG_TRIVIAL(debug) << "[" << peer_id_ << "] Data forwarded to input stream";
+          }
+        }
+
+        // Continue reading if still active
+        if (processing_active_ && socket_->is_open()) {
+          async_read_next();
+        }
+      } else if (ec != boost::asio::error::operation_aborted) {
+        BOOST_LOG_TRIVIAL(error) << "[" << peer_id_ << "] Read error: " << ec.message();
+        if (processing_active_ && socket_->is_open()) {
+          async_read_next();
+        }
+      }
+    });
 }
 
 // Send data stream to peer with buffered writing
 bool TCP_Peer::send_stream(std::istream& input_stream, std::size_t buffer_size) {
-    if (!socket_ || !socket_->is_open()) {
-        BOOST_LOG_TRIVIAL(error) << "[" << peer_id_ << "] Cannot send stream - socket not connected";
+  if (!socket_ || !socket_->is_open()) {
+    BOOST_LOG_TRIVIAL(error) << "[" << peer_id_ << "] Cannot send stream - socket not connected";
+    return false;
+  }
+
+  try {
+    std::unique_lock<std::mutex> lock(io_mutex_);
+    std::vector<char> buffer(buffer_size);
+    boost::system::error_code ec;
+
+    // Read and send data in chunks
+    while (input_stream.good()) {
+      input_stream.read(buffer.data(), buffer_size);
+      std::size_t bytes_read = input_stream.gcount();
+
+      if (bytes_read == 0) {
+        break;
+      }
+
+      // Write exact number of bytes read
+      std::size_t bytes_written = boost::asio::write(
+        *socket_,
+        boost::asio::buffer(buffer.data(), bytes_read),
+        boost::asio::transfer_exactly(bytes_read),
+        ec
+      );
+
+      if (ec || bytes_written != bytes_read) {
+        BOOST_LOG_TRIVIAL(error) << "[" << peer_id_ << "] Stream send error: " << ec.message();
         return false;
+      }
+
+      BOOST_LOG_TRIVIAL(debug) << "[" << peer_id_ << "] Sent " << bytes_written << " bytes from stream";
     }
 
-    try {
-        std::unique_lock<std::mutex> lock(io_mutex_);
-
-        // Get total stream size
-        input_stream.seekg(0, std::ios::end);
-        uint32_t total_size = static_cast<uint32_t>(input_stream.tellg());
-        input_stream.seekg(0, std::ios::beg);
-
-        // Send size in network byte order
-        uint32_t network_size = htonl(total_size);
-        boost::system::error_code ec;
-
-        size_t header_bytes = boost::asio::write(
-            *socket_,
-            boost::asio::buffer(&network_size, sizeof(network_size)),
-            boost::asio::transfer_exactly(sizeof(network_size)),
-            ec
-        );
-
-        if (ec || header_bytes != sizeof(network_size)) {
-            BOOST_LOG_TRIVIAL(error) << "[" << peer_id_ << "] Failed to send size header: " << ec.message();
-            return false;
-        }
-
-        // Send the actual data
-        std::vector<char> buffer(buffer_size);
-        size_t total_sent = 0;
-
-        while (input_stream.good() && total_sent < total_size) {
-            input_stream.read(buffer.data(), buffer_size);
-            std::size_t bytes_read = input_stream.gcount();
-
-            if (bytes_read == 0) {
-                break;
-            }
-
-            std::size_t bytes_written = boost::asio::write(
-                *socket_,
-                boost::asio::buffer(buffer.data(), bytes_read),
-                boost::asio::transfer_exactly(bytes_read),
-                ec
-            );
-
-            if (ec || bytes_written != bytes_read) {
-                BOOST_LOG_TRIVIAL(error) << "[" << peer_id_ << "] Stream send error: " << ec.message();
-                return false;
-            }
-
-            total_sent += bytes_written;
-            BOOST_LOG_TRIVIAL(debug) << "[" << peer_id_ << "] Sent " << bytes_written << " bytes from stream";
-        }
-
-        BOOST_LOG_TRIVIAL(debug) << "[" << peer_id_ << "] Successfully sent " << total_sent << " total bytes";
-        return total_sent == total_size;
-    } catch (const std::exception& e) {
-        BOOST_LOG_TRIVIAL(error) << "[" << peer_id_ << "] Stream send error: " << e.what();
-        return false;
-    }
+    return true;
+  } catch (const std::exception& e) {
+    BOOST_LOG_TRIVIAL(error) << "[" << peer_id_ << "] Stream send error: " << e.what();
+    return false;
+  }
 }
 
 // Clean up connection resources and reset state
@@ -286,7 +262,7 @@ bool TCP_Peer::send_message(const std::string& message) {
 }
 
 // Get peer identifier
-uint8_t TCP_Peer::get_peer_id() const {
+  uint8_t TCP_Peer::get_peer_id() const {
   return peer_id_;
 }
 
