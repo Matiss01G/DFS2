@@ -1,0 +1,63 @@
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from BootstrapTest
+[ RUN      ] BootstrapTest.PeerConnection
+[2025-01-23 19:14:16.192386] [0x00007f9f1c639d80] [info]    Initializing Bootstrap with ID: 1
+[2025-01-23 19:14:16.192396] [0x00007f9f1c639d80] [debug]   Channel created successfully
+[2025-01-23 19:14:16.192406] [0x00007f9f1c639d80] [info]    Initializing TCP server  on 127.0.0.1:8001
+[2025-01-23 19:14:16.192412] [0x00007f9f1c639d80] [debug]   TCP Server created successfully
+[2025-01-23 19:14:16.192417] [0x00007f9f1c639d80] [info]    PeerManager initialized with key size: 32 bytes
+[2025-01-23 19:14:16.192422] [0x00007f9f1c639d80] [debug]   Peer Manager created successfully
+[2025-01-23 19:14:16.192426] [0x00007f9f1c639d80] [info]    PeerManager set for TCP server 
+[2025-01-23 19:14:16.192433] [0x00007f9f1c639d80] [info]    Initializing FileServer with ID: 1
+[2025-01-23 19:14:16.192453] [0x00007f9f1c639d80] [info]    Initializing Store with base path: fileserver_1
+[2025-01-23 19:14:16.192463] [0x00007f9f1c639d80] [debug]   Store directory created/verified at: fileserver_1
+[2025-01-23 19:14:16.192470] [0x00007f9f1c639d80] [info]    Initializing Codec with key of size: 32
+[2025-01-23 19:14:16.192474] [0x00007f9f1c639d80] [info]    FileServer initialization complete
+[2025-01-23 19:14:16.192477] [0x00007f9f1c639d80] [debug]   File Server created successfully
+[2025-01-23 19:14:16.192480] [0x00007f9f1c639d80] [info]    Successfully created all components
+[2025-01-23 19:14:16.192485] [0x00007f9f1c639d80] [info]    Initializing Bootstrap with ID: 2
+[2025-01-23 19:14:16.192491] [0x00007f9f1c639d80] [debug]   Channel created successfully
+[2025-01-23 19:14:16.192496] [0x00007f9f1c639d80] [info]    Initializing TCP server  on 127.0.0.1:8002
+[2025-01-23 19:14:16.192501] [0x00007f9f1c639d80] [debug]   TCP Server created successfully
+[2025-01-23 19:14:16.192506] [0x00007f9f1c639d80] [info]    PeerManager initialized with key size: 32 bytes
+[2025-01-23 19:14:16.192511] [0x00007f9f1c639d80] [debug]   Peer Manager created successfully
+[2025-01-23 19:14:16.192515] [0x00007f9f1c639d80] [info]    PeerManager set for TCP server 
+[2025-01-23 19:14:16.192521] [0x00007f9f1c639d80] [info]    Initializing FileServer with ID: 2
+[2025-01-23 19:14:16.192525] [0x00007f9f1c639d80] [info]    Initializing Store with base path: fileserver_2
+[2025-01-23 19:14:16.192533] [0x00007f9f1c639d80] [debug]   Store directory created/verified at: fileserver_2
+[2025-01-23 19:14:16.192539] [0x00007f9f1c639d80] [info]    Initializing Codec with key of size: 32
+[2025-01-23 19:14:16.192545] [0x00007f9f1c639d80] [info]    FileServer initialization complete
+[2025-01-23 19:14:16.192550] [0x00007f9f1c639d80] [debug]   File Server created successfully
+[2025-01-23 19:14:16.192556] [0x00007f9f1c639d80] [info]    Successfully created all components
+[2025-01-23 19:14:16.193364] [0x00007f9f1c639d80] [info]    Server started successfully on 127.0.0.1:8002
+[2025-01-23 19:14:16.193373] [0x00007f9f1c639d80] [info]    Connecting to bootstrap nodes...
+[2025-01-23 19:14:16.193376] [0x00007f9f1c639d80] [info]    Attempting to connect to 127.0.0.1:8001
+[2025-01-23 19:14:16.193504] [0x00007f9f1c639d80] [error]   Connection failed: connect: Connection refused [system:111 at include/boost/asio/detail/reactive_socket_service.hpp:587:5 in function 'boost::system::error_code boost::asio::detail::reactive_socket_service<Protocol>::connect(implementation_type&, const endpoint_type&, boost::system::error_code&)']
+[2025-01-23 19:14:16.193528] [0x00007f9f1c639d80] [error]   Failed to connect to 127.0.0.1:8001
+[2025-01-23 19:14:16.193534] [0x00007f9f1c639d80] [warning] Failed to connect to some bootstrap nodes
+[2025-01-23 19:14:16.193536] [0x00007f9f1c639d80] [info]    Bootstrap successfully started
+[2025-01-23 19:14:16.194572] [0x00007f9f1c639d80] [info]    Server started successfully on 127.0.0.1:8001
+[2025-01-23 19:14:16.194583] [0x00007f9f1c639d80] [info]    Connecting to bootstrap nodes...
+[2025-01-23 19:14:16.194587] [0x00007f9f1c639d80] [info]    Attempting to connect to 127.0.0.1:8002
+[2025-01-23 19:14:16.194658] [0x00007f9f1c639d80] [info]    Successfully connected to 127.0.0.1:8002
+[2025-01-23 19:14:16.194686] [0x00007f9f1c639d80] [info]    Sent ID: 1
+[2025-01-23 19:14:16.194707] [0x00007f9f1c639d80] [info]    Successfully connected to 127.0.0.1:8002
+[2025-01-23 19:14:16.194717] [0x00007f9f1c639d80] [info]    Bootstrap successfully started
+/home/runner/workspace/src/tests/bootstrap_test.cpp:46: Failure
+Value of: peer1_manager.has_peer(PEER2_ID)
+  Actual: false
+Expected: true
+Peer 1 does not have Peer 2 (ID: 2) in its peer map
+
+[2025-01-23 19:14:18.194880] [0x00007f9f1c639d80] [info]    Initiating server shutdown
+[2025-01-23 19:14:18.195027] [0x00007f9f1c639d80] [info]    Server shutdown complete
+[2025-01-23 19:14:18.195034] [0x00007f9f1c639d80] [info]    Bootstrap shutdown complete
+[2025-01-23 19:14:18.195046] [0x00007f9f1c639d80] [info]    Initiating PeerManager shutdown
+[2025-01-23 19:14:18.195051] [0x00007f9f1c639d80] [info]    PeerManager shutdown complete
+[2025-01-23 19:14:18.195058] [0x00007f9f1c639d80] [info]    Initiating server shutdown
+[2025-01-23 19:14:18.195221] [0x00007f9f1c639d80] [info]    Server shutdown complete
+[2025-01-23 19:14:18.195229] [0x00007f9f1c639d80] [info]    Bootstrap shutdown complete
+[2025-01-23 19:14:18.195239] [0x00007f9f1c639d80] [info]    Initiating PeerManager shutdown
+[2025-01-23 19:14:18.195243] [0x00007f9f1c639d80] [info]    PeerManager shutdown complete
+[  FAILED  ] BootstrapTest.PeerConnection (2002 ms)
