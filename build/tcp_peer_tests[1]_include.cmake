@@ -1,0 +1,5 @@
+if(EXISTS "/home/runner/workspace/build/tcp_peer_tests[1]_tests.cmake")
+  include("/home/runner/workspace/build/tcp_peer_tests[1]_tests.cmake")
+else()
+  add_test(tcp_peer_tests_NOT_BUILT tcp_peer_tests_NOT_BUILT)
+endif()
