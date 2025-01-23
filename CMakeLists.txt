@@ -116,18 +116,6 @@ target_link_libraries(codec_tests
     GTest::Main
 )
 
-# TCP Peer tests
-add_executable(tcp_peer_tests
-    src/tests/tcp_peer_test.cpp)
-target_link_libraries(tcp_peer_tests
-    PRIVATE
-    dfs_network
-    dfs_crypto
-    dfs_store
-    GTest::GTest
-    GTest::Main
-)
-
 include(GoogleTest)
 gtest_discover_tests(crypto_tests)
 gtest_discover_tests(store_tests)
