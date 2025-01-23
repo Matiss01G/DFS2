@@ -1,0 +1,41 @@
+[ RUN      ] BootstrapTest.PeerConnection
+[2025-01-23 22:01:48.824148] [0x00007f749356ad80] [info]    Initializing Bootstrap with ID: 1
+[2025-01-23 22:01:48.824160] [0x00007f749356ad80] [debug]   Channel created successfully
+[2025-01-23 22:01:48.824170] [0x00007f749356ad80] [info]    Initializing TCP server  on 127.0.0.1:8001
+[2025-01-23 22:01:48.824173] [0x00007f749356ad80] [debug]   TCP Server created successfully
+[2025-01-23 22:01:48.824176] [0x00007f749356ad80] [info]    PeerManager initialized with key size: 32 bytes
+[2025-01-23 22:01:48.824242] [0x00007f749356ad80] [debug]   Peer Manager created successfully
+[2025-01-23 22:01:48.824247] [0x00007f749356ad80] [info]    PeerManager set for TCP server 
+[2025-01-23 22:01:48.824256] [0x00007f749356ad80] [info]    Initializing FileServer with ID: 1
+[2025-01-23 22:01:48.824273] [0x00007f749356ad80] [info]    Initializing Store with base path: fileserver_1
+[2025-01-23 22:01:48.824307] [0x00007f749356ad80] [debug]   Store directory created/verified at: fileserver_1
+[2025-01-23 22:01:48.824315] [0x00007f749356ad80] [info]    Initializing Codec with key of size: 32
+[2025-01-23 22:01:48.824319] [0x00007f749356ad80] [info]    FileServer initialization complete
+[2025-01-23 22:01:48.824325] [0x00007f749356ad80] [debug]   File Server created successfully
+[2025-01-23 22:01:48.824329] [0x00007f749356ad80] [info]    Successfully created all components
+[2025-01-23 22:01:48.824333] [0x00007f749356ad80] [info]    Initializing Bootstrap with ID: 2
+[2025-01-23 22:01:48.824386] [0x00007f749356ad80] [debug]   Channel created successfully
+[2025-01-23 22:01:48.824394] [0x00007f749356ad80] [info]    Initializing TCP server  on 127.0.0.1:8002
+[2025-01-23 22:01:48.824398] [0x00007f749356ad80] [debug]   TCP Server created successfully
+[2025-01-23 22:01:48.824410] [0x00007f749356ad80] [info]    PeerManager initialized with key size: 32 bytes
+[2025-01-23 22:01:48.824412] [0x00007f749356ad80] [debug]   Peer Manager created successfully
+[2025-01-23 22:01:48.824415] [0x00007f749356ad80] [info]    PeerManager set for TCP server 
+[2025-01-23 22:01:48.824436] [0x00007f749356ad80] [info]    Initializing FileServer with ID: 2
+[2025-01-23 22:01:48.824444] [0x00007f749356ad80] [info]    Initializing Store with base path: fileserver_2
+[2025-01-23 22:01:48.824452] [0x00007f749356ad80] [debug]   Store directory created/verified at: fileserver_2
+[2025-01-23 22:01:48.824459] [0x00007f749356ad80] [info]    Initializing Codec with key of size: 32
+[2025-01-23 22:01:48.824462] [0x00007f749356ad80] [info]    FileServer initialization complete
+[2025-01-23 22:01:48.824468] [0x00007f749356ad80] [debug]   File Server created successfully
+[2025-01-23 22:01:48.824472] [0x00007f749356ad80] [info]    Successfully created all components
+[2025-01-23 22:01:48.826155] [0x00007f749356ad80] [info]    Server started successfully on 127.0.0.1:8002
+[2025-01-23 22:01:48.826169] [0x00007f749356ad80] [info]    Connecting to bootstrap nodes...
+[2025-01-23 22:01:48.826175] [0x00007f749356ad80] [info]    Attempting to connect to 127.0.0.1:8001
+[2025-01-23 22:01:48.826367] [0x00007f749356ad80] [error]   Connection failed: connect: Connection refused [system:111 at include/boost/asio/detail/reactive_socket_service.hpp:587:5 in function 'boost::system::error_code boost::asio::detail::reactive_socket_service<Protocol>::connect(implementation_type&, const endpoint_type&, boost::system::error_code&)']
+[2025-01-23 22:01:48.826389] [0x00007f749356ad80] [error]   Failed to connect to 127.0.0.1:8001
+[2025-01-23 22:01:48.826393] [0x00007f749356ad80] [warning] Failed to connect to some bootstrap nodes
+[2025-01-23 22:01:48.826396] [0x00007f749356ad80] [info]    Bootstrap successfully started
+[2025-01-23 22:01:50.827127] [0x00007f749356ad80] [info]    Server started successfully on 127.0.0.1:8001
+[2025-01-23 22:01:50.827147] [0x00007f749356ad80] [info]    Connecting to bootstrap nodes...
+[2025-01-23 22:01:50.827156] [0x00007f749356ad80] [info]    Attempting to connect to 127.0.0.1:8002
+[2025-01-23 22:01:50.827279] [0x00007f749356ad80] [info]    Successfully connected to 127.0.0.1:8002
+[2025-01-23 22:01:50.827310] [0x00007f749356ad80] [info]    Sent ID: 1

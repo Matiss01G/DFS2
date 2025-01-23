@@ -34,6 +34,7 @@ bool TCP_Server::send_ID(std::shared_ptr<boost::asio::ip::tcp::socket> socket) {
 }
 
 uint8_t TCP_Server::read_ID(std::shared_ptr<boost::asio::ip::tcp::socket> socket) {
+  BOOST_LOG_TRIVIAL(debug) << "Starting to read ID";
   uint8_t peer_id;
   try {
     // Read exact number of bytes for ID
