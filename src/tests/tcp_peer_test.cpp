@@ -122,6 +122,8 @@ TEST_F(TCP_PeerTest, SerializeDeserializeMessageFrame) {
     send_frame.source_id = 1;
     std::string test_data = "Test payload data";
     send_frame.payload_stream = std::make_shared<std::stringstream>(test_data);
+    send_frame.payload_size = test_data.length();
+    send_frame.filename_length = 0;
 
     // Generate IV using CryptoStream
     crypto::CryptoStream crypto_stream;
