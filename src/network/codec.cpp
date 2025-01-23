@@ -141,6 +141,7 @@ MessageFrame Codec::deserialize(std::istream& input) {
     frame.payload_stream = std::make_shared<std::stringstream>();
 
     channel_.produce(frame);
+    BOOST_LOG_TRIVIAL(debug) << "New frame added to channel"; 
 
     // Decrypt payload if present
     if (frame.payload_size > 0) {
