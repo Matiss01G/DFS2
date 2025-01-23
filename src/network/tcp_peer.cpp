@@ -193,14 +193,19 @@ bool TCP_Peer::send_stream(std::istream& input_stream, std::size_t buffer_size) 
 
     // Read and send data in chunks
     while (input_stream.good()) {
-      input_stream.read(buffer.data(), buffer_size);
+      // Read chunk into buffer
+      input_stream.read(buffer.data(), buffer_size - 1);  // Leave space for newline
       std::size_t bytes_read = input_stream.gcount();
 
       if (bytes_read == 0) {
         break;
       }
 
-      // Write exact number of bytes read
+      // Add newline delimiter
+      buffer[bytes_read] = '\n';
+      bytes_read++;  // Include the newline in total bytes
+
+      // Write exact number of bytes read plus delimiter
       std::size_t bytes_written = boost::asio::write(
         *socket_,
         boost::asio::buffer(buffer.data(), bytes_read),
@@ -213,7 +218,7 @@ bool TCP_Peer::send_stream(std::istream& input_stream, std::size_t buffer_size) 
         return false;
       }
 
-      BOOST_LOG_TRIVIAL(debug) << "[" << peer_id_ << "] Sent " << bytes_written << " bytes from stream";
+      BOOST_LOG_TRIVIAL(debug) << "[" << peer_id_ << "] Sent " << bytes_written << " bytes from stream (including delimiter)";
     }
 
     return true;
@@ -257,12 +262,16 @@ void TCP_Peer::cleanup_connection() {
 
 // Convenience method to send string message
 bool TCP_Peer::send_message(const std::string& message) {
-  std::istringstream iss(message);
+  std::string delimited_message = message;
+  if (!message.empty() && message.back() != '\n') {
+    delimited_message += '\n';
+  }
+  std::istringstream iss(delimited_message);
   return send_stream(iss);
 }
 
 // Get peer identifier
-  uint8_t TCP_Peer::get_peer_id() const {
+uint8_t TCP_Peer::get_peer_id() const {
   return peer_id_;
 }
 
