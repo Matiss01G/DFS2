@@ -23,6 +23,7 @@ void TCP_Server::set_peer_manager(PeerManager& peer_manager) {
 bool TCP_Server::send_ID(std::shared_ptr<boost::asio::ip::tcp::socket> socket) {
   try {
     // Write ID_ as raw bytes to socket
+    BOOST_LOG_TRIVIAL(debug) << "Starting to send ID";
     boost::asio::write(*socket, boost::asio::buffer(&ID_, sizeof(ID_)));
     BOOST_LOG_TRIVIAL(info) << "Sent ID: " << static_cast<int>(ID_);
     return true;
@@ -49,13 +50,16 @@ uint8_t TCP_Server::read_ID(std::shared_ptr<boost::asio::ip::tcp::socket> socket
 }
 
 bool TCP_Server::initiate_handshake(std::shared_ptr<boost::asio::ip::tcp::socket> socket) {
+  BOOST_LOG_TRIVIAL(debug) << "Initiating handshake request";
   try {
     if (!send_ID(socket)) {
       return false;
     }
+    
     uint8_t peer_id = read_ID(socket);
     // Create peer only after full ID exchange
     if (peer_manager_ && !peer_manager_->has_peer(peer_id)) {
+      BOOST_LOG_TRIVIAL(debug) << "Creating new peer with ID: " << peer_id;
       peer_manager_->create_peer(socket, peer_id);
     }
     return true;
@@ -66,6 +70,7 @@ bool TCP_Server::initiate_handshake(std::shared_ptr<boost::asio::ip::tcp::socket
 }
 
 void TCP_Server::receive_handshake(std::shared_ptr<boost::asio::ip::tcp::socket> socket) {
+  BOOST_LOG_TRIVIAL(debug) << "Receiving handshake request";
   if (!peer_manager_) {
     BOOST_LOG_TRIVIAL(error) << "No PeerManager set";
     socket->close();
@@ -101,9 +106,13 @@ void TCP_Server::receive_handshake(std::shared_ptr<boost::asio::ip::tcp::socket>
 bool TCP_Server::initiate_connection(const std::string& remote_address, uint16_t remote_port,
                                    std::shared_ptr<boost::asio::ip::tcp::socket>& socket) {
   try {
+    BOOST_LOG_TRIVIAL(info) << "Resolving address to endpoints";
+
     // Resolve remote address to endpoints
     boost::asio::ip::tcp::resolver resolver(io_context_);
     auto endpoints = resolver.resolve(remote_address, std::to_string(remote_port));
+
+    BOOST_LOG_TRIVIAL(info) << "Attempting to connect to " << remote_address << ":" << remote_port;
 
     // Connect to the first available endpoint
     boost::asio::connect(*socket, endpoints);
@@ -132,6 +141,8 @@ void TCP_Server::start_accept() {
     return;
   }
 
+  BOOST_LOG_TRIVIAL(debug) << "Creating new socket for incoming connection";
+
   // Create new socket for incoming connection
   auto socket = std::make_shared<boost::asio::ip::tcp::socket>(io_context_);
 
@@ -139,6 +150,7 @@ void TCP_Server::start_accept() {
   acceptor_->async_accept(*socket,
     [this, socket](const boost::system::error_code& error) {
       if (!error) {
+        BOOST_LOG_TRIVIAL(debug) << "Calling receive_handshake for incoming connection";
         receive_handshake(socket);  // Process new connection with handshake
       } else {
         BOOST_LOG_TRIVIAL(error) << "Accept error: " << error.message();
@@ -167,8 +179,10 @@ bool TCP_Server::start_listener() {
     );
 
     // Start accepting connections
+    BOOST_LOG_TRIVIAL(debug) << "Starting to accept connections";
     start_accept();
 
+    BOOST_LOG_TRIVIAL(debug) << "Starting IO context";
     // Start io_context in a separate thread
     is_running_ = true;
     io_thread_ = std::make_unique<std::thread>([this]() {

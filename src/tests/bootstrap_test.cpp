@@ -13,50 +13,35 @@ protected:
 };
 
 TEST_F(BootstrapTest, PeerConnection) {
-    // Set up peer 1 (listening on port 8001)
-    const uint8_t PEER1_ID = 1;
-    const uint16_t PEER1_PORT = 8001;
-    std::vector<std::string> peer1_bootstrap_nodes = {
-        ADDRESS + ":8002"  // Connect to peer 2
-    };
+    const uint8_t PEER1_ID = 1, PEER2_ID = 2;
+    const uint16_t PEER1_PORT = 50001, PEER2_PORT = 50002;
 
-    // Set up peer 2 (listening on port 8002)
-    const uint8_t PEER2_ID = 2;
-    const uint16_t PEER2_PORT = 8002;
-    std::vector<std::string> peer2_bootstrap_nodes = {
-        ADDRESS + ":8001"  // Connect to peer 1
-    };
+    std::vector<std::string> peer1_bootstrap_nodes = {};
+    std::vector<std::string> peer2_bootstrap_nodes = {ADDRESS + ":50001"};
 
-    // Create bootstrap instances
     Bootstrap peer1(ADDRESS, PEER1_PORT, TEST_KEY, PEER1_ID, peer1_bootstrap_nodes);
     Bootstrap peer2(ADDRESS, PEER2_PORT, TEST_KEY, PEER2_ID, peer2_bootstrap_nodes);
 
-    // Start both peers
-    ASSERT_TRUE(peer2.start()) << "Failed to start peer 2";
-    
-    // Allow time for server initialization
-    std::this_thread::sleep_for(std::chrono::seconds(2));
-    
-    ASSERT_TRUE(peer1.start()) << "Failed to start peer 1";
+    std::thread peer1_thread([&peer1]() {
+        ASSERT_TRUE(peer1.start()) << "Failed to start peer 1";
+    });
 
-    // Allow time for connection establishment
     std::this_thread::sleep_for(std::chrono::seconds(2));
 
-    // Get peer managers from both bootstrap instances
+    std::thread peer2_thread([&peer2]() {
+        ASSERT_TRUE(peer2.start()) << "Failed to start peer 2";
+    });
+
+    std::this_thread::sleep_for(std::chrono::seconds(10));
+
     auto& peer1_manager = peer1.get_peer_manager();
     auto& peer2_manager = peer2.get_peer_manager();
 
-    // Verify peer 2 is connected to peer 1
-    ASSERT_TRUE(peer1_manager.has_peer(PEER2_ID)) 
-        << "Peer 1 does not have Peer 2 (ID: " << static_cast<int>(PEER2_ID) << ") in its peer map";
+    ASSERT_TRUE(peer1_manager.has_peer(PEER2_ID));
+    ASSERT_TRUE(peer2_manager.has_peer(PEER1_ID));
+    EXPECT_TRUE(peer1_manager.is_connected(PEER2_ID));
+    EXPECT_TRUE(peer2_manager.is_connected(PEER1_ID));
 
-    // Verify peer 1 is connected to peer 2
-    ASSERT_TRUE(peer2_manager.has_peer(PEER1_ID))
-        << "Peer 2 does not have Peer 1 (ID: " << static_cast<int>(PEER1_ID) << ") in its peer map";
-
-    // Additional connection state verification
-    EXPECT_TRUE(peer1_manager.is_connected(PEER2_ID))
-        << "Peer 1's connection to Peer 2 is not active";
-    EXPECT_TRUE(peer2_manager.is_connected(PEER1_ID))
-        << "Peer 2's connection to Peer 1 is not active";
+    peer1_thread.join();
+    peer2_thread.join();
 }
