@@ -69,19 +69,19 @@ include CMakeFiles/tcp_peer_tests.dir/progress.make
 # Include the compile flags for this target's objects.
 include CMakeFiles/tcp_peer_tests.dir/flags.make
 
-CMakeFiles/tcp_peer_tests.dir/src/tests/tcp_peer_tests.cpp.o: CMakeFiles/tcp_peer_tests.dir/flags.make
-CMakeFiles/tcp_peer_tests.dir/src/tests/tcp_peer_tests.cpp.o: /home/runner/workspace/src/tests/tcp_peer_tests.cpp
-CMakeFiles/tcp_peer_tests.dir/src/tests/tcp_peer_tests.cpp.o: CMakeFiles/tcp_peer_tests.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/workspace/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/tcp_peer_tests.dir/src/tests/tcp_peer_tests.cpp.o"
-	/nix/store/9bv7dcvmfcjnmg5mnqwqlq2wxfn8d7yi-gcc-wrapper-13.2.0/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/tcp_peer_tests.dir/src/tests/tcp_peer_tests.cpp.o -MF CMakeFiles/tcp_peer_tests.dir/src/tests/tcp_peer_tests.cpp.o.d -o CMakeFiles/tcp_peer_tests.dir/src/tests/tcp_peer_tests.cpp.o -c /home/runner/workspace/src/tests/tcp_peer_tests.cpp
+CMakeFiles/tcp_peer_tests.dir/src/tests/tcp_peer_test.cpp.o: CMakeFiles/tcp_peer_tests.dir/flags.make
+CMakeFiles/tcp_peer_tests.dir/src/tests/tcp_peer_test.cpp.o: /home/runner/workspace/src/tests/tcp_peer_test.cpp
+CMakeFiles/tcp_peer_tests.dir/src/tests/tcp_peer_test.cpp.o: CMakeFiles/tcp_peer_tests.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/workspace/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/tcp_peer_tests.dir/src/tests/tcp_peer_test.cpp.o"
+	/nix/store/9bv7dcvmfcjnmg5mnqwqlq2wxfn8d7yi-gcc-wrapper-13.2.0/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/tcp_peer_tests.dir/src/tests/tcp_peer_test.cpp.o -MF CMakeFiles/tcp_peer_tests.dir/src/tests/tcp_peer_test.cpp.o.d -o CMakeFiles/tcp_peer_tests.dir/src/tests/tcp_peer_test.cpp.o -c /home/runner/workspace/src/tests/tcp_peer_test.cpp
 
-CMakeFiles/tcp_peer_tests.dir/src/tests/tcp_peer_tests.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/tcp_peer_tests.dir/src/tests/tcp_peer_tests.cpp.i"
-	/nix/store/9bv7dcvmfcjnmg5mnqwqlq2wxfn8d7yi-gcc-wrapper-13.2.0/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/runner/workspace/src/tests/tcp_peer_tests.cpp > CMakeFiles/tcp_peer_tests.dir/src/tests/tcp_peer_tests.cpp.i
+CMakeFiles/tcp_peer_tests.dir/src/tests/tcp_peer_test.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/tcp_peer_tests.dir/src/tests/tcp_peer_test.cpp.i"
+	/nix/store/9bv7dcvmfcjnmg5mnqwqlq2wxfn8d7yi-gcc-wrapper-13.2.0/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/runner/workspace/src/tests/tcp_peer_test.cpp > CMakeFiles/tcp_peer_tests.dir/src/tests/tcp_peer_test.cpp.i
 
-CMakeFiles/tcp_peer_tests.dir/src/tests/tcp_peer_tests.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/tcp_peer_tests.dir/src/tests/tcp_peer_tests.cpp.s"
-	/nix/store/9bv7dcvmfcjnmg5mnqwqlq2wxfn8d7yi-gcc-wrapper-13.2.0/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/runner/workspace/src/tests/tcp_peer_tests.cpp -o CMakeFiles/tcp_peer_tests.dir/src/tests/tcp_peer_tests.cpp.s
+CMakeFiles/tcp_peer_tests.dir/src/tests/tcp_peer_test.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/tcp_peer_tests.dir/src/tests/tcp_peer_test.cpp.s"
+	/nix/store/9bv7dcvmfcjnmg5mnqwqlq2wxfn8d7yi-gcc-wrapper-13.2.0/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/runner/workspace/src/tests/tcp_peer_test.cpp -o CMakeFiles/tcp_peer_tests.dir/src/tests/tcp_peer_test.cpp.s
 
 CMakeFiles/tcp_peer_tests.dir/src/network/tcp_peer.cpp.o: CMakeFiles/tcp_peer_tests.dir/flags.make
 CMakeFiles/tcp_peer_tests.dir/src/network/tcp_peer.cpp.o: /home/runner/workspace/src/network/tcp_peer.cpp
@@ -99,13 +99,13 @@ CMakeFiles/tcp_peer_tests.dir/src/network/tcp_peer.cpp.s: cmake_force
 
 # Object files for target tcp_peer_tests
 tcp_peer_tests_OBJECTS = \
-"CMakeFiles/tcp_peer_tests.dir/src/tests/tcp_peer_tests.cpp.o" \
+"CMakeFiles/tcp_peer_tests.dir/src/tests/tcp_peer_test.cpp.o" \
 "CMakeFiles/tcp_peer_tests.dir/src/network/tcp_peer.cpp.o"
 
 # External object files for target tcp_peer_tests
 tcp_peer_tests_EXTERNAL_OBJECTS =
 
-tcp_peer_tests: CMakeFiles/tcp_peer_tests.dir/src/tests/tcp_peer_tests.cpp.o
+tcp_peer_tests: CMakeFiles/tcp_peer_tests.dir/src/tests/tcp_peer_test.cpp.o
 tcp_peer_tests: CMakeFiles/tcp_peer_tests.dir/src/network/tcp_peer.cpp.o
 tcp_peer_tests: CMakeFiles/tcp_peer_tests.dir/build.make
 tcp_peer_tests: libdfs_network.a

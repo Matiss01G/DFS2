@@ -5,7 +5,7 @@ modules = ["cpp"]
 channel = "stable-24_05"
 
 [workflows]
-runButton = "Build and Test Project"
+runButton = "Project"
 
 [[workflows.workflow]]
 name = "Project"

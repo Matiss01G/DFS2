@@ -585,29 +585,29 @@ src/tests/store_test.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/store_tests.dir/build.make CMakeFiles/store_tests.dir/src/tests/store_test.cpp.s
 .PHONY : src/tests/store_test.cpp.s
 
-src/tests/tcp_peer_tests.o: src/tests/tcp_peer_tests.cpp.o
-.PHONY : src/tests/tcp_peer_tests.o
+src/tests/tcp_peer_test.o: src/tests/tcp_peer_test.cpp.o
+.PHONY : src/tests/tcp_peer_test.o
 
 # target to build an object file
-src/tests/tcp_peer_tests.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/tcp_peer_tests.dir/build.make CMakeFiles/tcp_peer_tests.dir/src/tests/tcp_peer_tests.cpp.o
-.PHONY : src/tests/tcp_peer_tests.cpp.o
+src/tests/tcp_peer_test.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/tcp_peer_tests.dir/build.make CMakeFiles/tcp_peer_tests.dir/src/tests/tcp_peer_test.cpp.o
+.PHONY : src/tests/tcp_peer_test.cpp.o
 
-src/tests/tcp_peer_tests.i: src/tests/tcp_peer_tests.cpp.i
-.PHONY : src/tests/tcp_peer_tests.i
+src/tests/tcp_peer_test.i: src/tests/tcp_peer_test.cpp.i
+.PHONY : src/tests/tcp_peer_test.i
 
 # target to preprocess a source file
-src/tests/tcp_peer_tests.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/tcp_peer_tests.dir/build.make CMakeFiles/tcp_peer_tests.dir/src/tests/tcp_peer_tests.cpp.i
-.PHONY : src/tests/tcp_peer_tests.cpp.i
+src/tests/tcp_peer_test.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/tcp_peer_tests.dir/build.make CMakeFiles/tcp_peer_tests.dir/src/tests/tcp_peer_test.cpp.i
+.PHONY : src/tests/tcp_peer_test.cpp.i
 
-src/tests/tcp_peer_tests.s: src/tests/tcp_peer_tests.cpp.s
-.PHONY : src/tests/tcp_peer_tests.s
+src/tests/tcp_peer_test.s: src/tests/tcp_peer_test.cpp.s
+.PHONY : src/tests/tcp_peer_test.s
 
 # target to generate assembly for a file
-src/tests/tcp_peer_tests.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/tcp_peer_tests.dir/build.make CMakeFiles/tcp_peer_tests.dir/src/tests/tcp_peer_tests.cpp.s
-.PHONY : src/tests/tcp_peer_tests.cpp.s
+src/tests/tcp_peer_test.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/tcp_peer_tests.dir/build.make CMakeFiles/tcp_peer_tests.dir/src/tests/tcp_peer_test.cpp.s
+.PHONY : src/tests/tcp_peer_test.cpp.s
 
 # Help Target
 help:
@@ -667,9 +667,9 @@ help:
 	@echo "... src/tests/store_test.o"
 	@echo "... src/tests/store_test.i"
 	@echo "... src/tests/store_test.s"
-	@echo "... src/tests/tcp_peer_tests.o"
-	@echo "... src/tests/tcp_peer_tests.i"
-	@echo "... src/tests/tcp_peer_tests.s"
+	@echo "... src/tests/tcp_peer_test.o"
+	@echo "... src/tests/tcp_peer_test.i"
+	@echo "... src/tests/tcp_peer_test.s"
 .PHONY : help
 
 
