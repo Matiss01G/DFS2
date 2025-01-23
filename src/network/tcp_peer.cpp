@@ -190,32 +190,47 @@ bool TCP_Peer::send_stream(std::istream& input_stream, std::size_t buffer_size) 
     std::unique_lock<std::mutex> lock(io_mutex_);
     std::vector<char> buffer(buffer_size);
     boost::system::error_code ec;
+    bool data_sent = false;
 
     // Read and send data in chunks
     while (input_stream.good()) {
       input_stream.read(buffer.data(), buffer_size);
       std::size_t bytes_read = input_stream.gcount();
 
-      if (bytes_read == 0) {
-        break;
+      if (bytes_read > 0) {
+        // Write exact number of bytes read
+        std::size_t bytes_written = boost::asio::write(
+          *socket_,
+          boost::asio::buffer(buffer.data(), bytes_read),
+          boost::asio::transfer_exactly(bytes_read),
+          ec
+        );
+
+        if (ec || bytes_written != bytes_read) {
+          BOOST_LOG_TRIVIAL(error) << "[" << peer_id_ << "] Stream send error: " << ec.message();
+          return false;
+        }
+
+        data_sent = true;
+        BOOST_LOG_TRIVIAL(debug) << "[" << peer_id_ << "] Sent " << bytes_written << " bytes from stream";
       }
-
-      // Write exact number of bytes read
-      std::size_t bytes_written = boost::asio::write(
-        *socket_,
-        boost::asio::buffer(buffer.data(), bytes_read),
-        boost::asio::transfer_exactly(bytes_read),
-        ec
-      );
-
-      if (ec || bytes_written != bytes_read) {
-        BOOST_LOG_TRIVIAL(error) << "[" << peer_id_ << "] Stream send error: " << ec.message();
-        return false;
-      }
-
-      BOOST_LOG_TRIVIAL(debug) << "[" << peer_id_ << "] Sent " << bytes_written << " bytes from stream";
     }
 
+    // Always append newline character for message framing
+    char newline = '\n';
+    std::size_t newline_written = boost::asio::write(
+      *socket_,
+      boost::asio::buffer(&newline, 1),
+      boost::asio::transfer_exactly(1),
+      ec
+    );
+
+    if (ec || newline_written != 1) {
+      BOOST_LOG_TRIVIAL(error) << "[" << peer_id_ << "] Failed to send newline delimiter: " << ec.message();
+      return false;
+    }
+
+    BOOST_LOG_TRIVIAL(debug) << "[" << peer_id_ << "] Sent message delimiter";
     return true;
   } catch (const std::exception& e) {
     BOOST_LOG_TRIVIAL(error) << "[" << peer_id_ << "] Stream send error: " << e.what();
@@ -262,7 +277,7 @@ bool TCP_Peer::send_message(const std::string& message) {
 }
 
 // Get peer identifier
-  uint8_t TCP_Peer::get_peer_id() const {
+uint8_t TCP_Peer::get_peer_id() const {
   return peer_id_;
 }
 
