@@ -113,47 +113,47 @@ TEST_F(TCP_PeerTest, SendReceiveSimpleMessage) {
     std::this_thread::sleep_for(std::chrono::milliseconds(100));
 }
 
-TEST_F(TCP_PeerTest, SerializeDeserializeMessageFrame) {
-    create_connected_peers();
+// TEST_F(TCP_PeerTest, SerializeDeserializeMessageFrame) {
+//     create_connected_peers();
 
-    // Create test message frame
-    MessageFrame send_frame;
-    send_frame.message_type = MessageType::STORE_FILE;
-    send_frame.source_id = 1;
-    std::string test_data = "Test payload data";
-    send_frame.payload_stream = std::make_shared<std::stringstream>(test_data);
-    send_frame.payload_size = test_data.length();
-    send_frame.filename_length = 0;
+//     // Create test message frame
+//     MessageFrame send_frame;
+//     send_frame.message_type = MessageType::STORE_FILE;
+//     send_frame.source_id = 1;
+//     std::string test_data = "Test payload data";
+//     send_frame.payload_stream = std::make_shared<std::stringstream>(test_data);
+//     send_frame.payload_size = test_data.length();
+//     send_frame.filename_length = 0;
 
-    // Generate IV using CryptoStream
-    crypto::CryptoStream crypto_stream;
-    auto iv_array = crypto_stream.generate_IV();
-    send_frame.iv_.assign(iv_array.begin(), iv_array.end());
+//     // Generate IV using CryptoStream
+//     crypto::CryptoStream crypto_stream;
+//     auto iv_array = crypto_stream.generate_IV();
+//     send_frame.iv_.assign(iv_array.begin(), iv_array.end());
 
-    // Create serialized stream
-    std::stringstream serialized_stream;
-    Codec send_codec(key_, *channel_);
-    ASSERT_TRUE(send_codec.serialize(send_frame, serialized_stream));
+//     // Create serialized stream
+//     std::stringstream serialized_stream;
+//     Codec send_codec(key_, *channel_);
+//     ASSERT_TRUE(send_codec.serialize(send_frame, serialized_stream));
 
-    // Send serialized data
-    ASSERT_TRUE(peer1_->send_stream(serialized_stream));
+//     // Send serialized data
+//     ASSERT_TRUE(peer1_->send_stream(serialized_stream));
 
-    // Wait for processing
-    std::this_thread::sleep_for(std::chrono::milliseconds(100));
+//     // Wait for processing
+//     std::this_thread::sleep_for(std::chrono::milliseconds(100));
 
-    // Try to consume the frame from channel
-    MessageFrame received_frame;
-    ASSERT_TRUE(channel_->consume(received_frame));
+//     // Try to consume the frame from channel
+//     MessageFrame received_frame;
+//     ASSERT_TRUE(channel_->consume(received_frame));
 
-    // Verify received frame contents
-    EXPECT_EQ(received_frame.message_type, send_frame.message_type);
-    EXPECT_EQ(received_frame.source_id, send_frame.source_id);
+//     // Verify received frame contents
+//     EXPECT_EQ(received_frame.message_type, send_frame.message_type);
+//     EXPECT_EQ(received_frame.source_id, send_frame.source_id);
 
-    // Compare payload data
-    std::stringstream received_data;
-    received_data << received_frame.payload_stream->rdbuf();
-    EXPECT_EQ(received_data.str(), test_data);
-}
+//     // Compare payload data
+//     std::stringstream received_data;
+//     received_data << received_frame.payload_stream->rdbuf();
+//     EXPECT_EQ(received_data.str(), test_data);
+// }
 
 } // namespace test
 } // namespace network

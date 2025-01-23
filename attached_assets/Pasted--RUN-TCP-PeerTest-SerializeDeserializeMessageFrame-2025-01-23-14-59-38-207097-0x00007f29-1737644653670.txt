@@ -1,0 +1,75 @@
+[ RUN      ] TCP_PeerTest.SerializeDeserializeMessageFrame
+[2025-01-23 14:59:38.207097] [0x00007f29e4042d80] [info]    Initializing Codec with key of size: 32
+[2025-01-23 14:59:38.207106] [0x00007f29e4042d80] [debug]   [] Constructing TCP_Peer
+[2025-01-23 14:59:38.207108] [0x00007f29e4042d80] [debug]   [] Input stream initialized
+[2025-01-23 14:59:38.207128] [0x00007f29e403c6c0] [info]    Initializing Codec with key of size: 32
+[2025-01-23 14:59:38.207141] [0x00007f29e403c6c0] [debug]   [] Constructing TCP_Peer
+[2025-01-23 14:59:38.207151] [0x00007f29e403c6c0] [debug]   [] Input stream initialized
+[2025-01-23 14:59:38.207157] [0x00007f29e403c6c0] [info]    [] TCP_Peer instance created successfully
+[2025-01-23 14:59:38.207171] [0x00007f29e4042d80] [info]    [] TCP_Peer instance created successfully
+[2025-01-23 14:59:38.207190] [0x00007f29e4042d80] [debug]   [] Setting stream processor
+[2025-01-23 14:59:38.207199] [0x00007f29e4042d80] [debug]   [] Stream processor configured
+[2025-01-23 14:59:38.207206] [0x00007f29e4042d80] [debug]   [] Setting stream processor
+[2025-01-23 14:59:38.207213] [0x00007f29e4042d80] [debug]   [] Stream processor configured
+[2025-01-23 14:59:38.207220] [0x00007f29e4042d80] [debug]   [] Attempting to start stream processing
+[2025-01-23 14:59:38.207257] [0x00007f29e4042d80] [info]    [] Stream processing started successfully
+[2025-01-23 14:59:38.207307] [0x00007f29e403c6c0] [debug]   [] Setting up stream processing
+[2025-01-23 14:59:38.207319] [0x00007f29e403c6c0] [trace]   [] Setting up next async read
+[2025-01-23 14:59:38.207327] [0x00007f29e4042d80] [debug]   [] Attempting to start stream processing
+[2025-01-23 14:59:38.207360] [0x00007f29e4042d80] [info]    [] Stream processing started successfully
+[2025-01-23 14:59:38.207370] [0x00007f29e4042d80] [info]    Initializing CryptoStream
+[2025-01-23 14:59:38.207386] [0x00007f29e383b6c0] [debug]   [] Setting up stream processing
+[2025-01-23 14:59:38.207394] [0x00007f29e383b6c0] [trace]   [] Setting up next async read
+[2025-01-23 14:59:38.207551] [0x00007f29e4042d80] [debug]   CryptoStream initialization complete
+[2025-01-23 14:59:38.207559] [0x00007f29e4042d80] [debug]   Generating initialization vector
+[2025-01-23 14:59:38.209157] [0x00007f29e4042d80] [debug]   Successfully generated initialization vector
+[2025-01-23 14:59:38.209168] [0x00007f29e4042d80] [info]    Initializing Codec with key of size: 32
+[2025-01-23 14:59:38.209173] [0x00007f29e4042d80] [info]    Initializing CryptoStream
+[2025-01-23 14:59:38.209175] [0x00007f29e4042d80] [debug]   CryptoStream initialization complete
+[2025-01-23 14:59:38.209179] [0x00007f29e4042d80] [info]    Initializing crypto parameters
+[2025-01-23 14:59:38.209182] [0x00007f29e4042d80] [debug]   Crypto parameters initialized successfully
+[2025-01-23 14:59:38.209185] [0x00007f29e4042d80] [info]    Starting message frame serialization
+[2025-01-23 14:59:38.209192] [0x00007f29e4042d80] [debug]   Writing IV of size: 16
+[2025-01-23 14:59:38.209196] [0x00007f29e4042d80] [debug]   Writing message type: 0
+[2025-01-23 14:59:38.209198] [0x00007f29e4042d80] [debug]   Writing source id: 1
+[2025-01-23 14:59:38.209202] [0x00007f29e4042d80] [debug]   Writing payload size: 17
+[2025-01-23 14:59:38.209208] [0x00007f29e4042d80] [info]    Starting stream encryption
+[2025-01-23 14:59:38.209212] [0x00007f29e4042d80] [debug]   Initializing cipher for encryption
+[2025-01-23 14:59:38.209219] [0x00007f29e4042d80] [debug]   Cipher initialization complete
+[2025-01-23 14:59:38.209226] [0x00007f29e4042d80] [debug]   Writing encrypted filename length
+[2025-01-23 14:59:38.209231] [0x00007f29e4042d80] [debug]   Encrypting and writing payload of size: 17
+[2025-01-23 14:59:38.209232] [0x00007f29e4042d80] [info]    Starting stream encryption
+[2025-01-23 14:59:38.209235] [0x00007f29e4042d80] [debug]   Initializing cipher for encryption
+[2025-01-23 14:59:38.209240] [0x00007f29e4042d80] [debug]   Cipher initialization complete
+[2025-01-23 14:59:38.209242] [0x00007f29e4042d80] [info]    Encrypted message frame serialization complete. Total bytes written: 59
+[2025-01-23 14:59:38.209246] [0x00007f29e4042d80] [debug]   Cleaning up CryptoStream resources
+[2025-01-23 14:59:38.209278] [0x00007f29e4042d80] [debug]   [] Sent 74 bytes from stream
+/home/runner/workspace/src/tests/tcp_peer_test.cpp:146: Failure
+Value of: channel_->consume(received_frame)
+  Actual: false
+Expected: true
+
+[2025-01-23 14:59:38.309413] [0x00007f29e4042d80] [debug]   Cleaning up CryptoStream resources
+[2025-01-23 14:59:38.309435] [0x00007f29e4042d80] [debug]   [] Stopping stream processing
+[2025-01-23 14:59:38.309465] [0x00007f29e403c6c0] [info]    [] Stream processing stopped
+[2025-01-23 14:59:38.309509] [0x00007f29e4042d80] [debug]   [] Processing thread joined
+[2025-01-23 14:59:38.309517] [0x00007f29e4042d80] [info]    [] Stream processing stopped
+[2025-01-23 14:59:38.309520] [0x00007f29e4042d80] [debug]   [] Stopping stream processing
+[2025-01-23 14:59:38.309566] [0x00007f29e383b6c0] [info]    [] Stream processing stopped
+[2025-01-23 14:59:38.309615] [0x00007f29e4042d80] [debug]   [] Processing thread joined
+[2025-01-23 14:59:38.309625] [0x00007f29e4042d80] [info]    [] Stream processing stopped
+[2025-01-23 14:59:38.309703] [0x00007f29e4042d80] [debug]   TCP_Peer destroyed: 
+[2025-01-23 14:59:38.309728] [0x00007f29e4042d80] [debug]   TCP_Peer destroyed: 
+[  FAILED  ] TCP_PeerTest.SerializeDeserializeMessageFrame (103 ms)
+[----------] 3 tests from TCP_PeerTest (206 ms total)
+
+[----------] Global test environment tear-down
+[==========] 3 tests from 1 test suite ran. (206 ms total)
+[  PASSED  ] 2 tests.
+[  FAILED  ] 1 test, listed below:
+[  FAILED  ] TCP_PeerTest.SerializeDeserializeMessageFrame
+
+ 1 FAILED TEST
+make[2]: *** [CMakeFiles/run_tests.dir/build.make:78: CMakeFiles/run_tests] Error 1
+make[1]: *** [CMakeFiles/Makefile2:318: CMakeFiles/run_tests.dir/all] Error 2
+make: *** [Makefile:146: all] Error 2
