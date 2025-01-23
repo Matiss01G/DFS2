@@ -121,6 +121,7 @@ gtest_discover_tests(crypto_tests)
 gtest_discover_tests(store_tests)
 gtest_discover_tests(channel_tests)
 gtest_discover_tests(codec_tests)
+gtest_discover_tests(tcp_peer_tests)
 
 # Add custom target to run tests
 add_custom_target(run_tests ALL
@@ -128,7 +129,8 @@ add_custom_target(run_tests ALL
     COMMAND store_tests
     COMMAND channel_tests
     COMMAND codec_tests
-    DEPENDS crypto_tests store_tests channel_tests codec_tests
+    COMMAND tcp_peer_tests
+    DEPENDS crypto_tests store_tests channel_tests codec_tests tcp_peer_tests
     WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
 )
 
