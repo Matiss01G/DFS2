@@ -263,6 +263,19 @@ codec_tests/fast:
 .PHONY : codec_tests/fast
 
 #=============================================================================
+# Target rules for targets named tcp_peer_tests
+
+# Build rule for target.
+tcp_peer_tests: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 tcp_peer_tests
+.PHONY : tcp_peer_tests
+
+# fast build rule for target.
+tcp_peer_tests/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/tcp_peer_tests.dir/build.make CMakeFiles/tcp_peer_tests.dir/build
+.PHONY : tcp_peer_tests/fast
+
+#=============================================================================
 # Target rules for targets named run_tests
 
 # Build rule for target.
@@ -407,6 +420,7 @@ src/network/tcp_peer.o: src/network/tcp_peer.cpp.o
 # target to build an object file
 src/network/tcp_peer.cpp.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/dfs_network.dir/build.make CMakeFiles/dfs_network.dir/src/network/tcp_peer.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/tcp_peer_tests.dir/build.make CMakeFiles/tcp_peer_tests.dir/src/network/tcp_peer.cpp.o
 .PHONY : src/network/tcp_peer.cpp.o
 
 src/network/tcp_peer.i: src/network/tcp_peer.cpp.i
@@ -415,6 +429,7 @@ src/network/tcp_peer.i: src/network/tcp_peer.cpp.i
 # target to preprocess a source file
 src/network/tcp_peer.cpp.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/dfs_network.dir/build.make CMakeFiles/dfs_network.dir/src/network/tcp_peer.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/tcp_peer_tests.dir/build.make CMakeFiles/tcp_peer_tests.dir/src/network/tcp_peer.cpp.i
 .PHONY : src/network/tcp_peer.cpp.i
 
 src/network/tcp_peer.s: src/network/tcp_peer.cpp.s
@@ -423,6 +438,7 @@ src/network/tcp_peer.s: src/network/tcp_peer.cpp.s
 # target to generate assembly for a file
 src/network/tcp_peer.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/dfs_network.dir/build.make CMakeFiles/dfs_network.dir/src/network/tcp_peer.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/tcp_peer_tests.dir/build.make CMakeFiles/tcp_peer_tests.dir/src/network/tcp_peer.cpp.s
 .PHONY : src/network/tcp_peer.cpp.s
 
 src/network/tcp_server.o: src/network/tcp_server.cpp.o
@@ -569,6 +585,30 @@ src/tests/store_test.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/store_tests.dir/build.make CMakeFiles/store_tests.dir/src/tests/store_test.cpp.s
 .PHONY : src/tests/store_test.cpp.s
 
+src/tests/tcp_peer_tests.o: src/tests/tcp_peer_tests.cpp.o
+.PHONY : src/tests/tcp_peer_tests.o
+
+# target to build an object file
+src/tests/tcp_peer_tests.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/tcp_peer_tests.dir/build.make CMakeFiles/tcp_peer_tests.dir/src/tests/tcp_peer_tests.cpp.o
+.PHONY : src/tests/tcp_peer_tests.cpp.o
+
+src/tests/tcp_peer_tests.i: src/tests/tcp_peer_tests.cpp.i
+.PHONY : src/tests/tcp_peer_tests.i
+
+# target to preprocess a source file
+src/tests/tcp_peer_tests.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/tcp_peer_tests.dir/build.make CMakeFiles/tcp_peer_tests.dir/src/tests/tcp_peer_tests.cpp.i
+.PHONY : src/tests/tcp_peer_tests.cpp.i
+
+src/tests/tcp_peer_tests.s: src/tests/tcp_peer_tests.cpp.s
+.PHONY : src/tests/tcp_peer_tests.s
+
+# target to generate assembly for a file
+src/tests/tcp_peer_tests.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/tcp_peer_tests.dir/build.make CMakeFiles/tcp_peer_tests.dir/src/tests/tcp_peer_tests.cpp.s
+.PHONY : src/tests/tcp_peer_tests.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -590,6 +630,7 @@ help:
 	@echo "... dfs_network"
 	@echo "... dfs_store"
 	@echo "... store_tests"
+	@echo "... tcp_peer_tests"
 	@echo "... src/crypto/crypto_stream.o"
 	@echo "... src/crypto/crypto_stream.i"
 	@echo "... src/crypto/crypto_stream.s"
@@ -626,6 +667,9 @@ help:
 	@echo "... src/tests/store_test.o"
 	@echo "... src/tests/store_test.i"
 	@echo "... src/tests/store_test.s"
+	@echo "... src/tests/tcp_peer_tests.o"
+	@echo "... src/tests/tcp_peer_tests.i"
+	@echo "... src/tests/tcp_peer_tests.s"
 .PHONY : help
 
 
