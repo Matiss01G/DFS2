@@ -138,20 +138,12 @@ TEST_F(TCP_PeerTest, SerializeDeserializeMessageFrame) {
     // Send serialized data
     ASSERT_TRUE(peer1_->send_stream(serialized_stream));
 
-    // Wait for message processing and encryption/decryption
-    std::this_thread::sleep_for(std::chrono::milliseconds(200));
+    // Wait for processing
+    std::this_thread::sleep_for(std::chrono::milliseconds(100));
 
-    // Try to consume the frame from channel, with retry
+    // Try to consume the frame from channel
     MessageFrame received_frame;
-    int retries = 3;
-    bool consumed = false;
-    while (retries-- > 0 && !consumed) {
-        consumed = channel_->consume(received_frame);
-        if (!consumed) {
-            std::this_thread::sleep_for(std::chrono::milliseconds(50));
-        }
-    }
-    ASSERT_TRUE(consumed);
+    ASSERT_TRUE(channel_->consume(received_frame));
 
     // Verify received frame contents
     EXPECT_EQ(received_frame.message_type, send_frame.message_type);
