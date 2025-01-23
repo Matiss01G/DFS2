@@ -34,6 +34,7 @@ add_library(dfs_network
     src/network/peer_manager.cpp
     src/network/tcp_peer.cpp
     src/network/tcp_server.cpp
+    src/network/bootstrap.cpp
     src/file_server/file_server.cpp
 )
 target_include_directories(dfs_network PUBLIC

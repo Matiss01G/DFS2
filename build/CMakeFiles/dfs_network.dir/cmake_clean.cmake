@@ -1,6 +1,8 @@
 file(REMOVE_RECURSE
   "CMakeFiles/dfs_network.dir/src/file_server/file_server.cpp.o"
   "CMakeFiles/dfs_network.dir/src/file_server/file_server.cpp.o.d"
+  "CMakeFiles/dfs_network.dir/src/network/bootstrap.cpp.o"
+  "CMakeFiles/dfs_network.dir/src/network/bootstrap.cpp.o.d"
   "CMakeFiles/dfs_network.dir/src/network/channel.cpp.o"
   "CMakeFiles/dfs_network.dir/src/network/channel.cpp.o.d"
   "CMakeFiles/dfs_network.dir/src/network/codec.cpp.o"

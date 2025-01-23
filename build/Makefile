@@ -336,6 +336,30 @@ src/file_server/file_server.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/dfs_network.dir/build.make CMakeFiles/dfs_network.dir/src/file_server/file_server.cpp.s
 .PHONY : src/file_server/file_server.cpp.s
 
+src/network/bootstrap.o: src/network/bootstrap.cpp.o
+.PHONY : src/network/bootstrap.o
+
+# target to build an object file
+src/network/bootstrap.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/dfs_network.dir/build.make CMakeFiles/dfs_network.dir/src/network/bootstrap.cpp.o
+.PHONY : src/network/bootstrap.cpp.o
+
+src/network/bootstrap.i: src/network/bootstrap.cpp.i
+.PHONY : src/network/bootstrap.i
+
+# target to preprocess a source file
+src/network/bootstrap.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/dfs_network.dir/build.make CMakeFiles/dfs_network.dir/src/network/bootstrap.cpp.i
+.PHONY : src/network/bootstrap.cpp.i
+
+src/network/bootstrap.s: src/network/bootstrap.cpp.s
+.PHONY : src/network/bootstrap.s
+
+# target to generate assembly for a file
+src/network/bootstrap.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/dfs_network.dir/build.make CMakeFiles/dfs_network.dir/src/network/bootstrap.cpp.s
+.PHONY : src/network/bootstrap.cpp.s
+
 src/network/channel.o: src/network/channel.cpp.o
 .PHONY : src/network/channel.o
 
@@ -637,6 +661,9 @@ help:
 	@echo "... src/file_server/file_server.o"
 	@echo "... src/file_server/file_server.i"
 	@echo "... src/file_server/file_server.s"
+	@echo "... src/network/bootstrap.o"
+	@echo "... src/network/bootstrap.i"
+	@echo "... src/network/bootstrap.s"
 	@echo "... src/network/channel.o"
 	@echo "... src/network/channel.i"
 	@echo "... src/network/channel.s"

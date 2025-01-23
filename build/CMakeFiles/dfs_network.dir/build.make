@@ -139,10 +139,24 @@ CMakeFiles/dfs_network.dir/src/network/tcp_server.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/dfs_network.dir/src/network/tcp_server.cpp.s"
 	/nix/store/9bv7dcvmfcjnmg5mnqwqlq2wxfn8d7yi-gcc-wrapper-13.2.0/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/runner/workspace/src/network/tcp_server.cpp -o CMakeFiles/dfs_network.dir/src/network/tcp_server.cpp.s
 
+CMakeFiles/dfs_network.dir/src/network/bootstrap.cpp.o: CMakeFiles/dfs_network.dir/flags.make
+CMakeFiles/dfs_network.dir/src/network/bootstrap.cpp.o: /home/runner/workspace/src/network/bootstrap.cpp
+CMakeFiles/dfs_network.dir/src/network/bootstrap.cpp.o: CMakeFiles/dfs_network.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/workspace/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/dfs_network.dir/src/network/bootstrap.cpp.o"
+	/nix/store/9bv7dcvmfcjnmg5mnqwqlq2wxfn8d7yi-gcc-wrapper-13.2.0/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/dfs_network.dir/src/network/bootstrap.cpp.o -MF CMakeFiles/dfs_network.dir/src/network/bootstrap.cpp.o.d -o CMakeFiles/dfs_network.dir/src/network/bootstrap.cpp.o -c /home/runner/workspace/src/network/bootstrap.cpp
+
+CMakeFiles/dfs_network.dir/src/network/bootstrap.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/dfs_network.dir/src/network/bootstrap.cpp.i"
+	/nix/store/9bv7dcvmfcjnmg5mnqwqlq2wxfn8d7yi-gcc-wrapper-13.2.0/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/runner/workspace/src/network/bootstrap.cpp > CMakeFiles/dfs_network.dir/src/network/bootstrap.cpp.i
+
+CMakeFiles/dfs_network.dir/src/network/bootstrap.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/dfs_network.dir/src/network/bootstrap.cpp.s"
+	/nix/store/9bv7dcvmfcjnmg5mnqwqlq2wxfn8d7yi-gcc-wrapper-13.2.0/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/runner/workspace/src/network/bootstrap.cpp -o CMakeFiles/dfs_network.dir/src/network/bootstrap.cpp.s
+
 CMakeFiles/dfs_network.dir/src/file_server/file_server.cpp.o: CMakeFiles/dfs_network.dir/flags.make
 CMakeFiles/dfs_network.dir/src/file_server/file_server.cpp.o: /home/runner/workspace/src/file_server/file_server.cpp
 CMakeFiles/dfs_network.dir/src/file_server/file_server.cpp.o: CMakeFiles/dfs_network.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/workspace/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/dfs_network.dir/src/file_server/file_server.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/workspace/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/dfs_network.dir/src/file_server/file_server.cpp.o"
 	/nix/store/9bv7dcvmfcjnmg5mnqwqlq2wxfn8d7yi-gcc-wrapper-13.2.0/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/dfs_network.dir/src/file_server/file_server.cpp.o -MF CMakeFiles/dfs_network.dir/src/file_server/file_server.cpp.o.d -o CMakeFiles/dfs_network.dir/src/file_server/file_server.cpp.o -c /home/runner/workspace/src/file_server/file_server.cpp
 
 CMakeFiles/dfs_network.dir/src/file_server/file_server.cpp.i: cmake_force
@@ -160,6 +174,7 @@ dfs_network_OBJECTS = \
 "CMakeFiles/dfs_network.dir/src/network/peer_manager.cpp.o" \
 "CMakeFiles/dfs_network.dir/src/network/tcp_peer.cpp.o" \
 "CMakeFiles/dfs_network.dir/src/network/tcp_server.cpp.o" \
+"CMakeFiles/dfs_network.dir/src/network/bootstrap.cpp.o" \
 "CMakeFiles/dfs_network.dir/src/file_server/file_server.cpp.o"
 
 # External object files for target dfs_network
@@ -170,10 +185,11 @@ libdfs_network.a: CMakeFiles/dfs_network.dir/src/network/codec.cpp.o
 libdfs_network.a: CMakeFiles/dfs_network.dir/src/network/peer_manager.cpp.o
 libdfs_network.a: CMakeFiles/dfs_network.dir/src/network/tcp_peer.cpp.o
 libdfs_network.a: CMakeFiles/dfs_network.dir/src/network/tcp_server.cpp.o
+libdfs_network.a: CMakeFiles/dfs_network.dir/src/network/bootstrap.cpp.o
 libdfs_network.a: CMakeFiles/dfs_network.dir/src/file_server/file_server.cpp.o
 libdfs_network.a: CMakeFiles/dfs_network.dir/build.make
 libdfs_network.a: CMakeFiles/dfs_network.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/runner/workspace/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Linking CXX static library libdfs_network.a"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/runner/workspace/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Linking CXX static library libdfs_network.a"
 	$(CMAKE_COMMAND) -P CMakeFiles/dfs_network.dir/cmake_clean_target.cmake
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/dfs_network.dir/link.txt --verbose=$(VERBOSE)
 

@@ -6,8 +6,8 @@
 namespace dfs {
 namespace network {
 
-TCP_Server::TCP_Server(const uint16_t port, const std::string& address, const uint8_t ID, PeerManager& peer_manager)
-  : peer_manager_(peer_manager)
+TCP_Server::TCP_Server(const uint16_t port, const std::string& address, const uint8_t ID)
+  : peer_manager_(nullptr)
   , is_running_(false)
   , port_(port)
   , address_(address)
@@ -15,6 +15,10 @@ TCP_Server::TCP_Server(const uint16_t port, const std::string& address, const ui
   BOOST_LOG_TRIVIAL(info) << "Initializing TCP server " << ID << " on " << address << ":" << port;
 }
 
+void TCP_Server::set_peer_manager(PeerManager& peer_manager) {
+  peer_manager_ = &peer_manager;
+  BOOST_LOG_TRIVIAL(info) << "PeerManager set for TCP server " << ID_;
+}
 
 bool TCP_Server::send_ID(std::shared_ptr<boost::asio::ip::tcp::socket> socket) {
   try {
@@ -29,7 +33,6 @@ bool TCP_Server::send_ID(std::shared_ptr<boost::asio::ip::tcp::socket> socket) {
   }
 }
 
-  
 uint8_t TCP_Server::read_ID(std::shared_ptr<boost::asio::ip::tcp::socket> socket) {
   uint8_t peer_id;
   try {
@@ -44,8 +47,6 @@ uint8_t TCP_Server::read_ID(std::shared_ptr<boost::asio::ip::tcp::socket> socket
   }
 }
 
-  
-// Initiates connection and performs ID exchange with remote server
 bool TCP_Server::initiate_handshake(std::shared_ptr<boost::asio::ip::tcp::socket> socket) {
   try {
     if (!send_ID(socket)) {
@@ -58,28 +59,31 @@ bool TCP_Server::initiate_handshake(std::shared_ptr<boost::asio::ip::tcp::socket
   }
 }
 
-  
-// Handles incoming connection by performing ID exchange and peer creation
 void TCP_Server::receive_handshake(std::shared_ptr<boost::asio::ip::tcp::socket> socket) {
+  if (!peer_manager_) {
+    BOOST_LOG_TRIVIAL(error) << "No PeerManager set, cannot handle incoming connection";
+    socket->close();
+    return;
+  }
+
   try {
     // Read remote server's ID
     uint8_t peer_id = read_ID(socket);
 
     // Check if we already have this peer
-    if (peer_manager_.has_peer(peer_id)) {
+    if (peer_manager_->has_peer(peer_id)) {
       BOOST_LOG_TRIVIAL(warning) << "Peer " << peer_id << " already exists, terminating connection";
       socket->close();
     }
 
     // Create new peer with the received ID
-    peer_manager_.create_peer(socket, peer_id);
+    peer_manager_->create_peer(socket, peer_id);
   }
   catch (const std::exception& e) {
     BOOST_LOG_TRIVIAL(error) << "Handshake failed: " << e.what();
     socket->close();
   }
 }
-
 
 bool TCP_Server::initiate_connection(const std::string& remote_address, uint16_t remote_port,
                                    std::shared_ptr<boost::asio::ip::tcp::socket>& socket) {
@@ -100,7 +104,6 @@ bool TCP_Server::initiate_connection(const std::string& remote_address, uint16_t
   }
 }
 
-  
 bool TCP_Server::connect(const std::string& remote_address, uint16_t remote_port) {
   auto socket = std::make_shared<boost::asio::ip::tcp::socket>(io_context_);
 
@@ -111,7 +114,6 @@ bool TCP_Server::connect(const std::string& remote_address, uint16_t remote_port
   return initiate_handshake(socket);
 }
 
-  
 void TCP_Server::start_accept() {
   if (!acceptor_ || !is_running_) {
     return;
@@ -131,7 +133,6 @@ void TCP_Server::start_accept() {
       start_accept();  // Continue accepting new connections
     });
 }
-
 
 bool TCP_Server::start_listener() {
   if (is_running_) {
@@ -175,7 +176,6 @@ bool TCP_Server::start_listener() {
   }
 }
 
-  
 void TCP_Server::shutdown() {
   if (!is_running_) {
     return;
