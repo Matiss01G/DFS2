@@ -12,9 +12,9 @@ TCP_Peer::TCP_Peer(uint8_t peer_id, Channel& channel, const std::vector<uint8_t>
   input_buffer_(std::make_unique<boost::asio::streambuf>()),
   codec_(std::make_unique<Codec>(key, channel)) {  
   initialize_streams();
-  BOOST_LOG_TRIVIAL(debug) << "[" << peer_id_ << "] Constructing TCP_Peer";
-  BOOST_LOG_TRIVIAL(debug) << "[" << peer_id_ << "] Input stream initialized";
-  BOOST_LOG_TRIVIAL(info) << "[" << peer_id_ << "] TCP_Peer instance created successfully";
+  BOOST_LOG_TRIVIAL(debug) << "Constructing TCP_Peer";
+  BOOST_LOG_TRIVIAL(debug) << "Input stream initialized";
+  BOOST_LOG_TRIVIAL(info) << "TCP_Peer instance created successfully";
 }
 
 // Cleanup connection and resources on destruction
