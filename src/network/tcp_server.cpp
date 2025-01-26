@@ -180,13 +180,14 @@ bool TCP_Server::start_listener() {
       endpoint
     );
 
+    is_running_ = true;
+
     // Start accepting connections
     BOOST_LOG_TRIVIAL(debug) << "Starting to accept connections";
     start_accept();
 
     BOOST_LOG_TRIVIAL(debug) << "Starting IO context";
     // Start io_context in a separate thread
-    is_running_ = true;
     io_thread_ = std::make_unique<std::thread>([this]() {
       try {
         boost::asio::io_context::work work(io_context_);

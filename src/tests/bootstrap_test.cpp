@@ -14,10 +14,10 @@ protected:
 
 TEST_F(BootstrapTest, PeerConnection) {
     const uint8_t PEER1_ID = 1, PEER2_ID = 2;
-    const uint16_t PEER1_PORT = 50001, PEER2_PORT = 50002;
+    const uint16_t PEER1_PORT = 3001, PEER2_PORT = 3002;
 
     std::vector<std::string> peer1_bootstrap_nodes = {};
-    std::vector<std::string> peer2_bootstrap_nodes = {ADDRESS + ":50001"};
+    std::vector<std::string> peer2_bootstrap_nodes = {ADDRESS + ":3001"};
 
     Bootstrap peer1(ADDRESS, PEER1_PORT, TEST_KEY, PEER1_ID, peer1_bootstrap_nodes);
     Bootstrap peer2(ADDRESS, PEER2_PORT, TEST_KEY, PEER2_ID, peer2_bootstrap_nodes);
@@ -26,7 +26,7 @@ TEST_F(BootstrapTest, PeerConnection) {
         ASSERT_TRUE(peer1.start()) << "Failed to start peer 1";
     });
 
-    std::this_thread::sleep_for(std::chrono::seconds(2));
+    std::this_thread::sleep_for(std::chrono::seconds(10));
 
     std::thread peer2_thread([&peer2]() {
         ASSERT_TRUE(peer2.start()) << "Failed to start peer 2";
