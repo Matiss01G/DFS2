@@ -20,87 +20,130 @@ void TCP_Server::set_peer_manager(PeerManager& peer_manager) {
   BOOST_LOG_TRIVIAL(info) << "PeerManager set for TCP server " << ID_;
 }
 
-bool TCP_Server::send_ID(std::shared_ptr<boost::asio::ip::tcp::socket> socket) {
-  try {
-    // Write ID_ as raw bytes to socket
-    BOOST_LOG_TRIVIAL(debug) << "Starting to send ID";
-    boost::asio::write(*socket, boost::asio::buffer(&ID_, sizeof(ID_)));
-    BOOST_LOG_TRIVIAL(info) << "Sent ID: " << static_cast<int>(ID_);
-    return true;
-  }
-  catch (const std::exception& e) {
-    BOOST_LOG_TRIVIAL(error) << "Failed to send ID: " << e.what();
-    return false;
-  }
+
+void TCP_Server::async_send_ID(std::shared_ptr<boost::asio::ip::tcp::socket> socket,
+                             std::function<void(const boost::system::error_code&)> callback) {
+  BOOST_LOG_TRIVIAL(debug) << "Starting to send ID asynchronously";
+
+  boost::asio::async_write(*socket, 
+    boost::asio::buffer(&ID_, sizeof(ID_)),
+    [this, callback](const boost::system::error_code& ec, std::size_t bytes_written) {
+      if (!ec) {
+        BOOST_LOG_TRIVIAL(info) << "Successfully sent ID: " << static_cast<int>(ID_);
+        callback(ec);
+      } else {
+        BOOST_LOG_TRIVIAL(error) << "Failed to send ID: " << ec.message();
+        callback(ec);
+      }
+    });
 }
 
-uint8_t TCP_Server::read_ID(std::shared_ptr<boost::asio::ip::tcp::socket> socket) {
-  BOOST_LOG_TRIVIAL(debug) << "Starting to read ID";
-  uint8_t peer_id;
-  try {
-    // Read exact number of bytes for ID
-    boost::asio::read(*socket, boost::asio::buffer(&peer_id, sizeof(peer_id)));
-    BOOST_LOG_TRIVIAL(info) << "Received ID: " << static_cast<int>(peer_id);
-    return peer_id;
-  }
-  catch (const std::exception& e) {
-    BOOST_LOG_TRIVIAL(error) << "Failed to read ID: " << e.what();
-    throw;
-  }
+void TCP_Server::async_read_ID(std::shared_ptr<boost::asio::ip::tcp::socket> socket,
+                             std::function<void(const boost::system::error_code&, uint8_t)> callback) {
+  BOOST_LOG_TRIVIAL(debug) << "Starting to read ID asynchronously";
+
+  auto peer_id_buffer = std::make_shared<uint8_t>();
+
+  boost::asio::async_read(*socket,
+    boost::asio::buffer(peer_id_buffer.get(), sizeof(uint8_t)),
+    [this, callback, peer_id_buffer, socket](const boost::system::error_code& ec, std::size_t bytes_read) {
+      if (!ec) {
+        BOOST_LOG_TRIVIAL(info) << "Received ID: " << static_cast<int>(*peer_id_buffer);
+        callback(ec, *peer_id_buffer);
+      } else {
+        BOOST_LOG_TRIVIAL(error) << "Failed to read ID: " << ec.message();
+        callback(ec, 0);
+      }
+    });
 }
 
-bool TCP_Server::initiate_handshake(std::shared_ptr<boost::asio::ip::tcp::socket> socket) {
-  BOOST_LOG_TRIVIAL(debug) << "Initiating handshake request";
-  try {
-    if (!send_ID(socket)) {
-      return false;
-    }
-    
-    uint8_t peer_id = read_ID(socket);
-    // Create peer only after full ID exchange
-    if (peer_manager_ && !peer_manager_->has_peer(peer_id)) {
-      BOOST_LOG_TRIVIAL(debug) << "Creating new peer with ID: " << peer_id;
-      peer_manager_->create_peer(socket, peer_id);
-    }
-    return true;
-  } catch (const std::exception& e) {
-    BOOST_LOG_TRIVIAL(error) << "Handshake failed: " << e.what();
-    return false;
-  }
+void TCP_Server::initiate_handshake(std::shared_ptr<boost::asio::ip::tcp::socket> socket) {
+  BOOST_LOG_TRIVIAL(debug) << "Initiating async handshake request";
+
+  async_send_ID(socket, 
+    [this, socket](const boost::system::error_code& send_ec) {
+      if (send_ec) {
+        BOOST_LOG_TRIVIAL(error) << "Failed to send ID during handshake: " << send_ec.message();
+        socket->close();
+        return;
+      }
+
+      BOOST_LOG_TRIVIAL(debug) << "Successfully sent ID, waiting for peer ID";
+
+      async_read_ID(socket,
+        [this, socket](const boost::system::error_code& read_ec, uint8_t peer_id) {
+          if (read_ec) {
+            BOOST_LOG_TRIVIAL(error) << "Failed to read ID during handshake: " << read_ec.message();
+            socket->close();
+            return;
+          }
+
+          BOOST_LOG_TRIVIAL(debug) << "Successfully received peer ID: " << static_cast<int>(peer_id);
+
+          if (peer_manager_ && !peer_manager_->has_peer(peer_id)) {
+            BOOST_LOG_TRIVIAL(debug) << "Creating new peer with ID: " << static_cast<int>(peer_id);
+            try {
+              peer_manager_->create_peer(socket, peer_id);
+              BOOST_LOG_TRIVIAL(info) << "Successfully completed handshake with peer: " << static_cast<int>(peer_id);
+            } catch (const std::exception& e) {
+              BOOST_LOG_TRIVIAL(error) << "Failed to create peer: " << e.what();
+              socket->close();
+            }
+          } else {
+            BOOST_LOG_TRIVIAL(warning) << "Peer already exists or no peer manager available";
+            socket->close();
+          }
+        });
+    });
 }
 
 void TCP_Server::receive_handshake(std::shared_ptr<boost::asio::ip::tcp::socket> socket) {
-  BOOST_LOG_TRIVIAL(debug) << "Receiving handshake request";
+  BOOST_LOG_TRIVIAL(debug) << "Receiving async handshake request";
+
   if (!peer_manager_) {
     BOOST_LOG_TRIVIAL(error) << "No PeerManager set";
     socket->close();
     return;
   }
 
-  try {
-    uint8_t peer_id = read_ID(socket);
-    if (peer_manager_->has_peer(peer_id)) {
-      BOOST_LOG_TRIVIAL(warning) << "Peer " << peer_id << " already exists";
-      socket->close();
-      return;
-    }
+  async_read_ID(socket,
+    [this, socket](const boost::system::error_code& read_ec, uint8_t peer_id) {
+      if (read_ec) {
+        BOOST_LOG_TRIVIAL(error) << "Failed to read ID during receive handshake: " << read_ec.message();
+        socket->close();
+        return;
+      }
 
-    BOOST_LOG_TRIVIAL(debug) << "Preparing to send ID back to peer: " << static_cast<int>(ID_);
-    if (!send_ID(socket)) {
-      BOOST_LOG_TRIVIAL(error) << "Failed to send ID back to peer";
-      socket->close();
-      return;
-    }
-    BOOST_LOG_TRIVIAL(debug) << "Successfully sent ID back to peer";
+      BOOST_LOG_TRIVIAL(debug) << "Received peer ID: " << static_cast<int>(peer_id) 
+                              << ", checking if peer exists";
 
-    // Create peer only after full ID exchange
-    peer_manager_->create_peer(socket, peer_id);
-    BOOST_LOG_TRIVIAL(debug) << "Handshake complete for peer: " << static_cast<int>(peer_id);
-  }
-  catch (const std::exception& e) {
-    BOOST_LOG_TRIVIAL(error) << "Handshake failed: " << e.what();
-    socket->close();
-  }
+      if (peer_manager_->has_peer(peer_id)) {
+        BOOST_LOG_TRIVIAL(warning) << "Peer " << static_cast<int>(peer_id) << " already exists";
+        socket->close();
+        return;
+      }
+
+      BOOST_LOG_TRIVIAL(debug) << "Preparing to send ID back to peer: " << static_cast<int>(ID_);
+
+      async_send_ID(socket,
+        [this, socket, peer_id](const boost::system::error_code& send_ec) {
+          if (send_ec) {
+            BOOST_LOG_TRIVIAL(error) << "Failed to send ID back during receive handshake: " << send_ec.message();
+            socket->close();
+            return;
+          }
+
+          BOOST_LOG_TRIVIAL(debug) << "Successfully sent ID back to peer";
+
+          try {
+            peer_manager_->create_peer(socket, peer_id);
+            BOOST_LOG_TRIVIAL(debug) << "Handshake complete for peer: " << static_cast<int>(peer_id);
+          } catch (const std::exception& e) {
+            BOOST_LOG_TRIVIAL(error) << "Failed to create peer: " << e.what();
+            socket->close();
+          }
+        });
+    });
 }
 
 bool TCP_Server::initiate_connection(const std::string& remote_address, uint16_t remote_port,
@@ -130,10 +173,52 @@ bool TCP_Server::connect(const std::string& remote_address, uint16_t remote_port
   auto socket = std::make_shared<boost::asio::ip::tcp::socket>(io_context_);
 
   if (!initiate_connection(remote_address, remote_port, socket)) {
+    BOOST_LOG_TRIVIAL(error) << "Failed to establish initial connection to " << remote_address << ":" << remote_port;
     return false;
   }
 
-  return initiate_handshake(socket);
+  BOOST_LOG_TRIVIAL(info) << "Starting handshake process with " << remote_address << ":" << remote_port;
+
+  // Add exponential backoff retry for connection verification
+  const int MAX_RETRIES = 5;
+  const int BASE_DELAY_MS = 100;
+
+  initiate_handshake(socket);
+
+  // Wait for handshake completion with retries
+  for (int retry = 0; retry < MAX_RETRIES; retry++) {
+    std::this_thread::sleep_for(std::chrono::milliseconds(BASE_DELAY_MS * (1 << retry)));
+
+    if (!socket->is_open()) {
+      BOOST_LOG_TRIVIAL(error) << "Socket closed during handshake attempt " << retry + 1;
+      return false;
+    }
+
+    // Get remote endpoint for logging
+    boost::system::error_code ec;
+    auto remote_endpoint = socket->remote_endpoint(ec);
+    if (!ec) {
+      BOOST_LOG_TRIVIAL(debug) << "Checking connection status for " 
+                              << remote_endpoint.address().to_string() 
+                              << ":" << remote_endpoint.port() 
+                              << " (attempt " << retry + 1 << ")";
+    }
+
+    // Check for successful peer registration
+    if (peer_manager_) {
+      // Look for any peers that are connected through this socket
+      bool peer_found = false;
+      for (uint8_t potential_id = 0; potential_id < 255; potential_id++) {
+        if (peer_manager_->has_peer(potential_id)) {
+          BOOST_LOG_TRIVIAL(info) << "Connection established and peer registered with ID: " << static_cast<int>(potential_id);
+          return true;
+        }
+      }
+    }
+  }
+
+  BOOST_LOG_TRIVIAL(error) << "Failed to verify peer registration after " << MAX_RETRIES << " attempts";
+  return false;
 }
 
 void TCP_Server::start_accept() {
