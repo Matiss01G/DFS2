@@ -166,12 +166,14 @@ bool TCP_Server::start_listener() {
   }
 
   try {
+    BOOST_LOG_TRIVIAL(debug) << "Endpoint created";
     // Create endpoint
     boost::asio::ip::tcp::endpoint endpoint(
       boost::asio::ip::make_address(address_),
       port_
     );
 
+    BOOST_LOG_TRIVIAL(debug) << "Acceptor created";
     // Create acceptor
     acceptor_ = std::make_unique<boost::asio::ip::tcp::acceptor>(
       io_context_,
