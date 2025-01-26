@@ -4,8 +4,6 @@
 #include <boost/log/trivial.hpp>
 #include <memory>
 #include <string>
-#include <functional>
-#include <boost/system/error_code.hpp>
 #include "network/peer_manager.hpp"
 
 namespace dfs {
@@ -23,7 +21,7 @@ public:
   bool start_listener();
   void shutdown();
 
-  // Establishes connection to remote host
+  // Establishes connection to remove host
   bool connect(const std::string& remote_address, uint16_t remote_port);
 
   // Sets the peer manager after construction
@@ -37,15 +35,11 @@ private:
   bool initiate_connection(const std::string& remote_address, uint16_t remote_port, 
   std::shared_ptr<boost::asio::ip::tcp::socket>& socket);
 
-  // Async handshaking methods
-  void initiate_handshake(std::shared_ptr<boost::asio::ip::tcp::socket> socket);
+  // Handshaking methods
+  bool initiate_handshake(std::shared_ptr<boost::asio::ip::tcp::socket> socket);
   void receive_handshake(std::shared_ptr<boost::asio::ip::tcp::socket> socket);
-
-  // Async ID exchange methods
-  void async_send_ID(std::shared_ptr<boost::asio::ip::tcp::socket> socket,
-                    std::function<void(const boost::system::error_code&)> callback);
-  void async_read_ID(std::shared_ptr<boost::asio::ip::tcp::socket> socket,
-                    std::function<void(const boost::system::error_code&, uint8_t)> callback);
+  bool send_ID(std::shared_ptr<boost::asio::ip::tcp::socket> socket);
+  uint8_t read_ID(std::shared_ptr<boost::asio::ip::tcp::socket> socket);
 
   // Parameters
   boost::asio::io_context io_context_;
