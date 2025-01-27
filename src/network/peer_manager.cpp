@@ -46,11 +46,11 @@ void PeerManager::create_peer(std::shared_ptr<boost::asio::ip::tcp::socket> sock
 
     // Start stream processing
     if (!peer->start_stream_processing()) {
-    BOOST_LOG_TRIVIAL(error) << "Failed to start stream processing for peer: " << peer_id;
+    BOOST_LOG_TRIVIAL(error) << "Failed to start stream processing for peer: " << static_cast<int>(peer_id);
     return;
     }
 
-    BOOST_LOG_TRIVIAL(info) << "Accepted and initialized new connection from " << peer_id;
+    BOOST_LOG_TRIVIAL(info) << "Accepted and initialized new connection from peer: " << static_cast<int>(peer_id);
   } catch (const std::exception& e) {
     BOOST_LOG_TRIVIAL(error) << "Error handling new connection: " << e.what();
   }
@@ -68,14 +68,14 @@ void PeerManager::add_peer(std::shared_ptr<TCP_Peer> peer) {
   uint8_t peer_id = peer->get_peer_id();
 
   if (has_peer(peer_id)) {
-    BOOST_LOG_TRIVIAL(warning) << "Peer with ID " << peer_id << " already exists";
+    BOOST_LOG_TRIVIAL(warning) << "Peer with ID " << static_cast<int>(peer_id) << " already exists";
     return;
   }
 
   std::lock_guard<std::mutex> lock(mutex_);
 
   peers_[peer_id] = peer;
-  BOOST_LOG_TRIVIAL(info) << "Added peer with ID: " << peer_id;
+  BOOST_LOG_TRIVIAL(info) << "Added peer with ID: " << static_cast<int>(peer_id);
 }
 
 void PeerManager::remove_peer(uint8_t peer_id) {
@@ -85,9 +85,9 @@ void PeerManager::remove_peer(uint8_t peer_id) {
   if (it != peers_.end()) {
     disconnect(peer_id);
     peers_.erase(it);
-    BOOST_LOG_TRIVIAL(info) << "Removed peer with ID: " << peer_id;
+    BOOST_LOG_TRIVIAL(info) << "Removed peer with ID: " << static_cast<int>(peer_id);
   } else {
-    BOOST_LOG_TRIVIAL(warning) << "Attempted to remove non-existent peer: " << peer_id;
+    BOOST_LOG_TRIVIAL(warning) << "Attempted to remove non-existent peer: " << static_cast<int>(peer_id);
   }
 }
 
@@ -96,7 +96,7 @@ bool PeerManager::disconnect(uint8_t peer_id) {
 
   auto it = peers_.find(peer_id);
   if (it == peers_.end()) {
-    BOOST_LOG_TRIVIAL(warning) << "Cannot disconnect - peer not found: " << peer_id;
+    BOOST_LOG_TRIVIAL(warning) << "Cannot disconnect - peer not found: " << static_cast<int>(peer_id);
     return false;
   }
 
@@ -104,11 +104,11 @@ bool PeerManager::disconnect(uint8_t peer_id) {
     auto& peer = it->second;
     peer->stop_stream_processing();
     peer->cleanup_connection();
-    BOOST_LOG_TRIVIAL(info) << "Successfully disconnected peer: " << peer_id;
+    BOOST_LOG_TRIVIAL(info) << "Successfully disconnected peer: " << static_cast<int>(peer_id);
     return true;
   }
   catch (const std::exception& e) {
-    BOOST_LOG_TRIVIAL(error) << "Disconnect error for peer " << peer_id 
+    BOOST_LOG_TRIVIAL(error) << "Disconnect error for peer " << static_cast<int>(peer_id) 
                 << ": " << e.what();
     return false;
   }
@@ -190,7 +190,7 @@ bool PeerManager::broadcast_stream(std::istream& input_stream) {
 
 bool PeerManager::send_to_peer(uint8_t peer_id, std::istream& stream) {
   if (!stream.good()) {
-    BOOST_LOG_TRIVIAL(error) << "Invalid input stream provided for peer_id: " << peer_id;
+    BOOST_LOG_TRIVIAL(error) << "Invalid input stream provided for peer_id: " << static_cast<int>(peer_id);
     return false;
   }
 
@@ -198,25 +198,25 @@ bool PeerManager::send_to_peer(uint8_t peer_id, std::istream& stream) {
 
   auto it = peers_.find(peer_id);
   if (it == peers_.end()) {
-    BOOST_LOG_TRIVIAL(warning) << "Peer not found with ID: " << peer_id;
+    BOOST_LOG_TRIVIAL(warning) << "Peer not found with ID: " << static_cast<int>(peer_id);
     return false;
   }
 
   if (!is_connected(peer_id)) {
-    BOOST_LOG_TRIVIAL(warning) << "Peer is not connected: " << peer_id;
+    BOOST_LOG_TRIVIAL(warning) << "Peer is not connected: " << static_cast<int>(peer_id);
     return false;
   }
 
   try {
     bool success = it->second->send_stream(stream);
     if (success) {
-      BOOST_LOG_TRIVIAL(debug) << "Successfully sent stream to peer: " << peer_id;
+      BOOST_LOG_TRIVIAL(debug) << "Successfully sent stream to peer: " << static_cast<int>(peer_id);
     } else {
-      BOOST_LOG_TRIVIAL(error) << "Failed to send stream to peer: " << peer_id;
+      BOOST_LOG_TRIVIAL(error) << "Failed to send stream to peer: " << static_cast<int>(peer_id);
     }
     return success;
   } catch (const std::exception& e) {
-    BOOST_LOG_TRIVIAL(error) << "Exception while sending to peer " << peer_id 
+    BOOST_LOG_TRIVIAL(error) << "Exception while sending to peer " << static_cast<int>(peer_id) 
                 << ": " << e.what();
     return false;
   }

@@ -160,7 +160,7 @@ bool FileServer::prepare_and_send(const std::string& filename, MessageType messa
     // Send the serialized data
     bool send_success;
     if (peer_id) {
-      BOOST_LOG_TRIVIAL(debug) << "Sending file to peer: " << *peer_id;
+      BOOST_LOG_TRIVIAL(debug) << "Sending file to peer: " << static_cast<int>(*peer_id);
       send_success = peer_manager_.send_to_peer(*peer_id, serialized_stream);
     } else {
       BOOST_LOG_TRIVIAL(debug) << "Broadcasting file to all peers";

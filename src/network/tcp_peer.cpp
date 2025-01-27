@@ -20,7 +20,7 @@ TCP_Peer::TCP_Peer(uint8_t peer_id, Channel& channel, const std::vector<uint8_t>
 // Cleanup connection and resources on destruction
 TCP_Peer::~TCP_Peer() {
   cleanup_connection();
-  BOOST_LOG_TRIVIAL(debug) << "TCP_Peer destroyed: " << peer_id_;
+  BOOST_LOG_TRIVIAL(debug) << "TCP_Peer destroyed: " << static_cast<int>(peer_id_);
 }
 
 // Initialize input stream buffer for receiving data
@@ -38,35 +38,35 @@ std::istream* TCP_Peer::get_input_stream() {
 
 // Set callback function for processing received data streams
 void TCP_Peer::set_stream_processor(StreamProcessor processor) {
-  BOOST_LOG_TRIVIAL(debug) << "[" << peer_id_ << "] Setting stream processor";
+  BOOST_LOG_TRIVIAL(debug) << "Setting stream processor";
   stream_processor_ = std::move(processor);
-  BOOST_LOG_TRIVIAL(debug) << "[" << peer_id_ << "] Stream processor configured";
+  BOOST_LOG_TRIVIAL(debug) << "Stream processor configured";
 }
 
 // Start asynchronous stream processing if socket is connected and processor is set
 bool TCP_Peer::start_stream_processing() {
-  BOOST_LOG_TRIVIAL(debug) << "[" << peer_id_ << "] Attempting to start stream processing";
+  BOOST_LOG_TRIVIAL(debug) << "Attempting to start stream processing";
 
   if (!socket_->is_open() || !stream_processor_) {
-    BOOST_LOG_TRIVIAL(error) << "[" << peer_id_ << "] Cannot start processing - socket not connected or no processor set";
+    BOOST_LOG_TRIVIAL(error) << "Cannot start processing - socket not connected or no processor set";
     return false;
   }
 
   if (processing_active_) {
-    BOOST_LOG_TRIVIAL(debug) << "[" << peer_id_ << "] Stream processing already active";
+    BOOST_LOG_TRIVIAL(debug) << "Stream processing already active";
     return true;
   }
 
   processing_active_ = true;
   processing_thread_ = std::make_unique<std::thread>(&TCP_Peer::process_stream, this);
-  BOOST_LOG_TRIVIAL(info) << "[" << peer_id_ << "] Stream processing started successfully";
+  BOOST_LOG_TRIVIAL(info) << "Stream processing started successfully";
   return true;
 }
 
 // Gracefully stop stream processing and cleanup resources
 void TCP_Peer::stop_stream_processing() {
   if (processing_active_) {
-    BOOST_LOG_TRIVIAL(debug) << "[" << peer_id_ << "] Stopping stream processing";
+    BOOST_LOG_TRIVIAL(debug) << "Stopping stream processing";
 
     processing_active_ = false;
 
@@ -75,7 +75,7 @@ void TCP_Peer::stop_stream_processing() {
       boost::system::error_code ec;
       socket_->cancel(ec);
       if (ec) {
-        BOOST_LOG_TRIVIAL(error) << "[" << peer_id_ << "] Error canceling socket operations: " << ec.message();
+        BOOST_LOG_TRIVIAL(error) << "Error canceling socket operations: " << ec.message();
       }
     }
 
@@ -85,18 +85,18 @@ void TCP_Peer::stop_stream_processing() {
     if (processing_thread_ && processing_thread_->joinable()) {
       processing_thread_->join();
       processing_thread_.reset();
-      BOOST_LOG_TRIVIAL(debug) << "[" << peer_id_ << "] Processing thread joined";
+      BOOST_LOG_TRIVIAL(debug) << "Processing thread joined";
     }
 
     io_context_.restart();
 
-    BOOST_LOG_TRIVIAL(info) << "[" << peer_id_ << "] Stream processing stopped";
+    BOOST_LOG_TRIVIAL(info) << "Stream processing stopped";
   }
 }
 
 // Main stream processing loop that handles incoming data
 void TCP_Peer::process_stream() {
-  BOOST_LOG_TRIVIAL(debug) << "[" << peer_id_ << "] Setting up stream processing";
+  BOOST_LOG_TRIVIAL(debug) << "Setting up stream processing";
 
   try {
     // Keep io_context running while processing is active
@@ -117,10 +117,10 @@ void TCP_Peer::process_stream() {
     while (io_context_.poll_one()) {}
 
   } catch (const std::exception& e) {
-    BOOST_LOG_TRIVIAL(error) << "[" << peer_id_ << "] Stream processing error: " << e.what();
+    BOOST_LOG_TRIVIAL(error) << "Stream processing error: " << e.what();
   }
 
-  BOOST_LOG_TRIVIAL(info) << "[" << peer_id_ << "] Stream processing stopped";
+  BOOST_LOG_TRIVIAL(info) << "Stream processing stopped";
 }
 
 // Setup next asynchronous read operation with delimiter-based framing
@@ -129,7 +129,7 @@ void TCP_Peer::async_read_next() {
     return;
   }
 
-  BOOST_LOG_TRIVIAL(trace) << "[" << peer_id_ << "] Setting up next async read";
+  BOOST_LOG_TRIVIAL(trace) << "Setting up next async read";
 
   // Read until newline delimiter
   boost::asio::async_read_until(
@@ -143,7 +143,7 @@ void TCP_Peer::async_read_next() {
         std::getline(is, data);
 
         if (!data.empty()) {
-          BOOST_LOG_TRIVIAL(debug) << "[" << peer_id_ << "] Received data: " << data;
+          BOOST_LOG_TRIVIAL(debug) << "Received data: " << data;
 
           // Process data using stream processor if available
           if (stream_processor_) {
@@ -153,16 +153,16 @@ void TCP_Peer::async_read_next() {
               boost::asio::ip::tcp::endpoint remote_endpoint = socket_->remote_endpoint();
               std::string source_id = remote_endpoint.address().to_string() + ":" + 
                            std::to_string(remote_endpoint.port());
-              BOOST_LOG_TRIVIAL(debug) << "[" << peer_id_ << "] Processing data from " << source_id;
+              BOOST_LOG_TRIVIAL(debug) << "Processing data from " << source_id;
               stream_processor_(iss);
             } catch (const std::exception& e) {
-              BOOST_LOG_TRIVIAL(error) << "[" << peer_id_ << "] Stream processor error: " << e.what();
+              BOOST_LOG_TRIVIAL(error) << "Stream processor error: " << e.what();
             }
           } else {
             // Store data in input buffer if no processor is set
             std::string framed_data = data + '\n';
             input_buffer_->sputn(framed_data.c_str(), framed_data.length());
-            BOOST_LOG_TRIVIAL(debug) << "[" << peer_id_ << "] Data forwarded to input stream";
+            BOOST_LOG_TRIVIAL(debug) << "Data forwarded to input stream";
           }
         }
 
@@ -171,7 +171,7 @@ void TCP_Peer::async_read_next() {
           async_read_next();
         }
       } else if (ec != boost::asio::error::operation_aborted) {
-        BOOST_LOG_TRIVIAL(error) << "[" << peer_id_ << "] Read error: " << ec.message();
+        BOOST_LOG_TRIVIAL(error) << "Read error: " << ec.message();
         if (processing_active_ && socket_->is_open()) {
           async_read_next();
         }
@@ -182,7 +182,7 @@ void TCP_Peer::async_read_next() {
 // Send data stream to peer with buffered writing
 bool TCP_Peer::send_stream(std::istream& input_stream, std::size_t buffer_size) {
   if (!socket_ || !socket_->is_open()) {
-    BOOST_LOG_TRIVIAL(error) << "[" << peer_id_ << "] Cannot send stream - socket not connected";
+    BOOST_LOG_TRIVIAL(error) << "Cannot send stream - socket not connected";
     return false;
   }
 
@@ -207,12 +207,12 @@ bool TCP_Peer::send_stream(std::istream& input_stream, std::size_t buffer_size) 
         );
 
         if (ec || bytes_written != bytes_read) {
-          BOOST_LOG_TRIVIAL(error) << "[" << peer_id_ << "] Stream send error: " << ec.message();
+          BOOST_LOG_TRIVIAL(error) << "Stream send error: " << ec.message();
           return false;
         }
 
         data_sent = true;
-        BOOST_LOG_TRIVIAL(debug) << "[" << peer_id_ << "] Sent " << bytes_written << " bytes from stream";
+        BOOST_LOG_TRIVIAL(debug) << "Sent " << bytes_written << " bytes from stream";
       }
     }
 
@@ -226,14 +226,14 @@ bool TCP_Peer::send_stream(std::istream& input_stream, std::size_t buffer_size) 
     );
 
     if (ec || newline_written != 1) {
-      BOOST_LOG_TRIVIAL(error) << "[" << peer_id_ << "] Failed to send newline delimiter: " << ec.message();
+      BOOST_LOG_TRIVIAL(error) << "Failed to send newline delimiter: " << ec.message();
       return false;
     }
 
-    BOOST_LOG_TRIVIAL(debug) << "[" << peer_id_ << "] Sent message delimiter";
+    BOOST_LOG_TRIVIAL(debug) << "Sent message delimiter";
     return true;
   } catch (const std::exception& e) {
-    BOOST_LOG_TRIVIAL(error) << "[" << peer_id_ << "] Stream send error: " << e.what();
+    BOOST_LOG_TRIVIAL(error) << "Stream send error: " << e.what();
     return false;
   }
 }
@@ -253,12 +253,12 @@ void TCP_Peer::cleanup_connection() {
     // Shutdown both send and receive operations
     socket_->shutdown(boost::asio::ip::tcp::socket::shutdown_both, ec);
     if (ec) {
-      BOOST_LOG_TRIVIAL(error) << "[" << peer_id_ << "] Socket shutdown error: " << ec.message();
+      BOOST_LOG_TRIVIAL(error) << "Socket shutdown error: " << ec.message();
     }
 
     socket_->close(ec);
     if (ec) {
-      BOOST_LOG_TRIVIAL(error) << "[" << peer_id_ << "] Socket close error: " << ec.message();
+      BOOST_LOG_TRIVIAL(error) << "Socket close error: " << ec.message();
     }
   }
 
