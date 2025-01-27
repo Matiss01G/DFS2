@@ -1,0 +1,31 @@
+-- Configuring done (0.1s)
+-- Generating done (0.1s)
+-- Build files have been written to: /home/runner/workspace/build
+[  7%] Built target dfs_crypto
+[ 14%] Built target dfs_store
+[ 44%] Built target dfs_network
+[ 51%] Built target crypto_tests
+[ 59%] Built target store_tests
+[ 70%] Built target channel_tests
+[ 81%] Built target codec_tests
+[ 92%] Built target tcp_peer_tests
+[ 96%] Building CXX object CMakeFiles/bootstrap_tests.dir/src/tests/bootstrap_test.cpp.o
+In file included from /nix/store/ikmzrr3a8gd4jx31lkdhx7bk045j16fi-gtest-1.14.0-dev/include/gtest/gtest-printers.h:122,
+                 from /nix/store/ikmzrr3a8gd4jx31lkdhx7bk045j16fi-gtest-1.14.0-dev/include/gtest/gtest-matchers.h:49,
+                 from /nix/store/ikmzrr3a8gd4jx31lkdhx7bk045j16fi-gtest-1.14.0-dev/include/gtest/internal/gtest-death-test-internal.h:47,
+                 from /nix/store/ikmzrr3a8gd4jx31lkdhx7bk045j16fi-gtest-1.14.0-dev/include/gtest/gtest-death-test.h:43,
+                 from /nix/store/ikmzrr3a8gd4jx31lkdhx7bk045j16fi-gtest-1.14.0-dev/include/gtest/gtest.h:65,
+                 from /home/runner/workspace/src/tests/bootstrap_test.cpp:1:
+/home/runner/workspace/src/tests/bootstrap_test.cpp: In member function ‘virtual void BootstrapTest_FileSharing_Test::TestBody()’:
+/home/runner/workspace/src/tests/bootstrap_test.cpp:135: error: ‘class dfs::network::FileServer’ has no member named ‘get_store’
+  135 |     ASSERT_TRUE(file_server1.get_store().has(TEST_FILENAME))
+      | 
+/home/runner/workspace/src/tests/bootstrap_test.cpp:140: error: ‘class dfs::network::FileServer’ has no member named ‘get_store’
+  140 |     ASSERT_TRUE(file_server2.get_store().has(TEST_FILENAME))
+      | 
+/home/runner/workspace/src/tests/bootstrap_test.cpp:145: error: ‘class dfs::network::FileServer’ has no member named ‘get_store’
+  145 |     ASSERT_TRUE(file_server2.get_store().get(TEST_FILENAME, retrieved_content))
+      | 
+make[2]: *** [CMakeFiles/bootstrap_tests.dir/build.make:76: CMakeFiles/bootstrap_tests.dir/src/tests/bootstrap_test.cpp.o] Error 1
+make[1]: *** [CMakeFiles/Makefile2:318: CMakeFiles/bootstrap_tests.dir/all] Error 2
+make: *** [Makefile:146: all] Error 2

@@ -131,15 +131,21 @@ TEST_F(BootstrapTest, FileSharing) {
 
     std::this_thread::sleep_for(std::chrono::seconds(2));
 
+    // Verify file exists in peer1's store
+    ASSERT_TRUE(file_server1.get_store().has(TEST_FILENAME)) 
+        << "File should exist in peer1's store";
+
     auto& file_server2 = peer2.get_file_server();
-    auto retrieved_content = file_server2.get_file(TEST_FILENAME);
+    // Verify file exists in peer2's store after sharing
+    ASSERT_TRUE(file_server2.get_store().has(TEST_FILENAME)) 
+        << "File should exist in peer2's store after sharing";
 
-    ASSERT_TRUE(retrieved_content.has_value()) 
-        << "File should exist in peer2's store";
-
-    std::string content_str = retrieved_content.value().str();
-    EXPECT_EQ(content_str, TEST_FILE_CONTENT) 
-        << "Retrieved file content should match original";
+    // Verify file content matches in peer2's store
+    std::stringstream retrieved_content;
+    ASSERT_TRUE(file_server2.get_store().get(TEST_FILENAME, retrieved_content))
+        << "Failed to retrieve file from peer2's store";
+    ASSERT_EQ(retrieved_content.str(), TEST_FILE_CONTENT)
+        << "Retrieved file content should match original content";
 
     peer1_thread.join();
     peer2_thread.join();

@@ -28,6 +28,8 @@ CodecTest.MalformedInputHandling 16 0.00131552
 CodecTest.EmptySourceId 16 0.00168606
 TCP_PeerTest.BasicConnection 2 0.00671729
 TCP_PeerTest.SendReceiveSimpleMessage 2 0.0562118
-BootstrapTest.PeerConnection 3 0.675214
-BootstrapTest.DuplicatePeerConnection 1 2.02136
+BootstrapTest.PeerConnection 4 0.505301
+BootstrapTest.DuplicatePeerConnection 2 1.01859
+BootstrapTest.FileSharing 0 0
 ---
+BootstrapTest.FileSharing
