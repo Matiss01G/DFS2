@@ -34,9 +34,14 @@ TEST_F(BootstrapTest, PeerConnection) {
 
     std::this_thread::sleep_for(std::chrono::seconds(3));
 
+    std::cout << "Getting peer managers";
+
     auto& peer1_manager = peer1.get_peer_manager();
     auto& peer2_manager = peer2.get_peer_manager();
 
+    std::cout << "Joining threads peer managers";
+
+    std::cout << "checking for peer existence in peers map";
     ASSERT_TRUE(peer1_manager.has_peer(PEER2_ID));
     ASSERT_TRUE(peer2_manager.has_peer(PEER1_ID));
     EXPECT_TRUE(peer1_manager.is_connected(PEER2_ID));
@@ -44,4 +49,5 @@ TEST_F(BootstrapTest, PeerConnection) {
 
     peer1_thread.join();
     peer2_thread.join();
+
 }
