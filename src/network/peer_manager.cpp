@@ -92,7 +92,6 @@ void PeerManager::remove_peer(uint8_t peer_id) {
 }
 
 bool PeerManager::disconnect(uint8_t peer_id) {
-  std::lock_guard<std::mutex> lock(mutex_);
 
   auto it = peers_.find(peer_id);
   if (it == peers_.end()) {
