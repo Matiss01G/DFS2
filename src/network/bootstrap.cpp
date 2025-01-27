@@ -1,6 +1,8 @@
 #include "network/bootstrap.hpp"
 #include <boost/log/trivial.hpp>
 #include <sstream>
+#include <thread>
+#include <chrono>
 
 namespace dfs {
 namespace network {
@@ -12,7 +14,8 @@ Bootstrap::Bootstrap(const std::string& address, uint16_t port,
     , port_(port)
     , key_(key)
     , ID_(ID)
-    , bootstrap_nodes_(bootstrap_nodes) {
+    , bootstrap_nodes_(bootstrap_nodes)
+    , should_shutdown_(false) {
 
     BOOST_LOG_TRIVIAL(info) << "Initializing Bootstrap with ID: " << static_cast<int>(ID);
 
@@ -96,6 +99,12 @@ bool Bootstrap::start() {
         }
 
         BOOST_LOG_TRIVIAL(info) << "Bootstrap program: Bootstrap successfully started";
+
+        // Keep running until shutdown is requested
+        while (!should_shutdown_) {
+            std::this_thread::sleep_for(std::chrono::milliseconds(100));
+        }
+
         return true;
     }
     catch (const std::exception& e) {
@@ -104,16 +113,21 @@ bool Bootstrap::start() {
     }
 }
 
+void Bootstrap::shutdown() {
+    BOOST_LOG_TRIVIAL(info) << "Bootstrap program: Initiating shutdown...";
+    should_shutdown_ = true;
+
+    if (tcp_server_) {
+        tcp_server_->shutdown();
+    }
+
+    // Wait a bit for cleanup
+    std::this_thread::sleep_for(std::chrono::milliseconds(500));
+    BOOST_LOG_TRIVIAL(info) << "Bootstrap program: Shutdown complete";
+}
+
 Bootstrap::~Bootstrap() {
-    try {
-        if (tcp_server_) {
-            tcp_server_->shutdown();
-        }
-        BOOST_LOG_TRIVIAL(info) << "Bootstrap program: Bootstrap shutdown complete";
-    }
-    catch (const std::exception& e) {
-        BOOST_LOG_TRIVIAL(error) << "Bootstrap program: Error during bootstrap shutdown: " << e.what();
-    }
+    shutdown();
 }
 
 } // namespace network

@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 #include <memory>
+#include <atomic>
 #include "network/tcp_server.hpp"
 #include "network/peer_manager.hpp"
 #include "network/channel.hpp"
@@ -20,7 +21,8 @@ public:
 
     bool start();
     bool connect_to_bootstrap_nodes();
-    
+    void shutdown();
+
     // Add getter for peer manager
     PeerManager& get_peer_manager() { return *peer_manager_; }
 
@@ -30,6 +32,7 @@ private:
     std::vector<uint8_t> key_;
     uint8_t ID_;
     std::vector<std::string> bootstrap_nodes_;
+    std::atomic<bool> should_shutdown_;
 
     std::unique_ptr<Channel> channel_;
     std::unique_ptr<TCP_Server> tcp_server_;
