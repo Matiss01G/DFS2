@@ -141,8 +141,6 @@ bool PeerManager::broadcast_stream(std::istream& input_stream) {
     return false;
   }
 
-  std::lock_guard<std::mutex> lock(mutex_);
-
   if (peers_.empty()) {
     BOOST_LOG_TRIVIAL(warning) << "No peers available for broadcast";
     return false;
@@ -161,6 +159,8 @@ bool PeerManager::broadcast_stream(std::istream& input_stream) {
         all_success = false;
         continue;
       }
+
+      std::lock_guard<std::mutex> lock(mutex_);
 
       if (peer_pair.second->send_stream(input_stream)) {
         success_count++;
