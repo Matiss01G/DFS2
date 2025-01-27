@@ -55,13 +55,13 @@ bool TCP_Server::initiate_handshake(std::shared_ptr<boost::asio::ip::tcp::socket
     if (!send_ID(socket)) {
       return false;
     }
-    
+
     uint8_t peer_id = read_ID(socket);
     // Create peer only after full ID exchange
     if (peer_manager_ && !peer_manager_->has_peer(peer_id)) {
       BOOST_LOG_TRIVIAL(debug) << "Creating new peer with ID: " << static_cast<int>(peer_id);
       peer_manager_->create_peer(socket, peer_id);
-      return true
+      return true;
     }
     BOOST_LOG_TRIVIAL(warning) << "Peer with ID " << static_cast<int>(peer_id) << " already exists";
     return false;
