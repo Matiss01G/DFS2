@@ -1,0 +1,69 @@
+[----------] 1 test from BootstrapTest
+[ RUN      ] BootstrapTest.PeerConnection
+[2025-01-27 15:13:23.422865] [0x00007fdfc072cd80] [info]    Initializing Bootstrap with ID: 1
+[2025-01-27 15:13:23.422873] [0x00007fdfc072cd80] [debug]   Bootstrap program: Channel created successfully
+[2025-01-27 15:13:23.422880] [0x00007fdfc072cd80] [info]    Initializing TCP server  on 127.0.0.1:3001
+[2025-01-27 15:13:23.422885] [0x00007fdfc072cd80] [debug]   Bootstrap program: TCP Server created successfully
+[2025-01-27 15:13:23.422888] [0x00007fdfc072cd80] [info]    PeerManager initialized with key size: 32 bytes
+[2025-01-27 15:13:23.422890] [0x00007fdfc072cd80] [debug]   Bootstrap program: Peer Manager created successfully
+[2025-01-27 15:13:23.422892] [0x00007fdfc072cd80] [info]    PeerManager set for TCP server 
+[2025-01-27 15:13:23.422898] [0x00007fdfc072cd80] [info]    Initializing FileServer with ID: 1
+[2025-01-27 15:13:23.422924] [0x00007fdfc072cd80] [info]    Initializing Store with base path: fileserver_1
+[2025-01-27 15:13:23.422940] [0x00007fdfc072cd80] [debug]   Store directory created/verified at: fileserver_1
+[2025-01-27 15:13:23.422945] [0x00007fdfc072cd80] [info]    Initializing Codec with key of size: 32
+[2025-01-27 15:13:23.422947] [0x00007fdfc072cd80] [info]    FileServer initialization complete
+[2025-01-27 15:13:23.422951] [0x00007fdfc072cd80] [debug]   Bootstrap program: File Server created successfully
+[2025-01-27 15:13:23.422953] [0x00007fdfc072cd80] [info]    Bootstrap program: Successfully created all components
+[2025-01-27 15:13:23.422957] [0x00007fdfc072cd80] [info]    Initializing Bootstrap with ID: 2
+[2025-01-27 15:13:23.422959] [0x00007fdfc072cd80] [debug]   Bootstrap program: Channel created successfully
+[2025-01-27 15:13:23.422964] [0x00007fdfc072cd80] [info]    Initializing TCP server  on 127.0.0.1:3002
+[2025-01-27 15:13:23.422966] [0x00007fdfc072cd80] [debug]   Bootstrap program: TCP Server created successfully
+[2025-01-27 15:13:23.422970] [0x00007fdfc072cd80] [info]    PeerManager initialized with key size: 32 bytes
+[2025-01-27 15:13:23.422972] [0x00007fdfc072cd80] [debug]   Bootstrap program: Peer Manager created successfully
+[2025-01-27 15:13:23.422974] [0x00007fdfc072cd80] [info]    PeerManager set for TCP server 
+[2025-01-27 15:13:23.422980] [0x00007fdfc072cd80] [info]    Initializing FileServer with ID: 2
+[2025-01-27 15:13:23.422983] [0x00007fdfc072cd80] [info]    Initializing Store with base path: fileserver_2
+[2025-01-27 15:13:23.422989] [0x00007fdfc072cd80] [debug]   Store directory created/verified at: fileserver_2
+[2025-01-27 15:13:23.422993] [0x00007fdfc072cd80] [info]    Initializing Codec with key of size: 32
+[2025-01-27 15:13:23.422995] [0x00007fdfc072cd80] [info]    FileServer initialization complete
+[2025-01-27 15:13:23.422997] [0x00007fdfc072cd80] [debug]   Bootstrap program: File Server created successfully
+[2025-01-27 15:13:23.423001] [0x00007fdfc072cd80] [info]    Bootstrap program: Successfully created all components
+[2025-01-27 15:13:23.423098] [0x00007fdfc07266c0] [debug]   Endpoint created
+[2025-01-27 15:13:23.423126] [0x00007fdfc07266c0] [debug]   Acceptor created
+[2025-01-27 15:13:23.423761] [0x00007fdfc07266c0] [debug]   Starting to accept connections
+[2025-01-27 15:13:23.423771] [0x00007fdfc07266c0] [debug]   Creating new socket for incoming connection
+[2025-01-27 15:13:23.423788] [0x00007fdfc07266c0] [debug]   Starting IO context
+[2025-01-27 15:13:23.423831] [0x00007fdfc07266c0] [info]    Server started successfully on 127.0.0.1:3001
+[2025-01-27 15:13:23.423840] [0x00007fdfc07266c0] [info]    Bootstrap program: Bootstrap successfully started
+[2025-01-27 15:13:26.423229] [0x00007fdfbf7246c0] [debug]   Endpoint created
+[2025-01-27 15:13:26.423248] [0x00007fdfbf7246c0] [debug]   Acceptor created
+[2025-01-27 15:13:26.423920] [0x00007fdfbf7246c0] [debug]   Starting to accept connections
+[2025-01-27 15:13:26.423939] [0x00007fdfbf7246c0] [debug]   Creating new socket for incoming connection
+[2025-01-27 15:13:26.423979] [0x00007fdfbf7246c0] [debug]   Starting IO context
+[2025-01-27 15:13:26.424032] [0x00007fdfbf7246c0] [info]    Server started successfully on 127.0.0.1:3002
+[2025-01-27 15:13:26.424042] [0x00007fdfbf7246c0] [info]    Bootstrap program: Connecting to bootstrap nodes...
+[2025-01-27 15:13:26.424047] [0x00007fdfbf7246c0] [info]    Resolving address to endpoints
+[2025-01-27 15:13:26.424084] [0x00007fdfbf7246c0] [info]    Attempting to connect to 127.0.0.1:3001
+[2025-01-27 15:13:26.424217] [0x00007fdfbf7246c0] [info]    Successfully connected to 127.0.0.1:3001
+[2025-01-27 15:13:26.424229] [0x00007fdfbf7246c0] [debug]   Initiating handshake request
+[2025-01-27 15:13:26.424233] [0x00007fdfbf7246c0] [debug]   Starting to send ID
+[2025-01-27 15:13:26.424263] [0x00007fdfbf7246c0] [info]    Sent ID: 2
+[2025-01-27 15:13:26.424277] [0x00007fdfbf7246c0] [debug]   Starting to read ID
+[2025-01-27 15:13:26.424313] [0x00007fdfbff256c0] [debug]   Calling receive_handshake for incoming connection
+[2025-01-27 15:13:26.424336] [0x00007fdfbff256c0] [debug]   Receiving handshake request
+[2025-01-27 15:13:26.424341] [0x00007fdfbff256c0] [debug]   Starting to read ID
+[2025-01-27 15:13:26.424351] [0x00007fdfbff256c0] [info]    Received ID: 2
+[2025-01-27 15:13:26.424356] [0x00007fdfbff256c0] [debug]   Preparing to send ID back to peer: 1
+[2025-01-27 15:13:26.424363] [0x00007fdfbff256c0] [debug]   Starting to send ID
+[2025-01-27 15:13:26.424415] [0x00007fdfbff256c0] [info]    Sent ID: 1
+[2025-01-27 15:13:26.424424] [0x00007fdfbff256c0] [debug]   Successfully sent ID back to peer
+[2025-01-27 15:13:26.424446] [0x00007fdfbff256c0] [info]    Initializing Codec with key of size: 32
+[2025-01-27 15:13:26.424453] [0x00007fdfbff256c0] [debug]   Constructing TCP_Peer
+[2025-01-27 15:13:26.424456] [0x00007fdfbff256c0] [debug]   Input stream initialized
+[2025-01-27 15:13:26.424463] [0x00007fdfbff256c0] [info]    TCP_Peer instance created successfully
+[2025-01-27 15:13:26.424475] [0x00007fdfbf7246c0] [info]    Received ID: 1
+[2025-01-27 15:13:26.424481] [0x00007fdfbf7246c0] [debug]   Creating new peer with ID: 
+[2025-01-27 15:13:26.424497] [0x00007fdfbf7246c0] [info]    Initializing Codec with key of size: 32
+[2025-01-27 15:13:26.424503] [0x00007fdfbf7246c0] [debug]   Constructing TCP_Peer
+[2025-01-27 15:13:26.424506] [0x00007fdfbf7246c0] [debug]   Input stream initialized
+[2025-01-27 15:13:26.424510] [0x00007fdfbf7246c0] [info]    TCP_Peer instance created successfully

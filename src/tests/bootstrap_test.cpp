@@ -26,13 +26,13 @@ TEST_F(BootstrapTest, PeerConnection) {
         ASSERT_TRUE(peer1.start()) << "Failed to start peer 1";
     });
 
-    std::this_thread::sleep_for(std::chrono::seconds(10));
+    std::this_thread::sleep_for(std::chrono::seconds(3));
 
     std::thread peer2_thread([&peer2]() {
         ASSERT_TRUE(peer2.start()) << "Failed to start peer 2";
     });
 
-    std::this_thread::sleep_for(std::chrono::seconds(10));
+    std::this_thread::sleep_for(std::chrono::seconds(3));
 
     auto& peer1_manager = peer1.get_peer_manager();
     auto& peer2_manager = peer2.get_peer_manager();
