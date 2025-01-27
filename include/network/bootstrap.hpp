@@ -20,10 +20,13 @@ public:
 
     bool start();
     bool connect_to_bootstrap_nodes();
-    bool shutdown(); // Added shutdown method declaration
+    bool shutdown();
 
     // Add getter for peer manager
     PeerManager& get_peer_manager() { return *peer_manager_; }
+
+    // Add getter for file server
+    FileServer& get_file_server() { return *file_server_; }
 
 private:
     std::string address_;
