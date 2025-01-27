@@ -67,11 +67,6 @@ void PeerManager::add_peer(std::shared_ptr<TCP_Peer> peer) {
 
   uint8_t peer_id = peer->get_peer_id();
 
-  if (has_peer(peer_id)) {
-    BOOST_LOG_TRIVIAL(warning) << "Peer with ID " << static_cast<int>(peer_id) << " already exists";
-    return;
-  }
-
   std::lock_guard<std::mutex> lock(mutex_);
 
   peers_[peer_id] = peer;

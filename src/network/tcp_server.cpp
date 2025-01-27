@@ -61,8 +61,10 @@ bool TCP_Server::initiate_handshake(std::shared_ptr<boost::asio::ip::tcp::socket
     if (peer_manager_ && !peer_manager_->has_peer(peer_id)) {
       BOOST_LOG_TRIVIAL(debug) << "Creating new peer with ID: " << static_cast<int>(peer_id);
       peer_manager_->create_peer(socket, peer_id);
+      return true
     }
-    return true;
+    BOOST_LOG_TRIVIAL(warning) << "Peer with ID " << static_cast<int>(peer_id) << " already exists";
+    return false;
   } catch (const std::exception& e) {
     BOOST_LOG_TRIVIAL(error) << "Handshake failed: " << e.what();
     return false;
