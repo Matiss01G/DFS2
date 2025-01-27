@@ -51,3 +51,18 @@ TEST_F(BootstrapTest, PeerConnection) {
     peer2_thread.join();
 
 }
+
+TEST_F(BootstrapTest, ShutdownTest) {
+    const uint8_t PEER_ID = 1;
+    const uint16_t PORT = 3001;
+    std::vector<std::string> bootstrap_nodes = {};
+
+    Bootstrap peer(ADDRESS, PORT, TEST_KEY, PEER_ID, bootstrap_nodes);
+
+    ASSERT_TRUE(peer.start()) << "Failed to start peer";
+
+    // Sleep briefly to allow components to initialize
+    std::this_thread::sleep_for(std::chrono::seconds(1));
+
+    ASSERT_TRUE(peer.shutdown()) << "Failed to shutdown peer";
+}

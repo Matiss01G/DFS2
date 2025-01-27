@@ -104,15 +104,55 @@ bool Bootstrap::start() {
     }
 }
 
-Bootstrap::~Bootstrap() {
+bool Bootstrap::shutdown() {
     try {
-        if (tcp_server_) {
-            tcp_server_->shutdown();
+        BOOST_LOG_TRIVIAL(info) << "Bootstrap program: Initiating shutdown sequence";
+
+        // First shutdown file server as it depends on other components
+        if (file_server_) {
+            BOOST_LOG_TRIVIAL(debug) << "Bootstrap program: Shutting down File Server";
+            // File server cleanup handled by destructor
+            file_server_.reset();
         }
-        BOOST_LOG_TRIVIAL(info) << "Bootstrap program: Bootstrap shutdown complete";
+
+        // Next shutdown peer manager as it depends on channel and tcp server
+        if (peer_manager_) {
+            BOOST_LOG_TRIVIAL(debug) << "Bootstrap program: Shutting down Peer Manager";
+            // Peer manager cleanup handled by destructor
+            peer_manager_.reset();
+        }
+
+        // Shutdown TCP server
+        if (tcp_server_) {
+            BOOST_LOG_TRIVIAL(debug) << "Bootstrap program: Shutting down TCP Server";
+            tcp_server_->shutdown();
+            tcp_server_.reset();
+        }
+
+        // Finally shutdown channel as it has no dependencies
+        if (channel_) {
+            BOOST_LOG_TRIVIAL(debug) << "Bootstrap program: Shutting down Channel";
+            // Channel cleanup handled by destructor
+            channel_.reset();
+        }
+
+        BOOST_LOG_TRIVIAL(info) << "Bootstrap program: Shutdown complete";
+        return true;
     }
     catch (const std::exception& e) {
-        BOOST_LOG_TRIVIAL(error) << "Bootstrap program: Error during bootstrap shutdown: " << e.what();
+        BOOST_LOG_TRIVIAL(error) << "Bootstrap program: Error during shutdown: " << e.what();
+        return false;
+    }
+}
+
+Bootstrap::~Bootstrap() {
+    try {
+        if (!this->shutdown()) {
+            BOOST_LOG_TRIVIAL(error) << "Bootstrap program: Failed to shutdown cleanly in destructor";
+        }
+    }
+    catch (const std::exception& e) {
+        BOOST_LOG_TRIVIAL(error) << "Bootstrap program: Error during destructor shutdown: " << e.what();
     }
 }
 
