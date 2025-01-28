@@ -11,27 +11,63 @@
 namespace dfs {
 namespace network {
 
-// Helper class for streaming pipeline
-class StreamPipeline : public std::stringstream {
+// Custom streambuf for handling data production on demand
+class ProducerBuffer : public std::streambuf {
   std::function<bool(std::stringstream&)> producer_;
-  mutable bool produced_ = false;
+  bool buffer_filled_ = false;
+  std::string buffer_;
+  static const int putback_ = 8;  // Size of putback area
+
+public:
+  ProducerBuffer(std::function<bool(std::stringstream&)> producer)
+    : producer_(producer) {
+    // Initialize get buffer with empty string but reserve putback area
+    buffer_.reserve(putback_);
+  }
+
+protected:
+  // Handle buffer underflow during read operations
+  virtual int_type underflow() override {
+    if (gptr() < egptr()) {
+      return traits_type::to_int_type(*gptr());
+    }
+
+    // Process putback characters
+    int num_putback = std::min(static_cast<int>(gptr() - eback()), putback_);
+    if (num_putback > 0) {
+      std::memmove(&buffer_[0], gptr() - num_putback, num_putback);
+    }
+
+    // If buffer not yet filled, get data from producer
+    if (!buffer_filled_) {
+      std::stringstream temp;
+      if (!producer_(temp)) {
+        return traits_type::eof();
+      }
+      buffer_ = temp.str();
+      buffer_filled_ = true;
+    }
+
+    // Set buffer pointers
+    char* base = &buffer_[0];
+    setg(base,                       // beginning of putback area
+         base + num_putback,         // read position
+         base + buffer_.size());     // end of buffer
+
+    return traits_type::to_int_type(*gptr());
+  }
+};
+
+// Helper class for streaming pipeline
+class StreamPipeline : public std::istream {
+  std::unique_ptr<ProducerBuffer> buffer_;
 
 public:
   StreamPipeline(std::function<bool(std::stringstream&)> producer)
-    : producer_(producer) {}
-
-  // Sync method to implement on-demand data production
-  virtual int sync() {
-    if (!produced_) {
-      produced_ = true;
-      std::stringstream temp;
-      if (!producer_(temp)) {
-        setstate(std::ios::failbit);
-        return -1;
-      }
-      str(temp.str());
-    }
-    return 0;
+    : std::istream(nullptr)
+    , buffer_(new ProducerBuffer(producer)) {
+    // Set custom buffer as the stream's buffer
+    rdbuf(buffer_.get());
   }
 };
 
@@ -39,7 +75,7 @@ FileServer::FileServer(uint32_t ID, const std::vector<uint8_t>& key, PeerManager
   : ID_(ID)
   , key_(key)
   , channel_(channel)
-  , peer_manager_(peer_manager) {  // Initialize PeerManager reference
+  , peer_manager_(peer_manager) {
 
   // Validate key size (32 bytes for AES-256)
   if (key_.empty() || key_.size() != 32) {
@@ -66,8 +102,6 @@ FileServer::FileServer(uint32_t ID, const std::vector<uint8_t>& key, PeerManager
     throw;
   }
 }
-
-// Removing duplicate get_store() definitions since they're now inline in the header
 
 std::string FileServer::extract_filename(const MessageFrame& frame) {
   if (!frame.payload_stream) {
@@ -112,8 +146,8 @@ std::string FileServer::extract_filename(const MessageFrame& frame) {
 bool FileServer::prepare_and_send(const std::string& filename, MessageType message_type, std::optional<uint8_t> peer_id) {
   try {
     BOOST_LOG_TRIVIAL(info) << "Preparing file: " << filename 
-                          << " for " << (peer_id ? "peer " + std::to_string(*peer_id) : "broadcast")
-                          << " with message type: " << static_cast<int>(message_type);
+                        << " for " << (peer_id ? "peer " + std::to_string(*peer_id) : "broadcast")
+                        << " with message type: " << static_cast<int>(message_type);
 
     // Create message frame
     MessageFrame frame;
@@ -139,10 +173,11 @@ bool FileServer::prepare_and_send(const std::string& filename, MessageType messa
         }
       };
 
-      // Create streaming payload
-      frame.payload_stream = std::make_shared<StreamPipeline>(store_producer);
+      // Create streamed payload using StreamPipeline
+      auto streamed = std::make_shared<StreamPipeline>(store_producer);
+      frame.payload_stream = std::dynamic_pointer_cast<std::stringstream>(streamed);
 
-      if (!frame.payload_stream->good()) {
+      if (!frame.payload_stream || !frame.payload_stream->good()) {
         BOOST_LOG_TRIVIAL(error) << "Failed to initialize streaming payload";
         return false;
       }
