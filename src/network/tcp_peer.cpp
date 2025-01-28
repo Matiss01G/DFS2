@@ -152,7 +152,7 @@ void TCP_Peer::async_read_next() {
 
           // Process data using stream processor if available
           if (stream_processor_) {
-            std::string framed_data = data + '\n';
+            std::string framed_data = data;
             std::istringstream iss(framed_data);
             try {
               boost::asio::ip::tcp::endpoint remote_endpoint = socket_->remote_endpoint();

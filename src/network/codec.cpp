@@ -53,6 +53,7 @@ std::size_t Codec::serialize(const MessageFrame& frame, std::ostream& output) {
     write_bytes(output, &network_payload_size, sizeof(network_payload_size));
     total_bytes += sizeof(network_payload_size);
 
+    BOOST_LOG_TRIVIAL(debug) << "Writing filename length: " << frame.filename_length;
     // Encrypt and write filename length
     uint32_t network_filename_length = boost::endian::native_to_big(frame.filename_length);
     // Create stream for raw data
@@ -139,7 +140,7 @@ MessageFrame Codec::deserialize(std::istream& input) {
     // Create stream for encrypted data and copy encrypted data into it
     std::stringstream encrypted_filename_length_stream;
     encrypted_filename_length_stream.write(encrypted_filename_length.data(), encrypted_filename_length.size());
-    // Create stream fopr decrypted data and decrypt filename_length into it
+    // Create stream for decrypted data and decrypt filename_length into it
     std::stringstream decrypted_filename_length_stream;
     filename_crypto.decrypt(encrypted_filename_length_stream, decrypted_filename_length_stream);
     // Create variable for network ordered filename_length and read decrypted data into it

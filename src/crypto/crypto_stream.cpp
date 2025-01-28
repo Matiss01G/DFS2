@@ -107,26 +107,38 @@ void CryptoStream::processStream(std::istream& input, std::ostream& output, bool
         std::array<uint8_t, BUFFER_SIZE> inbuf;
         std::array<uint8_t, BUFFER_SIZE + EVP_MAX_BLOCK_LENGTH> outbuf;
         int outlen;
+        size_t block_count = 0;
+        size_t total_bytes_processed = 0;
 
         // Process the input stream in chunks
         while (input.good() && !input.eof()) {
             input.read(reinterpret_cast<char*>(inbuf.data()), inbuf.size());
             auto bytes_read = input.gcount();
 
+            BOOST_LOG_TRIVIAL(debug) << "Processing block " << block_count 
+                                    << ": Read " << bytes_read << " bytes"
+                                    << " (total processed so far: " << total_bytes_processed << ")";
+
             if (bytes_read <= 0) {
                 if (!input.eof()) {
                     throw std::runtime_error("Failed to read from input stream");
                 }
+                BOOST_LOG_TRIVIAL(debug) << "Reached end of input stream after " 
+                                        << block_count << " blocks";
                 break;
             }
 
             // Process the chunk
             if (encrypting) {
+                BOOST_LOG_TRIVIAL(trace) << "Encrypting block " << block_count 
+                                        << " of size " << bytes_read;
                 if (!EVP_EncryptUpdate(context_->get(), outbuf.data(), &outlen,
                                      inbuf.data(), static_cast<int>(bytes_read))) {
                     throw EncryptionError("Failed to encrypt data block");
                 }
             } else {
+                BOOST_LOG_TRIVIAL(trace) << "Decrypting block " << block_count 
+                                        << " of size " << bytes_read;
                 if (!EVP_DecryptUpdate(context_->get(), outbuf.data(), &outlen,
                                      inbuf.data(), static_cast<int>(bytes_read))) {
                     throw DecryptionError("Failed to decrypt data block");
@@ -135,38 +147,53 @@ void CryptoStream::processStream(std::istream& input, std::ostream& output, bool
 
             // Write processed data
             if (outlen > 0) {
+                BOOST_LOG_TRIVIAL(debug) << (encrypting ? "Encrypted" : "Decrypted")
+                                        << " block " << block_count 
+                                        << " produced " << outlen << " bytes";
                 output.write(reinterpret_cast<char*>(outbuf.data()), outlen);
                 if (!output.good()) {
                     throw std::runtime_error("Failed to write to output stream");
                 }
+                total_bytes_processed += outlen;
             }
+            block_count++;
         }
 
         // Finalize the operation with padding
+        BOOST_LOG_TRIVIAL(debug) << "Finalizing " << (encrypting ? "encryption" : "decryption")
+                                << " after " << block_count << " blocks";
         if (encrypting) {
             if (!EVP_EncryptFinal_ex(context_->get(), outbuf.data(), &outlen)) {
                 throw EncryptionError("Failed to finalize encryption");
             }
         } else {
             if (!EVP_DecryptFinal_ex(context_->get(), outbuf.data(), &outlen)) {
+                BOOST_LOG_TRIVIAL(error) << "Failed to finalize decryption after processing "
+                                        << total_bytes_processed << " bytes in "
+                                        << block_count << " blocks";
                 throw DecryptionError("Failed to finalize decryption");
             }
         }
 
         // Write final block
         if (outlen > 0) {
+            BOOST_LOG_TRIVIAL(debug) << "Writing final block of size " << outlen;
             output.write(reinterpret_cast<char*>(outbuf.data()), outlen);
             if (!output.good()) {
                 throw std::runtime_error("Failed to write final block");
             }
+            total_bytes_processed += outlen;
         }
+
+        BOOST_LOG_TRIVIAL(info) << "Completed " << (encrypting ? "encryption" : "decryption")
+                               << ": Processed " << total_bytes_processed 
+                               << " bytes in " << block_count << " blocks";
 
         // Reset stream positions
         input.clear();
         input.seekg(input_pos);
         output.clear();
         output.seekp(output_pos);
-
         // Flush output
         output.flush();
     }
