@@ -10,6 +10,7 @@ TCP_Peer::TCP_Peer(uint8_t peer_id, Channel& channel, const std::vector<uint8_t>
   : peer_id_(peer_id),  
   socket_(std::make_unique<boost::asio::ip::tcp::socket>(io_context_)),  
   input_buffer_(std::make_unique<boost::asio::streambuf>()),
+  message_buffer_(""),
   codec_(std::make_unique<Codec>(key, channel)) {  
   initialize_streams();
   BOOST_LOG_TRIVIAL(debug) << "Constructing TCP_Peer";
@@ -138,7 +139,7 @@ void TCP_Peer::async_read_next() {
     '\n',
     [this](const boost::system::error_code& ec, std::size_t bytes_transferred) {
       BOOST_LOG_TRIVIAL(debug) << "Read callback triggered";
-      
+
       if (!ec && bytes_transferred > 0) {
         std::string data;
         std::istream is(input_buffer_.get());
@@ -146,28 +147,38 @@ void TCP_Peer::async_read_next() {
 
         BOOST_LOG_TRIVIAL(debug) << "Read from buffer - got " 
           << data.length() << " bytes of data";
-        
+
         if (!data.empty()) {
           BOOST_LOG_TRIVIAL(debug) << "Receiving data";
 
-          // Process data using stream processor if available
-          if (stream_processor_) {
-            std::string framed_data = data + '\n';
-            std::istringstream iss(framed_data);
-            try {
-              boost::asio::ip::tcp::endpoint remote_endpoint = socket_->remote_endpoint();
-              std::string source_id = remote_endpoint.address().to_string() + ":" + 
-                           std::to_string(remote_endpoint.port());
-              BOOST_LOG_TRIVIAL(debug) << "Processing data from " << source_id;
-              stream_processor_(iss);
-            } catch (const std::exception& e) {
-              BOOST_LOG_TRIVIAL(error) << "Stream processor error: " << e.what();
+          // Append received data to message buffer
+          message_buffer_ += data + '\n';
+
+          // Check if we have a complete message (ends with newline)
+          size_t pos;
+          while ((pos = message_buffer_.find('\n')) != std::string::npos) {
+            // Extract complete message
+            std::string complete_message = message_buffer_.substr(0, pos + 1);
+            message_buffer_ = message_buffer_.substr(pos + 1);
+
+            // Process complete message using stream processor
+            if (stream_processor_) {
+              try {
+                boost::asio::ip::tcp::endpoint remote_endpoint = socket_->remote_endpoint();
+                std::string source_id = remote_endpoint.address().to_string() + ":" + 
+                            std::to_string(remote_endpoint.port());
+                BOOST_LOG_TRIVIAL(debug) << "Processing complete message from " << source_id;
+
+                std::istringstream iss(complete_message);
+                stream_processor_(iss);
+              } catch (const std::exception& e) {
+                BOOST_LOG_TRIVIAL(error) << "Stream processor error: " << e.what();
+              }
+            } else {
+              // Store complete message in input buffer if no processor is set
+              input_buffer_->sputn(complete_message.c_str(), complete_message.length());
+              BOOST_LOG_TRIVIAL(debug) << "Complete message forwarded to input stream";
             }
-          } else {
-            // Store data in input buffer if no processor is set
-            std::string framed_data = data + '\n';
-            input_buffer_->sputn(framed_data.c_str(), framed_data.length());
-            BOOST_LOG_TRIVIAL(debug) << "Data forwarded to input stream";
           }
         }
 
