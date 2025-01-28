@@ -171,7 +171,7 @@ void TCP_Peer::process_buffered_messages() {
 
       // Process data using stream processor if available
       if (stream_processor_) {
-        std::string framed_data = data + '\n';
+        std::string framed_data = data + '\n';  // Add back the newline that was removed by getline
         std::istringstream iss(framed_data);
         try {
           boost::asio::ip::tcp::endpoint remote_endpoint = socket_->remote_endpoint();
@@ -201,7 +201,7 @@ bool TCP_Peer::send_stream(std::istream& input_stream, std::size_t buffer_size) 
     bool data_sent = false;
 
     BOOST_LOG_TRIVIAL(debug) << "Peer " << static_cast<int>(peer_id_) << " starting to read and send data chunks";
-    
+
     // Read and send data in chunks
     while (input_stream.good()) {
       input_stream.read(buffer.data(), buffer_size);
