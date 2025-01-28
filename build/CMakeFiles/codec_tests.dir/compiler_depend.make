@@ -813,6 +813,7 @@ CMakeFiles/codec_tests.dir/src/tests/codec_test.cpp.o: /home/runner/workspace/sr
   /home/runner/workspace/include/network/channel.hpp \
   /home/runner/workspace/include/network/codec.hpp \
   /home/runner/workspace/include/network/message_frame.hpp \
+  /home/runner/workspace/include/network/stream_pipeline.hpp \
   /nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/algorithm \
   /nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/any \
   /nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/array \
@@ -4002,6 +4003,8 @@ CMakeFiles/codec_tests.dir/src/tests/codec_test.cpp.o: /home/runner/workspace/sr
 
 /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/fusion/adapted/struct/detail/adapt_base.hpp:
 
+/nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/fusion/adapted/struct/detail/adapt_auto.hpp:
+
 /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/range/detail/has_member_size.hpp:
 
 /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/mpl/find.hpp:
@@ -5107,8 +5110,6 @@ CMakeFiles/codec_tests.dir/src/tests/codec_test.cpp.o: /home/runner/workspace/sr
 /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/predef/compiler/ekopath.h:
 
 /nix/store/fwh4fxd747m0py3ib3s5abamia9nrf90-glibc-2.39-52-dev/include/bits/wordsize.h:
-
-/nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/cstdarg:
 
 /nix/store/fwh4fxd747m0py3ib3s5abamia9nrf90-glibc-2.39-52-dev/include/locale.h:
 
@@ -6430,6 +6431,10 @@ CMakeFiles/codec_tests.dir/src/tests/codec_test.cpp.o: /home/runner/workspace/sr
 
 /nix/store/ikmzrr3a8gd4jx31lkdhx7bk045j16fi-gtest-1.14.0-dev/include/gtest/internal/custom/gtest-printers.h:
 
+/nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/cstdarg:
+
+/home/runner/workspace/include/network/stream_pipeline.hpp:
+
 /nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/any:
 
 /nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/atomic:
@@ -6889,5 +6894,3 @@ CMakeFiles/codec_tests.dir/src/tests/codec_test.cpp.o: /home/runner/workspace/sr
 /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/fusion/adapted/mpl/detail/begin_impl.hpp:
 
 /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/fusion/adapted/struct/adapt_struct.hpp:
-
-/nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/fusion/adapted/struct/detail/adapt_auto.hpp:

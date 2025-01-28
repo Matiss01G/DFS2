@@ -5,35 +5,12 @@
 #include <thread>
 #include <chrono>
 #include "network/peer_manager.hpp"
+#include "network/stream_pipeline.hpp"  // Add the new header
 #include <memory>
 #include <functional>
 
 namespace dfs {
 namespace network {
-
-// Helper class for streaming pipeline
-class StreamPipeline : public std::stringstream {
-  std::function<bool(std::stringstream&)> producer_;
-  mutable bool produced_ = false;
-
-public:
-  StreamPipeline(std::function<bool(std::stringstream&)> producer)
-    : producer_(producer) {}
-
-  // Sync method to implement on-demand data production
-  virtual int sync() {
-    if (!produced_) {
-      produced_ = true;
-      std::stringstream temp;
-      if (!producer_(temp)) {
-        setstate(std::ios::failbit);
-        return -1;
-      }
-      str(temp.str());
-    }
-    return 0;
-  }
-};
 
 FileServer::FileServer(uint32_t ID, const std::vector<uint8_t>& key, PeerManager& peer_manager, Channel& channel)
   : ID_(ID)
@@ -66,8 +43,6 @@ FileServer::FileServer(uint32_t ID, const std::vector<uint8_t>& key, PeerManager
     throw;
   }
 }
-
-// Removing duplicate get_store() definitions since they're now inline in the header
 
 std::string FileServer::extract_filename(const MessageFrame& frame) {
   if (!frame.payload_stream) {

@@ -8,6 +8,7 @@
 #include "network/codec.hpp"
 #include "network/channel.hpp"
 #include "network/message_frame.hpp"
+#include "network/stream_pipeline.hpp"  // Add the new header
 #include "crypto/crypto_stream.hpp"
 
 using namespace dfs::network;
@@ -53,6 +54,73 @@ protected:
 };
 
 bool CodecTest::logging_initialized = false;
+
+// Test the StreamPipeline with small data
+TEST_F(CodecTest, StreamPipelineBasicTest) {
+    const std::string test_data = "Hello, StreamPipeline!";
+
+    // Create producer function
+    auto producer = [&test_data](std::stringstream& output) -> bool {
+        output.write(test_data.c_str(), test_data.length());
+        return output.good();
+    };
+
+    // Create pipeline
+    StreamPipeline pipeline(producer);
+
+    // Read from pipeline
+    std::string result((std::istreambuf_iterator<char>(pipeline)),
+                      std::istreambuf_iterator<char>());
+
+    EXPECT_EQ(result, test_data) << "Pipeline output doesn't match input";
+}
+
+// Test StreamPipeline with codec serialization
+TEST_F(CodecTest, StreamPipelineWithCodec) {
+    MessageFrame input_frame;
+    input_frame.message_type = MessageType::STORE_FILE;
+    input_frame.iv_ = generate_test_iv();
+    input_frame.source_id = 1;
+
+    const std::string test_data = "Test data for pipeline";
+    input_frame.payload_size = test_data.length();
+
+    // Create producer for original data
+    auto data_producer = [&test_data](std::stringstream& output) -> bool {
+        output.write(test_data.c_str(), test_data.length());
+        return output.good();
+    };
+
+    // Set payload stream to pipeline
+    input_frame.payload_stream = std::make_shared<StreamPipeline>(data_producer);
+
+    // Create serialization producer
+    auto serialize_producer = [this, &input_frame](std::stringstream& output) -> bool {
+        try {
+            codec.serialize(input_frame, output);
+            return output.good();
+        } catch (const std::exception&) {
+            return false;
+        }
+    };
+
+    // Create serialization pipeline
+    StreamPipeline serialized_stream(serialize_producer);
+
+    // Deserialize the data
+    MessageFrame output_frame = codec.deserialize(serialized_stream);
+
+    // Verify the frame
+    EXPECT_EQ(output_frame.message_type, input_frame.message_type);
+    EXPECT_EQ(output_frame.source_id, input_frame.source_id);
+    EXPECT_EQ(output_frame.payload_size, input_frame.payload_size);
+    EXPECT_EQ(output_frame.iv_, input_frame.iv_);
+
+    // Read and compare payload
+    std::string output_data((std::istreambuf_iterator<char>(*output_frame.payload_stream)),
+                           std::istreambuf_iterator<char>());
+    EXPECT_EQ(output_data, test_data) << "Pipeline payload doesn't match input";
+}
 
 TEST_F(CodecTest, MinimalFrameSerializeDeserialize) {
     MessageFrame input_frame;
