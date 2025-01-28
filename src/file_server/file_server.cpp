@@ -7,33 +7,10 @@
 #include "network/peer_manager.hpp"
 #include <memory>
 #include <functional>
+#include "utils/pipeliner.hpp"
 
 namespace dfs {
 namespace network {
-
-// Helper class for streaming pipeline
-class StreamPipeline : public std::stringstream {
-  std::function<bool(std::stringstream&)> producer_;
-  mutable bool produced_ = false;
-
-public:
-  StreamPipeline(std::function<bool(std::stringstream&)> producer)
-    : producer_(producer) {}
-
-  // Sync method to implement on-demand data production
-  virtual int sync() {
-    if (!produced_) {
-      produced_ = true;
-      std::stringstream temp;
-      if (!producer_(temp)) {
-        setstate(std::ios::failbit);
-        return -1;
-      }
-      str(temp.str());
-    }
-    return 0;
-  }
-};
 
 FileServer::FileServer(uint32_t ID, const std::vector<uint8_t>& key, PeerManager& peer_manager, Channel& channel)
   : ID_(ID)
@@ -67,7 +44,6 @@ FileServer::FileServer(uint32_t ID, const std::vector<uint8_t>& key, PeerManager
   }
 }
 
-// Removing duplicate get_store() definitions since they're now inline in the header
 
 std::string FileServer::extract_filename(const MessageFrame& frame) {
   if (!frame.payload_stream) {
@@ -126,47 +102,37 @@ bool FileServer::prepare_and_send(const std::string& filename, MessageType messa
     auto iv = crypto_stream.generate_IV();
     frame.iv_.assign(iv.begin(), iv.end());
 
-    // For STORE_FILE, implement streaming pipeline
-    if (message_type == MessageType::STORE_FILE) {
-      // Create producer function that reads from store
-      auto store_producer = [this, &filename](std::stringstream& output) -> bool {
-        try {
-          store_->get(filename, output);
-          return output.good();
-        } catch (const std::exception& e) {
-          BOOST_LOG_TRIVIAL(error) << "Error reading from store: " << e.what();
-          return false;
-        }
-      };
-
-      // Create streaming payload
-      frame.payload_stream = std::make_shared<StreamPipeline>(store_producer);
-
-      if (!frame.payload_stream->good()) {
-        BOOST_LOG_TRIVIAL(error) << "Failed to initialize streaming payload";
+    // Create producer for store operations
+    auto store_producer = [this, &filename](std::stringstream& output) -> bool {
+      try {
+        store_->get(filename, output);
+        return output.good();
+      } catch (const std::exception& e) {
+        BOOST_LOG_TRIVIAL(error) << "Error reading from store: " << e.what();
         return false;
       }
-    } else {
-      // For other message types, use regular stringstream
-      frame.payload_stream = std::make_shared<std::stringstream>();
-    }
+    };
 
-    // Create serialization producer
-    auto serialize_producer = [this, &frame](std::stringstream& output) -> bool {
+    // Create serialization transform
+    auto serialize_transform = [this, &frame](std::stringstream& input, std::stringstream& output) -> bool {
+      frame.payload_stream = std::make_shared<std::stringstream>();
+      *frame.payload_stream << input.rdbuf();
       return codec_->serialize(frame, output);
     };
 
-    // Create serialization pipeline
-    StreamPipeline serialized_stream(serialize_producer);
+    // Create and configure pipeline
+    auto pipeline = utils::Pipeliner::create(store_producer)
+                    ->transform(serialize_transform);
+    pipeline->set_buffer_size(1024 * 1024); // 1MB buffer size
 
-    // Send the serialized data
+    // Send the pipeline data
     bool send_success;
     if (peer_id) {
       BOOST_LOG_TRIVIAL(debug) << "Sending file to peer: " << static_cast<int>(*peer_id);
-      send_success = peer_manager_.send_to_peer(*peer_id, serialized_stream);
+      send_success = peer_manager_.send_to_peer(*peer_id, *pipeline);
     } else {
       BOOST_LOG_TRIVIAL(debug) << "Broadcasting file to all peers";
-      send_success = peer_manager_.broadcast_stream(serialized_stream);
+      send_success = peer_manager_.broadcast_stream(*pipeline);
     }
 
     if (!send_success) {
