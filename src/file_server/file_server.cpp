@@ -33,6 +33,15 @@ public:
     }
     return 0;
   }
+  template <typename T>
+  auto then(T next) {
+      auto combined = [this, next](std::stringstream& output) -> bool {
+          if (this->sync() != 0) return false;
+          return next(*this);
+      };
+      return std::make_shared<StreamPipeline>(combined);
+  }
+
 };
 
 FileServer::FileServer(uint32_t ID, const std::vector<uint8_t>& key, PeerManager& peer_manager, Channel& channel)
@@ -67,7 +76,6 @@ FileServer::FileServer(uint32_t ID, const std::vector<uint8_t>& key, PeerManager
   }
 }
 
-// Removing duplicate get_store() definitions since they're now inline in the header
 
 std::string FileServer::extract_filename(const MessageFrame& frame) {
   if (!frame.payload_stream) {
@@ -110,77 +118,98 @@ std::string FileServer::extract_filename(const MessageFrame& frame) {
 }
 
 bool FileServer::prepare_and_send(const std::string& filename, MessageType message_type, std::optional<uint8_t> peer_id) {
-  try {
-    BOOST_LOG_TRIVIAL(info) << "Preparing file: " << filename 
-                          << " for " << (peer_id ? "peer " + std::to_string(*peer_id) : "broadcast")
-                          << " with message type: " << static_cast<int>(message_type);
+    try {
+        BOOST_LOG_TRIVIAL(info) << "Preparing file: " << filename 
+                              << " for " << (peer_id ? "peer " + std::to_string(*peer_id) : "broadcast")
+                              << " with message type: " << static_cast<int>(message_type);
 
-    // Create message frame
-    MessageFrame frame;
-    frame.message_type = message_type;
-    frame.source_id = ID_;
-    frame.filename_length = filename.length();
+        // Create message frame
+        MessageFrame frame;
+        frame.message_type = message_type;
+        frame.source_id = ID_;
+        frame.filename_length = filename.length();
 
-    // Generate and set IV
-    crypto::CryptoStream crypto_stream;
-    auto iv = crypto_stream.generate_IV();
-    frame.iv_.assign(iv.begin(), iv.end());
+        // Generate and set IV
+        crypto::CryptoStream crypto_stream;
+        auto iv = crypto_stream.generate_IV();
+        frame.iv_.assign(iv.begin(), iv.end());
 
-    // For STORE_FILE, implement streaming pipeline
-    if (message_type == MessageType::STORE_FILE) {
-      // Create producer function that reads from store
-      auto store_producer = [this, &filename](std::stringstream& output) -> bool {
-        try {
-          store_->get(filename, output);
-          return output.good();
-        } catch (const std::exception& e) {
-          BOOST_LOG_TRIVIAL(error) << "Error reading from store: " << e.what();
-          return false;
+        // For STORE_FILE, create pipeline
+        if (message_type == MessageType::STORE_FILE) {
+            // Create producer function that reads from store
+            auto store_producer = [this, &filename](std::stringstream& output) -> bool {
+                try {
+                    store_->get(filename, output);
+                    return output.good();
+                } catch (const std::exception& e) {
+                    BOOST_LOG_TRIVIAL(error) << "Error reading from store: " << e.what();
+                    return false;
+                }
+            };
+
+            // Create serialization producer
+            auto serialize_producer = [this, &frame](std::stringstream& output) -> bool {
+                try {
+                    codec_->serialize(frame, output);
+                    return output.good();
+                } catch (const std::exception& e) {
+                    BOOST_LOG_TRIVIAL(error) << "Error in serialization: " << e.what();
+                    return false;
+                }
+            };
+
+            // Create pipeline
+            auto pipeline = std::make_shared<StreamPipeline>(store_producer);
+            auto serialized_pipeline = pipeline->then(serialize_producer);
+
+            // Send the serialized data
+            bool send_success;
+            if (peer_id) {
+                BOOST_LOG_TRIVIAL(debug) << "Sending file to peer: " << static_cast<int>(*peer_id);
+                send_success = peer_manager_.send_to_peer(*peer_id, *serialized_pipeline);
+            } else {
+                BOOST_LOG_TRIVIAL(debug) << "Broadcasting file to all peers";
+                send_success = peer_manager_.broadcast_stream(*serialized_pipeline);
+            }
+
+            if (!send_success) {
+                BOOST_LOG_TRIVIAL(error) << "Failed to send file: " << filename;
+                return false;
+            }
+        } else {
+            // For other message types, use regular stringstream
+            frame.payload_stream = std::make_shared<std::stringstream>();
+
+            // Create serialization pipeline
+            auto serialize_producer = [this, &frame](std::stringstream& output) -> bool {
+                return codec_->serialize(frame, output) > 0;
+            };
+
+            StreamPipeline serialized_stream(serialize_producer);
+
+            // Send the serialized data
+            bool send_success;
+            if (peer_id) {
+                BOOST_LOG_TRIVIAL(debug) << "Sending file to peer: " << static_cast<int>(*peer_id);
+                send_success = peer_manager_.send_to_peer(*peer_id, serialized_stream);
+            } else {
+                BOOST_LOG_TRIVIAL(debug) << "Broadcasting file to all peers";
+                send_success = peer_manager_.broadcast_stream(serialized_stream);
+            }
+
+            if (!send_success) {
+                BOOST_LOG_TRIVIAL(error) << "Failed to send file: " << filename;
+                return false;
+            }
         }
-      };
 
-      // Create streaming payload
-      frame.payload_stream = std::make_shared<StreamPipeline>(store_producer);
-
-      if (!frame.payload_stream->good()) {
-        BOOST_LOG_TRIVIAL(error) << "Failed to initialize streaming payload";
+        BOOST_LOG_TRIVIAL(info) << "Successfully prepared and sent file: " << filename;
+        return true;
+    }
+    catch (const std::exception& e) {
+        BOOST_LOG_TRIVIAL(error) << "Error in prepare_and_send: " << e.what();
         return false;
-      }
-    } else {
-      // For other message types, use regular stringstream
-      frame.payload_stream = std::make_shared<std::stringstream>();
     }
-
-    // Create serialization producer
-    auto serialize_producer = [this, &frame](std::stringstream& output) -> bool {
-      return codec_->serialize(frame, output);
-    };
-
-    // Create serialization pipeline
-    StreamPipeline serialized_stream(serialize_producer);
-
-    // Send the serialized data
-    bool send_success;
-    if (peer_id) {
-      BOOST_LOG_TRIVIAL(debug) << "Sending file to peer: " << static_cast<int>(*peer_id);
-      send_success = peer_manager_.send_to_peer(*peer_id, serialized_stream);
-    } else {
-      BOOST_LOG_TRIVIAL(debug) << "Broadcasting file to all peers";
-      send_success = peer_manager_.broadcast_stream(serialized_stream);
-    }
-
-    if (!send_success) {
-      BOOST_LOG_TRIVIAL(error) << "Failed to send file: " << filename;
-      return false;
-    }
-
-    BOOST_LOG_TRIVIAL(info) << "Successfully prepared and sent file: " << filename;
-    return true;
-  }
-  catch (const std::exception& e) {
-    BOOST_LOG_TRIVIAL(error) << "Error in prepare_and_send: " << e.what();
-    return false;
-  }
 }
 
 bool FileServer::store_file(const std::string& filename, std::stringstream& input) {
