@@ -20,7 +20,6 @@ namespace network {
  * This class provides TCP/IP-based network communication with stream support.
  * It implements an asynchronous event-driven approach for handling network I/O,
  * utilizing boost::asio for efficient, non-blocking operations.
- * Messages are fully buffered before being processed to ensure completeness.
  */
 class TCP_Peer : public Peer,
                  public std::enable_shared_from_this<TCP_Peer> {
@@ -70,9 +69,6 @@ private:
     // Stream buffers
     std::unique_ptr<boost::asio::streambuf> input_buffer_;
     std::unique_ptr<std::istream> input_stream_;
-
-    // Message buffering
-    std::string message_buffer_; // Stores incomplete messages until they are complete
 
     // Internal methods
     void initialize_streams();
