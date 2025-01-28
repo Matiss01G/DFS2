@@ -45,6 +45,10 @@ public:
     // Handle incoming get message frame
     bool handle_get(const MessageFrame& frame);
 
+    // Methods to access the store (moved to public for testing)
+    const dfs::store::Store& get_store() const { return *store_; }
+    dfs::store::Store& get_store() { return *store_; }
+
 private:
     uint32_t ID_;
     std::vector<uint8_t> key_;

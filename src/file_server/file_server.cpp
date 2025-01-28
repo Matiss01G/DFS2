@@ -67,20 +67,7 @@ FileServer::FileServer(uint32_t ID, const std::vector<uint8_t>& key, PeerManager
   }
 }
 
-// Add method to access the Store object
-const dfs::store::Store& FileServer::get_store() const {
-  if (!store_) {
-    throw std::runtime_error("Store not initialized");
-  }
-  return *store_;
-}
-
-dfs::store::Store& FileServer::get_store() {
-  if (!store_) {
-    throw std::runtime_error("Store not initialized");
-  }
-  return *store_;
-}
+// Removing duplicate get_store() definitions since they're now inline in the header
 
 std::string FileServer::extract_filename(const MessageFrame& frame) {
   if (!frame.payload_stream) {

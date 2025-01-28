@@ -110,7 +110,7 @@ void TCP_Peer::process_stream() {
     while (processing_active_ && socket_->is_open()) {
       io_context_.run_one();
     }
-
+    
     work_guard.reset();
 
     // Process any remaining events
@@ -137,11 +137,16 @@ void TCP_Peer::async_read_next() {
     *input_buffer_,
     '\n',
     [this](const boost::system::error_code& ec, std::size_t bytes_transferred) {
+      BOOST_LOG_TRIVIAL(debug) << "Read callback triggered";
+      
       if (!ec && bytes_transferred > 0) {
         std::string data;
         std::istream is(input_buffer_.get());
         std::getline(is, data);
 
+        BOOST_LOG_TRIVIAL(debug) << "Read from buffer - got " 
+          << data.length() << " bytes of data";
+        
         if (!data.empty()) {
           BOOST_LOG_TRIVIAL(debug) << "Received data: " << data;
 
@@ -192,10 +197,14 @@ bool TCP_Peer::send_stream(std::istream& input_stream, std::size_t buffer_size) 
     boost::system::error_code ec;
     bool data_sent = false;
 
+    BOOST_LOG_TRIVIAL(debug) << "Peer " << static_cast<int>(peer_id_) << " starting to read and send data chunks";
+    
     // Read and send data in chunks
     while (input_stream.good()) {
       input_stream.read(buffer.data(), buffer_size);
       std::size_t bytes_read = input_stream.gcount();
+
+      BOOST_LOG_TRIVIAL(debug) << "Peer " << static_cast<int>(peer_id_) << " read " << bytes_read << " bytes from stream";
 
       if (bytes_read > 0) {
         // Write exact number of bytes read

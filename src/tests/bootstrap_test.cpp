@@ -142,8 +142,8 @@ TEST_F(BootstrapTest, FileSharing) {
 
     // Verify file content matches in peer2's store
     std::stringstream retrieved_content;
-    ASSERT_TRUE(file_server2.get_store().get(TEST_FILENAME, retrieved_content))
-        << "Failed to retrieve file from peer2's store";
+    file_server2.get_store().get(TEST_FILENAME, retrieved_content);
+    ASSERT_TRUE(retrieved_content.good()) << "Failed to retrieve file from peer2's store";
     ASSERT_EQ(retrieved_content.str(), TEST_FILE_CONTENT)
         << "Retrieved file content should match original content";
 

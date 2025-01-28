@@ -155,7 +155,7 @@ bool PeerManager::broadcast_stream(std::istream& input_stream) {
       input_stream.seekg(initial_pos);
 
       if (!is_connected(peer_pair.first)) {
-        BOOST_LOG_TRIVIAL(warning) << "Skipping disconnected peer: " << peer_pair.first;
+        BOOST_LOG_TRIVIAL(warning) << "Skipping disconnected peer: " << static_cast<int>(peer_pair.first);
         all_success = false;
         continue;
       }
@@ -164,10 +164,10 @@ bool PeerManager::broadcast_stream(std::istream& input_stream) {
 
       if (peer_pair.second->send_stream(input_stream)) {
         success_count++;
-        BOOST_LOG_TRIVIAL(debug) << "Successfully broadcast to peer: " << peer_pair.first;
+        BOOST_LOG_TRIVIAL(debug) << "Successfully broadcast to peer: " << static_cast<int>(peer_pair.first);
       } else {
         all_success = false;
-        BOOST_LOG_TRIVIAL(error) << "Failed to broadcast to peer: " << peer_pair.first;
+        BOOST_LOG_TRIVIAL(error) << "Failed to broadcast to peer: " << static_cast<int>(peer_pair.first);
       }
     } catch (const std::exception& e) {
       all_success = false;
