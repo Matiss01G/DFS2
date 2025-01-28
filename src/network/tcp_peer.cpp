@@ -148,7 +148,7 @@ void TCP_Peer::async_read_next() {
           << data.length() << " bytes of data";
         
         if (!data.empty()) {
-          BOOST_LOG_TRIVIAL(debug) << "Received data: " << data;
+          BOOST_LOG_TRIVIAL(debug) << "Receiving data";
 
           // Process data using stream processor if available
           if (stream_processor_) {

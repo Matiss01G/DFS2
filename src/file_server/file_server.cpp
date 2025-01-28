@@ -103,9 +103,13 @@ bool FileServer::prepare_and_send(const std::string& filename, MessageType messa
     frame.iv_.assign(iv.begin(), iv.end());
 
     // Register producer function for pipeline
-    auto store_producer = [this, &filename](std::stringstream& output) -> bool {
+    auto store_producer = [this, &filename, first_read = true](std::stringstream& output) mutable -> bool {
+      if (!first_read) {
+        return false;  // We've already read the file
+      }
       try {
         store_->get(filename, output);
+        first_read = false;
         return output.good();
       } catch (const std::exception& e) {
         BOOST_LOG_TRIVIAL(error) << "Error reading from store: " << e.what();
@@ -117,6 +121,12 @@ bool FileServer::prepare_and_send(const std::string& filename, MessageType messa
     auto serialize_transform = [this, &frame](std::stringstream& input, std::stringstream& output) -> bool {
       frame.payload_stream = std::make_shared<std::stringstream>();
       *frame.payload_stream << input.rdbuf();
+
+      // Get position to find size
+      frame.payload_stream->seekp(0, std::ios::end);
+      frame.payload_size = frame.payload_stream->tellp();
+      frame.payload_stream->seekg(0);
+      
       return codec_->serialize(frame, output);
     };
 
@@ -126,7 +136,7 @@ bool FileServer::prepare_and_send(const std::string& filename, MessageType messa
     pipeline->set_buffer_size(1024 * 1024); // 1MB buffer size
 
     // Flush the pipeline before sending to account for files smaller than 1MB
-    // pipeline->flush();
+    pipeline->flush();
 
     // Send the pipeline data
     bool send_success;
