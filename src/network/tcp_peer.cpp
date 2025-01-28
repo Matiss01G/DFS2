@@ -157,7 +157,7 @@ void TCP_Peer::async_read_next() {
             try {
               boost::asio::ip::tcp::endpoint remote_endpoint = socket_->remote_endpoint();
               std::string source_id = remote_endpoint.address().to_string() + ":" + 
-                           std::to_string(remote_endpoint.port());
+                                       std::to_string(remote_endpoint.port());
               BOOST_LOG_TRIVIAL(debug) << "Processing data from " << source_id;
               stream_processor_(iss);
             } catch (const std::exception& e) {
@@ -196,15 +196,18 @@ bool TCP_Peer::send_stream(std::istream& input_stream, std::size_t buffer_size) 
     std::vector<char> buffer(buffer_size);
     boost::system::error_code ec;
     bool data_sent = false;
+    std::streampos initial_pos = input_stream.tellg();
 
-    BOOST_LOG_TRIVIAL(debug) << "Peer " << static_cast<int>(peer_id_) << " starting to read and send data chunks";
-    
+    BOOST_LOG_TRIVIAL(debug) << "Peer " << static_cast<int>(peer_id_) 
+                            << " starting to read and send data chunks";
+
     // Read and send data in chunks
     while (input_stream.good()) {
       input_stream.read(buffer.data(), buffer_size);
       std::size_t bytes_read = input_stream.gcount();
 
-      BOOST_LOG_TRIVIAL(debug) << "Peer " << static_cast<int>(peer_id_) << " read " << bytes_read << " bytes from stream";
+      BOOST_LOG_TRIVIAL(debug) << "Peer " << static_cast<int>(peer_id_) 
+                              << " read " << bytes_read << " bytes from stream";
 
       if (bytes_read > 0) {
         // Write exact number of bytes read
@@ -221,9 +224,13 @@ bool TCP_Peer::send_stream(std::istream& input_stream, std::size_t buffer_size) 
         }
 
         data_sent = true;
-        BOOST_LOG_TRIVIAL(debug) << "Sent " << bytes_written << " bytes from stream";
+        BOOST_LOG_TRIVIAL(debug) << "Sent " << bytes_written << " bytes to peer";
       }
     }
+
+    // Reset stream position for potential reuse
+    input_stream.clear();
+    input_stream.seekg(initial_pos);
 
     // Always append newline character for message framing
     char newline = '\n';
@@ -240,7 +247,7 @@ bool TCP_Peer::send_stream(std::istream& input_stream, std::size_t buffer_size) 
     }
 
     BOOST_LOG_TRIVIAL(debug) << "Sent message delimiter";
-    return true;
+    return data_sent;  // Only return true if we actually sent data
   } catch (const std::exception& e) {
     BOOST_LOG_TRIVIAL(error) << "Stream send error: " << e.what();
     return false;

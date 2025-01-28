@@ -114,19 +114,26 @@ bool FileServer::prepare_and_send(const std::string& filename, MessageType messa
     };
 
     // Register transformer function for pipeline
-    auto serialize_transform = [this, &frame](std::stringstream& input, std::stringstream& output) -> bool {
+    auto serialize_transform = [this, &frame, &filename](std::stringstream& input, std::stringstream& output) -> bool {
       frame.payload_stream = std::make_shared<std::stringstream>();
+
+      // Write filename first
+      frame.payload_stream->write(filename.c_str(), filename.length());
+
+      // Copy the file content after filename
       *frame.payload_stream << input.rdbuf();
+
+      BOOST_LOG_TRIVIAL(debug) << "Serializing frame with " << frame.payload_stream->tellp() << " bytes of data";
       return codec_->serialize(frame, output);
     };
 
-    // Create pipeline with producer and transformer defined above
+    // Create pipeline with producer and transformer
     auto pipeline = utils::Pipeliner::create(store_producer)
                     ->transform(serialize_transform);
     pipeline->set_buffer_size(1024 * 1024); // 1MB buffer size
 
-    // Flush the pipeline before sending to account for files smaller than 1MB
-    // pipeline->flush();
+    // Force pipeline to flush all data
+    pipeline->flush();
 
     // Send the pipeline data
     bool send_success;
