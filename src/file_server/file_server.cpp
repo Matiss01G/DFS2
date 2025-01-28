@@ -102,7 +102,7 @@ bool FileServer::prepare_and_send(const std::string& filename, MessageType messa
     auto iv = crypto_stream.generate_IV();
     frame.iv_.assign(iv.begin(), iv.end());
 
-    // Create producer for store operations
+    // Register producer function for pipeline
     auto store_producer = [this, &filename](std::stringstream& output) -> bool {
       try {
         store_->get(filename, output);
@@ -113,17 +113,20 @@ bool FileServer::prepare_and_send(const std::string& filename, MessageType messa
       }
     };
 
-    // Create serialization transform
+    // Register transformer function for pipeline
     auto serialize_transform = [this, &frame](std::stringstream& input, std::stringstream& output) -> bool {
       frame.payload_stream = std::make_shared<std::stringstream>();
       *frame.payload_stream << input.rdbuf();
       return codec_->serialize(frame, output);
     };
 
-    // Create and configure pipeline
+    // Create pipeline with producer and transformer defined above
     auto pipeline = utils::Pipeliner::create(store_producer)
                     ->transform(serialize_transform);
     pipeline->set_buffer_size(1024 * 1024); // 1MB buffer size
+
+    // Flush the pipeline before sending to account for files smaller than 1MB
+    // pipeline->flush();
 
     // Send the pipeline data
     bool send_success;

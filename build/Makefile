@@ -670,6 +670,30 @@ src/tests/tcp_peer_tests.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/tcp_peer_tests.dir/build.make CMakeFiles/tcp_peer_tests.dir/src/tests/tcp_peer_tests.cpp.s
 .PHONY : src/tests/tcp_peer_tests.cpp.s
 
+src/utils/pipeliner.o: src/utils/pipeliner.cpp.o
+.PHONY : src/utils/pipeliner.o
+
+# target to build an object file
+src/utils/pipeliner.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/dfs_network.dir/build.make CMakeFiles/dfs_network.dir/src/utils/pipeliner.cpp.o
+.PHONY : src/utils/pipeliner.cpp.o
+
+src/utils/pipeliner.i: src/utils/pipeliner.cpp.i
+.PHONY : src/utils/pipeliner.i
+
+# target to preprocess a source file
+src/utils/pipeliner.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/dfs_network.dir/build.make CMakeFiles/dfs_network.dir/src/utils/pipeliner.cpp.i
+.PHONY : src/utils/pipeliner.cpp.i
+
+src/utils/pipeliner.s: src/utils/pipeliner.cpp.s
+.PHONY : src/utils/pipeliner.s
+
+# target to generate assembly for a file
+src/utils/pipeliner.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/dfs_network.dir/build.make CMakeFiles/dfs_network.dir/src/utils/pipeliner.cpp.s
+.PHONY : src/utils/pipeliner.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -738,6 +762,9 @@ help:
 	@echo "... src/tests/tcp_peer_tests.o"
 	@echo "... src/tests/tcp_peer_tests.i"
 	@echo "... src/tests/tcp_peer_tests.s"
+	@echo "... src/utils/pipeliner.o"
+	@echo "... src/utils/pipeliner.i"
+	@echo "... src/utils/pipeliner.s"
 .PHONY : help
 
 

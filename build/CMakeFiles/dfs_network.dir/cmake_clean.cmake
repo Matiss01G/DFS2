@@ -13,6 +13,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/dfs_network.dir/src/network/tcp_peer.cpp.o.d"
   "CMakeFiles/dfs_network.dir/src/network/tcp_server.cpp.o"
   "CMakeFiles/dfs_network.dir/src/network/tcp_server.cpp.o.d"
+  "CMakeFiles/dfs_network.dir/src/utils/pipeliner.cpp.o"
+  "CMakeFiles/dfs_network.dir/src/utils/pipeliner.cpp.o.d"
   "libdfs_network.a"
   "libdfs_network.pdb"
 )

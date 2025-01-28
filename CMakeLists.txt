@@ -10,7 +10,6 @@ find_package(OpenSSL REQUIRED)
 find_package(Boost REQUIRED COMPONENTS log log_setup system thread)
 find_package(GTest REQUIRED)
 
-
 # Create crypto library
 add_library(dfs_crypto
     src/crypto/crypto_stream.cpp
@@ -36,6 +35,7 @@ add_library(dfs_network
     src/network/tcp_server.cpp
     src/network/bootstrap.cpp
     src/file_server/file_server.cpp
+    src/utils/pipeliner.cpp
 )
 target_include_directories(dfs_network PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
