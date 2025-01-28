@@ -131,45 +131,22 @@ void TCP_Peer::async_read_next() {
 
   BOOST_LOG_TRIVIAL(trace) << "Setting up next async read";
 
-  // Read until newline delimiter
-  boost::asio::async_read_until(
-    *socket_,
-    *input_buffer_,
-    '\n',
-    [this](const boost::system::error_code& ec, std::size_t bytes_transferred) {
+  // Use fixed size buffer for reading chunks
+  static const size_t chunk_size = 1024;
+  auto chunk_buffer = std::make_shared<std::vector<char>>(chunk_size);
+
+  // Asynchronously read a chunk of data
+  socket_->async_read_some(
+    boost::asio::buffer(*chunk_buffer),
+    [this, chunk_buffer](const boost::system::error_code& ec, std::size_t bytes_transferred) {
       BOOST_LOG_TRIVIAL(debug) << "Read callback triggered";
-      
+
       if (!ec && bytes_transferred > 0) {
-        std::string data;
-        std::istream is(input_buffer_.get());
-        std::getline(is, data);
+        // Add received data to input buffer
+        input_buffer_->sputn(chunk_buffer->data(), bytes_transferred);
 
-        BOOST_LOG_TRIVIAL(debug) << "Read from buffer - got " 
-          << data.length() << " bytes of data";
-        
-        if (!data.empty()) {
-          BOOST_LOG_TRIVIAL(debug) << "Receiving data";
-
-          // Process data using stream processor if available
-          if (stream_processor_) {
-            std::string framed_data = data + '\n';
-            std::istringstream iss(framed_data);
-            try {
-              boost::asio::ip::tcp::endpoint remote_endpoint = socket_->remote_endpoint();
-              std::string source_id = remote_endpoint.address().to_string() + ":" + 
-                           std::to_string(remote_endpoint.port());
-              BOOST_LOG_TRIVIAL(debug) << "Processing data from " << source_id;
-              stream_processor_(iss);
-            } catch (const std::exception& e) {
-              BOOST_LOG_TRIVIAL(error) << "Stream processor error: " << e.what();
-            }
-          } else {
-            // Store data in input buffer if no processor is set
-            std::string framed_data = data + '\n';
-            input_buffer_->sputn(framed_data.c_str(), framed_data.length());
-            BOOST_LOG_TRIVIAL(debug) << "Data forwarded to input stream";
-          }
-        }
+        // Process complete messages in the buffer
+        process_buffered_messages();
 
         // Continue reading if still active
         if (processing_active_ && socket_->is_open()) {
@@ -182,6 +159,32 @@ void TCP_Peer::async_read_next() {
         }
       }
     });
+}
+
+void TCP_Peer::process_buffered_messages() {
+  std::string data;
+  std::istream is(input_buffer_.get());
+
+  while (std::getline(is, data)) {
+    if (!data.empty()) {
+      BOOST_LOG_TRIVIAL(debug) << "Processing complete message of length: " << data.length();
+
+      // Process data using stream processor if available
+      if (stream_processor_) {
+        std::string framed_data = data + '\n';
+        std::istringstream iss(framed_data);
+        try {
+          boost::asio::ip::tcp::endpoint remote_endpoint = socket_->remote_endpoint();
+          std::string source_id = remote_endpoint.address().to_string() + ":" + 
+                       std::to_string(remote_endpoint.port());
+          BOOST_LOG_TRIVIAL(debug) << "Processing message from " << source_id;
+          stream_processor_(iss);
+        } catch (const std::exception& e) {
+          BOOST_LOG_TRIVIAL(error) << "Stream processor error: " << e.what();
+        }
+      }
+    }
+  }
 }
 
 // Send data stream to peer with buffered writing
