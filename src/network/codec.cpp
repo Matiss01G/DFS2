@@ -21,9 +21,13 @@ std::size_t Codec::serialize(const MessageFrame& frame, std::ostream& output) {
 
   std::size_t total_bytes = 0;
 
-  // Create and nitialize crypto stream with key and IV
-  crypto::CryptoStream crypto;
-  crypto.initialize(key_, frame.iv_);
+  // Create and itialize crypto stream with key and IV
+  crypto::CryptoStream filename_crypto;
+  crypto::CryptoStream payload_crypto;
+
+  filename_crypto.initialize(key_, frame.iv_);
+  payload_crypto.initialize(key_, frame.iv_);
+
   BOOST_LOG_TRIVIAL(info) << "Starting message frame serialization";
 
   try {
@@ -56,7 +60,7 @@ std::size_t Codec::serialize(const MessageFrame& frame, std::ostream& output) {
     filename_length_stream.write(reinterpret_cast<char*>(&network_filename_length), sizeof(network_filename_length));
     // Encrypt the filename length
     std::stringstream encrypted_filename_length;
-    crypto.encrypt(filename_length_stream, encrypted_filename_length);
+    filename_crypto.encrypt(filename_length_stream, encrypted_filename_length);
     // Write filename length
     BOOST_LOG_TRIVIAL(debug) << "Writing encrypted filename length";
     write_bytes(output, encrypted_filename_length.str().data(), encrypted_filename_length.str().size());
@@ -66,7 +70,7 @@ std::size_t Codec::serialize(const MessageFrame& frame, std::ostream& output) {
     if (frame.payload_size > 0 && frame.payload_stream) {
       BOOST_LOG_TRIVIAL(debug) << "Encrypting and writing payload of size: " << frame.payload_size;
       frame.payload_stream->seekg(0);
-      crypto.encrypt(*frame.payload_stream, output);
+      payload_crypto.encrypt(*frame.payload_stream, output);
       total_bytes += frame.payload_size;
     } 
 
@@ -90,7 +94,8 @@ MessageFrame Codec::deserialize(std::istream& input) {
   std::size_t total_bytes = 0;
 
   // Create CryptoStream instance
-  crypto::CryptoStream crypto;
+  crypto::CryptoStream filename_crypto;
+  crypto::CryptoStream payload_crypto;
 
   BOOST_LOG_TRIVIAL(info) << "Starting message frame deserialization";
 
@@ -102,7 +107,9 @@ MessageFrame Codec::deserialize(std::istream& input) {
     total_bytes += frame.iv_.size();
 
     // Initialize crypto stream with key and IV
-    crypto.initialize(key_, frame.iv_);
+    filename_crypto.initialize(key_, frame.iv_);
+    payload_crypto.initialize(key_, frame.iv_);
+
 
     // Read message type
     uint8_t msg_type;
@@ -131,7 +138,7 @@ MessageFrame Codec::deserialize(std::istream& input) {
     std::stringstream encrypted_filename_length_stream;
     encrypted_filename_length_stream.write(encrypted_filename_length.data(), encrypted_filename_length.size());
     std::stringstream decrypted_filename_length_stream;
-    crypto.decrypt(encrypted_filename_length_stream, decrypted_filename_length_stream);
+    filename_crypto.decrypt(encrypted_filename_length_stream, decrypted_filename_length_stream);
     uint32_t network_filename_length;
     decrypted_filename_length_stream.read(reinterpret_cast<char*>(&network_filename_length), sizeof(network_filename_length));
     frame.filename_length = boost::endian::big_to_native(network_filename_length);
@@ -146,7 +153,7 @@ MessageFrame Codec::deserialize(std::istream& input) {
     // Decrypt payload if present
     if (frame.payload_size > 0) {
       BOOST_LOG_TRIVIAL(debug) << "Decrypting payload of size: " << frame.payload_size;
-      crypto.decrypt(input, *frame.payload_stream);
+      payload_crypto.decrypt(input, *frame.payload_stream);
       total_bytes += frame.payload_size;
       frame.payload_stream->seekg(0);
     }
