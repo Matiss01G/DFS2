@@ -28,7 +28,7 @@ task = "packager.installForAll"
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "cd /home/runner/workspace/build && cmake .. && make"
+args = "cd /home/runner/workspace/build && cmake .. && make && ctest --output-on-failure"
 
 [[ports]]
 localPort = 3001
@@ -47,4 +47,4 @@ localPort = 12345
 localPort = 50001
 
 [deployment]
-run = ["sh", "-c", "cd /home/runner/workspace/build && cmake .. && make"]
+run = ["sh", "-c", "cd /home/runner/workspace/build && cmake .. && make && ctest --output-on-failure"]

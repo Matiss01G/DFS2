@@ -74,7 +74,6 @@ private:
     void initialize_streams();
     void cleanup_connection();
     void process_stream();
-    void process_buffered_messages();  // Processes messages buffered until newline
 
     // Codec for encryption/decryption
     std::unique_ptr<Codec> codec_;
