@@ -133,14 +133,19 @@ MessageFrame Codec::deserialize(std::istream& input) {
     total_bytes += sizeof(network_payload_size);
 
     // Decrypt filename length
+    // create buffer and read 1 block of encrypted data into it
     std::vector<char> encrypted_filename_length(crypto::CryptoStream::BLOCK_SIZE);
     read_bytes(input, encrypted_filename_length.data(), encrypted_filename_length.size());
+    // Create stream for encrypted data and copy encrypted data into it
     std::stringstream encrypted_filename_length_stream;
     encrypted_filename_length_stream.write(encrypted_filename_length.data(), encrypted_filename_length.size());
+    // Create stream fopr decrypted data and decrypt filename_length into it
     std::stringstream decrypted_filename_length_stream;
     filename_crypto.decrypt(encrypted_filename_length_stream, decrypted_filename_length_stream);
+    // Create variable for network ordered filename_length and read decrypted data into it
     uint32_t network_filename_length;
     decrypted_filename_length_stream.read(reinterpret_cast<char*>(&network_filename_length), sizeof(network_filename_length));
+    // Convert to host byte order
     frame.filename_length = boost::endian::big_to_native(network_filename_length);
     BOOST_LOG_TRIVIAL(debug) << "Read decrypted filename length: " << frame.filename_length;
     total_bytes += encrypted_filename_length.size();
