@@ -4,6 +4,8 @@
 #include <cstdint>
 #include <vector>
 #include <memory>
+#include <mutex>
+#include <thread>
 #include <string>
 #include <sstream>
 #include <optional>
@@ -25,7 +27,7 @@ public:
     FileServer(uint32_t ID, const std::vector<uint8_t>& key, PeerManager& peer_manager, Channel& channel);
 
     // Virtual destructor for proper cleanup
-    virtual ~FileServer() = default;
+    virtual ~FileServer();
 
     // Extract filename from message frame's payload stream
     std::string extract_filename(const MessageFrame& frame);
@@ -56,7 +58,10 @@ private:
     std::unique_ptr<Codec> codec_;
     Channel& channel_;
     PeerManager& peer_manager_;  // Added PeerManager reference
-
+    std::mutex mutex_;
+    std::atomic<bool> running_{true};
+    std::unique_ptr<std::thread> listener_thread_;
+    
     // Channel listener continuously checks for messages in the channel queue
     void channel_listener();
 

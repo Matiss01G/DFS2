@@ -36,6 +36,9 @@ FileServer::FileServer(uint32_t ID, const std::vector<uint8_t>& key, PeerManager
     // Initialize codec with the provided cryptographic key and channel reference
     codec_ = std::make_unique<Codec>(key_, channel);
 
+    // Start the channel listener thread
+    listener_thread_ = std::make_unique<std::thread>(&FileServer::channel_listener, this);
+
     BOOST_LOG_TRIVIAL(info) << "FileServer initialization complete";
   }
   catch (const std::exception& e) {
@@ -44,6 +47,12 @@ FileServer::FileServer(uint32_t ID, const std::vector<uint8_t>& key, PeerManager
   }
 }
 
+FileServer::~FileServer() {
+    running_ = false;
+    if (listener_thread_ && listener_thread_->joinable()) {
+        listener_thread_->join();
+    }
+}
 
 std::string FileServer::extract_filename(const MessageFrame& frame) {
   if (!frame.payload_stream) {
@@ -60,18 +69,12 @@ std::string FileServer::extract_filename(const MessageFrame& frame) {
     // Create a buffer to hold the filename
     std::vector<char> filename_buffer(frame.filename_length);
 
-    // Save current position
-    std::streampos original_pos = frame.payload_stream->tellg();
-
     // Read the filename from the start of payload
     frame.payload_stream->seekg(0);
     if (!frame.payload_stream->read(filename_buffer.data(), frame.filename_length)) {
       BOOST_LOG_TRIVIAL(error) << "Failed to read filename from payload stream";
       throw std::runtime_error("Failed to read filename");
     }
-
-    // Restore original position
-    frame.payload_stream->seekg(original_pos);
 
     // Convert to string
     std::string filename(filename_buffer.begin(), filename_buffer.end());
@@ -108,6 +111,10 @@ bool FileServer::prepare_and_send(const std::string& filename, MessageType messa
         return false;  // We've already read the file
       }
       try {
+        // Write filename first
+        output.write(filename.c_str(), filename.length());
+
+        // Then write file content
         store_->get(filename, output);
         first_read = false;
         return output.good();
@@ -163,6 +170,8 @@ bool FileServer::prepare_and_send(const std::string& filename, MessageType messa
 }
 
 bool FileServer::store_file(const std::string& filename, std::stringstream& input) {
+  std::lock_guard<std::mutex> lock(mutex_);
+
   try {
     BOOST_LOG_TRIVIAL(info) << "Storing file with filename: " << filename;
 
@@ -200,6 +209,8 @@ bool FileServer::store_file(const std::string& filename, std::stringstream& inpu
 }
 
 std::optional<std::stringstream> FileServer::get_file(const std::string& filename) {
+  std::lock_guard<std::mutex> lock(mutex_);
+
   try {
     BOOST_LOG_TRIVIAL(info) << "Attempting to get file: " << filename;
 
@@ -315,11 +326,12 @@ bool FileServer::handle_get(const MessageFrame& frame) {
 void FileServer::channel_listener() {
   BOOST_LOG_TRIVIAL(info) << "Starting channel listener";
 
-  while (true) {
+  while (running_) {
     try {
       MessageFrame frame;
       // Try to consume a message from the channel
       if (channel_.consume(frame)) {
+        std::lock_guard<std::mutex> lock(mutex_);
         BOOST_LOG_TRIVIAL(debug) << "Retrieved message from channel, type: " 
                     << static_cast<int>(frame.message_type);
 
