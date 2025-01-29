@@ -6,5 +6,5 @@ CXX_DEFINES = -DBOOST_ATOMIC_DYN_LINK -DBOOST_ATOMIC_NO_LIB -DBOOST_CHRONO_DYN_L
 
 CXX_INCLUDES = -I/home/runner/workspace/include -I/home/runner/workspace/src/tests
 
-CXX_FLAGS = -g -std=c++20
+CXX_FLAGS = -std=c++20
 

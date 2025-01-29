@@ -14,9 +14,6 @@
 # EXTERNAL cache entries
 ########################
 
-//Disable testing
-BUILD_TESTING:BOOL=OFF
-
 //The directory containing a CMake configuration file for Boost.
 Boost_DIR:PATH=/nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/lib/cmake/Boost-1.81.0
 
@@ -39,7 +36,7 @@ CMAKE_AR:FILEPATH=/nix/store/9bv7dcvmfcjnmg5mnqwqlq2wxfn8d7yi-gcc-wrapper-13.2.0
 
 //Choose the type of build, options are: None Debug Release RelWithDebInfo
 // MinSizeRel ...
-CMAKE_BUILD_TYPE:STRING=Debug
+CMAKE_BUILD_TYPE:STRING=
 
 //Enable/Disable color output during build.
 CMAKE_COLOR_MAKEFILE:BOOL=ON
