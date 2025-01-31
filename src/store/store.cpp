@@ -48,8 +48,6 @@ void Store::store(const std::string& key, std::istream& data) {
     return;
   }
 
-  const auto TIMER = std::chrono::milliseconds(500);
-
   while (true) {
      if (data.read(buffer, sizeof(buffer))) {
        file.write(buffer, data.gcount());
