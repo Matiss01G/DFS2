@@ -56,6 +56,7 @@ private:
     // Process data through OpenSSL cipher context
     void processStream(std::istream& input, std::ostream& output, bool encrypting);
     void initializeCipher(bool encrypting);
+
 };
 
 } // namespace dfs::crypto

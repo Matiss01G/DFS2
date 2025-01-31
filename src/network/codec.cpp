@@ -153,9 +153,6 @@ MessageFrame Codec::deserialize(std::istream& input) {
 
     frame.payload_stream = std::make_shared<std::stringstream>();
 
-    channel_.produce(frame);
-    BOOST_LOG_TRIVIAL(debug) << "Codec: New frame added to channel"; 
-
     // Decrypt payload if present
     if (frame.payload_size > 0) {
       BOOST_LOG_TRIVIAL(debug) << "Codec: Decrypting payload of size: " << frame.payload_size;
@@ -163,6 +160,9 @@ MessageFrame Codec::deserialize(std::istream& input) {
       total_bytes += frame.payload_size;
       frame.payload_stream->seekg(0);
     }
+
+    channel_.produce(frame);
+    BOOST_LOG_TRIVIAL(debug) << "Codec: New frame added to channel"; 
 
     BOOST_LOG_TRIVIAL(info) << "Codec: Message frame deserialization complete. Total bytes read: " << total_bytes;
     return frame;

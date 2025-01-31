@@ -1,6 +1,7 @@
 #include "store/store.hpp"
 #include <iomanip>
 #include <boost/log/trivial.hpp>
+#include <thread>
 
 namespace dfs {
 namespace store {
@@ -34,7 +35,7 @@ void Store::store(const std::string& key, std::istream& data) {
     throw StoreError("Store: Failed to create file: " + file_path.string());
   }
   
-  // Stream data in chunks for memory efficiency
+  // Stream data in chunks for memory effi    ciency
   size_t bytes_written = 0;
   char buffer[4096];  // 4KB chunks balance memory usage and I/O performance
   
@@ -46,11 +47,22 @@ void Store::store(const std::string& key, std::istream& data) {
     BOOST_LOG_TRIVIAL(info) << "Store: Successfully stored 0 bytes with key: " << key;
     return;
   }
-  
-  while (data.read(buffer, sizeof(buffer))) {  // Read full chunks
-    file.write(buffer, data.gcount());
-    bytes_written += data.gcount();
+
+  const auto TIMER = std::chrono::milliseconds(500);
+
+  while (true) {
+     if (data.read(buffer, sizeof(buffer))) {
+       file.write(buffer, data.gcount());
+       bytes_written += data.gcount();
+       continue;
+     }
+
+     if (data.eof()) {
+         data.clear();
+         if (data.peek() == EOF) break;
+     }
   }
+
   // Handle final partial chunk if any
   if (data.gcount() > 0) {
     file.write(buffer, data.gcount());
