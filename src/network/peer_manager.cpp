@@ -10,11 +10,11 @@ PeerManager::PeerManager(Channel& channel, TCP_Server& tcp_server, const std::ve
   , key_(key) {
 
   if (key_.empty() || key_.size() != 32) {
-    BOOST_LOG_TRIVIAL(error) << "Invalid key size: " << key_.size() << " bytes. Expected 32 bytes.";
-    throw std::invalid_argument("Invalid cryptographic key size");
+    BOOST_LOG_TRIVIAL(error) << "Peer manager: Invalid key size: " << key_.size() << " bytes. Expected 32 bytes.";
+    throw std::invalid_argument("Peer manager: Invalid cryptographic key size");
   }
 
-  BOOST_LOG_TRIVIAL(info) << "PeerManager initialized with key size: " << key_.size() << " bytes";
+  BOOST_LOG_TRIVIAL(info) << "Peer manager: initialized with key size: " << key_.size() << " bytes";
 }
 
 PeerManager::~PeerManager() {
@@ -39,20 +39,20 @@ void PeerManager::create_peer(std::shared_ptr<boost::asio::ip::tcp::socket> sock
          try {
            peer->codec_->deserialize(stream);
          } catch (const std::exception& e) {
-           BOOST_LOG_TRIVIAL(error) << "Deserialization error: " << e.what();
+           BOOST_LOG_TRIVIAL(error) << "Peer manager: Deserialization error: " << e.what();
          }
        }
      );
 
     // Start stream processing
     if (!peer->start_stream_processing()) {
-    BOOST_LOG_TRIVIAL(error) << "Failed to start stream processing for peer: " << static_cast<int>(peer_id);
+    BOOST_LOG_TRIVIAL(error) << "Peer manager: Failed to start stream processing for peer: " << static_cast<int>(peer_id);
     return;
     }
 
-    BOOST_LOG_TRIVIAL(info) << "Accepted and initialized new connection from peer: " << static_cast<int>(peer_id);
+    BOOST_LOG_TRIVIAL(info) << "Peer manager: Accepted and initialized new connection from peer: " << static_cast<int>(peer_id);
   } catch (const std::exception& e) {
-    BOOST_LOG_TRIVIAL(error) << "Error handling new connection: " << e.what();
+    BOOST_LOG_TRIVIAL(error) << "Peer manager: Error handling new connection: " << e.what();
   }
 
   // Continue accepting new connections if server is still running
@@ -61,7 +61,7 @@ void PeerManager::create_peer(std::shared_ptr<boost::asio::ip::tcp::socket> sock
 
 void PeerManager::add_peer(std::shared_ptr<TCP_Peer> peer) {
   if (!peer) {
-    BOOST_LOG_TRIVIAL(error) << "Attempted to add null peer";
+    BOOST_LOG_TRIVIAL(error) << "Peer manager: Attempted to add null peer";
     return;
   }
 
@@ -70,7 +70,7 @@ void PeerManager::add_peer(std::shared_ptr<TCP_Peer> peer) {
   std::lock_guard<std::mutex> lock(mutex_);
 
   peers_[peer_id] = peer;
-  BOOST_LOG_TRIVIAL(info) << "Added peer with ID: " << static_cast<int>(peer_id);
+  BOOST_LOG_TRIVIAL(info) << "Peer manager: Added peer with ID: " << static_cast<int>(peer_id);
 }
 
 void PeerManager::remove_peer(uint8_t peer_id) {
@@ -80,9 +80,9 @@ void PeerManager::remove_peer(uint8_t peer_id) {
   if (it != peers_.end()) {
     disconnect(peer_id);
     peers_.erase(it);
-    BOOST_LOG_TRIVIAL(info) << "Removed peer with ID: " << static_cast<int>(peer_id);
+    BOOST_LOG_TRIVIAL(info) << "Peer manager: Removed peer with ID: " << static_cast<int>(peer_id);
   } else {
-    BOOST_LOG_TRIVIAL(warning) << "Attempted to remove non-existent peer: " << static_cast<int>(peer_id);
+    BOOST_LOG_TRIVIAL(warning) << "Peer manager: Attempted to remove non-existent peer: " << static_cast<int>(peer_id);
   }
 }
 
@@ -90,7 +90,7 @@ bool PeerManager::disconnect(uint8_t peer_id) {
 
   auto it = peers_.find(peer_id);
   if (it == peers_.end()) {
-    BOOST_LOG_TRIVIAL(warning) << "Cannot disconnect - peer not found: " << static_cast<int>(peer_id);
+    BOOST_LOG_TRIVIAL(warning) << "Peer manager: Cannot disconnect - peer not found: " << static_cast<int>(peer_id);
     return false;
   }
 
@@ -98,11 +98,11 @@ bool PeerManager::disconnect(uint8_t peer_id) {
     auto& peer = it->second;
     peer->stop_stream_processing();
     peer->cleanup_connection();
-    BOOST_LOG_TRIVIAL(info) << "Successfully disconnected peer: " << static_cast<int>(peer_id);
+    BOOST_LOG_TRIVIAL(info) << "Peer manager: Successfully disconnected peer: " << static_cast<int>(peer_id);
     return true;
   }
   catch (const std::exception& e) {
-    BOOST_LOG_TRIVIAL(error) << "Disconnect error for peer " << static_cast<int>(peer_id) 
+    BOOST_LOG_TRIVIAL(error) << "Peer manager: Disconnect error for peer " << static_cast<int>(peer_id) 
                 << ": " << e.what();
     return false;
   }
@@ -135,56 +135,56 @@ std::shared_ptr<TCP_Peer> PeerManager::get_peer(uint8_t peer_id) {
   return nullptr;
 }
 
-bool PeerManager::broadcast_stream(std::istream& input_stream) {
-  if (!input_stream.good()) {
-    BOOST_LOG_TRIVIAL(error) << "Invalid input stream provided for broadcast";
+bool PeerManager::broadcast_stream(dfs::utils::Pipeliner& pipeline) {
+  if (!pipeline.good()) {
+    BOOST_LOG_TRIVIAL(error) << "Peer manager: Invalid input stream provided for broadcast";
     return false;
   }
 
   if (peers_.empty()) {
-    BOOST_LOG_TRIVIAL(warning) << "No peers available for broadcast";
+    BOOST_LOG_TRIVIAL(warning) << "Peer manager: No peers available for broadcast";
     return false;
   }
 
+  // Get the total size from pipeline
+  std::size_t total_size = pipeline.get_total_size();
+
   bool all_success = true;
   size_t success_count = 0;
-  std::streampos initial_pos = input_stream.tellg();
 
   for (auto& peer_pair : peers_) {
     try {
-      input_stream.seekg(initial_pos);
-
       if (!is_connected(peer_pair.first)) {
-        BOOST_LOG_TRIVIAL(warning) << "Skipping disconnected peer: " << static_cast<int>(peer_pair.first);
+        BOOST_LOG_TRIVIAL(warning) << "Peer manager: Skipping disconnected peer: " << static_cast<int>(peer_pair.first);
         all_success = false;
         continue;
       }
 
       std::lock_guard<std::mutex> lock(mutex_);
 
-      if (peer_pair.second->send_stream(input_stream)) {
+      if (peer_pair.second->send_stream(pipeline, total_size)) {
         success_count++;
-        BOOST_LOG_TRIVIAL(debug) << "Successfully broadcast to peer: " << static_cast<int>(peer_pair.first);
+        BOOST_LOG_TRIVIAL(debug) << "Peer manager: Successfully broadcast to peer: " << static_cast<int>(peer_pair.first);
       } else {
         all_success = false;
-        BOOST_LOG_TRIVIAL(error) << "Failed to broadcast to peer: " << static_cast<int>(peer_pair.first);
+        BOOST_LOG_TRIVIAL(error) << "Peer manager: Failed to broadcast to peer: " << static_cast<int>(peer_pair.first);
       }
     } catch (const std::exception& e) {
       all_success = false;
-      BOOST_LOG_TRIVIAL(error) << "Exception while broadcasting to peer " 
+      BOOST_LOG_TRIVIAL(error) << "Peer manager: Exception while broadcasting to peer " 
                   << peer_pair.first << ": " << e.what();
     }
   }
 
-  BOOST_LOG_TRIVIAL(info) << "Broadcast completed. Successfully sent to " 
+  BOOST_LOG_TRIVIAL(info) << "Peer manager: Broadcast completed. Successfully sent to " 
               << success_count << " out of " << peers_.size() << " peers";
 
   return all_success;
 }
 
-bool PeerManager::send_to_peer(uint8_t peer_id, std::istream& stream) {
-  if (!stream.good()) {
-    BOOST_LOG_TRIVIAL(error) << "Invalid input stream provided for peer_id: " << static_cast<int>(peer_id);
+bool PeerManager::send_to_peer(uint8_t peer_id, dfs::utils::Pipeliner& pipeline) {
+  if (!pipeline.good()) {
+    BOOST_LOG_TRIVIAL(error) << "Peer manager: Invalid input stream provided for peer_id: " << static_cast<int>(peer_id);
     return false;
   }
 
@@ -192,25 +192,29 @@ bool PeerManager::send_to_peer(uint8_t peer_id, std::istream& stream) {
 
   auto it = peers_.find(peer_id);
   if (it == peers_.end()) {
-    BOOST_LOG_TRIVIAL(warning) << "Peer not found with ID: " << static_cast<int>(peer_id);
+    BOOST_LOG_TRIVIAL(warning) << "Peer manager: Peer not found with ID: " << static_cast<int>(peer_id);
     return false;
   }
 
   if (!is_connected(peer_id)) {
-    BOOST_LOG_TRIVIAL(warning) << "Peer is not connected: " << static_cast<int>(peer_id);
+    BOOST_LOG_TRIVIAL(warning) << "Peer manager: Peer is not connected: " << static_cast<int>(peer_id);
     return false;
   }
+  
+  // Get the total size from pipeline
+  std::size_t total_size = pipeline.get_total_size();
+
 
   try {
-    bool success = it->second->send_stream(stream);
+    bool success = it->second->send_stream(pipeline, total_size);
     if (success) {
-      BOOST_LOG_TRIVIAL(debug) << "Successfully sent stream to peer: " << static_cast<int>(peer_id);
+      BOOST_LOG_TRIVIAL(debug) << "Peer manager: Successfully sent stream to peer: " << static_cast<int>(peer_id);
     } else {
-      BOOST_LOG_TRIVIAL(error) << "Failed to send stream to peer: " << static_cast<int>(peer_id);
+      BOOST_LOG_TRIVIAL(error) << "Peer manager: Failed to send stream to peer: " << static_cast<int>(peer_id);
     }
     return success;
   } catch (const std::exception& e) {
-    BOOST_LOG_TRIVIAL(error) << "Exception while sending to peer " << static_cast<int>(peer_id) 
+    BOOST_LOG_TRIVIAL(error) << "Peer manager: Exception while sending to peer " << static_cast<int>(peer_id) 
                 << ": " << e.what();
     return false;
   }
@@ -219,20 +223,20 @@ bool PeerManager::send_to_peer(uint8_t peer_id, std::istream& stream) {
 void PeerManager::shutdown() {
   std::lock_guard<std::mutex> lock(mutex_);
 
-  BOOST_LOG_TRIVIAL(info) << "Initiating PeerManager shutdown";
+  BOOST_LOG_TRIVIAL(info) << "Peer manager: Initiating PeerManager shutdown";
 
   for (auto& peer_pair : peers_) {
     try {
       disconnect(peer_pair.first);
-      BOOST_LOG_TRIVIAL(debug) << "Disconnected peer: " << peer_pair.first;
+      BOOST_LOG_TRIVIAL(debug) << "Peer manager: Disconnected peer: " << peer_pair.first;
     } catch (const std::exception& e) {
-      BOOST_LOG_TRIVIAL(error) << "Error disconnecting peer " << peer_pair.first 
+      BOOST_LOG_TRIVIAL(error) << "Peer manager: Error disconnecting peer " << peer_pair.first 
                   << ": " << e.what();
     }
   }
 
   peers_.clear();
-  BOOST_LOG_TRIVIAL(info) << "PeerManager shutdown complete";
+  BOOST_LOG_TRIVIAL(info) << "Peer manager: shutdown complete";
 }
 
 std::size_t PeerManager::size() const {

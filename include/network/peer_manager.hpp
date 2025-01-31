@@ -11,6 +11,8 @@
 #include "tcp_peer.hpp"
 #include "channel.hpp"
 #include "tcp_server.hpp"
+#include "utils/pipeliner.hpp"
+
 
 namespace dfs {
 namespace network {
@@ -36,8 +38,8 @@ public:
     void remove_peer(uint8_t peer_id);
 
     // Stream Operations
-    bool send_to_peer(uint8_t peer_id, std::istream& stream);
-    bool broadcast_stream(std::istream& input_stream);
+    bool send_to_peer(uint8_t peer_id, dfs::utils::Pipeliner& pipeline);
+    bool broadcast_stream(dfs::utils::Pipeliner& pipeline);
 
     // Utility Methods
     std::size_t size() const;

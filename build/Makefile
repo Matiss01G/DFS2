@@ -250,19 +250,6 @@ channel_tests/fast:
 .PHONY : channel_tests/fast
 
 #=============================================================================
-# Target rules for targets named codec_tests
-
-# Build rule for target.
-codec_tests: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 codec_tests
-.PHONY : codec_tests
-
-# fast build rule for target.
-codec_tests/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/codec_tests.dir/build.make CMakeFiles/codec_tests.dir/build
-.PHONY : codec_tests/fast
-
-#=============================================================================
 # Target rules for targets named tcp_peer_tests
 
 # Build rule for target.
@@ -287,6 +274,19 @@ bootstrap_tests: cmake_check_build_system
 bootstrap_tests/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/bootstrap_tests.dir/build.make CMakeFiles/bootstrap_tests.dir/build
 .PHONY : bootstrap_tests/fast
+
+#=============================================================================
+# Target rules for targets named codec_tests
+
+# Build rule for target.
+codec_tests: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 codec_tests
+.PHONY : codec_tests
+
+# fast build rule for target.
+codec_tests/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/codec_tests.dir/build.make CMakeFiles/codec_tests.dir/build
+.PHONY : codec_tests/fast
 
 #=============================================================================
 # Target rules for targets named run_tests

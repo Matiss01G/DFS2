@@ -30,7 +30,7 @@ public:
     virtual std::istream* get_input_stream() = 0;
 
     // Message operations
-    virtual bool send_message(const std::string& message) = 0;
+    virtual bool send_message(const std::string& message, std::size_t total_size) = 0;
 
     // Stream processing
     virtual void set_stream_processor(StreamProcessor processor) = 0;

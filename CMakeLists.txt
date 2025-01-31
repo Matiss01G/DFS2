@@ -101,22 +101,6 @@ target_link_libraries(channel_tests
     GTest::Main
 )
 
-# Network tests (from network)
-add_executable(codec_tests
-    src/tests/codec_test.cpp
-    src/network/codec.cpp)
-target_include_directories(codec_tests PRIVATE
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/tests
-)
-target_link_libraries(codec_tests
-    PRIVATE
-    dfs_network
-    dfs_crypto
-    dfs_store
-    GTest::GTest
-    GTest::Main
-)
-
 # TCP Peer tests
 add_executable(tcp_peer_tests
     src/tests/tcp_peer_tests.cpp
@@ -141,6 +125,22 @@ target_include_directories(bootstrap_tests PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/src/tests
 )
 target_link_libraries(bootstrap_tests
+    PRIVATE
+    dfs_network
+    dfs_crypto
+    dfs_store
+    GTest::GTest
+    GTest::Main
+)
+
+# Network tests (from network)
+add_executable(codec_tests
+    src/tests/codec_test.cpp
+    src/network/codec.cpp)
+target_include_directories(codec_tests PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/tests
+)
+target_link_libraries(codec_tests
     PRIVATE
     dfs_network
     dfs_crypto

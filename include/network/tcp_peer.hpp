@@ -36,7 +36,7 @@ public:
 
     // Stream operations
     std::istream* get_input_stream() override;
-    bool send_message(const std::string& message) override;
+    bool send_message(const std::string& message, std::size_t total_size) override;
 
     // Stream processing
     void set_stream_processor(StreamProcessor processor) override;
@@ -45,7 +45,7 @@ public:
 
     // Asynchronous I/O Operations
     void async_write();
-    bool send_stream(std::istream& input_stream, std::size_t buffer_size = 8192);
+    bool send_stream(std::istream& input_stream, std::size_t total_size, std::size_t buffer_size = 8192);
     void async_read_next();
 
     // Getters
@@ -55,6 +55,7 @@ public:
 private:
     uint8_t peer_id_;
     StreamProcessor stream_processor_;
+    std::size_t expected_size_;
 
     // Network components
     boost::asio::io_context io_context_;
@@ -71,9 +72,14 @@ private:
     std::unique_ptr<std::istream> input_stream_;
 
     // Internal methods
+    bool send_size(std::size_t total_size);
+    std::size_t read_size();
     void initialize_streams();
     void cleanup_connection();
     void process_stream();
+    void handle_read_size(const boost::system::error_code& ec, std::size_t bytes_transferred);
+    void handle_read_data(const boost::system::error_code& ec, std::size_t bytes_transferred);
+    void process_received_data();
 
     // Codec for encryption/decryption
     std::unique_ptr<Codec> codec_;

@@ -15,7 +15,7 @@ struct CipherContext {
     CipherContext() {
         ctx = EVP_CIPHER_CTX_new();
         if (!ctx) {
-            throw std::runtime_error("Failed to create cipher context");
+            throw std::runtime_error("Crypto stream: Failed to create cipher context");
         }
     }
 
@@ -29,42 +29,37 @@ struct CipherContext {
 };
 
 CryptoStream::CryptoStream() {
-    BOOST_LOG_TRIVIAL(info) << "Initializing CryptoStream";
+    BOOST_LOG_TRIVIAL(info) << "Crypto stream: Initializing CryptoStream";
     OpenSSL_add_all_algorithms();
     context_ = std::make_unique<CipherContext>();
-    BOOST_LOG_TRIVIAL(debug) << "CryptoStream initialization complete";
+    BOOST_LOG_TRIVIAL(debug) << "Crypto stream: initialization complete";
 }
 
 CryptoStream::~CryptoStream() {
-    BOOST_LOG_TRIVIAL(debug) << "Cleaning up CryptoStream resources";
+    BOOST_LOG_TRIVIAL(debug) << "Crypto stream: Cleaning up CryptoStream resources";
     EVP_cleanup();
 }
 
 void CryptoStream::initialize(const std::vector<uint8_t>& key, const std::vector<uint8_t>& iv) {
-    BOOST_LOG_TRIVIAL(info) << "Initializing crypto parameters";
+    BOOST_LOG_TRIVIAL(info) << "Crypto stream: Initializing crypto parameters";
 
     if (key.size() != KEY_SIZE) {
-        BOOST_LOG_TRIVIAL(error) << "Invalid key size: " << key.size() << " bytes (expected " << KEY_SIZE << " bytes)";
+        BOOST_LOG_TRIVIAL(error) << "Crypto stream: Invalid key size: " << key.size() << " bytes (expected " << KEY_SIZE << " bytes)";
         throw InitializationError("Invalid key size");
-    }
-
-    if (iv.size() != IV_SIZE) {
-        BOOST_LOG_TRIVIAL(error) << "Invalid IV size: " << iv.size() << " bytes (expected " << IV_SIZE << " bytes)";
-        throw InitializationError("Invalid IV size");
     }
 
     key_ = key;
     iv_ = iv;
     is_initialized_ = true;
-    BOOST_LOG_TRIVIAL(debug) << "Crypto parameters initialized successfully";
+    BOOST_LOG_TRIVIAL(debug) << "Crypto stream: Crypto parameters initialized successfully";
 }
 
 void CryptoStream::initializeCipher(bool encrypting) {
-    BOOST_LOG_TRIVIAL(debug) << "Initializing cipher for " << (encrypting ? "encryption" : "decryption");
+    BOOST_LOG_TRIVIAL(debug) << "Crypto stream: Initializing cipher for " << (encrypting ? "encryption" : "decryption");
 
     if (!is_initialized_) {
-        BOOST_LOG_TRIVIAL(error) << "Attempted to use uninitialized CryptoStream";
-        throw InitializationError("CryptoStream not initialized");
+        BOOST_LOG_TRIVIAL(error) << "Crypto stream: Attempted to use uninitialized CryptoStream";
+        throw InitializationError("Crypto stream: CryptoStream not initialized");
     }
 
     // Reset the context state
@@ -74,25 +69,25 @@ void CryptoStream::initializeCipher(bool encrypting) {
     const EVP_CIPHER* cipher = EVP_aes_256_cbc();
     if (encrypting) {
         if (!EVP_EncryptInit_ex(context_->get(), cipher, nullptr, key_.data(), iv_.data())) {
-            BOOST_LOG_TRIVIAL(error) << "Failed to initialize encryption context";
-            throw EncryptionError("Failed to initialize encryption");
+            BOOST_LOG_TRIVIAL(error) << "Crypto stream: Failed to initialize encryption context";
+            throw EncryptionError("Crypto stream: Failed to initialize encryption");
         }
     } else {
         if (!EVP_DecryptInit_ex(context_->get(), cipher, nullptr, key_.data(), iv_.data())) {
-            BOOST_LOG_TRIVIAL(error) << "Failed to initialize decryption context";
-            throw DecryptionError("Failed to initialize decryption");
+            BOOST_LOG_TRIVIAL(error) << "Crypto stream: Failed to initialize decryption context";
+            throw DecryptionError("Crypto stream: Failed to initialize decryption");
         }
     }
 
-    BOOST_LOG_TRIVIAL(debug) << "Cipher initialization complete";
+    BOOST_LOG_TRIVIAL(debug) << "Crypto stream: Cipher initialization complete";
 }
 
 void CryptoStream::processStream(std::istream& input, std::ostream& output, bool encrypting) {
-    BOOST_LOG_TRIVIAL(info) << "Starting stream " << (encrypting ? "encryption" : "decryption");
+    BOOST_LOG_TRIVIAL(info) << "Crypto stream: Starting stream " << (encrypting ? "encryption" : "decryption");
 
     if (!input.good() || !output.good()) {
-        BOOST_LOG_TRIVIAL(error) << "Invalid stream state detected";
-        throw std::runtime_error("Invalid stream state");
+        BOOST_LOG_TRIVIAL(error) << "Crypto stream: Invalid stream state detected";
+        throw std::runtime_error("Crypto stream: Invalid stream state");
     }
 
     // Save stream positions
@@ -115,44 +110,45 @@ void CryptoStream::processStream(std::istream& input, std::ostream& output, bool
             input.read(reinterpret_cast<char*>(inbuf.data()), inbuf.size());
             auto bytes_read = input.gcount();
 
-            BOOST_LOG_TRIVIAL(debug) << "Processing block " << block_count 
+            BOOST_LOG_TRIVIAL(debug) << "Crypto stream: Processing block " << block_count 
                                     << ": Read " << bytes_read << " bytes"
                                     << " (total processed so far: " << total_bytes_processed << ")";
 
             if (bytes_read <= 0) {
                 if (!input.eof()) {
-                    throw std::runtime_error("Failed to read from input stream");
+                    throw std::runtime_error("Crypto stream: Failed to read from input stream");
                 }
-                BOOST_LOG_TRIVIAL(debug) << "Reached end of input stream after " 
+                BOOST_LOG_TRIVIAL(debug) << "Crypto stream: Reached end of input stream after " 
                                         << block_count << " blocks";
                 break;
             }
 
             // Process the chunk
             if (encrypting) {
-                BOOST_LOG_TRIVIAL(trace) << "Encrypting block " << block_count 
+                BOOST_LOG_TRIVIAL(trace) << "Crypto stream: Encrypting block " << block_count 
                                         << " of size " << bytes_read;
                 if (!EVP_EncryptUpdate(context_->get(), outbuf.data(), &outlen,
                                      inbuf.data(), static_cast<int>(bytes_read))) {
-                    throw EncryptionError("Failed to encrypt data block");
+                    throw EncryptionError("Crypto stream: Failed to encrypt data block");
                 }
             } else {
-                BOOST_LOG_TRIVIAL(trace) << "Decrypting block " << block_count 
+                BOOST_LOG_TRIVIAL(trace) << "Crypto stream: Decrypting block " << block_count 
                                         << " of size " << bytes_read;
                 if (!EVP_DecryptUpdate(context_->get(), outbuf.data(), &outlen,
                                      inbuf.data(), static_cast<int>(bytes_read))) {
-                    throw DecryptionError("Failed to decrypt data block");
+                    throw DecryptionError("Crypto stream: Failed to decrypt data block");
                 }
             }
 
             // Write processed data
             if (outlen > 0) {
-                BOOST_LOG_TRIVIAL(debug) << (encrypting ? "Encrypted" : "Decrypted")
+                BOOST_LOG_TRIVIAL(debug) << "Crypto stream: "
+                                        <<(encrypting ? "Encrypted" : "Decrypted")
                                         << " block " << block_count 
                                         << " produced " << outlen << " bytes";
                 output.write(reinterpret_cast<char*>(outbuf.data()), outlen);
                 if (!output.good()) {
-                    throw std::runtime_error("Failed to write to output stream");
+                    throw std::runtime_error("Crypto stream: Failed to write to output stream");
                 }
                 total_bytes_processed += outlen;
             }
@@ -160,32 +156,32 @@ void CryptoStream::processStream(std::istream& input, std::ostream& output, bool
         }
 
         // Finalize the operation with padding
-        BOOST_LOG_TRIVIAL(debug) << "Finalizing " << (encrypting ? "encryption" : "decryption")
+        BOOST_LOG_TRIVIAL(debug) << "Crypto stream: Finalizing " << (encrypting ? "encryption" : "decryption")
                                 << " after " << block_count << " blocks";
         if (encrypting) {
             if (!EVP_EncryptFinal_ex(context_->get(), outbuf.data(), &outlen)) {
-                throw EncryptionError("Failed to finalize encryption");
+                throw EncryptionError("Crypto stream: Failed to finalize encryption");
             }
         } else {
             if (!EVP_DecryptFinal_ex(context_->get(), outbuf.data(), &outlen)) {
-                BOOST_LOG_TRIVIAL(error) << "Failed to finalize decryption after processing "
+                BOOST_LOG_TRIVIAL(error) << "Crypto stream: Failed to finalize decryption after processing "
                                         << total_bytes_processed << " bytes in "
                                         << block_count << " blocks";
-                throw DecryptionError("Failed to finalize decryption");
+                throw DecryptionError("Crypto stream: Failed to finalize decryption");
             }
         }
 
         // Write final block
         if (outlen > 0) {
-            BOOST_LOG_TRIVIAL(debug) << "Writing final block of size " << outlen;
+            BOOST_LOG_TRIVIAL(debug) << "Crypto stream: Writing final block of size " << outlen;
             output.write(reinterpret_cast<char*>(outbuf.data()), outlen);
             if (!output.good()) {
-                throw std::runtime_error("Failed to write final block");
+                throw std::runtime_error("Crypto stream: Failed to write final block");
             }
             total_bytes_processed += outlen;
         }
 
-        BOOST_LOG_TRIVIAL(info) << "Completed " << (encrypting ? "encryption" : "decryption")
+        BOOST_LOG_TRIVIAL(info) << "Crypto stream: Completed " << (encrypting ? "encryption" : "decryption")
                                << ": Processed " << total_bytes_processed 
                                << " bytes in " << block_count << " blocks";
 
@@ -198,7 +194,7 @@ void CryptoStream::processStream(std::istream& input, std::ostream& output, bool
         output.flush();
     }
     catch (const std::exception& e) {
-        BOOST_LOG_TRIVIAL(error) << "Stream processing failed: " << e.what();
+        BOOST_LOG_TRIVIAL(error) << "Crypto stream: Stream processing failed: " << e.what();
         // Restore stream positions on error
         input.clear();
         input.seekg(input_pos);
@@ -219,11 +215,11 @@ std::ostream& CryptoStream::decrypt(std::istream& input, std::ostream& output) {
 }
 
 CryptoStream& CryptoStream::operator>>(std::ostream& output) {
-    BOOST_LOG_TRIVIAL(debug) << "Stream operator>> called in " << (mode_ == Mode::Encrypt ? "encryption" : "decryption") << " mode";
+    BOOST_LOG_TRIVIAL(debug) << "Crypto stream: Stream operator>> called in " << (mode_ == Mode::Encrypt ? "encryption" : "decryption") << " mode";
 
     if (!pending_input_) {
-        BOOST_LOG_TRIVIAL(error) << "Stream operator>> called without prior input stream";
-        throw std::runtime_error("No pending input stream. Use operator<< first.");
+        BOOST_LOG_TRIVIAL(error) << "Crypto stream: Stream operator>> called without prior input stream";
+        throw std::runtime_error("Crypto stream: No pending input stream. Use operator<< first.");
     }
 
     if (mode_ == Mode::Encrypt) {
@@ -233,24 +229,24 @@ CryptoStream& CryptoStream::operator>>(std::ostream& output) {
     }
 
     pending_input_ = nullptr;
-    BOOST_LOG_TRIVIAL(debug) << "Stream processing complete";
+    BOOST_LOG_TRIVIAL(debug) << "Crypto stream: Stream processing complete";
 
     return *this;
 }
 
 CryptoStream& CryptoStream::operator<<(std::istream& input) {
-    BOOST_LOG_TRIVIAL(debug) << "Stream operator<< called, storing input stream for processing";
+    BOOST_LOG_TRIVIAL(debug) << "Crypto stream: Stream operator<< called, storing input stream for processing";
     pending_input_ = &input;
     return *this;
 }
 
 std::array<uint8_t, CryptoStream::IV_SIZE> CryptoStream::generate_IV() const {
-    BOOST_LOG_TRIVIAL(debug) << "Generating initialization vector";
+    BOOST_LOG_TRIVIAL(debug) << "Crypto stream: Generating initialization vector";
 
     std::array<uint8_t, IV_SIZE> iv;
     if (RAND_bytes(iv.data(), static_cast<int>(iv.size())) != 1) {
-        BOOST_LOG_TRIVIAL(error) << "Failed to generate random IV";
-        throw std::runtime_error("Failed to generate secure random IV");
+        BOOST_LOG_TRIVIAL(error) << "Crypto stream: Failed to generate random IV";
+        throw std::runtime_error("Crypto stream: Failed to generate secure random IV");
     }
 
     BOOST_LOG_TRIVIAL(debug) << "Successfully generated initialization vector";

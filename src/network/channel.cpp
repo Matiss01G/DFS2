@@ -9,7 +9,7 @@ namespace network {
 void Channel::produce(const MessageFrame& frame) {
     std::lock_guard<std::mutex> lock(mutex_);
     queue_.push(frame);
-    BOOST_LOG_TRIVIAL(debug) << "Added message frame to channel. Channel size: " << queue_.size();
+    BOOST_LOG_TRIVIAL(debug) << "Channel: Added message frame to channel. Channel size: " << queue_.size();
 }
 
 bool Channel::consume(MessageFrame& frame) {
@@ -21,7 +21,7 @@ bool Channel::consume(MessageFrame& frame) {
     frame = queue_.front();
     queue_.pop();
     
-    BOOST_LOG_TRIVIAL(debug) << "Retrieved message frame from channel. Channel size: " << queue_.size();
+    BOOST_LOG_TRIVIAL(debug) << "Channel: Retrieved message frame from channel. Channel size: " << queue_.size();
     return true;
 }
 

@@ -27,6 +27,8 @@ public:
   PipelinerPtr transform(TransformFn transform);
   void set_buffer_size(size_t size);
   void flush();
+  void set_total_size(std::size_t size) { total_size_ = size; }
+  std::size_t get_total_size() const { return total_size_; }
 
 protected:
   // Override basic_stringbuf's sync to implement lazy evaluation
@@ -42,6 +44,7 @@ private:
   bool produced_;
   bool eof_;
   std::stringstream buffer_;
+  std::size_t total_size_{0}; 
 };
 
 } // namespace utils

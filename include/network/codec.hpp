@@ -27,6 +27,8 @@ private:
 
     // Reference to the channel for message delivery
     Channel& channel_;
+
+    static size_t get_padded_size(size_t original_size);
     
     // Writes bytes to an output stream
     void write_bytes(std::ostream& output, const void* data, std::size_t size);
