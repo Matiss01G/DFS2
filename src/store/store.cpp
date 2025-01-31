@@ -48,20 +48,12 @@ void Store::store(const std::string& key, std::istream& data) {
     return;
   }
 
-  while (true) {
-     if (data.read(buffer, sizeof(buffer))) {
-       file.write(buffer, data.gcount());
-       bytes_written += data.gcount();
-       continue;
-     }
-
-     if (data.eof()) {
-         data.clear();
-         if (data.peek() == EOF) break;
-     }
+  while (data.read(buffer, sizeof(buffer))) {
+    file.write(buffer, data.gcount());
+    bytes_written += data.gcount();
   }
 
-  // Handle final partial chunk if any
+  // Handle final partial chunk
   if (data.gcount() > 0) {
     file.write(buffer, data.gcount());
     bytes_written += data.gcount();
