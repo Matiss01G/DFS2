@@ -105,6 +105,9 @@ void CryptoStream::processStream(std::istream& input, std::ostream& output, bool
         size_t block_count = 0;
         size_t total_bytes_processed = 0;
 
+        // Add end of stream marker for decryption
+        static const std::string EOS_MARKER = "<<DFS_EOS>>";
+
         // Process the input stream in chunks
         while (input.good() && !input.eof()) {
             input.read(reinterpret_cast<char*>(inbuf.data()), inbuf.size());
@@ -128,14 +131,14 @@ void CryptoStream::processStream(std::istream& input, std::ostream& output, bool
                 BOOST_LOG_TRIVIAL(trace) << "Crypto stream: Encrypting block " << block_count 
                                         << " of size " << bytes_read;
                 if (!EVP_EncryptUpdate(context_->get(), outbuf.data(), &outlen,
-                                     inbuf.data(), static_cast<int>(bytes_read))) {
+                                      inbuf.data(), static_cast<int>(bytes_read))) {
                     throw EncryptionError("Crypto stream: Failed to encrypt data block");
                 }
             } else {
                 BOOST_LOG_TRIVIAL(trace) << "Crypto stream: Decrypting block " << block_count 
                                         << " of size " << bytes_read;
                 if (!EVP_DecryptUpdate(context_->get(), outbuf.data(), &outlen,
-                                     inbuf.data(), static_cast<int>(bytes_read))) {
+                                      inbuf.data(), static_cast<int>(bytes_read))) {
                     throw DecryptionError("Crypto stream: Failed to decrypt data block");
                 }
             }
@@ -181,9 +184,18 @@ void CryptoStream::processStream(std::istream& input, std::ostream& output, bool
             total_bytes_processed += outlen;
         }
 
+        // Write end of stream marker only for decryption
+        if (!encrypting) {
+            BOOST_LOG_TRIVIAL(debug) << "Crypto stream: Writing end of stream marker";
+            output.write(EOS_MARKER.c_str(), EOS_MARKER.length());
+            if (!output.good()) {
+                throw std::runtime_error("Crypto stream: Failed to write end of stream marker");
+            }
+        }
+
         BOOST_LOG_TRIVIAL(info) << "Crypto stream: Completed " << (encrypting ? "encryption" : "decryption")
-                               << ": Processed " << total_bytes_processed 
-                               << " bytes in " << block_count << " blocks";
+                                << ": Processed " << total_bytes_processed 
+                                << " bytes in " << block_count << " blocks";
 
         // Reset stream positions
         input.clear();

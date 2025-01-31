@@ -14,63 +14,76 @@ Store::Store(const std::string& base_path) : base_path_(base_path) {
 }
 
 void Store::store(const std::string& key, std::istream& data) {
-  BOOST_LOG_TRIVIAL(info) << "Store: Storing data with key: " << key;
-  
-  // Check stream state before attempting any operations
-  if (!data.good()) {
-    BOOST_LOG_TRIVIAL(error) << "Store: Invalid input stream provided for key: " << key;
-    throw StoreError("Store: Invalid input stream");
-  }
-  
-  // Create hierarchical directory structure based on key hash
-  std::string hash = hash_key(key);  // Generate SHA-256 hash from key
-  std::filesystem::path file_path = get_path_for_hash(hash);  // Convert hash to path
-  ensure_directory_exists(file_path.parent_path());  // Create directories if needed
-  
-  BOOST_LOG_TRIVIAL(debug) << "Store: Calculated file path: " << file_path.string();
-  
-  // Create output file in binary mode for cross-platform compatibility
-  std::ofstream file(file_path, std::ios::binary);
-  if (!file) {
-    throw StoreError("Store: Failed to create file: " + file_path.string());
-  }
-  
-  // Stream data in chunks for memory effi    ciency
-  size_t bytes_written = 0;
-  char buffer[4096];  // 4KB chunks balance memory usage and I/O performance
-  
-  // Handle empty stream case
-  data.peek();
-  if (data.eof()) {
-    BOOST_LOG_TRIVIAL(debug) << "Store: Storing empty content for key: " << key;
+    BOOST_LOG_TRIVIAL(info) << "Store: Storing data with key: " << key;
+
+    // Check stream state before attempting any operations
+    if (!data.good()) {
+        BOOST_LOG_TRIVIAL(error) << "Store: Invalid input stream provided for key: " << key;
+        throw StoreError("Store: Invalid input stream");
+    }
+
+    // Create hierarchical directory structure based on key hash
+    std::string hash = hash_key(key);  // Generate SHA-256 hash from key
+    std::filesystem::path file_path = get_path_for_hash(hash);  // Convert hash to path
+    ensure_directory_exists(file_path.parent_path());  // Create directories if needed
+
+    BOOST_LOG_TRIVIAL(debug) << "Store: Calculated file path: " << file_path.string();
+
+    // Create output file in binary mode for cross-platform compatibility
+    std::ofstream file(file_path, std::ios::binary);
+    if (!file) {
+        throw StoreError("Store: Failed to create file: " + file_path.string());
+    }
+
+    // Stream data in chunks for memory efficiency
+    size_t bytes_written = 0;
+    char buffer[4096];  // 4KB chunks balance memory usage and I/O performance
+
+    // Handle empty stream case
+    data.peek();
+    if (data.eof()) {
+        BOOST_LOG_TRIVIAL(debug) << "Store: Storing empty content for key: " << key;
+        file.close();
+        BOOST_LOG_TRIVIAL(info) << "Store: Successfully stored 0 bytes with key: " << key;
+        return;
+    }
+
+    static const std::string EOS_MARKER = "<<DFS_EOS>>";
+    std::string potential_marker;
+    potential_marker.reserve(EOS_MARKER.length());
+
+    while (true) {
+        if (data.read(buffer, sizeof(buffer))) {
+            file.write(buffer, data.gcount());
+            bytes_written += data.gcount();
+
+            // Check for marker in the last bytes read
+            size_t marker_check_size = std::min(static_cast<size_t>(data.gcount()), 
+                                              static_cast<size_t>(EOS_MARKER.length()));
+            potential_marker.append(buffer + data.gcount() - marker_check_size, 
+                                  marker_check_size);
+
+            if (potential_marker.length() > EOS_MARKER.length()) {
+                potential_marker = potential_marker.substr(potential_marker.length() - EOS_MARKER.length());
+            }
+
+            if (potential_marker == EOS_MARKER) {
+                // Remove the marker from the file
+                file.seekp(-static_cast<std::streamoff>(EOS_MARKER.length()), std::ios::cur);
+                bytes_written -= EOS_MARKER.length();
+                break;
+            }
+            continue;
+        }
+
+        if (data.eof()) {
+            data.clear();
+            if (data.peek() == EOF) break;
+        }
+    }
+
     file.close();
-    BOOST_LOG_TRIVIAL(info) << "Store: Successfully stored 0 bytes with key: " << key;
-    return;
-  }
-
-  const auto TIMER = std::chrono::milliseconds(500);
-
-  while (true) {
-     if (data.read(buffer, sizeof(buffer))) {
-       file.write(buffer, data.gcount());
-       bytes_written += data.gcount();
-       continue;
-     }
-
-     if (data.eof()) {
-         data.clear();
-         if (data.peek() == EOF) break;
-     }
-  }
-
-  // Handle final partial chunk if any
-  if (data.gcount() > 0) {
-    file.write(buffer, data.gcount());
-    bytes_written += data.gcount();
-  }
-  
-  file.close();
-  BOOST_LOG_TRIVIAL(info) << "Store: Successfully stored " << bytes_written << " bytes with key: " << key;
+    BOOST_LOG_TRIVIAL(info) << "Store: Successfully stored " << bytes_written << " bytes with key: " << key;
 }
 
 void Store::get(const std::string& key, std::stringstream& output) {
