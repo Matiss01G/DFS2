@@ -162,6 +162,9 @@ bool PeerManager::broadcast_stream(dfs::utils::Pipeliner& pipeline) {
 
       std::lock_guard<std::mutex> lock(mutex_);
 
+      // Reset pipeline position before sending to each peer
+      pipeline.seekg(0);
+
       if (peer_pair.second->send_stream(pipeline, total_size)) {
         success_count++;
         BOOST_LOG_TRIVIAL(debug) << "Peer manager: Successfully broadcast to peer: " << static_cast<int>(peer_pair.first);
