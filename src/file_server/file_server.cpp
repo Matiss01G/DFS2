@@ -88,89 +88,102 @@ std::string FileServer::extract_filename(const MessageFrame& frame) {
   }
 }
 
-bool FileServer::prepare_and_send(const std::string& filename, MessageType message_type, std::optional<uint8_t> peer_id) {
-  try {
-    BOOST_LOG_TRIVIAL(info) << "File server: Preparing file: " << filename 
-                          << " for " << (peer_id ? "peer " + std::to_string(*peer_id) : "broadcast")
-                          << " with message type: " << static_cast<int>(message_type);
+MessageFrame FileServer::create_message_frame(const std::string& filename, MessageType message_type) {
+  // Initialize basic frame metadata
+  MessageFrame frame;
+  frame.message_type = message_type;
+  frame.source_id = ID_;
+  frame.filename_length = filename.length();
 
-    // Create message frame
-    MessageFrame frame;
-    frame.message_type = message_type;
-    frame.source_id = ID_;
-    frame.filename_length = filename.length();
+  // Generate cryptographic IV for this message
+  crypto::CryptoStream crypto_stream;
+  auto iv = crypto_stream.generate_IV();
+  frame.iv_.assign(iv.begin(), iv.end());
 
-    // Generate and set IV
-    crypto::CryptoStream crypto_stream;
-    auto iv = crypto_stream.generate_IV();
-    frame.iv_.assign(iv.begin(), iv.end());
+  return frame;
+}
 
-    // Register producer function for pipeline
-    auto store_producer = [this, &filename, first_read = true](std::stringstream& output) mutable -> bool {
-      if (!first_read) {
-        return false;  // We've already read the file
-      }
-      try {
-        // Write filename first
-        output.write(filename.c_str(), filename.length());
-        
-        // Then write file content
-        store_->get(filename, output);
-        first_read = false;
-        return output.good();
-      } catch (const std::exception& e) {
-        BOOST_LOG_TRIVIAL(error) << "File server: Error reading from store: " << e.what();
-        return false;
-      }
+std::function<bool(std::stringstream&)> FileServer::create_producer(
+  const std::string& filename, MessageType message_type) {
+
+  if (message_type == MessageType::GET_FILE) {
+      // For GET_FILE, producer only writes filename (no file content needed)
+      return [filename, first_read = true](std::stringstream& output) mutable -> bool {
+          if (!first_read) return false;  // Only write once
+          output.write(filename.c_str(), filename.length());
+          first_read = false;
+          return output.good();
+      };
+  }
+
+  // For other types (e.g., STORE_FILE), producer writes both filename and file content
+  return [this, filename, first_read = true](std::stringstream& output) mutable -> bool {
+      if (!first_read) return false;  // Only read once
+      output.write(filename.c_str(), filename.length());  // Write filename first
+      store_->get(filename, output);   // Then append file content
+      first_read = false;
+      return output.good();
+  };
+}
+
+std::function<bool(std::stringstream&, std::stringstream&)> FileServer::create_transform(
+    MessageFrame& frame,
+    utils::Pipeliner* pipeline) {
+    // Capture pipeline by value since it's a pointer
+    return [this, &frame, pipeline](std::stringstream& input, std::stringstream& output) -> bool {
+        frame.payload_stream = std::make_shared<std::stringstream>();
+        *frame.payload_stream << input.rdbuf();
+
+        frame.payload_stream->seekp(0, std::ios::end);
+        frame.payload_size = frame.payload_stream->tellp();
+        frame.payload_stream->seekg(0);
+
+        std::size_t total_serialized_size = codec_->serialize(frame, output);
+        pipeline->set_total_size(total_serialized_size);
+
+        return true;
     };
-
-    // Create pipeline first so we can capture it in the transform
-    auto pipeline = utils::Pipeliner::create(store_producer);
-
-    // Register transformer function for pipeline
-    auto serialize_transform = [this, &frame, pipeline](std::stringstream& input, std::stringstream& output) -> bool {
-      frame.payload_stream = std::make_shared<std::stringstream>();
-      *frame.payload_stream << input.rdbuf();
-
-      // Get position to find size
-      frame.payload_stream->seekp(0, std::ios::end);
-      frame.payload_size = frame.payload_stream->tellp();
-      frame.payload_stream->seekg(0);
-      
-      std::size_t total_serialized_size = codec_->serialize(frame, output);
-      pipeline->set_total_size(total_serialized_size);
-
-      return true;
-    };
-
-    // Add transform to pipeline
-    pipeline->transform(serialize_transform);
-    pipeline->set_buffer_size(1024 * 1024); // 1MB buffer size
-
-    // Flush the pipeline before sending to account for files smaller than 1MB
-    pipeline->flush();
-
-    // Send the pipeline data
-    bool send_success;
+}
+bool FileServer::send_pipeline(dfs::utils::Pipeliner* const& pipeline, std::optional<uint8_t> peer_id) {
     if (peer_id) {
-      BOOST_LOG_TRIVIAL(debug) << "File server: Sending file to peer: " << static_cast<int>(*peer_id);
-      send_success = peer_manager_.send_to_peer(*peer_id, *pipeline);
-    } else {
-      BOOST_LOG_TRIVIAL(debug) << "File server: Broadcasting file to all peers";
-      send_success = peer_manager_.broadcast_stream(*pipeline);
+        BOOST_LOG_TRIVIAL(debug) << "File server: Sending to peer: " << static_cast<int>(*peer_id);
+        return peer_manager_.send_to_peer(*peer_id, *pipeline);
     }
 
-    if (!send_success) {
-      BOOST_LOG_TRIVIAL(error) << "File server: Failed to send file: " << filename;
-      return false;
-    }
+    BOOST_LOG_TRIVIAL(debug) << "File server: Broadcasting to all peers";
+    return peer_manager_.broadcast_stream(*pipeline);
+}
 
-    BOOST_LOG_TRIVIAL(info) << "File server: Successfully prepared and sent file: " << filename;
-    return true;
+bool FileServer::prepare_and_send(const std::string& filename, MessageType message_type, 
+                              std::optional<uint8_t> peer_id) {
+  try {
+      BOOST_LOG_TRIVIAL(info) << "File server: Preparing file: " << filename 
+                             << " for " << (peer_id ? "peer " + std::to_string(*peer_id) : "broadcast")
+                             << " with message type: " << static_cast<int>(message_type);
+
+      // Create pipeline and components
+      auto frame = create_message_frame(filename, message_type);
+      auto producer = create_producer(filename, message_type);
+      auto pipeline = utils::Pipeliner::create(producer);
+      auto transform = create_transform(frame, pipeline.get());
+
+      // Configure pipeline with 1MB buffer
+      pipeline->transform(transform);
+      pipeline->set_buffer_size(1024 * 1024);  // 1MB buffer for efficient streaming
+      pipeline->flush();  // Ensure all data is processed
+
+      // Send data and handle any failures
+      if (!send_pipeline(pipeline.get(), peer_id)) {
+          BOOST_LOG_TRIVIAL(error) << "File server: Failed to send file: " << filename;
+          return false;
+      }
+
+      BOOST_LOG_TRIVIAL(info) << "File server: Successfully sent file: " << filename;
+      return true;
   }
   catch (const std::exception& e) {
-    BOOST_LOG_TRIVIAL(error) << "File server: Error in prepare_and_send: " << e.what();
-    return false;
+      BOOST_LOG_TRIVIAL(error) << "File server: Error in prepare_and_send: " << e.what();
+      return false;
   }
 }
 
@@ -315,7 +328,7 @@ bool FileServer::handle_get(const MessageFrame& frame) {
     }
 
     // Prepare file with GET_FILE message type and send to requesting peer
-    if (!prepare_and_send(filename, MessageType::GET_FILE, frame.source_id)) {
+    if (!prepare_and_send(filename, MessageType::STORE_FILE, frame.source_id)) {
       BOOST_LOG_TRIVIAL(error) << "File server: Failed to prepare file: " << filename;
       return false;
     }
@@ -336,7 +349,6 @@ void FileServer::channel_listener() {
       MessageFrame frame;
       // Try to consume a message from the channel
       if (channel_.consume(frame)) {
-        std::lock_guard<std::mutex> lock(mutex_);
         BOOST_LOG_TRIVIAL(debug) << "File server: Retrieved message from channel, type: " 
                     << static_cast<int>(frame.message_type);
 

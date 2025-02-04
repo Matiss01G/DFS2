@@ -191,7 +191,7 @@ bool PeerManager::send_to_peer(uint8_t peer_id, dfs::utils::Pipeliner& pipeline)
     return false;
   }
 
-  std::lock_guard<std::mutex> lock(mutex_);
+  // std::lock_guard<std::mutex> lock(mutex_);
 
   auto it = peers_.find(peer_id);
   if (it == peers_.end()) {

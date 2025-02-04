@@ -492,21 +492,24 @@ TEST_F(BootstrapTest, GetFile) {
   });
   auto& file_server1 = peer1.get_file_server();
   // Prepare and store the file
-  // std::stringstream file_content;
-  // file_content << TEST_FILE_CONTENT;
-  // file_server1.store_file(TEST_FILENAME, file_content);
+  std::stringstream file_content;
+  file_content << TEST_FILE_CONTENT;
+  file_server1.store_file(TEST_FILENAME, file_content);
 
   
-  std::this_thread::sleep_for(std::chrono::seconds(2));
+  std::this_thread::sleep_for(std::chrono::seconds(3));
 
   
   std::thread peer2_thread([&peer2]() {
     ASSERT_TRUE(peer2.start()) << "Failed to start peer 2";
   });
+
+  std::this_thread::sleep_for(std::chrono::seconds(3));
+
   auto& file_server2 = peer2.get_file_server();
-  // file_server2.get_file(TEST_FILENAME);
+  file_server2.get_file(TEST_FILENAME);
   
-  std::this_thread::sleep_for(std::chrono::seconds(2));
+  std::this_thread::sleep_for(std::chrono::seconds(5));
 
   auto& peer1_manager = peer1.get_peer_manager();
   auto& peer2_manager = peer2.get_peer_manager();
@@ -523,18 +526,18 @@ TEST_F(BootstrapTest, GetFile) {
 
   // std::this_thread::sleep_for(std::chrono::seconds(4));
 
-  // // Verify file exists in peer2's store after sharing
-  // ASSERT_TRUE(file_server2.get_store().has(TEST_FILENAME)) 
-  //   << "File should exist in peer2's store after sharing";
+  // Verify file exists in peer2's store after sharing
+  ASSERT_TRUE(file_server2.get_store().has(TEST_FILENAME)) 
+    << "File should exist in peer2's store after sharing";
 
   // std::this_thread::sleep_for(std::chrono::seconds(4));
 
-  // // Verify file content matches in peer2's store
-  // std::stringstream retrieved_content;
-  // file_server2.get_store().get(TEST_FILENAME, retrieved_content);
-  // ASSERT_TRUE(retrieved_content.good()) << "Failed to retrieve file from peer2's store";
-  // ASSERT_EQ(retrieved_content.str(), TEST_FILE_CONTENT)
-  //   << "Retrieved file content should match original content";
+  // Verify file content matches in peer2's store
+  std::stringstream retrieved_content;
+  file_server2.get_store().get(TEST_FILENAME, retrieved_content);
+  ASSERT_TRUE(retrieved_content.good()) << "Failed to retrieve file from peer2's store";
+  ASSERT_EQ(retrieved_content.str(), TEST_FILE_CONTENT)
+    << "Retrieved file content should match original content";
 
   peer1_thread.join();
   peer2_thread.join();
