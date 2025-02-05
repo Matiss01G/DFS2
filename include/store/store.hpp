@@ -37,6 +37,9 @@ public:
     // Removes all stored data and reset store
     void clear();
 
+    void read_file(const std::string& key, size_t lines_per_page = 20) const;
+
+
 private:
     // Root path for all stored files
     std::filesystem::path base_path_;

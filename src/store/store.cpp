@@ -13,6 +13,66 @@ Store::Store(const std::string& base_path) : base_path_(base_path) {
   BOOST_LOG_TRIVIAL(debug) << "Store: Store directory created/verified at: " << base_path;
 }
 
+void Store::read_file(const std::string& key, size_t lines_per_page) const {
+    BOOST_LOG_TRIVIAL(info) << "Store: Reading file with key: " << key;
+
+    // Generate file path and verify existence
+    std::string hash = hash_key(key);
+    std::filesystem::path file_path = get_path_for_hash(hash);
+
+    if (!std::filesystem::exists(file_path)) {
+        BOOST_LOG_TRIVIAL(error) << "Store: File not found: " << file_path.string();
+        throw StoreError("Store: File not found");
+    }
+
+    // Handle empty file case
+    if (std::filesystem::file_size(file_path) == 0) {
+        BOOST_LOG_TRIVIAL(debug) << "Store: File is empty for key: " << key;
+        return;
+    }
+
+    std::ifstream file(file_path);
+    if (!file) {
+        BOOST_LOG_TRIVIAL(error) << "Store: Failed to open file: " << file_path.string();
+        throw StoreError("Store: Failed to open file: " + file_path.string());
+    }
+
+    std::string line;
+    size_t current_line = 0;
+    bool continue_reading = true;
+
+    while (continue_reading && !file.eof()) {
+        // Clear screen for each new page
+        #ifdef _WIN32
+            system("cls");
+        #else
+            system("clear");
+        #endif
+
+        // Read and display one page worth of lines
+        for (size_t i = 0; i < lines_per_page && std::getline(file, line); ++i) {
+            std::cout << line << '\n';
+            ++current_line;
+        }
+
+        // Show status line with file info at the bottom
+        std::cout << "\n--Key: " << key << " - Line " << current_line 
+                  << " (Press Enter to continue, 'q' to quit)--" << std::flush;
+
+        // Get user input
+        char input = std::cin.get();
+        if (input == 'q' || input == 'Q') {
+            continue_reading = false;
+        }
+
+        // Clear the input buffer
+        std::cin.clear();
+        while (std::cin.get() != '\n') {}
+    }
+
+    BOOST_LOG_TRIVIAL(info) << "Store: Finished reading file with key: " << key;
+}
+
 void Store::store(const std::string& key, std::istream& data) {
   BOOST_LOG_TRIVIAL(info) << "Store: Storing data with key: " << key;
   
