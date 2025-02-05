@@ -36,6 +36,7 @@ add_library(dfs_network
     src/network/bootstrap.cpp
     src/file_server/file_server.cpp
     src/utils/pipeliner.cpp
+    src/cli/cli.cpp
 )
 target_include_directories(dfs_network PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>

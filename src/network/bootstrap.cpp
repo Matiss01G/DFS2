@@ -1,4 +1,5 @@
 #include "network/bootstrap.hpp"
+#include "cli/cli.hpp"
 #include <boost/log/trivial.hpp>
 #include <sstream>
 
@@ -17,7 +18,11 @@ Bootstrap::Bootstrap(const std::string& address, uint16_t port,
     BOOST_LOG_TRIVIAL(info) << "Initializing Bootstrap with ID: " << static_cast<int>(ID);
 
     try {
-        // Create channel first (no dependencies)
+        // Create store first as it has no dependencies
+        store_ = std::make_unique<store::Store>("./store");
+        BOOST_LOG_TRIVIAL(debug) << "Bootstrap program: Store created successfully";
+
+        // Create channel (no dependencies)
         channel_ = std::make_unique<Channel>();
         BOOST_LOG_TRIVIAL(debug) << "Bootstrap program: Channel created successfully";
 
@@ -95,6 +100,10 @@ bool Bootstrap::start() {
             }
         }
 
+        // Create and run CLI
+        cli::CLI cli(*store_, *file_server_);
+        cli.run();
+
         BOOST_LOG_TRIVIAL(info) << "Bootstrap program: Bootstrap successfully started";
         return true;
     }
@@ -134,6 +143,12 @@ bool Bootstrap::shutdown() {
             BOOST_LOG_TRIVIAL(debug) << "Bootstrap program: Shutting down Channel";
             // Channel cleanup handled by destructor
             channel_.reset();
+        }
+
+        // Clean up store last
+        if (store_) {
+            BOOST_LOG_TRIVIAL(debug) << "Bootstrap program: Shutting down Store";
+            store_.reset();
         }
 
         BOOST_LOG_TRIVIAL(info) << "Bootstrap program: Shutdown complete";
