@@ -79,18 +79,6 @@ target_link_libraries(dfs_cli PUBLIC
     Boost::log
 )
 
-# Create CLI executable
-add_executable(dfs_cli_exe
-    src/cli/main.cpp
-)
-target_link_libraries(dfs_cli_exe PRIVATE
-    dfs_cli
-    dfs_store
-    dfs_network
-    dfs_crypto
-    Boost::log
-)
-
 # Tests
 enable_testing()
 
@@ -198,7 +186,7 @@ add_custom_target(run_tests ALL
 )
 
 # Install rules
-install(TARGETS dfs_crypto dfs_store dfs_network dfs_cli dfs_cli_exe
+install(TARGETS dfs_crypto dfs_store dfs_network dfs_cli
     EXPORT dfs-targets
     ARCHIVE DESTINATION lib
     LIBRARY DESTINATION lib
