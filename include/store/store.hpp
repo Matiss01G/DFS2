@@ -38,7 +38,8 @@ public:
     void clear();
 
     void read_file(const std::string& key, size_t lines_per_page = 20) const;
-
+    void print_working_dir() const;
+    void list() const;
 
 private:
     // Root path for all stored files

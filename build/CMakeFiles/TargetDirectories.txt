@@ -8,6 +8,7 @@
 /home/runner/workspace/build/CMakeFiles/tcp_peer_tests.dir
 /home/runner/workspace/build/CMakeFiles/bootstrap_tests.dir
 /home/runner/workspace/build/CMakeFiles/codec_tests.dir
+/home/runner/workspace/build/CMakeFiles/dfs_main.dir
 /home/runner/workspace/build/CMakeFiles/run_tests.dir
 /home/runner/workspace/build/CMakeFiles/test.dir
 /home/runner/workspace/build/CMakeFiles/edit_cache.dir

@@ -23,10 +23,8 @@ public:
     bool connect_to_bootstrap_nodes();
     bool shutdown();
 
-    // Add getter for peer manager
+    // Add getters
     PeerManager& get_peer_manager() { return *peer_manager_; }
-
-    // Add getter for file server
     FileServer& get_file_server() { return *file_server_; }
 
 private:
@@ -40,7 +38,6 @@ private:
     std::unique_ptr<TCP_Server> tcp_server_;
     std::unique_ptr<PeerManager> peer_manager_;
     std::unique_ptr<FileServer> file_server_;
-    std::unique_ptr<cli::CLI> cli_;  // Added CLI member
 };
 
 } // namespace network

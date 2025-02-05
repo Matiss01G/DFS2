@@ -302,6 +302,19 @@ codec_tests/fast:
 .PHONY : codec_tests/fast
 
 #=============================================================================
+# Target rules for targets named dfs_main
+
+# Build rule for target.
+dfs_main: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 dfs_main
+.PHONY : dfs_main
+
+# fast build rule for target.
+dfs_main/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/dfs_main.dir/build.make CMakeFiles/dfs_main.dir/build
+.PHONY : dfs_main/fast
+
+#=============================================================================
 # Target rules for targets named run_tests
 
 # Build rule for target.
@@ -385,6 +398,30 @@ src/file_server/file_server.s: src/file_server/file_server.cpp.s
 src/file_server/file_server.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/dfs_network.dir/build.make CMakeFiles/dfs_network.dir/src/file_server/file_server.cpp.s
 .PHONY : src/file_server/file_server.cpp.s
+
+src/main.o: src/main.cpp.o
+.PHONY : src/main.o
+
+# target to build an object file
+src/main.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/dfs_main.dir/build.make CMakeFiles/dfs_main.dir/src/main.cpp.o
+.PHONY : src/main.cpp.o
+
+src/main.i: src/main.cpp.i
+.PHONY : src/main.i
+
+# target to preprocess a source file
+src/main.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/dfs_main.dir/build.make CMakeFiles/dfs_main.dir/src/main.cpp.i
+.PHONY : src/main.cpp.i
+
+src/main.s: src/main.cpp.s
+.PHONY : src/main.s
+
+# target to generate assembly for a file
+src/main.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/dfs_main.dir/build.make CMakeFiles/dfs_main.dir/src/main.cpp.s
+.PHONY : src/main.cpp.s
 
 src/network/bootstrap.o: src/network/bootstrap.cpp.o
 .PHONY : src/network/bootstrap.o
@@ -751,6 +788,7 @@ help:
 	@echo "... crypto_tests"
 	@echo "... dfs_cli"
 	@echo "... dfs_crypto"
+	@echo "... dfs_main"
 	@echo "... dfs_network"
 	@echo "... dfs_store"
 	@echo "... store_tests"
@@ -764,6 +802,9 @@ help:
 	@echo "... src/file_server/file_server.o"
 	@echo "... src/file_server/file_server.i"
 	@echo "... src/file_server/file_server.s"
+	@echo "... src/main.o"
+	@echo "... src/main.i"
+	@echo "... src/main.s"
 	@echo "... src/network/bootstrap.o"
 	@echo "... src/network/bootstrap.i"
 	@echo "... src/network/bootstrap.s"

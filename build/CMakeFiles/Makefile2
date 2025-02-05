@@ -73,6 +73,7 @@ all: CMakeFiles/channel_tests.dir/all
 all: CMakeFiles/tcp_peer_tests.dir/all
 all: CMakeFiles/bootstrap_tests.dir/all
 all: CMakeFiles/codec_tests.dir/all
+all: CMakeFiles/dfs_main.dir/all
 all: CMakeFiles/run_tests.dir/all
 .PHONY : all
 
@@ -91,6 +92,7 @@ clean: CMakeFiles/channel_tests.dir/clean
 clean: CMakeFiles/tcp_peer_tests.dir/clean
 clean: CMakeFiles/bootstrap_tests.dir/clean
 clean: CMakeFiles/codec_tests.dir/clean
+clean: CMakeFiles/dfs_main.dir/clean
 clean: CMakeFiles/run_tests.dir/clean
 .PHONY : clean
 
@@ -127,7 +129,7 @@ CMakeFiles/dfs_crypto.dir/clean:
 CMakeFiles/dfs_network.dir/all: CMakeFiles/dfs_cli.dir/all
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/dfs_network.dir/build.make CMakeFiles/dfs_network.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/dfs_network.dir/build.make CMakeFiles/dfs_network.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/runner/workspace/build/CMakeFiles --progress-num=15,16,17,18,19,20,21,22,23 "Built target dfs_network"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/runner/workspace/build/CMakeFiles --progress-num=17,18,19,20,21,22,23,24,25 "Built target dfs_network"
 .PHONY : CMakeFiles/dfs_network.dir/all
 
 # Build rule for subdir invocation for target.
@@ -153,7 +155,7 @@ CMakeFiles/dfs_network.dir/clean:
 CMakeFiles/dfs_store.dir/all:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/dfs_store.dir/build.make CMakeFiles/dfs_store.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/dfs_store.dir/build.make CMakeFiles/dfs_store.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/runner/workspace/build/CMakeFiles --progress-num=24,25 "Built target dfs_store"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/runner/workspace/build/CMakeFiles --progress-num=26,27 "Built target dfs_store"
 .PHONY : CMakeFiles/dfs_store.dir/all
 
 # Build rule for subdir invocation for target.
@@ -232,7 +234,7 @@ CMakeFiles/crypto_tests.dir/clean:
 CMakeFiles/store_tests.dir/all: CMakeFiles/dfs_store.dir/all
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/store_tests.dir/build.make CMakeFiles/store_tests.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/store_tests.dir/build.make CMakeFiles/store_tests.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/runner/workspace/build/CMakeFiles --progress-num=26,27 "Built target store_tests"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/runner/workspace/build/CMakeFiles --progress-num=28,29 "Built target store_tests"
 .PHONY : CMakeFiles/store_tests.dir/all
 
 # Build rule for subdir invocation for target.
@@ -288,7 +290,7 @@ CMakeFiles/tcp_peer_tests.dir/all: CMakeFiles/dfs_network.dir/all
 CMakeFiles/tcp_peer_tests.dir/all: CMakeFiles/dfs_store.dir/all
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/tcp_peer_tests.dir/build.make CMakeFiles/tcp_peer_tests.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/tcp_peer_tests.dir/build.make CMakeFiles/tcp_peer_tests.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/runner/workspace/build/CMakeFiles --progress-num=28,29,30 "Built target tcp_peer_tests"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/runner/workspace/build/CMakeFiles --progress-num=30,31,32 "Built target tcp_peer_tests"
 .PHONY : CMakeFiles/tcp_peer_tests.dir/all
 
 # Build rule for subdir invocation for target.
@@ -362,6 +364,34 @@ codec_tests: CMakeFiles/codec_tests.dir/rule
 CMakeFiles/codec_tests.dir/clean:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/codec_tests.dir/build.make CMakeFiles/codec_tests.dir/clean
 .PHONY : CMakeFiles/codec_tests.dir/clean
+
+#=============================================================================
+# Target rules for target CMakeFiles/dfs_main.dir
+
+# All Build rule for target.
+CMakeFiles/dfs_main.dir/all: CMakeFiles/dfs_crypto.dir/all
+CMakeFiles/dfs_main.dir/all: CMakeFiles/dfs_network.dir/all
+CMakeFiles/dfs_main.dir/all: CMakeFiles/dfs_store.dir/all
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/dfs_main.dir/build.make CMakeFiles/dfs_main.dir/depend
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/dfs_main.dir/build.make CMakeFiles/dfs_main.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/runner/workspace/build/CMakeFiles --progress-num=15,16 "Built target dfs_main"
+.PHONY : CMakeFiles/dfs_main.dir/all
+
+# Build rule for subdir invocation for target.
+CMakeFiles/dfs_main.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/workspace/build/CMakeFiles 17
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/dfs_main.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/workspace/build/CMakeFiles 0
+.PHONY : CMakeFiles/dfs_main.dir/rule
+
+# Convenience name for target.
+dfs_main: CMakeFiles/dfs_main.dir/rule
+.PHONY : dfs_main
+
+# clean rule for target.
+CMakeFiles/dfs_main.dir/clean:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/dfs_main.dir/build.make CMakeFiles/dfs_main.dir/clean
+.PHONY : CMakeFiles/dfs_main.dir/clean
 
 #=============================================================================
 # Target rules for target CMakeFiles/run_tests.dir

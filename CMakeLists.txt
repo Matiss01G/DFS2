@@ -164,6 +164,20 @@ target_link_libraries(codec_tests
     GTest::Main
 )
 
+# Create main executable
+add_executable(dfs_main
+    src/main.cpp
+)
+target_include_directories(dfs_main PUBLIC
+    ${CMAKE_CURRENT_SOURCE_DIR}/include
+)
+target_link_libraries(dfs_main
+    PRIVATE
+    dfs_network
+    dfs_crypto
+    dfs_store
+)
+
 # Update test discovery and run_tests sections
 include(GoogleTest)
 gtest_discover_tests(crypto_tests)

@@ -69,8 +69,24 @@ void Store::read_file(const std::string& key, size_t lines_per_page) const {
         std::cin.clear();
         while (std::cin.get() != '\n') {}
     }
-
+  
     BOOST_LOG_TRIVIAL(info) << "Store: Finished reading file with key: " << key;
+}
+
+void Store::print_working_dir() const {
+  std::cout << std::filesystem::current_path() << std::endl;
+  BOOST_LOG_TRIVIAL(debug) << "Store: Current working directory: " 
+                          << std::filesystem::current_path();
+}
+
+void Store::list() const {
+  std::filesystem::path current = std::filesystem::current_path();
+  BOOST_LOG_TRIVIAL(info) << "Store: Listing contents of: " << current;
+
+  for (const auto& entry : std::filesystem::directory_iterator(current)) {
+      std::cout << (entry.is_directory() ? "[DIR] " : "[FILE] ")
+                << entry.path().filename() << std::endl;
+  }
 }
 
 void Store::store(const std::string& key, std::istream& data) {
