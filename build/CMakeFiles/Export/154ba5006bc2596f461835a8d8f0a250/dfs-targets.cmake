@@ -19,7 +19,7 @@ set(CMAKE_IMPORT_FILE_VERSION 1)
 set(_cmake_targets_defined "")
 set(_cmake_targets_not_defined "")
 set(_cmake_expected_targets "")
-foreach(_cmake_expected_target IN ITEMS dfs::dfs_crypto dfs::dfs_store dfs::dfs_network)
+foreach(_cmake_expected_target IN ITEMS dfs::dfs_crypto dfs::dfs_store dfs::dfs_network dfs::dfs_cli)
   list(APPEND _cmake_expected_targets "${_cmake_expected_target}")
   if(TARGET "${_cmake_expected_target}")
     list(APPEND _cmake_targets_defined "${_cmake_expected_target}")
@@ -76,7 +76,15 @@ add_library(dfs::dfs_network STATIC IMPORTED)
 
 set_target_properties(dfs::dfs_network PROPERTIES
   INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include"
-  INTERFACE_LINK_LIBRARIES "dfs::dfs_crypto;dfs::dfs_store;Boost::system;Boost::thread;Boost::log"
+  INTERFACE_LINK_LIBRARIES "dfs::dfs_crypto;dfs::dfs_store;dfs::dfs_cli;Boost::system;Boost::thread;Boost::log"
+)
+
+# Create imported target dfs::dfs_cli
+add_library(dfs::dfs_cli STATIC IMPORTED)
+
+set_target_properties(dfs::dfs_cli PROPERTIES
+  INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include"
+  INTERFACE_LINK_LIBRARIES "dfs::dfs_store;dfs::dfs_network;Boost::log"
 )
 
 # Load information for each installed configuration.

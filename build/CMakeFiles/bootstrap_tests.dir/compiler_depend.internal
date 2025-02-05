@@ -3,6 +3,7 @@
 
 CMakeFiles/bootstrap_tests.dir/src/tests/bootstrap_test.cpp.o
  /home/runner/workspace/src/tests/bootstrap_test.cpp
+ /home/runner/workspace/include/cli/cli.hpp
  /home/runner/workspace/include/crypto/crypto_error.hpp
  /home/runner/workspace/include/crypto/crypto_stream.hpp
  /home/runner/workspace/include/file_server/file_server.hpp

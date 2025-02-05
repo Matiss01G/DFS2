@@ -95,9 +95,14 @@ bootstrap_tests: CMakeFiles/bootstrap_tests.dir/build.make
 bootstrap_tests: libdfs_network.a
 bootstrap_tests: libdfs_crypto.a
 bootstrap_tests: libdfs_store.a
+bootstrap_tests: libdfs_cli.a
+bootstrap_tests: libdfs_network.a
+bootstrap_tests: libdfs_cli.a
+bootstrap_tests: libdfs_crypto.a
+bootstrap_tests: libdfs_store.a
+bootstrap_tests: /nix/store/62sh2bwllmkl8zzpqhglzgpk7lmsmrsa-boost-1.81.0/lib/libboost_system.so.1.81.0
 bootstrap_tests: /nix/store/gp504m4dvw5k2pdx6pccf1km79fkcwgf-openssl-3.0.13/lib/libcrypto.so
 bootstrap_tests: /nix/store/62sh2bwllmkl8zzpqhglzgpk7lmsmrsa-boost-1.81.0/lib/libboost_log_setup.so.1.81.0
-bootstrap_tests: /nix/store/62sh2bwllmkl8zzpqhglzgpk7lmsmrsa-boost-1.81.0/lib/libboost_system.so.1.81.0
 bootstrap_tests: /nix/store/62sh2bwllmkl8zzpqhglzgpk7lmsmrsa-boost-1.81.0/lib/libboost_log.so.1.81.0
 bootstrap_tests: /nix/store/62sh2bwllmkl8zzpqhglzgpk7lmsmrsa-boost-1.81.0/lib/libboost_thread.so.1.81.0
 bootstrap_tests: /nix/store/62sh2bwllmkl8zzpqhglzgpk7lmsmrsa-boost-1.81.0/lib/libboost_chrono.so.1.81.0

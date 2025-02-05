@@ -44,6 +44,7 @@ target_include_directories(dfs_network PUBLIC
 target_link_libraries(dfs_network PUBLIC
     dfs_crypto
     dfs_store
+    dfs_cli
     Boost::system
     Boost::thread
     Boost::log
@@ -62,6 +63,20 @@ target_link_libraries(dfs_store PUBLIC
     Boost::log
     Boost::log_setup
     Boost::system
+)
+
+# Create CLI library
+add_library(dfs_cli
+    src/cli/cli.cpp
+)
+target_include_directories(dfs_cli PUBLIC
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+    $<INSTALL_INTERFACE:include>
+)
+target_link_libraries(dfs_cli PUBLIC
+    dfs_store
+    dfs_network
+    Boost::log
 )
 
 # Tests
@@ -171,7 +186,7 @@ add_custom_target(run_tests ALL
 )
 
 # Install rules
-install(TARGETS dfs_crypto dfs_store dfs_network
+install(TARGETS dfs_crypto dfs_store dfs_network dfs_cli
     EXPORT dfs-targets
     ARCHIVE DESTINATION lib
     LIBRARY DESTINATION lib

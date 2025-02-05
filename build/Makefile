@@ -211,6 +211,19 @@ dfs_store/fast:
 .PHONY : dfs_store/fast
 
 #=============================================================================
+# Target rules for targets named dfs_cli
+
+# Build rule for target.
+dfs_cli: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 dfs_cli
+.PHONY : dfs_cli
+
+# fast build rule for target.
+dfs_cli/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/dfs_cli.dir/build.make CMakeFiles/dfs_cli.dir/build
+.PHONY : dfs_cli/fast
+
+#=============================================================================
 # Target rules for targets named crypto_tests
 
 # Build rule for target.
@@ -300,6 +313,30 @@ run_tests: cmake_check_build_system
 run_tests/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/run_tests.dir/build.make CMakeFiles/run_tests.dir/build
 .PHONY : run_tests/fast
+
+src/cli/cli.o: src/cli/cli.cpp.o
+.PHONY : src/cli/cli.o
+
+# target to build an object file
+src/cli/cli.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/dfs_cli.dir/build.make CMakeFiles/dfs_cli.dir/src/cli/cli.cpp.o
+.PHONY : src/cli/cli.cpp.o
+
+src/cli/cli.i: src/cli/cli.cpp.i
+.PHONY : src/cli/cli.i
+
+# target to preprocess a source file
+src/cli/cli.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/dfs_cli.dir/build.make CMakeFiles/dfs_cli.dir/src/cli/cli.cpp.i
+.PHONY : src/cli/cli.cpp.i
+
+src/cli/cli.s: src/cli/cli.cpp.s
+.PHONY : src/cli/cli.s
+
+# target to generate assembly for a file
+src/cli/cli.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/dfs_cli.dir/build.make CMakeFiles/dfs_cli.dir/src/cli/cli.cpp.s
+.PHONY : src/cli/cli.cpp.s
 
 src/crypto/crypto_stream.o: src/crypto/crypto_stream.cpp.o
 .PHONY : src/crypto/crypto_stream.o
@@ -712,11 +749,15 @@ help:
 	@echo "... channel_tests"
 	@echo "... codec_tests"
 	@echo "... crypto_tests"
+	@echo "... dfs_cli"
 	@echo "... dfs_crypto"
 	@echo "... dfs_network"
 	@echo "... dfs_store"
 	@echo "... store_tests"
 	@echo "... tcp_peer_tests"
+	@echo "... src/cli/cli.o"
+	@echo "... src/cli/cli.i"
+	@echo "... src/cli/cli.s"
 	@echo "... src/crypto/crypto_stream.o"
 	@echo "... src/crypto/crypto_stream.i"
 	@echo "... src/crypto/crypto_stream.s"

@@ -109,11 +109,14 @@ channel_tests: CMakeFiles/channel_tests.dir/src/tests/channel_test.cpp.o
 channel_tests: CMakeFiles/channel_tests.dir/src/network/channel.cpp.o
 channel_tests: CMakeFiles/channel_tests.dir/build.make
 channel_tests: libdfs_network.a
+channel_tests: libdfs_cli.a
+channel_tests: libdfs_network.a
+channel_tests: libdfs_cli.a
 channel_tests: libdfs_crypto.a
 channel_tests: libdfs_store.a
+channel_tests: /nix/store/62sh2bwllmkl8zzpqhglzgpk7lmsmrsa-boost-1.81.0/lib/libboost_system.so.1.81.0
 channel_tests: /nix/store/gp504m4dvw5k2pdx6pccf1km79fkcwgf-openssl-3.0.13/lib/libcrypto.so
 channel_tests: /nix/store/62sh2bwllmkl8zzpqhglzgpk7lmsmrsa-boost-1.81.0/lib/libboost_log_setup.so.1.81.0
-channel_tests: /nix/store/62sh2bwllmkl8zzpqhglzgpk7lmsmrsa-boost-1.81.0/lib/libboost_system.so.1.81.0
 channel_tests: /nix/store/62sh2bwllmkl8zzpqhglzgpk7lmsmrsa-boost-1.81.0/lib/libboost_log.so.1.81.0
 channel_tests: /nix/store/62sh2bwllmkl8zzpqhglzgpk7lmsmrsa-boost-1.81.0/lib/libboost_thread.so.1.81.0
 channel_tests: /nix/store/62sh2bwllmkl8zzpqhglzgpk7lmsmrsa-boost-1.81.0/lib/libboost_chrono.so.1.81.0

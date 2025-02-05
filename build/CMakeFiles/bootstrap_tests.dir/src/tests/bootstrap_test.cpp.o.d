@@ -2745,4 +2745,5 @@ CMakeFiles/bootstrap_tests.dir/src/tests/bootstrap_test.cpp.o: \
  /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/log/sinks/text_ostream_backend.hpp \
  /home/runner/workspace/include/network/codec.hpp \
  /home/runner/workspace/include/crypto/crypto_stream.hpp \
- /home/runner/workspace/include/crypto/crypto_error.hpp
+ /home/runner/workspace/include/crypto/crypto_error.hpp \
+ /home/runner/workspace/include/cli/cli.hpp

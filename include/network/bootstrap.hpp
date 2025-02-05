@@ -7,6 +7,7 @@
 #include "network/peer_manager.hpp"
 #include "network/channel.hpp"
 #include "file_server/file_server.hpp"
+#include "cli/cli.hpp"
 
 namespace dfs {
 namespace network {
@@ -39,6 +40,7 @@ private:
     std::unique_ptr<TCP_Server> tcp_server_;
     std::unique_ptr<PeerManager> peer_manager_;
     std::unique_ptr<FileServer> file_server_;
+    std::unique_ptr<cli::CLI> cli_;  // Added CLI member
 };
 
 } // namespace network

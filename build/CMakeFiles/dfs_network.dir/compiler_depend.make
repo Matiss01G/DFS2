@@ -2720,6 +2720,7 @@ CMakeFiles/dfs_network.dir/src/file_server/file_server.cpp.o: /home/runner/works
   /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/version.hpp
 
 CMakeFiles/dfs_network.dir/src/network/bootstrap.cpp.o: /home/runner/workspace/src/network/bootstrap.cpp \
+  /home/runner/workspace/include/cli/cli.hpp \
   /home/runner/workspace/include/crypto/crypto_error.hpp \
   /home/runner/workspace/include/crypto/crypto_stream.hpp \
   /home/runner/workspace/include/file_server/file_server.hpp \
@@ -16631,6 +16632,8 @@ CMakeFiles/dfs_network.dir/src/utils/pipeliner.cpp.o: /home/runner/workspace/src
 /nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/bits/stl_list.h:
 
 /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/fusion/iterator/detail/segmented_equal_to.hpp:
+
+/home/runner/workspace/include/cli/cli.hpp:
 
 /nix/store/ywac4cc4ls0nckfpbc5w2wfrd27sxrlh-boost-1.81.0-dev/include/boost/predef/architecture/superh.h:
 

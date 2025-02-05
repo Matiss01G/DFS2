@@ -111,9 +111,14 @@ tcp_peer_tests: CMakeFiles/tcp_peer_tests.dir/build.make
 tcp_peer_tests: libdfs_network.a
 tcp_peer_tests: libdfs_crypto.a
 tcp_peer_tests: libdfs_store.a
+tcp_peer_tests: libdfs_cli.a
+tcp_peer_tests: libdfs_network.a
+tcp_peer_tests: libdfs_cli.a
+tcp_peer_tests: libdfs_crypto.a
+tcp_peer_tests: libdfs_store.a
+tcp_peer_tests: /nix/store/62sh2bwllmkl8zzpqhglzgpk7lmsmrsa-boost-1.81.0/lib/libboost_system.so.1.81.0
 tcp_peer_tests: /nix/store/gp504m4dvw5k2pdx6pccf1km79fkcwgf-openssl-3.0.13/lib/libcrypto.so
 tcp_peer_tests: /nix/store/62sh2bwllmkl8zzpqhglzgpk7lmsmrsa-boost-1.81.0/lib/libboost_log_setup.so.1.81.0
-tcp_peer_tests: /nix/store/62sh2bwllmkl8zzpqhglzgpk7lmsmrsa-boost-1.81.0/lib/libboost_system.so.1.81.0
 tcp_peer_tests: /nix/store/62sh2bwllmkl8zzpqhglzgpk7lmsmrsa-boost-1.81.0/lib/libboost_log.so.1.81.0
 tcp_peer_tests: /nix/store/62sh2bwllmkl8zzpqhglzgpk7lmsmrsa-boost-1.81.0/lib/libboost_thread.so.1.81.0
 tcp_peer_tests: /nix/store/62sh2bwllmkl8zzpqhglzgpk7lmsmrsa-boost-1.81.0/lib/libboost_chrono.so.1.81.0

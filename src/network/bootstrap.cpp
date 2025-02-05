@@ -36,6 +36,10 @@ Bootstrap::Bootstrap(const std::string& address, uint16_t port,
         file_server_ = std::make_unique<FileServer>(ID_, key_, *peer_manager_, *channel_);
         BOOST_LOG_TRIVIAL(debug) << "Bootstrap program: File Server created successfully";
 
+        // Initialize CLI with store and file server
+        cli_ = std::make_unique<cli::CLI>(file_server_->get_store(), *file_server_);
+        BOOST_LOG_TRIVIAL(debug) << "Bootstrap program: CLI created successfully";
+
         BOOST_LOG_TRIVIAL(info) << "Bootstrap program: Successfully created all components";
     }
     catch (const std::exception& e) {
@@ -96,6 +100,12 @@ bool Bootstrap::start() {
         }
 
         BOOST_LOG_TRIVIAL(info) << "Bootstrap program: Bootstrap successfully started";
+
+        // Run CLI after all other components are initialized
+        if (cli_) {
+            cli_->run();
+        }
+
         return true;
     }
     catch (const std::exception& e) {
@@ -113,6 +123,12 @@ bool Bootstrap::shutdown() {
             BOOST_LOG_TRIVIAL(debug) << "Bootstrap program: Shutting down File Server";
             // File server cleanup handled by destructor
             file_server_.reset();
+        }
+
+        // Shutdown CLI before peer manager as it depends on file server
+        if (cli_) {
+            BOOST_LOG_TRIVIAL(debug) << "Bootstrap program: Shutting down CLI";
+            cli_.reset();
         }
 
         // Next shutdown peer manager as it depends on channel and tcp server
