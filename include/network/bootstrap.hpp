@@ -7,7 +7,6 @@
 #include "network/peer_manager.hpp"
 #include "network/channel.hpp"
 #include "file_server/file_server.hpp"
-#include "store/store.hpp"
 
 namespace dfs {
 namespace network {
@@ -40,7 +39,6 @@ private:
     std::unique_ptr<TCP_Server> tcp_server_;
     std::unique_ptr<PeerManager> peer_manager_;
     std::unique_ptr<FileServer> file_server_;
-    std::unique_ptr<store::Store> store_; // Added store member
 };
 
 } // namespace network
