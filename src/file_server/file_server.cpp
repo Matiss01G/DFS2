@@ -278,57 +278,56 @@ bool FileServer::store_file(const std::string& filename, std::istream& input) {
   }
 }
 
-std::optional<std::stringstream> FileServer::get_file(const std::string& filename) {
+bool FileServer::get_file(const std::string& filename) {
   std::lock_guard<std::mutex> lock(mutex_);
+  BOOST_LOG_TRIVIAL(info) << "File server: Attempting to get file: " << filename;
 
+  // Try reading from local store first
+  if (read_from_local_store(filename)) {
+      return true;  
+  }
+
+  // If local read failed, try network retrieval
+  return retrieve_from_network(filename);
+}
+
+bool FileServer::read_from_local_store(const std::string& filename) {
   try {
-    BOOST_LOG_TRIVIAL(info) << "File server: Attempting to get file: " << filename;
-
-    // Try to read file directly first
-    if (store_->read_file(filename, 20)) {
-      BOOST_LOG_TRIVIAL(info) << "File server: File successfully read from local store: " << filename;
-      return std::nullopt;  
-    }
-
-    std::stringstream local_result;
-    try {
-      store_->get(filename, local_result);
-      if (local_result.good()) {
-        BOOST_LOG_TRIVIAL(info) << "File server: File found in local store: " << filename;
-        return local_result;
+      if (!store_->has(filename)) {
+          BOOST_LOG_TRIVIAL(debug) << "File server: File not found in local store";
+          return false;
       }
-    } catch (const dfs::store::StoreError& e) {
-      BOOST_LOG_TRIVIAL(debug) << "File server: File not found in local store: " << e.what();
-      // Try to get file from network by sending GET_FILE request
+
+      if (store_->read_file(filename, 20)) {
+          BOOST_LOG_TRIVIAL(info) << "File server: File successfully read from local store: " << filename;
+          return true;
+      }
+  } catch (const std::exception& e) {
+      BOOST_LOG_TRIVIAL(debug) << "File server: Error reading from local store: " << e.what();
+  }
+  return false;
+}
+
+bool FileServer::retrieve_from_network(const std::string& filename) {
+  try {
       if (!prepare_and_send(filename, MessageType::GET_FILE)) {
-        BOOST_LOG_TRIVIAL(error) << "File server: Failed to send GET_FILE request for: " << filename;
-        return std::nullopt;
+          BOOST_LOG_TRIVIAL(error) << "File server: Failed to send GET_FILE request for: " << filename;
+          return false;
       }
 
-      // Wait for potential network retrieval (5 seconds)
       BOOST_LOG_TRIVIAL(debug) << "File server: Waiting for network retrieval of file: " << filename;
       std::this_thread::sleep_for(std::chrono::seconds(5));
 
-      // Try to get the file from local store again
-      try {
-        std::stringstream retry_result;
-        store_->get(filename, retry_result);
-        if (retry_result.good()) {
+      if (store_->has(filename)) { 
           BOOST_LOG_TRIVIAL(info) << "File server: File successfully retrieved from network: " << filename;
-          return retry_result;
-        }
-      } catch (const dfs::store::StoreError& e) {
-        BOOST_LOG_TRIVIAL(debug) << "File server: File not found after network retrieval attempt: " << e.what();
+          return true;  
       }
-    }
+  } catch (const std::exception& e) {
+      BOOST_LOG_TRIVIAL(error) << "File server: Error in network retrieval: " << e.what();
+  }
 
-    BOOST_LOG_TRIVIAL(info) << "File server: File not found: " << filename;
-    return std::nullopt;
-  }
-  catch (const std::exception& e) {
-    BOOST_LOG_TRIVIAL(error) << "File server: Error in get_file: " << e.what();
-    return std::nullopt;
-  }
+  BOOST_LOG_TRIVIAL(info) << "File server: File not found: " << filename;
+  return false;
 }
 
 bool FileServer::handle_store(const MessageFrame& frame) {

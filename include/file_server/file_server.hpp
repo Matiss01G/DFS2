@@ -36,7 +36,7 @@ public:
     bool store_file(const std::string& filename, std::stringstream& input);
     bool store_file(const std::string& filename, std::istream& input);
     // Get file either from local store or network
-    std::optional<std::stringstream> get_file(const std::string& filename);
+    bool get_file(const std::string& filename);
 
     // Handle incoming store message frame
     bool handle_store(const MessageFrame& frame);
@@ -83,6 +83,9 @@ private:
 
     // Message handler routes messages to appropriate handlers based on type
     void message_handler(const MessageFrame& frame);
+
+    bool read_from_local_store(const std::string& filename);
+    bool retrieve_from_network(const std::string& filename);
 };
 
 } // namespace network
