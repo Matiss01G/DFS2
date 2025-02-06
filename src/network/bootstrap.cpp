@@ -33,7 +33,7 @@ Bootstrap::Bootstrap(const std::string& address, uint16_t port,
         tcp_server_->set_peer_manager(*peer_manager_);
 
         // Create file server last as it depends on all other components
-        file_server_ = std::make_unique<FileServer>(ID_, key_, *peer_manager_, *channel_);
+        file_server_ = std::make_unique<FileServer>(ID_, key_, *peer_manager_, *channel_, *tcp_server_);
         BOOST_LOG_TRIVIAL(debug) << "Bootstrap program: File Server created successfully";
 
         BOOST_LOG_TRIVIAL(info) << "Bootstrap program: Successfully created all components";

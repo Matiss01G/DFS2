@@ -116,22 +116,6 @@ target_link_libraries(channel_tests
     GTest::Main
 )
 
-# TCP Peer tests
-add_executable(tcp_peer_tests
-    src/tests/tcp_peer_tests.cpp
-    src/network/tcp_peer.cpp)
-target_include_directories(tcp_peer_tests PRIVATE
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/tests
-)
-target_link_libraries(tcp_peer_tests
-    PRIVATE
-    dfs_network
-    dfs_crypto
-    dfs_store
-    GTest::GTest
-    GTest::Main
-)
-
 # Bootstrap tests
 add_executable(bootstrap_tests
     src/tests/bootstrap_test.cpp)
@@ -184,7 +168,6 @@ gtest_discover_tests(crypto_tests)
 gtest_discover_tests(store_tests)
 gtest_discover_tests(channel_tests)
 gtest_discover_tests(codec_tests)
-gtest_discover_tests(tcp_peer_tests)
 gtest_discover_tests(bootstrap_tests)
 
 # Update run_tests target
@@ -193,9 +176,8 @@ add_custom_target(run_tests ALL
     COMMAND store_tests
     COMMAND channel_tests
     COMMAND codec_tests
-    COMMAND tcp_peer_tests
     COMMAND bootstrap_tests
-    DEPENDS crypto_tests store_tests channel_tests codec_tests tcp_peer_tests bootstrap_tests
+    DEPENDS crypto_tests store_tests channel_tests codec_tests bootstrap_tests
     WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
 )
 

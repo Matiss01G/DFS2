@@ -13,11 +13,125 @@ Store::Store(const std::string& base_path) : base_path_(base_path) {
   BOOST_LOG_TRIVIAL(debug) << "Store: Store directory created/verified at: " << base_path;
 }
 
-void Store::read_file(const std::string& key, size_t lines_per_page) const {
+bool Store::read_file(const std::string& key, size_t lines_per_page) const {
     BOOST_LOG_TRIVIAL(info) << "Store: Reading file with key: " << key;
+    try {
+        std::string hash = hash_key(key);
+        std::filesystem::path file_path = get_path_for_hash(hash);
 
-    // Generate file path and verify existence
-    std::string hash = hash_key(key);
+        if (!std::filesystem::exists(file_path)) {
+            BOOST_LOG_TRIVIAL(error) << "Store: File not found: " << file_path.string();
+            return false;
+        }
+
+        if (std::filesystem::file_size(file_path) == 0) {
+            BOOST_LOG_TRIVIAL(debug) << "Store: File is empty for key: " << key;
+            return true;  // Empty file is still considered successful read
+        }
+
+        std::ifstream file(file_path);
+        if (!file) {
+            BOOST_LOG_TRIVIAL(error) << "Store: Failed to open file: " << file_path.string();
+            return false;
+        }
+
+        std::string line;
+        size_t current_line = 0;
+        bool continue_reading = true;
+
+        while (continue_reading && !file.eof()) {
+            #ifdef _WIN32
+            if (system("cls") != 0) {
+                BOOST_LOG_TRIVIAL(error) << "Store: Failed to clear screen";
+                // Continue execution despite screen clear failure
+            }
+            #else
+            if (system("clear") != 0) {
+                BOOST_LOG_TRIVIAL(error) << "Store: Failed to clear screen";
+                // Continue execution despite screen clear failure
+            }
+            #endif
+
+            for (size_t i = 0; i < lines_per_page && std::getline(file, line); ++i) {
+                std::cout << line << '\n';
+                ++current_line;
+            }
+
+            std::cout << "\n--Key: " << key << " - Line " << current_line 
+                     << " (Press Enter to continue, 'q' to quit)--" << std::flush;
+            char input = std::cin.get();
+            if (input == 'q' || input == 'Q') {
+                continue_reading = false;
+            }
+            std::cin.clear();
+            while (std::cin.get() != '\n') {}
+        }
+
+        BOOST_LOG_TRIVIAL(info) << "Store: Finished reading file with key: " << key;
+        return true;
+    }
+    catch (const std::exception& e) {
+        BOOST_LOG_TRIVIAL(error) << "Store: Exception while reading file: " << e.what();
+        return false;
+    }
+}
+
+void Store::print_working_dir() const {
+    std::cout << "\nLocal working directory: " << std::filesystem::current_path() << std::endl;
+    std::cout << "DFS store directory: " << base_path_.filename() << "\n"<< std::endl;
+}
+  
+void Store::list() const {
+    BOOST_LOG_TRIVIAL(info) << "Store: Listing contents";
+
+    std::cout << "Local Files:" << std::endl;
+    for (const auto& entry : std::filesystem::directory_iterator(std::filesystem::current_path())) {
+        std::cout << "  " << (entry.is_directory() ? "[DIR] " : "[FILE]") 
+                  << " " << entry.path().filename() << std::endl;
+    }
+
+    std::cout << "\nDFS Store:" << std::endl;
+    for (const auto& entry : std::filesystem::directory_iterator(base_path_)) {
+        std::cout << "* " << (entry.is_directory() ? "[DIR] " : "[FILE]") 
+                  << " " << entry.path().filename() << std::endl;
+    }
+}
+
+void Store::move_dir(const std::string& path) {
+    BOOST_LOG_TRIVIAL(info) << "Store: Changing DFS directory to: " << path;
+
+    std::filesystem::path new_path;
+    // Check if path is relative or absolute
+    if (std::filesystem::path(path).is_absolute()) {
+        new_path = path;
+    } else {
+        new_path = base_path_ / path;
+    }
+
+    try {
+        if (!std::filesystem::exists(new_path)) {
+            BOOST_LOG_TRIVIAL(error) << "Store: DFS directory does not exist: " << path;
+            throw StoreError("Store: DFS directory does not exist");
+        }
+
+        if (!std::filesystem::is_directory(new_path)) {
+            BOOST_LOG_TRIVIAL(error) << "Store: DFS path exists but is not a directory: " << path;
+            throw StoreError("Store: DFS path is not a directory");
+        }
+
+        base_path_ = new_path;
+        BOOST_LOG_TRIVIAL(info) << "Store: Successfully changed DFS directory to: " << base_path_;
+
+    } catch (const std::filesystem::filesystem_error& e) {
+        BOOST_LOG_TRIVIAL(error) << "Store: Failed to change DFS directory: " << e.what();
+        throw StoreError("Store: Failed to change DFS directory: " + std::string(e.what()));
+    }
+}
+
+void Store::delete_file(const std::string& filename) {
+    BOOST_LOG_TRIVIAL(info) << "Store: Deleting file: " << filename;
+
+    std::string hash = hash_key(filename);
     std::filesystem::path file_path = get_path_for_hash(hash);
 
     if (!std::filesystem::exists(file_path)) {
@@ -25,68 +139,24 @@ void Store::read_file(const std::string& key, size_t lines_per_page) const {
         throw StoreError("Store: File not found");
     }
 
-    // Handle empty file case
-    if (std::filesystem::file_size(file_path) == 0) {
-        BOOST_LOG_TRIVIAL(debug) << "Store: File is empty for key: " << key;
-        return;
+    // Delete the file
+    if (!std::filesystem::remove(file_path)) {
+        BOOST_LOG_TRIVIAL(error) << "Store: Failed to delete file: " << filename;
+        throw StoreError("Store: Failed to delete file");
     }
 
-    std::ifstream file(file_path);
-    if (!file) {
-        BOOST_LOG_TRIVIAL(error) << "Store: Failed to open file: " << file_path.string();
-        throw StoreError("Store: Failed to open file: " + file_path.string());
-    }
-
-    std::string line;
-    size_t current_line = 0;
-    bool continue_reading = true;
-
-    while (continue_reading && !file.eof()) {
-        // Clear screen for each new page
-        #ifdef _WIN32
-            system("cls");
-        #else
-            system("clear");
-        #endif
-
-        // Read and display one page worth of lines
-        for (size_t i = 0; i < lines_per_page && std::getline(file, line); ++i) {
-            std::cout << line << '\n';
-            ++current_line;
+    // Clean up empty parent directories up to base_path_
+    auto current = file_path.parent_path();
+    while (current != base_path_) {
+        if (std::filesystem::is_empty(current)) {
+            std::filesystem::remove(current);
+            current = current.parent_path();
+        } else {
+            break;
         }
-
-        // Show status line with file info at the bottom
-        std::cout << "\n--Key: " << key << " - Line " << current_line 
-                  << " (Press Enter to continue, 'q' to quit)--" << std::flush;
-
-        // Get user input
-        char input = std::cin.get();
-        if (input == 'q' || input == 'Q') {
-            continue_reading = false;
-        }
-
-        // Clear the input buffer
-        std::cin.clear();
-        while (std::cin.get() != '\n') {}
     }
-  
-    BOOST_LOG_TRIVIAL(info) << "Store: Finished reading file with key: " << key;
-}
 
-void Store::print_working_dir() const {
-  std::cout << std::filesystem::current_path() << std::endl;
-  BOOST_LOG_TRIVIAL(debug) << "Store: Current working directory: " 
-                          << std::filesystem::current_path();
-}
-
-void Store::list() const {
-  std::filesystem::path current = std::filesystem::current_path();
-  BOOST_LOG_TRIVIAL(info) << "Store: Listing contents of: " << current;
-
-  for (const auto& entry : std::filesystem::directory_iterator(current)) {
-      std::cout << (entry.is_directory() ? "[DIR] " : "[FILE] ")
-                << entry.path().filename() << std::endl;
-  }
+    BOOST_LOG_TRIVIAL(info) << "Store: Successfully deleted file and cleaned up directories: " << filename;
 }
 
 void Store::store(const std::string& key, std::istream& data) {
@@ -111,7 +181,7 @@ void Store::store(const std::string& key, std::istream& data) {
     throw StoreError("Store: Failed to create file: " + file_path.string());
   }
   
-  // Stream data in chunks for memory effi    ciency
+  // Stream data in chunks for memory efficiency
   size_t bytes_written = 0;
   char buffer[4096];  // 4KB chunks balance memory usage and I/O performance
   

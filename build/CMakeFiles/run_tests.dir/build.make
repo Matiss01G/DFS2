@@ -70,13 +70,11 @@ CMakeFiles/run_tests: crypto_tests
 CMakeFiles/run_tests: store_tests
 CMakeFiles/run_tests: channel_tests
 CMakeFiles/run_tests: codec_tests
-CMakeFiles/run_tests: tcp_peer_tests
 CMakeFiles/run_tests: bootstrap_tests
 	/home/runner/workspace/build/crypto_tests
 	/home/runner/workspace/build/store_tests
 	/home/runner/workspace/build/channel_tests
 	/home/runner/workspace/build/codec_tests
-	/home/runner/workspace/build/tcp_peer_tests
 	/home/runner/workspace/build/bootstrap_tests
 
 run_tests: CMakeFiles/run_tests

@@ -34,10 +34,6 @@ public:
     void setMode(Mode mode) { mode_ = mode; }
     Mode getMode() const { return mode_; }
 
-    // Stream operator overloads for encryption/decryption
-    CryptoStream& operator>>(std::ostream& output);  // Process data to output
-    CryptoStream& operator<<(std::istream& input);   // Accept input data
-
     // Encryption/decryption stream operations
     std::ostream& encrypt(std::istream& input, std::ostream& output);
     std::ostream& decrypt(std::istream& input, std::ostream& output);
@@ -51,7 +47,7 @@ private:
     std::unique_ptr<CipherContext> context_;
     bool is_initialized_ = false;
     Mode mode_ = Mode::Encrypt;  // Default to encryption mode
-    std::istream* pending_input_ = nullptr;  // Store input stream for operator>> to process
+    std::istream* pending_input_ = nullptr;  
 
     // Process data through OpenSSL cipher context
     void processStream(std::istream& input, std::ostream& output, bool encrypting);

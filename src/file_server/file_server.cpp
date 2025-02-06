@@ -12,11 +12,12 @@
 namespace dfs {
 namespace network {
 
-FileServer::FileServer(uint32_t ID, const std::vector<uint8_t>& key, PeerManager& peer_manager, Channel& channel)
+FileServer::FileServer(uint32_t ID, const std::vector<uint8_t>& key, PeerManager& peer_manager, Channel& channel, TCP_Server& tcp_server)
   : ID_(ID)
   , key_(key)
   , channel_(channel)
-  , peer_manager_(peer_manager) {  // Initialize PeerManager reference
+  , peer_manager_(peer_manager) 
+  , tcp_server_(tcp_server) {  
 
   // Validate key size (32 bytes for AES-256)
   if (key_.empty() || key_.size() != 32) {
@@ -52,6 +53,24 @@ FileServer::~FileServer() {
     if (listener_thread_ && listener_thread_->joinable()) {
         listener_thread_->join();
     }
+}
+
+bool FileServer::connect(const std::string& remote_address, uint16_t remote_port) {
+  BOOST_LOG_TRIVIAL(info) << "File server: Initiating connection to " << remote_address << ":" << remote_port;
+
+  try {
+    if (!tcp_server_.connect(remote_address, remote_port)) {
+      BOOST_LOG_TRIVIAL(error) << "File server: Failed to connect to " << remote_address << ":" << remote_port;
+      return false;
+    }
+
+    BOOST_LOG_TRIVIAL(info) << "File server: Successfully connected to " << remote_address << ":" << remote_port;
+    return true;
+  }
+  catch (const std::exception& e) {
+    BOOST_LOG_TRIVIAL(error) << "File server: Connection error: " << e.what();
+    return false;
+  }
 }
 
 std::string FileServer::extract_filename(const MessageFrame& frame) {
@@ -226,13 +245,51 @@ bool FileServer::store_file(const std::string& filename, std::stringstream& inpu
   }
 }
 
+bool FileServer::store_file(const std::string& filename, std::istream& input) {
+  std::lock_guard<std::mutex> lock(mutex_);
+  try {
+    BOOST_LOG_TRIVIAL(info) << "File server: Storing file with filename: " << filename;
+    // Validate input stream
+    if (!input.good()) {
+      BOOST_LOG_TRIVIAL(error) << "File server: Invalid input stream for file: " << filename;
+      return false;
+    }
+    // Store file locally
+    try {
+      store_->store(filename, input);
+    } catch (const std::exception& e) {
+      BOOST_LOG_TRIVIAL(error) << "File server: Failed to store file locally: " << e.what();
+      return false;
+    }
+    // Reset stream position after store operation
+    input.clear();
+    input.seekg(0);
+    // Broadcast the stored file to all peers with STORE_FILE message type
+    if (!prepare_and_send(filename, MessageType::STORE_FILE)) {
+      BOOST_LOG_TRIVIAL(error) << "Failed to broadcast file: " << filename;
+      return false;
+    }
+    BOOST_LOG_TRIVIAL(info) << "File server: Successfully stored and broadcasted file: " << filename;
+    return true;
+  }
+  catch (const std::exception& e) {
+    BOOST_LOG_TRIVIAL(error) << "File server: Error in store_file: " << e.what();
+    return false;
+  }
+}
+
 std::optional<std::stringstream> FileServer::get_file(const std::string& filename) {
   std::lock_guard<std::mutex> lock(mutex_);
 
   try {
     BOOST_LOG_TRIVIAL(info) << "File server: Attempting to get file: " << filename;
 
-    // Check local store
+    // Try to read file directly first
+    if (store_->read_file(filename, 20)) {
+      BOOST_LOG_TRIVIAL(info) << "File server: File successfully read from local store: " << filename;
+      return std::nullopt;  
+    }
+
     std::stringstream local_result;
     try {
       store_->get(filename, local_result);

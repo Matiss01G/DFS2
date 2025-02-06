@@ -28,6 +28,7 @@ struct CipherContext {
     EVP_CIPHER_CTX* get() { return ctx; }
 };
 
+// Constructor
 CryptoStream::CryptoStream() {
     BOOST_LOG_TRIVIAL(info) << "Crypto stream: Initializing CryptoStream";
     OpenSSL_add_all_algorithms();
@@ -35,6 +36,7 @@ CryptoStream::CryptoStream() {
     BOOST_LOG_TRIVIAL(debug) << "Crypto stream: initialization complete";
 }
 
+// Destructor
 CryptoStream::~CryptoStream() {
     BOOST_LOG_TRIVIAL(debug) << "Crypto stream: Cleaning up CryptoStream resources";
     EVP_cleanup();
@@ -212,32 +214,6 @@ std::ostream& CryptoStream::encrypt(std::istream& input, std::ostream& output) {
 std::ostream& CryptoStream::decrypt(std::istream& input, std::ostream& output) {
     processStream(input, output, false);
     return output;
-}
-
-CryptoStream& CryptoStream::operator>>(std::ostream& output) {
-    BOOST_LOG_TRIVIAL(debug) << "Crypto stream: Stream operator>> called in " << (mode_ == Mode::Encrypt ? "encryption" : "decryption") << " mode";
-
-    if (!pending_input_) {
-        BOOST_LOG_TRIVIAL(error) << "Crypto stream: Stream operator>> called without prior input stream";
-        throw std::runtime_error("Crypto stream: No pending input stream. Use operator<< first.");
-    }
-
-    if (mode_ == Mode::Encrypt) {
-        encrypt(*pending_input_, output);
-    } else {
-        decrypt(*pending_input_, output);
-    }
-
-    pending_input_ = nullptr;
-    BOOST_LOG_TRIVIAL(debug) << "Crypto stream: Stream processing complete";
-
-    return *this;
-}
-
-CryptoStream& CryptoStream::operator<<(std::istream& input) {
-    BOOST_LOG_TRIVIAL(debug) << "Crypto stream: Stream operator<< called, storing input stream for processing";
-    pending_input_ = &input;
-    return *this;
 }
 
 std::array<uint8_t, CryptoStream::IV_SIZE> CryptoStream::generate_IV() const {

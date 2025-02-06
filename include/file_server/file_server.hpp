@@ -15,6 +15,7 @@
 #include "network/channel.hpp"
 #include "crypto/crypto_stream.hpp"
 #include "utils/pipeliner.hpp"
+#include "network/tcp_server.hpp" 
 
 namespace dfs {
 namespace network {
@@ -26,13 +27,14 @@ class Pipeliner;
 class FileServer {
 public:
     // Constructor takes server ID, encryption key, PeerManager reference and reference to shared channel
-    FileServer(uint32_t ID, const std::vector<uint8_t>& key, PeerManager& peer_manager, Channel& channel);
+    FileServer(uint32_t ID, const std::vector<uint8_t>& key, PeerManager& peer_manager, Channel& channel, TCP_Server& tcp_server);
 
     // Virtual destructor for proper cleanup
     virtual ~FileServer();
 
     // Store file locally and broadcast to peers
     bool store_file(const std::string& filename, std::stringstream& input);
+    bool store_file(const std::string& filename, std::istream& input);
     // Get file either from local store or network
     std::optional<std::stringstream> get_file(const std::string& filename);
 
@@ -61,6 +63,8 @@ public:
     // Handles sending pipeline data to specific peer or broadcasting
     bool send_pipeline(dfs::utils::Pipeliner* const& pipeline, std::optional<uint8_t> peer_id);
 
+    bool connect(const std::string& remote_address, uint16_t remote_port);
+
 
 private:
     uint32_t ID_;
@@ -68,7 +72,8 @@ private:
     std::unique_ptr<dfs::store::Store> store_;
     std::unique_ptr<Codec> codec_;
     Channel& channel_;
-    PeerManager& peer_manager_;  // Added PeerManager reference
+    PeerManager& peer_manager_;  
+    TCP_Server& tcp_server_;
     std::mutex mutex_;
     std::atomic<bool> running_{true};
     std::unique_ptr<std::thread> listener_thread_;
