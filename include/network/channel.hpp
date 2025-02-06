@@ -15,8 +15,7 @@ public:
     // Adds a message frame to the back of the queue
     void produce(const MessageFrame& frame);
 
-    // Retrieves and removes the next message frame from the front of the queue
-    // Returns true if a frame was retrieved, false if queue was empty
+    // Retrieves and removes next message frame from queue
     bool consume(MessageFrame& frame);
 
     // Returns true if the channel has no messages
@@ -26,6 +25,7 @@ public:
     std::size_t size() const;
 
 private:
+    // Parameters
     mutable std::mutex mutex_;
     std::queue<MessageFrame> queue_;
 };

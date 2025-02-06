@@ -26,66 +26,69 @@ class Pipeliner;
 
 class FileServer {
 public:
-    // Constructor takes server ID, encryption key, PeerManager reference and reference to shared channel
-    FileServer(uint32_t ID, const std::vector<uint8_t>& key, PeerManager& peer_manager, Channel& channel, TCP_Server& tcp_server);
+  // Constructor and destructor
+  FileServer(uint32_t ID, const std::vector<uint8_t>& key, PeerManager& peer_manager, Channel& channel, TCP_Server& tcp_server);
+  virtual ~FileServer();
 
-    // Virtual destructor for proper cleanup
-    virtual ~FileServer();
+  
+  // ---- PROCESSING OF USER REQUESTS ----
+  
+  bool store_file(const std::string& filename, std::istream& input);
+  bool get_file(const std::string& filename);
 
-    // Store file locally and broadcast to peers
-    bool store_file(const std::string& filename, std::stringstream& input);
-    bool store_file(const std::string& filename, std::istream& input);
-    // Get file either from local store or network
-    bool get_file(const std::string& filename);
+  // Getter for store
+  dfs::store::Store& get_store() { return *store_; }
+  
+  // Connects to a remote endpoint 
+  bool connect(const std::string& remote_address, uint16_t remote_port);
 
-    // Handle incoming store message frame
-    bool handle_store(const MessageFrame& frame);
-    // Handle incoming get message frame
-    bool handle_get(const MessageFrame& frame);
-
-    // Methods to access the store (moved to public for testing)
-    const dfs::store::Store& get_store() const { return *store_; }
-    dfs::store::Store& get_store() { return *store_; }
-
-    // Extract filename from message frame's payload stream
-    std::string extract_filename(const MessageFrame& frame);
-
-    // Prepare and send file to peers with specified message type
-    bool prepare_and_send(const std::string& filename, MessageType message_type, std::optional<uint8_t> peer_id = std::nullopt);
-    // Creates MessageFrame with appropriate metadata and IV
-    MessageFrame create_message_frame(const std::string& filename, MessageType message_type);
-    // Creates producer function to handle file content streaming based on message type
-    std::function<bool(std::stringstream&)> create_producer(const std::string& filename, MessageType message_type);
-    // Creates transform function to serialize message frame data
-    std::function<bool(std::stringstream&, std::stringstream&)> create_transform(
-        MessageFrame& frame, 
-        utils::Pipeliner* pipeline);
-    // Handles sending pipeline data to specific peer or broadcasting
-    bool send_pipeline(dfs::utils::Pipeliner* const& pipeline, std::optional<uint8_t> peer_id);
-
-    bool connect(const std::string& remote_address, uint16_t remote_port);
-
-
+  
 private:
-    uint32_t ID_;
-    std::vector<uint8_t> key_;
-    std::unique_ptr<dfs::store::Store> store_;
-    std::unique_ptr<Codec> codec_;
-    Channel& channel_;
-    PeerManager& peer_manager_;  
-    TCP_Server& tcp_server_;
-    std::mutex mutex_;
-    std::atomic<bool> running_{true};
-    std::unique_ptr<std::thread> listener_thread_;
-    
-    // Channel listener continuously checks for messages in the channel queue
-    void channel_listener();
+  // Parameters
+  uint32_t ID_;
+  std::vector<uint8_t> key_;
+  std::unique_ptr<dfs::store::Store> store_;
+  std::unique_ptr<Codec> codec_;
+  Channel& channel_;
+  PeerManager& peer_manager_;  
+  TCP_Server& tcp_server_;
+  std::mutex mutex_;
+  std::atomic<bool> running_{true};
+  std::unique_ptr<std::thread> listener_thread_;
 
-    // Message handler routes messages to appropriate handlers based on type
-    void message_handler(const MessageFrame& frame);
+  
+  // ---- PROCESSING OF OUTGOING DATA ----
 
-    bool read_from_local_store(const std::string& filename);
-    bool retrieve_from_network(const std::string& filename);
+  // Prepare and send file to peers with specified message type
+  bool prepare_and_send(const std::string& filename, MessageType message_type, std::optional<uint8_t> peer_id = std::nullopt);
+  // Creates MessageFrame with appropriate metadata and IV
+  MessageFrame create_message_frame(const std::string& filename, MessageType message_type);
+  // Creates producer function to handle file content streaming based on message type
+  std::function<bool(std::stringstream&)> create_producer(const std::string& filename, MessageType message_type);
+  // Creates transform function to serialize message frame data
+  std::function<bool(std::stringstream&, std::stringstream&)> create_transform(
+    MessageFrame& frame, 
+    utils::Pipeliner* pipeline);
+  // Handles sending pipeline data to specific peer or broadcasting
+  bool send_pipeline(dfs::utils::Pipeliner* const& pipeline, std::optional<uint8_t> peer_id);
+
+  
+  // ---- PROCESSING OF INCOMING DATA ----
+
+  // Channel listener continuously checks for messages in the channel queue
+  void channel_listener();
+  // Message handler routes messages to appropriate handlers based on type
+  void message_handler(const MessageFrame& frame);
+  // Handle incoming store/get message frames
+  bool handle_store(const MessageFrame& frame);
+  bool handle_get(const MessageFrame& frame);
+  // Extract filename from message frame's payload stream
+  std::string extract_filename(const MessageFrame& frame);
+
+  
+  // Called by get_file to retrieve file from store/network
+  bool read_from_local_store(const std::string& filename);
+  bool retrieve_from_network(const std::string& filename);
 };
 
 } // namespace network

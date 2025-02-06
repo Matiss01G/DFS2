@@ -6,7 +6,10 @@
 
 namespace dfs::crypto {
 
+//==============================================
 // Base class for all crypto-related errors
+//==============================================
+    
 class CryptoError : public std::runtime_error {
 public:
     explicit CryptoError(const std::string& message) 

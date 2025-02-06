@@ -53,8 +53,9 @@ std::size_t Codec::serialize(const MessageFrame& frame, std::ostream& output) {
     write_bytes(output, &network_payload_size, sizeof(network_payload_size));
     total_bytes += sizeof(network_payload_size);
 
+    // Encrypt filename length
     BOOST_LOG_TRIVIAL(debug) << "Codec: Writing filename length: " << frame.filename_length;
-    // Encrypt and write filename length
+    // Convert to network byte order
     uint32_t network_filename_length = boost::endian::native_to_big(frame.filename_length);
     // Create stream for raw data
     std::stringstream filename_length_stream;

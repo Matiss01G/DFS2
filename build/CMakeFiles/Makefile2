@@ -367,11 +367,11 @@ CMakeFiles/dfs_main.dir/clean:
 # Target rules for target CMakeFiles/run_tests.dir
 
 # All Build rule for target.
+CMakeFiles/run_tests.dir/all: CMakeFiles/crypto_tests.dir/all
+CMakeFiles/run_tests.dir/all: CMakeFiles/store_tests.dir/all
 CMakeFiles/run_tests.dir/all: CMakeFiles/channel_tests.dir/all
 CMakeFiles/run_tests.dir/all: CMakeFiles/bootstrap_tests.dir/all
 CMakeFiles/run_tests.dir/all: CMakeFiles/codec_tests.dir/all
-CMakeFiles/run_tests.dir/all: CMakeFiles/crypto_tests.dir/all
-CMakeFiles/run_tests.dir/all: CMakeFiles/store_tests.dir/all
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/run_tests.dir/build.make CMakeFiles/run_tests.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/run_tests.dir/build.make CMakeFiles/run_tests.dir/build
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/runner/workspace/build/CMakeFiles --progress-num= "Built target run_tests"

@@ -4,6 +4,10 @@
 namespace dfs {
 namespace network {
 
+//==============================================
+// Constructor and destructor
+//==============================================
+
 PeerManager::PeerManager(Channel& channel, TCP_Server& tcp_server, const std::vector<uint8_t>& key)
   : channel_(channel)
   , tcp_server_(tcp_server)
@@ -21,6 +25,10 @@ PeerManager::~PeerManager() {
   shutdown();
 }
 
+//==============================================
+// Peer creation and management
+//==============================================
+  
 void PeerManager::create_peer(std::shared_ptr<boost::asio::ip::tcp::socket> socket, uint8_t peer_id) {
   try {
 
@@ -86,6 +94,26 @@ void PeerManager::remove_peer(uint8_t peer_id) {
   }
 }
 
+bool PeerManager::has_peer(uint8_t peer_id) {
+  std::lock_guard<std::mutex> lock(mutex_);
+  return peers_.find(peer_id) != peers_.end();
+}
+
+std::shared_ptr<TCP_Peer> PeerManager::get_peer(uint8_t peer_id) {
+  std::lock_guard<std::mutex> lock(mutex_);
+  
+  auto it = peers_.find(peer_id);
+  if (it != peers_.end()) {
+    return it->second;
+  }
+  
+  return nullptr;
+}
+  
+//==============================================
+// Connection Management
+//==============================================
+
 bool PeerManager::disconnect(uint8_t peer_id) {
 
   auto it = peers_.find(peer_id);
@@ -119,22 +147,46 @@ bool PeerManager::is_connected(uint8_t peer_id) {
   return it->second->get_socket().is_open();
 }
 
-bool PeerManager::has_peer(uint8_t peer_id) {
-    std::lock_guard<std::mutex> lock(mutex_);
-    return peers_.find(peer_id) != peers_.end();
-}
-
-std::shared_ptr<TCP_Peer> PeerManager::get_peer(uint8_t peer_id) {
-  std::lock_guard<std::mutex> lock(mutex_);
-
-  auto it = peers_.find(peer_id);
-  if (it != peers_.end()) {
-    return it->second;
+//==============================================
+// Stream Operations
+//==============================================
+  
+bool PeerManager::send_to_peer(uint8_t peer_id, dfs::utils::Pipeliner& pipeline) {
+  if (!pipeline.good()) {
+    BOOST_LOG_TRIVIAL(error) << "Peer manager: Invalid input stream provided for peer_id: " << static_cast<int>(peer_id);
+    return false;
   }
 
-  return nullptr;
-}
+  auto it = peers_.find(peer_id);
+  if (it == peers_.end()) {
+    BOOST_LOG_TRIVIAL(warning) << "Peer manager: Peer not found with ID: " << static_cast<int>(peer_id);
+    return false;
+  }
 
+  if (!is_connected(peer_id)) {
+    BOOST_LOG_TRIVIAL(warning) << "Peer manager: Peer is not connected: " << static_cast<int>(peer_id);
+    return false;
+  }
+
+  // Get the total size from pipeline
+  std::size_t total_size = pipeline.get_total_size();
+
+
+  try {
+    bool success = it->second->send_stream(pipeline, total_size);
+    if (success) {
+      BOOST_LOG_TRIVIAL(debug) << "Peer manager: Successfully sent stream to peer: " << static_cast<int>(peer_id);
+    } else {
+      BOOST_LOG_TRIVIAL(error) << "Peer manager: Failed to send stream to peer: " << static_cast<int>(peer_id);
+    }
+    return success;
+  } catch (const std::exception& e) {
+    BOOST_LOG_TRIVIAL(error) << "Peer manager: Exception while sending to peer " << static_cast<int>(peer_id) 
+                << ": " << e.what();
+    return false;
+  }
+}
+  
 bool PeerManager::broadcast_stream(dfs::utils::Pipeliner& pipeline) {
   if (!pipeline.good()) {
     BOOST_LOG_TRIVIAL(error) << "Peer manager: Invalid input stream provided for broadcast";
@@ -185,43 +237,9 @@ bool PeerManager::broadcast_stream(dfs::utils::Pipeliner& pipeline) {
   return all_success;
 }
 
-bool PeerManager::send_to_peer(uint8_t peer_id, dfs::utils::Pipeliner& pipeline) {
-  if (!pipeline.good()) {
-    BOOST_LOG_TRIVIAL(error) << "Peer manager: Invalid input stream provided for peer_id: " << static_cast<int>(peer_id);
-    return false;
-  }
-
-  // std::lock_guard<std::mutex> lock(mutex_);
-
-  auto it = peers_.find(peer_id);
-  if (it == peers_.end()) {
-    BOOST_LOG_TRIVIAL(warning) << "Peer manager: Peer not found with ID: " << static_cast<int>(peer_id);
-    return false;
-  }
-
-  if (!is_connected(peer_id)) {
-    BOOST_LOG_TRIVIAL(warning) << "Peer manager: Peer is not connected: " << static_cast<int>(peer_id);
-    return false;
-  }
-  
-  // Get the total size from pipeline
-  std::size_t total_size = pipeline.get_total_size();
-
-
-  try {
-    bool success = it->second->send_stream(pipeline, total_size);
-    if (success) {
-      BOOST_LOG_TRIVIAL(debug) << "Peer manager: Successfully sent stream to peer: " << static_cast<int>(peer_id);
-    } else {
-      BOOST_LOG_TRIVIAL(error) << "Peer manager: Failed to send stream to peer: " << static_cast<int>(peer_id);
-    }
-    return success;
-  } catch (const std::exception& e) {
-    BOOST_LOG_TRIVIAL(error) << "Peer manager: Exception while sending to peer " << static_cast<int>(peer_id) 
-                << ": " << e.what();
-    return false;
-  }
-}
+//==============================================
+// Utility Methods
+//==============================================
 
 void PeerManager::shutdown() {
   std::lock_guard<std::mutex> lock(mutex_);
