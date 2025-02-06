@@ -172,7 +172,11 @@ gtest_discover_tests(bootstrap_tests)
 
 # Update run_tests target
 add_custom_target(run_tests ALL
-    COMMAND ctest --output-on-failure
+    COMMAND crypto_tests
+    COMMAND store_tests
+    COMMAND channel_tests
+    COMMAND codec_tests
+    COMMAND bootstrap_tests
     DEPENDS crypto_tests store_tests channel_tests codec_tests bootstrap_tests
     WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
 )
