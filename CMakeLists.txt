@@ -148,6 +148,32 @@ target_link_libraries(codec_tests
     GTest::Main
 )
 
+# Create combined all_tests executable
+add_executable(all_tests
+    src/tests/crypto_stream_test.cpp
+    src/tests/store_test.cpp
+    src/tests/channel_test.cpp
+    src/network/channel.cpp
+    src/tests/bootstrap_test.cpp
+    src/tests/codec_test.cpp
+    src/network/codec.cpp
+)
+
+target_include_directories(all_tests PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}/include
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/tests
+)
+
+target_link_libraries(all_tests
+    PRIVATE
+    dfs_network
+    dfs_crypto
+    dfs_store
+    dfs_cli
+    GTest::GTest
+    GTest::Main
+)
+
 # Create main executable
 add_executable(dfs_main
     src/main.cpp
@@ -169,9 +195,10 @@ gtest_discover_tests(store_tests)
 gtest_discover_tests(channel_tests)
 gtest_discover_tests(codec_tests)
 gtest_discover_tests(bootstrap_tests)
+gtest_discover_tests(all_tests)
 
 # Update run_tests target
-add_custom_target(run_tests ALL
+add_custom_target(run_tests 
     COMMAND ctest --output-on-failure
     DEPENDS crypto_tests store_tests channel_tests codec_tests bootstrap_tests
     WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
