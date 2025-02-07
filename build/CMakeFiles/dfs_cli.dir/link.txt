@@ -1,2 +1,0 @@
-/nix/store/9bv7dcvmfcjnmg5mnqwqlq2wxfn8d7yi-gcc-wrapper-13.2.0/bin/ar qc libdfs_cli.a CMakeFiles/dfs_cli.dir/src/cli/cli.cpp.o
-/nix/store/9bv7dcvmfcjnmg5mnqwqlq2wxfn8d7yi-gcc-wrapper-13.2.0/bin/ranlib libdfs_cli.a
