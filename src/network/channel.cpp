@@ -5,6 +5,10 @@
 
 namespace dfs {
 namespace network {
+  
+//==============================================
+// CHANNEL CONTROL METHODS
+//==============================================
 
 void Channel::produce(const MessageFrame& frame) {
   std::lock_guard<std::mutex> lock(mutex_);
@@ -24,6 +28,11 @@ bool Channel::consume(MessageFrame& frame) {
   BOOST_LOG_TRIVIAL(debug) << "Channel: Retrieved message frame from channel. Channel size: " << queue_.size();
   return true;
 }
+
+  
+//==============================================
+// QUERY METHODS 
+//==============================================
 
 bool Channel::empty() const {
   std::lock_guard<std::mutex> lock(mutex_);

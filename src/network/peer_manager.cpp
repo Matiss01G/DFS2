@@ -5,7 +5,7 @@ namespace dfs {
 namespace network {
 
 //==============================================
-// Constructor and destructor
+// CONSTRUCTOR AND DESTRUCTOR
 //==============================================
 
 PeerManager::PeerManager(Channel& channel, TCP_Server& tcp_server, const std::vector<uint8_t>& key)
@@ -26,7 +26,7 @@ PeerManager::~PeerManager() {
 }
 
 //==============================================
-// Peer creation and management
+// PEER CREATION AND MANAGEMENT
 //==============================================
   
 void PeerManager::create_peer(std::shared_ptr<boost::asio::ip::tcp::socket> socket, uint8_t peer_id) {
@@ -111,7 +111,7 @@ std::shared_ptr<TCP_Peer> PeerManager::get_peer(uint8_t peer_id) {
 }
   
 //==============================================
-// Connection Management
+// CONNECTION MANAGEMENT
 //==============================================
 
 bool PeerManager::disconnect(uint8_t peer_id) {
@@ -148,7 +148,7 @@ bool PeerManager::is_connected(uint8_t peer_id) {
 }
 
 //==============================================
-// Stream Operations
+// STREAM OPERATIONS
 //==============================================
   
 bool PeerManager::send_to_peer(uint8_t peer_id, dfs::utils::Pipeliner& pipeline) {
@@ -238,7 +238,7 @@ bool PeerManager::broadcast_stream(dfs::utils::Pipeliner& pipeline) {
 }
 
 //==============================================
-// Utility Methods
+// UTILITY METHODS
 //==============================================
 
 void PeerManager::shutdown() {

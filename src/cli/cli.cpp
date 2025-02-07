@@ -6,6 +6,10 @@
 namespace dfs {
 namespace cli {
 
+//==============================================
+// CONSTRUCTOR AND DESTRUCTOR
+//==============================================
+  
 CLI::CLI(store::Store& store, network::FileServer& file_server)
   : store_(store)
   , file_server_(file_server)
@@ -13,6 +17,10 @@ CLI::CLI(store::Store& store, network::FileServer& file_server)
   BOOST_LOG_TRIVIAL(info) << "CLI initialized";
 }
 
+
+//==============================================
+// STARTUP
+//==============================================
 void CLI::run() {
   running_ = true;
   std::string line;
@@ -21,99 +29,118 @@ void CLI::run() {
   std::cout << "DFS CLI started. Enter command and filename (or 'quit' to exit):" << std::endl;
   
   while (running_ && std::getline(std::cin, line)) {
-    if (line == "quit") {
-      running_ = false;
-      continue;
-    }
+  if (line == "quit") {
+    running_ = false;
+    continue;
+  }
 
-    std::istringstream iss(line);
-    std::string command, filename;
+  std::istringstream iss(line);
+  std::string command, filename;
 
-    iss >> command;
-    if (command == "pwd" || command == "ls") {
-      process_command(command, "");
-    } else if (iss >> filename) {
-      process_command(command, filename);
-    } else {
-      std::cout << "Invalid input. Usage: <command> [filename]" << std::endl;
-    }
+  iss >> command;
+  if (command == "pwd" || command == "ls") {
+    process_command(command, "");
+  } else if (iss >> filename) {
+    process_command(command, filename);
+  } else {
+    std::cout << "Invalid input. Usage: <command> [filename]" << std::endl;
+  }
 
-    if (running_) {
-      std::cout << "Enter command and filename (or 'quit' to exit):" << std::endl;
-    }
+  if (running_) {
+    std::cout << "Enter command and filename (or 'quit' to exit):" << std::endl;
+  }
   }
   
   BOOST_LOG_TRIVIAL(info) << "CLI loop ended";
 }
 
+
+//==============================================
+// COMMAND PROCESSING 
+//==============================================
+
 void CLI::process_command(const std::string& command, const std::string& filename) {
-    BOOST_LOG_TRIVIAL(debug) << "Processing command: " << command << " with filename: " << filename;
+  BOOST_LOG_TRIVIAL(debug) << "Processing command: " << command << " with filename: " << filename;
 
-    if (command == "read") {
-        try {
-            file_server_.get_file(filename);  
-        } catch (const std::exception& e) {
-            BOOST_LOG_TRIVIAL(error) << "Error reading file: " << e.what();
-            std::cout << "Error reading file: " << e.what() << std::endl;
-        }
-    }
-    else if (command == "pwd" && filename.empty()) {
-        store_.print_working_dir();
-    }
-    else if (command == "ls" && filename.empty()) {
-        store_.list();
-    }
-    else if (command == "store") {
-        std::ifstream file(filename);
-        if (!file) {
-            std::cout << "Error opening file: " << filename << std::endl;
-            return;
-        }
-        file_server_.store_file(filename, file);
-    }   
-    else if (command == "cd") {
-        try {
-            store_.move_dir(filename);
-        } catch (const std::exception& e) {
-            BOOST_LOG_TRIVIAL(error) << "Error changing directory: " << e.what();
-            std::cout << "Error changing directory: " << e.what() << std::endl;
-        }
-    }
-    else if (command == "delete") {
-        try {
-            store_.delete_file(filename);
-            std::cout << "File deleted successfully" << std::endl;
-        } catch (const std::exception& e) {
-            BOOST_LOG_TRIVIAL(error) << "Error deleting file: " << e.what();
-            std::cout << "Error deleting file: " << e.what() << std::endl;
-        }
-    } 
-    else if (command == "connect") {
-        // Parse IP and port from the filename parameter
-        size_t colon_pos = filename.find(':');
-        if (colon_pos == std::string::npos) {
-            std::cout << "Invalid format. Usage: connect ip:port (e.g., connect 127.0.0.1:3002)" << std::endl;
-            return;
-        }
+  if (command == "read") {
+      handle_read_command(filename);
+  }
+  else if (command == "pwd" && filename.empty()) {
+      store_.print_working_dir();
+  }
+  else if (command == "ls" && filename.empty()) {
+      store_.list();
+  }
+  else if (command == "store") {
+      handle_store_command(filename);
+  }
+  else if (command == "cd") {
+      try {
+          store_.move_dir(filename);
+      } catch (const std::exception& e) {
+          log_and_display_error("Error changing directory", e.what());
+      }
+  }
+  else if (command == "delete") {
+      handle_delete_command(filename);
+  }
+  else if (command == "connect") {
+      handle_connect_command(filename);
+  }
+  else {
+      std::cout << "Unknown command or invalid arguments" << std::endl;
+  }
+}
+  
+void CLI::handle_read_command(const std::string& filename) {
+  try {
+      file_server_.get_file(filename);  
+  } catch (const std::exception& e) {
+      log_and_display_error("Error reading file", e.what());
+  }
+}
 
-        std::string ip = filename.substr(0, colon_pos);
-        std::string port_str = filename.substr(colon_pos + 1);
+void CLI::handle_store_command(const std::string& filename) {
+  std::ifstream file(filename);
+  if (!file) {
+      std::cout << "Error opening file: " << filename << std::endl;
+      return;
+  }
+  file_server_.store_file(filename, file);
+}
 
-        try {
-            uint16_t port = std::stoi(port_str);
-            if (file_server_.connect(ip, port)) {
-                std::cout << "Successfully connected to " << ip << ":" << port << std::endl;
-            } else {
-                std::cout << "Failed to connect to " << ip << ":" << port << std::endl;
-            }
-        } catch (const std::exception& e) {
-            std::cout << "Invalid port number: " << port_str << std::endl;
-            return;
-        }
-    }
-    else {
-        std::cout << "Unknown command or invalid arguments" << std::endl;
-    }
+void CLI::handle_connect_command(const std::string& connection_string) {
+  size_t colon_pos = connection_string.find(':');
+  if (colon_pos == std::string::npos) {
+      std::cout << "Invalid format. Usage: connect ip:port (e.g., connect 127.0.0.1:3002)" << std::endl;
+      return;
+  }
+
+  std::string ip = connection_string.substr(0, colon_pos);
+  std::string port_str = connection_string.substr(colon_pos + 1);
+
+  try {
+      uint16_t port = std::stoi(port_str);
+      bool success = file_server_.connect(ip, port);
+      std::cout << (success ? "Successfully connected to " : "Failed to connect to ")
+               << ip << ":" << port << std::endl;
+  } catch (const std::exception& e) {
+      std::cout << "Invalid port number: " << port_str << std::endl;
+  }
+}
+
+void CLI::handle_delete_command(const std::string& filename) {
+  try {
+      store_.delete_file(filename);
+      std::cout << "File deleted successfully" << std::endl;
+  } catch (const std::exception& e) {
+      log_and_display_error("Error deleting file", e.what());
+  }
+}
+
+void CLI::log_and_display_error(const std::string& message, const std::string& error) {
+  BOOST_LOG_TRIVIAL(error) << message << ": " << error;
+  std::cout << message << ": " << error << std::endl;
 }
 
 } // namespace cli

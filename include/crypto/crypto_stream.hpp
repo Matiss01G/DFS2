@@ -26,26 +26,29 @@ public:
   static constexpr size_t IV_SIZE = 16;      // 128 bits for CBC mode
   static constexpr size_t BLOCK_SIZE = 16;   // AES block size
 
-  // Constructor and destructor
+  // ---- CONSTRUCTOR AND DESTRUCTOR ----
   CryptoStream();
   ~CryptoStream();
 
-  // Initializes crypto unit with encryption key and IV
-  void initialize(const std::vector<uint8_t>& key, const std::vector<uint8_t>& iv);
-
   // Generate an initialization vector
   std::array<uint8_t, IV_SIZE> generate_IV() const;
+  
+  // ---- INITIALIZATION ----
+  // Initializes crypto_stream parameters
+  void initialize(const std::vector<uint8_t>& key, const std::vector<uint8_t>& iv);
 
-  // Encryption/decryption stream operations
+  
+  // ---- ENCRYPTION/DECRYPTION OPERATIONS ----
   std::ostream& encrypt(std::istream& input, std::ostream& output);
   std::ostream& decrypt(std::istream& input, std::ostream& output);
 
-  // Getter/setter for operation mode
+  
+  // ---- GETTERS/SETTERS ----
   void setMode(Mode mode) { mode_ = mode; }
   Mode getMode() const { return mode_; }
 
 private:
-  // Parameters
+  // ---- PARAMETERS ----
   std::vector<uint8_t> key_;
   std::vector<uint8_t> iv_;
   std::unique_ptr<CipherContext> context_;
@@ -54,18 +57,17 @@ private:
   std::istream* pending_input_ = nullptr;  
   static constexpr size_t BUFFER_SIZE = 8192; 
 
+  
+  // ---- INITIALIZATION ----  
   // Initializes cipher context
   void initializeCipher(bool encrypting);
 
 
   // ---- STREAM PROCESSING - ENCRYPTION/DECRYPTION ----
-
   // Process data through OpenSSL cipher context
   void processStream(std::istream& input, std::ostream& output, bool encrypting);
-  // Verifies that both input and output streams are in a valid state
-  void validateStreams(const std::istream& input, const std::ostream& output) const;
   // Manages stream positions and handles automatic position restoration on errors
-  void saveAndRestoreStreamPositions(std::istream& input, std::ostream& output, 
+  void saveStreamPos(std::istream& input, std::ostream& output, 
                                    const std::function<void()>& operation);
   // Performs the main encryption/decryption loop on the input stream
   void processStreamData(std::istream& input, std::ostream& output, bool encrypting);

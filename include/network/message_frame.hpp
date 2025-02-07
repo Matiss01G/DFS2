@@ -11,11 +11,13 @@
 namespace dfs {
 namespace network {
 
+// Message type used to differentiate between requests
 enum class MessageType : uint8_t {
     STORE_FILE = 0,
     GET_FILE = 1
 };
 
+// Data structure used to represent data locally
 struct MessageFrame {
     std::vector<uint8_t> iv_;
     MessageType message_type;

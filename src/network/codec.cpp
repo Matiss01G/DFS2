@@ -7,11 +7,20 @@
 namespace dfs {
 namespace network {
 
+//==============================================
+// CONSTRUCTOR AND DESTRUCTOR
+//==============================================
+  
 Codec::Codec(const std::vector<uint8_t>& key, Channel& channel) 
   : key_(key)
   , channel_(channel) {
   BOOST_LOG_TRIVIAL(info) << "Codec: Initializing Codec with key of size: " << key_.size();
 }
+
+  
+//==============================================
+// SERIALIZATION AND DESERIALIZATION
+//==============================================
 
 std::size_t Codec::serialize(const MessageFrame& frame, std::ostream& output) {
   if (!output.good()) {
@@ -174,10 +183,11 @@ MessageFrame Codec::deserialize(std::istream& input) {
   }
 }
 
-size_t Codec::get_padded_size(size_t original_size) {
-    return ((original_size + crypto::CryptoStream::BLOCK_SIZE -1) / crypto::CryptoStream::BLOCK_SIZE) * crypto::CryptoStream::BLOCK_SIZE;
-}
-
+  
+//==============================================
+// STREAM OPERATIONS
+//==============================================
+  
 void Codec::write_bytes(std::ostream& output, const void* data, std::size_t size) {
   if (!output.write(static_cast<const char*>(data), size)) {
     BOOST_LOG_TRIVIAL(error) << "Codec: Failed to write " << size << " bytes to output stream";
@@ -190,6 +200,15 @@ void Codec::read_bytes(std::istream& input, void* data, std::size_t size) {
     BOOST_LOG_TRIVIAL(error) << "Codec: Failed to read " << size << " bytes from input stream";
     throw std::runtime_error("Codec: Failed to read from input stream");
   }
+}
+
+
+//==============================================
+// UTILITY METHODS
+//==============================================
+
+size_t Codec::get_padded_size(size_t original_size) {
+    return ((original_size + crypto::CryptoStream::BLOCK_SIZE -1) / crypto::CryptoStream::BLOCK_SIZE) * crypto::CryptoStream::BLOCK_SIZE;
 }
 
 } // namespace network

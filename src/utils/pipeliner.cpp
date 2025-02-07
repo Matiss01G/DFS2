@@ -3,24 +3,34 @@
 namespace dfs {
 namespace utils {
 
-PipelinerPtr Pipeliner::create(ProducerFn producer) {
-  return std::make_shared<Pipeliner>(producer);
-}
+//==============================================
+// CONSTRUCTOR AND DESTRUCTOR
+//==============================================
 
 Pipeliner::Pipeliner(ProducerFn producer)
   : producer_(producer)
-  , buffer_size_(8192)  // Default 8KB buffer
+  , buffer_size_(8192) 
   , produced_(false)
   , eof_(false) {}
 
+  
+//==============================================
+// PIPELINE CONSTRUCTION METHODS 
+//==============================================
+  
+PipelinerPtr Pipeliner::create(ProducerFn producer) {
+  return std::make_shared<Pipeliner>(producer);
+}
+  
 PipelinerPtr Pipeliner::transform(TransformFn transform) {
   transforms_.push_back(transform);
   return shared_from_this();
 }
 
-void Pipeliner::set_buffer_size(size_t size) {
-  buffer_size_ = size;
-}
+  
+//==============================================
+// PIPELINE EXECUTION AND CONTROL METHODS 
+//==============================================
 
 void Pipeliner::flush() {
   if (sync() != 0) { 
@@ -29,6 +39,7 @@ void Pipeliner::flush() {
 }
 
 int Pipeliner::sync() {
+  // Only process data once
   if (!produced_) {
     produced_ = true;
     if (!process_pipeline()) {
@@ -100,5 +111,16 @@ bool Pipeliner::process_pipeline() {
   }
 }
 
+  
+//==============================================
+// GETTERS AND SETTERS
+//==============================================
+  
+void Pipeliner::set_buffer_size(size_t size) {
+  buffer_size_ = size;
+}
+
+
+  
 } // namespace utils
 } // namespace dfs

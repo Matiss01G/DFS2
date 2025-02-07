@@ -11,31 +11,29 @@
 namespace dfs {
 namespace network {
 
-/**
- * Network peer interface for stream-based communication in DFS.
- * Implements streaming data transfer and message-based support.
- * 
- * Primary Interface:
- * - Stream-based data transfer (input/output streams)
- * - Asynchronous processing with callbacks
- */
 class Peer {
 public:
     // Stream callback type for processing received data
     using StreamProcessor = std::function<void(std::istream&)>;
 
-    virtual ~Peer() = default;
+    
+    // ---- CONSTRUCTOR AND DESTRUCTOR ----
+    virtual ~Peer() = default;    
 
-    // Stream operations (required)
-    virtual std::istream* get_input_stream() = 0;
-
-    // Message operations
-    virtual bool send_message(const std::string& message, std::size_t total_size) = 0;
-
-    // Stream processing
-    virtual void set_stream_processor(StreamProcessor processor) = 0;
+    
+    // ---- STREAM CONTROL OPERATIONS ----
     virtual bool start_stream_processing() = 0;
     virtual void stop_stream_processing() = 0;
+    
+
+    // ---- OUTGOING DATA STREAM PROCESSING ----
+    virtual bool send_message(const std::string& message, std::size_t total_size) = 0;
+    virtual bool send_stream(std::istream& input_stream, std::size_t total_size, std::size_t buffer_size = 8192) = 0;
+    
+
+    // ---- GETTERS AND SETTERS ----
+    virtual std::istream* get_input_stream() = 0;
+    virtual void set_stream_processor(StreamProcessor processor) = 0;
 
 protected:
     Peer() = default;

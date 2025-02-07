@@ -26,25 +26,25 @@ class Pipeliner;
 
 class FileServer {
 public:
-  // Constructor and destructor
+  // ---- CONSTRUCTOR AND DESTRUCTOR ----
   FileServer(uint32_t ID, const std::vector<uint8_t>& key, PeerManager& peer_manager, Channel& channel, TCP_Server& tcp_server);
   virtual ~FileServer();
 
+
+  // Connects to a remote endpoint 
+  bool connect(const std::string& remote_address, uint16_t remote_port);
+  
   
   // ---- PROCESSING OF USER REQUESTS ----
-  
   bool store_file(const std::string& filename, std::istream& input);
   bool get_file(const std::string& filename);
 
-  // Getter for store
+  
+  // ---- GETTERS ----
   dfs::store::Store& get_store() { return *store_; }
   
-  // Connects to a remote endpoint 
-  bool connect(const std::string& remote_address, uint16_t remote_port);
-
-  
 private:
-  // Parameters
+  // ---- PARAMETERS ----
   uint32_t ID_;
   std::vector<uint8_t> key_;
   std::unique_ptr<dfs::store::Store> store_;
@@ -58,7 +58,6 @@ private:
 
   
   // ---- PROCESSING OF OUTGOING DATA ----
-
   // Prepare and send file to peers with specified message type
   bool prepare_and_send(const std::string& filename, MessageType message_type, std::optional<uint8_t> peer_id = std::nullopt);
   // Creates MessageFrame with appropriate metadata and IV
@@ -74,7 +73,6 @@ private:
 
   
   // ---- PROCESSING OF INCOMING DATA ----
-
   // Channel listener continuously checks for messages in the channel queue
   void channel_listener();
   // Message handler routes messages to appropriate handlers based on type
