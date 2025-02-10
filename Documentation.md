@@ -1,19 +1,17 @@
 // ---- CRYPTO ----
+
 // CipherContext Documentation
 /*
 DOCUMENTATION:
 CLASS: CipherContext (RAII Wrapper)
-
 VARIABLES:
   . EVP_CIPHER_CTX* ctx
       - OpenSSL cipher context pointer
       - Initialized to nullptr
-      
 CONSTRUCTOR:
   . CipherContext()
       - Creates new EVP cipher context
       - Throws runtime_error if context creation fails
-      
 METHODS:
   . ~CipherContext()
       - Destructor that frees the cipher context
@@ -25,7 +23,6 @@ METHODS:
 /*
 DOCUMENTATION:
 CLASS: CryptoStream
-
 VARIABLES:
 . static constexpr size_t KEY_SIZE = 32
     - 256 bits for AES-256 encryption
@@ -47,13 +44,11 @@ VARIABLES:
     - Current operation mode
 . istream* pending_input_ = nullptr
     - Tracks pending input stream
-
 CONSTRUCTOR:
 . CryptoStream()
     - Initializes OpenSSL algorithms
     - Creates cipher context
     - Sets up logging
-
 METHODS:
 Public:
   Initialization:
@@ -64,7 +59,6 @@ Public:
       - Sets up encryption/decryption parameters
       - Validates key size
       - Stores key and IV
-
   Encryption/Decryption Operations:
   . ostream& encrypt(istream& input, ostream& output)
       - Encrypts input stream to output stream
@@ -72,19 +66,16 @@ Public:
   . ostream& decrypt(istream& input, ostream& output)
       - Decrypts input stream to output stream
       - Uses AES-256-CBC decryption
-
   Getters/Setters:
   . void setMode(Mode mode)
       - Sets operation mode (Encrypt/Decrypt)
   . Mode getMode() const
       - Returns current operation mode
-
 Private:
   Initialization:
   . void initializeCipher(bool encrypting)
       - Sets up cipher context for encryption/decryption
       - Configures AES-256-CBC mode
-
   Stream Processing:
   . void processStream(istream& input, ostream& output, bool encrypting)
       - Main stream processing loop
@@ -104,7 +95,6 @@ Private:
   . void processFinalBlock(uint8_t* outbuf, int& outlen, bool encrypting)
       - Handles final block with padding
       - Finalizes encryption/decryption
-
 EXCEPTIONS:
 . InitializationError
     - Thrown when initialization fails
