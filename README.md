@@ -212,6 +212,7 @@ The project includes comprehensive test suites that can be run individually or t
 
 ## Project Information
 
+- **Date**: 11/02/2025
 - **Version**: 1.0
 - **Author**: Marin Gallien
 - **Copyright**: © 2025 Marin Gallien
