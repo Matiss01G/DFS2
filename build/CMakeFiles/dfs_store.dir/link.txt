@@ -1,2 +1,0 @@
-/nix/store/pkkvk57f8h4pdviqdrlzj9xa67jzb00w-replit-runtime-path/bin/ar qc libdfs_store.a CMakeFiles/dfs_store.dir/src/store/store.cpp.o
-/nix/store/pkkvk57f8h4pdviqdrlzj9xa67jzb00w-replit-runtime-path/bin/ranlib libdfs_store.a
