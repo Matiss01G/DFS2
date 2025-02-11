@@ -1,3 +1,30 @@
+# Distributed File System Test Documentation
+
+## Overview
+
+This document provides comprehensive test documentation for the distributed file system implementation. Each test suite validates specific components of the system, including storage operations, cryptographic functions, network communication, and distributed operations.
+
+### Document Structure
+
+Each test suite follows a consistent format:
+
+- **Overview** - Purpose and scope of the test suite
+- **Test Environment Setup** - Required configuration and initialization
+- **Test Cases** - Detailed test scenarios and assertions
+    - **Test description**
+    - **Key assertions**
+- **Helper Methods** - Utility functions supporting the tests
+
+### Test Suites
+
+### Core Components
+
+- **Store Tests** - Content-addressable storage operations
+- **CryptoStream Tests** - Encryption and decryption functionality
+- **Codec Tests** - Message serialization and deserialization
+- **Channel Tests** - Thread-safe message passing
+- **Bootstrap Tests** - Peer-to-peer networking and file distribution
+
 # Store Tests
 
 ## Overview
