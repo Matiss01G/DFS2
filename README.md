@@ -83,7 +83,7 @@ The DFS consists of several key components:
 Detailed documentation for this project can be found in the following files:
 
 - [documentation.md](./documentation.md): Contains comprehensive documentation about the system architecture, components, and implementation details
-- [test_documentation.md](./test_documentation.md): Contains detailed information about the test suite, testing strategies, and test case documentation
+- [test_documentation.md](./test_documentation.md): Contains detailed information about the test suite and test case documentation
 
 ## Dependencies
 
