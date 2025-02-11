@@ -36,7 +36,7 @@ struct CipherContext {
 };
 
 //==============================================
-// CONSTRUCTOR AND DESTRUYC
+// CONSTRUCTOR AND DESTRUCTOR
 //==============================================
 
 CryptoStream::CryptoStream() {
