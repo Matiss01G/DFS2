@@ -38,7 +38,7 @@ void CLI::run() {
   std::string command, filename;
 
   iss >> command;
-  if (command == "pwd" || command == "ls") {
+  if (command == "pwd" || command == "ls" || command == "help") {
   process_command(command, "");
   } else if (iss >> filename) {
   process_command(command, filename);
