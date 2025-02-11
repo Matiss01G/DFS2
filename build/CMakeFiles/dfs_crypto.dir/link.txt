@@ -1,0 +1,2 @@
+/nix/store/pkkvk57f8h4pdviqdrlzj9xa67jzb00w-replit-runtime-path/bin/ar qc libdfs_crypto.a CMakeFiles/dfs_crypto.dir/src/crypto/crypto_stream.cpp.o
+/nix/store/pkkvk57f8h4pdviqdrlzj9xa67jzb00w-replit-runtime-path/bin/ranlib libdfs_crypto.a
