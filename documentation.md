@@ -78,56 +78,31 @@ None defined - Class uses only static methods
 
 ### Public Methods
 
-### Endianness Detection
+**Edianness Detection**
 
 `static bool isLittleEndian()` - Determines if the current system uses little endian byte ordering
 
-- Returns: true if system is little endian, false if big endian
-- Implementation uses a compile-time check of byte representation
-
-### Byte Order Conversion
+**Byte Order Conversion**
 
 `static T toNetworkOrder(T value)` - Converts a value from host byte order to network byte order (big endian)
 
-- Template parameter T: Type of value to convert
-- Parameters:
-    - value: The value to convert to network byte order
-- Returns: Value in network byte order (big endian)
-- Performs conversion only if system is little endian
-
 `static T fromNetworkOrder(T value)` - Converts a value from network byte order (big endian) back to host byte order
-
-- Template parameter T: Type of value to convert
-- Parameters:
-    - value: The value to convert from network byte order
-- Returns: Value in host byte order
-- Performs conversion only if system is little endian
 
 ### Private Methods
 
-### Byte Manipulation
+**Byte Manipulation**
 
 `static T byteSwap(T value)` - Internal helper function that reverses byte order of any sized value
 
-- Template parameter T: Type of value to byte swap
-- Parameters:
-    - value: The value whose bytes need to be swapped
-- Returns: Value with reversed byte order
-- Implementation:
-    - Copies value to byte array
-    - Reverses byte array
-    - Copies back to result value
-    - Uses std::memcpy for safe type punning
 
 
-
-# **CryptoError Classes**
+# **CryptoError**
 
 ### Overview
 
 Provides a hierarchy of exception classes for handling various cryptographic operation errors. All crypto-specific exceptions inherit from a common base class `CryptoError`, which itself derives from `std::runtime_error`. This ensures consistent error handling and reporting across the cryptographic system.
 
-## Base Class:
+### Base Class:
 
 ### CryptoError
 
@@ -145,7 +120,7 @@ Provides a hierarchy of exception classes for handling various cryptographic ope
     - message: Descriptive error message
 - Behavior: Forwards message to std::runtime_error constructor
 
-## Derived Classes:
+### Derived Classes:
 
 ### InitializationError
 
@@ -312,16 +287,16 @@ Example:
 
 # **MessageFrame**
 
-## Overview
+### Overview
 
 MessageFrame defines the structure for network messages in the distributed file system. It provides an enumeration for message types and a data structure that holds message content including initialization vectors, metadata, and payload data.
 
-## Constants
+### Constants
 
 - `MessageType::STORE_FILE = 0` - Enumeration value for file storage requests
 - `MessageType::GET_FILE = 1` - Enumeration value for file retrieval requests
 
-## Variables
+### Variables
 
 - `std::vector<uint8_t> iv_` - Initialization vector for cryptographic operations
 - `MessageType message_type` - Type of the message (STORE_FILE or GET_FILE)
@@ -330,11 +305,11 @@ MessageFrame defines the structure for network messages in the distributed file 
 - `uint32_t filename_length` - Length of the filename in the payload
 - `std::shared_ptr<std::stringstream> payload_stream` - Stream containing the message payload data
 
-## Public Methods
+### Public Methods
 
 None defined in class.
 
-## Private Methods
+### Private Methods
 
 None defined in class.
 
@@ -342,19 +317,19 @@ None defined in class.
 
 # **Peer**
 
-## Overview
+### Overview
 
 Peer is an abstract base class that defines the interface for network peers in the distributed file system. It provides virtual methods for stream processing, message sending, and stream control operations.
 
-## Constants
+### Constants
 
 None defined in class scope.
 
-## Variables
+### Variables
 
 - `using StreamProcessor = std::function<void(std::istream&)>` - Type definition for stream processing callback function
 
-## Public Methods
+### Public Methods
 
 **Constructor/Destructor**
 
@@ -375,7 +350,7 @@ None defined in class scope.
 - `virtual std::istream* get_input_stream() = 0` - Returns pointer to input stream
 - `virtual void set_stream_processor(StreamProcessor processor) = 0` - Sets callback for processing received data
 
-## Private Methods
+### Private Methods
 
 None defined in class.
 
@@ -383,15 +358,13 @@ None defined in class.
 
 # **TCP_Peer**
 
-## Overview
+### Overview
 
 TCP_Peer implements the Peer interface using TCP/IP for network communication. It provides asynchronous stream processing, secure message transmission, and connection management functionality for peer-to-peer communication.
 
-## Constants
+### Constants
 
 None defined in class scope.
-
-## Variables
 
 ### Public Types
 
@@ -421,7 +394,7 @@ None defined in class scope.
 - `std::unique_ptr<std::thread> processing_thread_` - Thread for async processing
 - `std::atomic<bool> processing_active_` - Flag for processing state
 
-## Public Methods
+### Public Methods
 
 **Constructor/Destructor**
 
@@ -445,7 +418,7 @@ None defined in class scope.
 - `boost::asio::ip::tcp::socket& get_socket()` - Returns reference to socket
 - `void set_stream_processor(StreamProcessor processor)` - Sets stream processing callback
 
-## Private Methods
+### Private Methods
 
 **Incoming Data Stream Processing**
 
@@ -468,15 +441,15 @@ None defined in class scope.
 
 # **PeerManager**
 
-## Overview
+### Overview
 
 PeerManager handles peer connections in the distributed file system. It manages TCP peer creation, maintains peer state, handles message routing, and provides stream operations for communication between peers.
 
-## Constants
+### Constants
 
 None defined in class scope.
 
-## Variables
+### Variables
 
 - `Channel& channel_` - Reference to communication channel for message passing
 - `TCP_Server& tcp_server_` - Reference to TCP server for connection handling
@@ -484,7 +457,7 @@ None defined in class scope.
 - `std::map<uint8_t, std::shared_ptr<TCP_Peer>> peers_` - Map of connected peers
 - `mutable std::mutex mutex_` - Synchronization primitive for thread-safe peer access
 
-## Public Methods
+### Public Methods
 
 **Constructor/Destructor**
 
@@ -514,7 +487,7 @@ None defined in class scope.
 - `std::size_t size() const` - Returns number of managed peers
 - `void shutdown()` - Terminates all peer connections and cleanup
 
-## Private Methods
+### Private Methods
 
 None defined in class.
 
@@ -522,20 +495,20 @@ None defined in class.
 
 # **Codec**
 
-## Overview
+### Overview
 
 Codec handles the serialization and deserialization of message frames for network transmission. It provides encryption for secure communication using AES-256-CBC, handles byte order conversion, and manages stream operations.
 
-## Constants
+### Constants
 
 None defined in class scope.
 
-## Variables
+### Variables
 
 - `std::vector<uint8_t> key_` - Encryption key used for securing message frames
 - `Channel& channel_` - Reference to channel for message frame distribution
 
-## Public Methods
+### Public Methods
 
 **Constructor/Destructor**
 
@@ -546,7 +519,7 @@ None defined in class scope.
 - `std::size_t serialize(const MessageFrame& frame, std::ostream& output)` - Encrypts and writes message frame to output stream. Returns total bytes written
 - `MessageFrame deserialize(std::istream& input)` - Reads and decrypts message frame from input stream, adds to channel. Returns parsed frame
 
-## Private Methods
+### Private Methods
 
 **Stream Operations**
 
@@ -568,20 +541,20 @@ None defined in class scope.
 
 # **Channel**
 
-## Overview
+### Overview
 
 Channel provides a thread-safe message queue implementation for inter-component communication in the distributed file system. Messages are processed in FIFO order with proper synchronization for concurrent access.
 
-## Constants
+### Constants
 
 None defined in class scope.
 
-## Variables
+### Variables
 
 - `mutable std::mutex mutex_` - Synchronization primitive for thread-safe queue access
 - `std::queue<MessageFrame> queue_` - Internal FIFO queue storing message frames
 
-## Public Methods
+### Public Methods
 
 **Constructor/Destructor**
 
@@ -598,7 +571,7 @@ None defined in class scope.
 - `bool empty() const` - Returns true if the channel has no messages
 - `std::size_t size() const` - Returns the number of messages currently in the channel
 
-## Private Methods
+### Private Methods
 
 - None
 
@@ -606,15 +579,15 @@ None defined in class scope.
 
 # **TCP_Server**
 
-## Overview
+### Overview
 
 TCP_Server manages TCP/IP network connections and handles peer handshaking in the distributed file system. It provides functionality for accepting incoming connections, establishing outgoing connections, and managing the lifecycle of network connections.
 
-## Constants
+### Constants
 
 None defined in class scope.
 
-## Variables
+### Variables
 
 - `PeerManager* peer_manager_` - Pointer to peer management system
 - `const uint8_t ID_` - Unique identifier for this server
@@ -634,7 +607,7 @@ None defined in class scope.
 - `boost::asio::io_context io_context_` - Asio I/O context
 - `std::unique_ptr<boost::asio::ip::tcp::acceptor> acceptor_` - Connection acceptor=
 
-## Public Methods
+### Public Methods
 
 **Constructor/Destructor**
 
@@ -654,7 +627,7 @@ None defined in class scope.
 
 - `void set_peer_manager(PeerManager& peer_manager)` - Sets the peer management system
 
-## Private Methods
+### Private Methods
 
 **Initialization and Teardown**
 
@@ -678,15 +651,15 @@ None defined in class scope.
 
 # **Bootstrap**
 
-## Overview
+### Overview
 
 Bootstrap manages the initialization and lifecycle of a distributed file system node. It coordinates multiple components including TCP servers, peer management, and file services. The class handles network connections, peer discovery, and ensures proper startup and shutdown sequences.
 
-## Constants
+### Constants
 
 None defined in class scope.
 
-## Variables
+### Variables
 
 **Network Components**
 
@@ -706,7 +679,7 @@ None defined in class scope.
 - `std::unique_ptr<PeerManager> peer_manager_` - Manages peer relationships
 - `std::unique_ptr<FileServer> file_server_` - Handles file operations
 
-## Public Methods
+### Public Methods
 
 **Constructor/Destructor**
 
@@ -724,7 +697,7 @@ None defined in class scope.
 - `PeerManager& get_peer_manager()` - Returns reference to peer management system
 - `FileServer& get_file_server()` - Returns reference to file server component
 
-## Private Methods
+### Private Methods
 
 - None
 
@@ -732,19 +705,19 @@ None defined in class scope.
 
 # **Store**
 
-## Overview
+### Overview
 
 Store provides content-addressable storage functionality using SHA-256 hashing. It manages file storage, retrieval, and organization with a hierarchical directory structure based on content hashes.
 
-## Constants
+### Constants
 
 None defined in class scope.
 
-## Variables
+### Variables
 
 - `std::filesystem::path base_path_` - Root directory path for all stored files
 
-## Public Methods
+### Public Methods
 
 **Constructor/Destructor**
 
@@ -770,7 +743,7 @@ None defined in class scope.
 - `void move_dir(const std::string& path)` - Changes working directory
 - `void delete_file(const std::string& filename)` - Deletes specified file
 
-## Private Methods
+### Private Methods
 
 **CLI Command Support**
 
@@ -791,15 +764,15 @@ None defined in class scope.
 
 # **Pipeliner**
 
-## Overview
+### Overview
 
 Pipeliner implements a stream processing pipeline that allows data transformation through producer and transformer functions. It extends std::stringstream to provide buffered stream processing capabilities.
 
-## Constants
+### Constants
 
 None defined in class scope.
 
-## Variables
+### Variables
 
 - `ProducerFn producer_` - Function that produces input data
 - `std::vector<TransformFn> transforms_` - List of transformation functions
@@ -809,7 +782,7 @@ None defined in class scope.
 - `std::stringstream buffer_` - Internal buffer for data processing
 - `std::size_t total_size_` - Total size of processed data
 
-## Public Methods
+### Public Methods
 
 **Constructor/Destructor**
 
@@ -830,7 +803,7 @@ None defined in class scope.
 - `void set_buffer_size(size_t size)` - Sets processing buffer size
 - `void set_total_size(std::size_t size)` - Sets total data size
 
-## Private Methods
+### Private Methods
 
 **Pipeline Execution and Control Methods**
 
@@ -842,21 +815,21 @@ None defined in class scope.
 
 # **CLI**
 
-## Overview
+### Overview
 
 CLI provides a command-line interface for interacting with the distributed file system. It processes user commands for file operations, directory navigation, and network connections.
 
-## Constants
+### Constants
 
 None defined in class scope.
 
-## Variables
+### Variables
 
 - `bool running_` - Flag indicating if CLI is active
 - `store::Store& store_` - Reference to storage system
 - `network::FileServer& file_server_` - Reference to file server component
 
-## Public Methods
+### Public Methods
 
 **Constructor/Destructor**
 
@@ -866,7 +839,7 @@ None defined in class scope.
 
 - `void run()` - Starts CLI command processing loop
 
-## Private Methods
+### Private Methods
 
 **Command Processing**
 
