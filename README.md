@@ -54,7 +54,10 @@ make
 # Connect peers (in either terminal's DFS shell)
 DFS_Shell> connect 127.0.0.1:3002
 
-# Use the DFS
+# Store test file
+DFS_Shell> store test.txt
+
+# Keep using the DFS
 ```
 
 ## Features
@@ -140,6 +143,12 @@ make
 ```
 
 ## Running the DFS
+
+### Files to Store
+Before you run the program, you must move any test file you want to store to the build directory.
+
+A test.txt file already exists in the build directory for testing purposes.
+
 
 ### Starting a Peer Node
 
