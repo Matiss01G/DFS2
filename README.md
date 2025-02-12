@@ -145,7 +145,7 @@ make
 ## Running the DFS
 
 ### Files to Store
-Before you run the program, you must move any test file you want to store to the build directory.
+Before you run the program, you must move any text file you want to store to the build directory.
 
 A test.txt file already exists in the build directory for testing purposes.
 
